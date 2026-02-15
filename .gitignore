@@ -1,0 +1,17 @@
+# --- segredos / auth ---
+**/auth*.json
+**/oauth*.json
+**/*token*
+**/secrets*
+**/.env
+
+# --- runtime / lixo ---
+/tmp/
+/logs/
+**/*.log
+**/cache/
+**/.cache/
+**/sessions/
+**/cookies/
+**/storage_state*.json
+**/playwright/.cache/
