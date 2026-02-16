@@ -15,3 +15,12 @@
 **/cookies/
 **/storage_state*.json
 **/playwright/.cache/
+
+# --- OpenClaw auth (NUNCA versionar) ---
+agent/auth.json
+agent/auth-profiles.json
+**/auth*.json
+**/oauth*.json
+**/*token*
+**/secrets*
+**/.env
