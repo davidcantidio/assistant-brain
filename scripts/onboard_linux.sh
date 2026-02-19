@@ -133,7 +133,7 @@ CONVEX_DEPLOYMENT_URL=
 CONVEX_DEPLOY_KEY=
 
 # Runtime
-HEARTBEAT_MINUTES=45
+HEARTBEAT_MINUTES=20
 STANDUP_TIME=11:30
 
 # Model Router (OpenAI)
@@ -196,7 +196,7 @@ configure_env_interactive() {
   [ -n "$cxkey" ] && set_env_kv "$env_file" "CONVEX_DEPLOY_KEY" "$cxkey"
 
   local hb
-  hb="$(prompt_text "HEARTBEAT_MINUTES" "45")"
+  hb="$(prompt_text "HEARTBEAT_MINUTES" "20")"
   set_env_kv "$env_file" "HEARTBEAT_MINUTES" "$hb"
 
   local st

@@ -12,6 +12,8 @@
 **/cache/
 **/.cache/
 **/sessions/
+!sessions/
+!sessions/README.md
 **/cookies/
 **/storage_state*.json
 **/playwright/.cache/

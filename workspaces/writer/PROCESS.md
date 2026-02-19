@@ -1,4 +1,7 @@
 # PROCESS (writer)
-- Atualizar memory/decisions.md com decisões e data.
-- Atualizar memory/pending_tasks.md com tarefas pequenas e próximas ações.
-- Sempre manter texto curto, acionável, sem floreio.
+
+Workspace estacionado para fase futura.
+
+No MVP:
+- nao executar rotinas aqui;
+- usar somente `workspaces/main`.

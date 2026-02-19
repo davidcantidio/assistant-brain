@@ -29,7 +29,20 @@ fi
 
 echo
 echo "[4] Estrutura do brain"
-ls -la "$REPO_ROOT/agent" "$REPO_ROOT/memory" "$REPO_ROOT/workspaces" 2>/dev/null || true
+ls -la "$REPO_ROOT/PRD" "$REPO_ROOT/ARC" "$REPO_ROOT/SEC" "$REPO_ROOT/workspaces/main" 2>/dev/null || true
+
+echo
+echo "[5] Heartbeat baseline (20 min)"
+if [ -f "$REPO_ROOT/.env" ]; then
+  hb="$(grep -E '^HEARTBEAT_MINUTES=' "$REPO_ROOT/.env" | tail -n1 | cut -d= -f2- || true)"
+  if [ -n "$hb" ]; then
+    echo "HEARTBEAT_MINUTES=$hb"
+  else
+    echo "HEARTBEAT_MINUTES ausente no .env"
+  fi
+else
+  echo ".env ausente"
+fi
 
 echo
 echo "OK."

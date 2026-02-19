@@ -1,0 +1,60 @@
+---
+doc_id: "ARC-HEARTBEAT.md"
+version: "1.0"
+status: "active"
+owner: "Marvin"
+last_updated: "2026-02-18"
+rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
+---
+
+# ARC Heartbeat
+
+## Objetivo
+Definir politica de heartbeat e wake-up para equilibrar custo, responsividade e consistencia operacional.
+
+## Escopo
+Inclui:
+- intervalo base e perfis por papel
+- algoritmo de heartbeat em passos
+- gatilhos event-driven de wake-up
+
+Exclui:
+- implementacao de cron provider especifico
+- tuning de contexto por agente individual
+
+## Regras Normativas
+- [RFC-050] MUST registrar heartbeat com timestamp e estado do agente.
+- [RFC-030] MUST acionar wake-up por evento sem aguardar janela periodica.
+- [RFC-001] SHOULD manter politicas de periodicidade consistentes entre escritorios.
+- [RFC-030] MUST usar baseline unico de 20 minutos para cadencia periodica.
+
+## Intervalos Oficiais
+- base global: 20 minutos.
+- Dispatcher: event-driven + varredura periodica a cada 20 minutos.
+- Workers: 20 minutos.
+- Risk/Compliance: 20 minutos.
+- Standup diario: 11:30 no fuso -03 (America/Sao_Paulo).
+
+## Algoritmo de Heartbeat
+1. carregar contexto minimo (`working.md`, tasks abertas, mentions pendentes).
+2. verificar prioridade/SLA e bloqueios.
+3. executar acao ou registrar "Heartbeat OK" com motivo.
+4. publicar resumo no `activity_feed`.
+5. voltar para sleep ate proximo tick ou evento.
+
+## Gatilhos de Wake-up
+- mention direta em tarefa.
+- nova task atribuida.
+- decision pendente com timeout proximo.
+- alerta de threshold (custo/latencia/falha).
+- incidente com severidade alta.
+
+## Regras de Custo
+- tarefas sem evento SHOULD usar contexto reduzido.
+- agentes ociosos MAY aumentar janela dentro do limite de papel.
+- loop de wake-up sem progresso MUST abrir task de diagnostico.
+
+## Links Relacionados
+- [ARC Core](./ARC-CORE.md)
+- [ARC Observability](./ARC-OBSERVABILITY.md)
+- [Decision Protocol](../PM/DECISION-PROTOCOL.md)
