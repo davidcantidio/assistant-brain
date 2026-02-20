@@ -1,22 +1,23 @@
 ---
 doc_id: "SYSTEM-HEALTH-THRESHOLDS.md"
-version: "1.0"
+version: "1.3"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
 ---
 
 # System Health Thresholds
 
 ## Objetivo
-Definir limites operacionais de custo, latencia, falha, fallback e incidentes, com acao automatica padronizada.
+Definir limites operacionais de custo, latencia, confiabilidade, fallback, privacidade e incidentes com acao automatica padronizada.
 
 ## Escopo
 Inclui:
 - thresholds de saude do sistema
 - acoes automaticas em violacao
 - criterios de escalation para decision
+- contrato executavel de idempotencia/rollback para auto-acoes
 
 Exclui:
 - tuning manual sem registro
@@ -29,20 +30,24 @@ Exclui:
 - [RFC-001] MUST abrir decision se violacao persistir apos mitigacao.
 - [RFC-050] MUST aplicar anti-storm controls antes de abrir task/decision em massa.
 - [RFC-050] MUST bloquear release quando claim central nao tiver eval gate ativo.
+- [RFC-050] MUST aplicar efeito colateral automatico somente com `automation_action_id` idempotente.
 
 ## Thresholds
 | Categoria | Threshold inicial | Acao |
 |---|---|---|
 | Custo diario | > 90% teto | fallback agressivo + decision de budget |
-| Latencia p95 | > 2x SLA por 30 min | task de tuning + redução de carga |
+| Burn-rate horario | > 130% baseline | reduzir carga + bloquear nao critico |
+| Latencia p95 | > 2x SLA por 30 min | task de tuning + reducao de carga |
 | Falha de tarefa | > 10% em 1h | circuit breaker por classe |
 | Fallback em cascata | > 3 por tarefa | escalar cloud/humano |
+| Parse rate (structured) | < 98% em janela | bloquear rota + abrir tuning |
+| Tool success rate (tools) | < 95% em janela | trocar preset/provider e abrir decision |
 | Incidente critico | >= 1 | ativar degraded mode e checklist incidente |
 
 ## Calibragem por Fase
 - Fase 0 (aquecimento, 2-4 semanas):
-  - usar thresholds mais tolerantes para reduzir falso positivo.
-  - ajustar semanalmente por baseline real (media + desvio).
+  - thresholds mais tolerantes para reduzir falso positivo.
+  - ajustar semanalmente por baseline real.
 - Fase 1+:
   - reduzir tolerancia gradualmente por classe critica.
   - bloquear regressao repetida com gate automatico.
@@ -54,10 +59,16 @@ Exclui:
 - `max_auto_tasks_per_hour`: 6 por escritorio.
 - `max_auto_decisions_per_hour`: 3 por escritorio.
 - `max_pending_decisions_global`: 10.
-- quando exceder limite:
-  - consolidar alertas em 1 task agregada;
-  - suspender novas decisions nao criticas;
-  - manter apenas incidentes criticos.
+
+## Contrato Minimo de Auto-Acao
+```yaml
+schema_version: "1.2"
+automation_action_id: "AUTO-UUID"
+coalescing_key: "<office>:<metric>:<cause>"
+idempotency_key: "IDEMP-UUID"
+rollback_plan_ref: "artifact://..."
+status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
+```
 
 ## Acoes Automaticas
 - abrir task de mitigacao com owner.
@@ -65,23 +76,33 @@ Exclui:
 - registrar evento no activity feed e incident log.
 - abrir decision para ajuste estrutural quando persistente.
 - nunca abrir mais de 1 decision para a mesma `coalescing_key` durante `cooldown_window`.
+- auto-acao sem `rollback_plan_ref` MUST degradar para `notify-only`.
 
 ## EVAL Gates de Claims Centrais (obrigatorio)
 | Claim central | Gate minimo | Threshold inicial | Acao em falha |
 |---|---|---|---|
-| identidade de aprovador HITL valida | taxa de comando autorizado | 100% | bloquear comandos + abrir `SECURITY_VIOLATION_REVIEW` |
+| OpenRouter e gateway programatico padrao | chamada programatica fora do gateway | 0 casos | bloquear release + abrir incident |
+| requested/effective model/provider auditavel | run sem campos de roteamento | 0 casos | bloquear pipeline + task de contrato |
+| provider allowlist aplicada por sensibilidade | rota sensitive fora de allowlist | 0 casos | bloquear comando + incidente de seguranca |
+| ZDR em fluxo sensitive | run sensitive sem policy ZDR quando exigido | 0 casos | stop-ship + incidente de seguranca |
 | comando HITL idempotente | replay sem efeito colateral | 100% | bloquear execucao + abrir incident |
-| Work Order schema/version/idempotency validos | WO invalido aceito | 0 casos | bloquear ingest + abrir task de contrato |
+| lifecycle de challenge HITL completo | challenge expirado/duplicado aceito | 0 casos | bloquear comando critico + incidente |
+| Work Order schema/version/idempotency validos | WO invalido aceito | 0 casos | bloquear ingest + task de contrato |
 | reconciliacao offline sem duplicidade | eventos duplicados pos-replay | 0 casos | manter degraded + abrir decision |
-| heartbeat baseline de 20 min atendido | atraso p95 vs agenda | <= 5 min | abrir tuning + reduzir carga |
-| allowlists aplicadas corretamente | taxa de bloqueio de acao proibida | 100% | bloquear deploy + incident de seguranca |
+| allowlists aplicadas corretamente | taxa de bloqueio de acao proibida | 100% | bloquear deploy + incidente |
 | trilha auditavel integra (hash-chain) | quebra de cadeia | 0 casos | stop-ship + incidente de integridade |
+| budget governor por creditos ativo | snapshot de creditos desatualizado > 10 min | 0 casos | bloquear tarefas nao criticas |
+| `execution_gateway` como unico caminho de ordem live | ordem emitida fora do gateway | 0 casos | stop-ship + incidente de seguranca |
+| `make eval-trading` executavel para release de trading | comando ausente/falha em CI | 0 casos | bloquear merge/deploy de trading |
+| engine primaria indisponivel => `fail_closed` | nova entrada aceita com engine primaria indisponivel | 0 casos | stop-ship + incidente |
+| fallback HITL trading com operadores validos | comando critico por Slack sem IDs allowlist validos | 0 casos | bloquear comando + incidente |
+| degradacao com posicao aberta sem `UNMANAGED_EXPOSURE` persistente | `UNMANAGED_EXPOSURE` > 10 min | 0 casos | manter `TRADING_BLOCKED` + `SEV-1` |
 
 ## Regra de Release
 - qualquer claim central sem gate definido/executado => release bloqueada.
-- excecao apenas por decision explicita de risco, com prazo para correcao.
+- excecao apenas por decision explicita de risco, com prazo de correcao.
 
 ## Links Relacionados
 - [ARC Observability](../ARC/ARC-OBSERVABILITY.md)
-- [ARC Degraded Mode](../ARC/ARC-DEGRADED-MODE.md)
+- [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
 - [Incident Log Policy](../INCIDENTS/INCIDENT-LOG-POLICY.md)

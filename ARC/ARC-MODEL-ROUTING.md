@@ -1,164 +1,308 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.0"
+version: "1.3"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-18"
-rfc_refs: ["RFC-001", "RFC-010", "RFC-030", "RFC-050", "RFC-060"]
+last_updated: "2026-02-20"
+rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
 # ARC Model Routing
 
 ## Objetivo
-Definir regras executaveis de roteamento por classe de tarefa, com fallback ladder, SLA p50/p95, saida auditavel e gates por risco.
+Definir regras executaveis de roteamento por classe de tarefa com OpenRouter como gateway padrao, provider routing explicito, fallback controlado, governanca por preset e trilha auditavel completa.
 
 ## Escopo
 Inclui:
-- mapeamento tarefa -> modelo local -> validacoes -> fallback -> cloud
-- separacao de perfis operacionais por ambiente (VPS e Mac)
-- escolha de `execution_pattern` (script, agente unico, pod de subagentes)
-- criterios de abertura de decision
-- tabela operacional de referencia (Tabela A)
+- OpenRouter OpenAI-compatible como endpoint unico programatico
+- Model Catalog Service como fonte viva de metadados
+- Model Router com ranking por capabilities + historico real + custo/latencia/confiabilidade
+- provider selection/pin/no-fallback/fallback chain
+- modo de alta confiabilidade para tool-calling critico
+- exemplos minimos de implementacao
 
 Exclui:
 - benchmark de hardware em tempo real
 - tuning fino de prompt por caso especifico
 
 ## Regras Normativas
-- [RFC-030] MUST iniciar no menor custo que cumpra qualidade e SLA.
-- [RFC-030] MUST executar fallback ladder antes de escalar para cloud.
-- [RFC-010] MUST respeitar gate de risco para aprovacoes criticas.
-- [RFC-050] MUST produzir output auditavel por classe de tarefa.
-- [RFC-060] MUST tratar Trading com cloud/humano obrigatorio em pontos criticos.
-- [RFC-030] MUST usar token manager para estimar custo e escolher modelo dentro do budget.
-- [RFC-030] MUST escolher primeiro o `execution_pattern` e depois o modelo/tier.
-- [RFC-030] MUST usar `codex-mini` como default de economia para microtarefas de codigo.
+- [RFC-030] MUST usar OpenRouter como gateway padrao para chamadas LLM programaticas.
+- [RFC-030] MUST escolher modelo por policy + historico + custo/latencia/confiabilidade.
+- [RFC-030] MUST tratar variancia de provider como risco operacional explicito.
+- [RFC-050] MUST registrar requested/effective model/provider em toda execucao.
+- [RFC-015] MUST respeitar provider allowlist por sensibilidade de dado.
+- [RFC-010] MUST aplicar gate de risco para rotas criticas.
+- [RFC-060] MUST tratar Trading com rotas restritas e checkpoint humano.
+
+## OpenRouter como Camada Padrao
+- endpoint canonico:
+  - `https://openrouter.ai/api/v1`
+- cliente:
+  - OpenAI SDK compativel (troca de modelo via campo `model`).
+- capacidades:
+  - tools, structured outputs, reasoning e multimodal conforme suporte do modelo efetivo.
+
+## Model Catalog Service (fonte de verdade)
+### Responsabilidades
+- sincronizar periodicamente o catalogo via Models API.
+- versionar mudancas de:
+  - preco,
+  - limite de contexto/output,
+  - supported parameters,
+  - capabilities,
+  - disponibilidade/status.
+- expor API interna para o Router consultar e ranquear candidatos.
+
+### Regras
+- catalogo sem timestamp atual nao pode ser usado em rota critica.
+- modelo sem metrica minima de custo/latencia/confiabilidade deve ser degradado ou bloqueado.
+- alteracao de schema do catalogo MUST abrir decision.
+
+## Provider Variance e Provider Routing
+### Premissa
+- o mesmo `model_id` pode variar por provider em latencia, limites e comportamento.
+
+### Politica obrigatoria
+- o Router MUST aceitar parametros de provider routing:
+  - `include`
+  - `exclude`
+  - `order`
+  - `require`
+- rotas criticas MAY usar `pin_provider=true`.
+- rotas nao criticas podem usar order preferencial com fallback de provider permitido.
+
+## Fallback Policy
+### Cadeia declarativa por task_type
+- cada `task_type` MUST ter:
+  - primario
+  - secundario
+  - degradado
+- fallback MUST registrar:
+  - motivo,
+  - etapa acionada,
+  - impacto previsto de qualidade/custo.
+
+### no-fallback para sensivel
+- rotas `sensitive` e/ou criticas MAY marcar `no_fallback=true`.
+- se rota falhar sob `no_fallback`, resultado MUST ser `blocked_with_incident`.
+
+## Modo de Alta Confiabilidade para Tool-Calling
+- quando `tools_required=true` e risco >= medio:
+  - Router SHOULD preferir variante curada de alta confiabilidade (ex.: exacto) quando disponivel.
+- quando variante curada nao estiver disponivel:
+  - Router MUST registrar `exacto_unavailable` e aplicar rota alternativa permitida por policy.
+
+## Presets (governanca central)
+### Definicao
+- `preset` e a unidade canonica de configuracao por task_type.
+
+### Campos minimos
+- `preset_id`
+- `task_type`
+- `requested_model`
+- `provider_routing`
+- `generation_defaults`
+- `fallback_chain`
+- `no_fallback`
+- `pin_provider`
+- `exacto_mode`
+- `policy_version`
+
+### Regra
+- agente nao escolhe modelo livremente em runtime de producao.
+- runtime MUST consumir `preset_id` aprovado.
 
 ## Perfis Oficiais de Execucao
-- `VPS-CLOUD` (producao): cloud-first, sem dependencia de LLM local para operacao critica.
-- `MAC-LOCAL` (desenvolvimento/pesquisa): local-first, com fallback cloud por risco.
+- `VPS-CLOUD` (producao): cloud-first via OpenRouter.
+- `MAC-LOCAL` (dev/operacao assistida): local-first com fallback OpenRouter conforme policy.
+- Fase 0 MUST suportar `MAC-LOCAL` para tarefas pesadas nao urgentes, com supervisao por modelo robusto de assinatura em checkpoints de risco.
 
-## Execution Patterns
-- `deterministic_script`:
-  - prioridade maxima para tarefas repetiveis e idempotentes.
-- `single_agent`:
-  - tarefas simples, baixo risco, contexto curto.
-- `subagent_pod_codex`:
-  - tarefas de codigo com decomposicao em planner/implementer/tester/reviewer.
-- `subagent_pod_claude`:
-  - tarefas de analise/produto/politica com researcher/critic/writer.
-- `cross_review_codex_claude`:
-  - alto risco: um pod produz, o outro revisa.
+## Defaults Conservadores (quando nao especificado)
+- default de tipo: texto-only.
+- output para consumo por maquina:
+  - structured output obrigatorio ou falha controlada.
+- tarefas agenticas:
+  - tools obrigatorias.
+- retries:
+  - `max_retries = 2` com fallback rapido.
+- consistencia critica:
+  - `pin_provider = true`.
+- tool-calling critico:
+  - preferir exacto (quando disponivel).
+- algoritmo de escolha:
+  - com historico suficiente: rank por `cost_per_success` + confiabilidade + latencia.
+  - sem historico suficiente: capabilities-first + heuristica de custo/latencia.
 
-## Matriz de Escolha de Subagentes
-| Cenário | Pattern | Engine tier recomendado |
-|---|---|---|
-| Função simples + teste curto | `single_agent` | `codex-mini` |
-| Refactor pequeno com testes | `subagent_pod_codex` | planner/implementer `codex-mini`, reviewer `codex` |
-| Correção complexa em base grande | `subagent_pod_codex` | planner `codex`, implementer `codex-mini`, reviewer `codex` |
-| PRD/roadmap com riscos e trade-offs | `subagent_pod_claude` | researcher/writer `claude-code-default`, critic `claude-code-strong` |
-| Mudança crítica (risco alto) | `cross_review_codex_claude` | produção em um pod + revisão no outro |
+## Router Inputs e Outputs
+### Inputs obrigatorios
+- `task_type`
+- `risk_class`
+- `risk_tier`
+- `sensitivity`
+- `sla_class`
+- `budget_cap`
+- `tools_required`
+- `structured_output_required`
+- `context_tokens_estimated`
 
-## Limites de Pod (custo e previsibilidade)
-- `max_subagents_per_pod = 4`
-- `max_pod_rounds = 2`
-- `max_pod_runtime_seconds = 900`
-- `stop_on_convergence = true`
-- se exceder qualquer limite:
-  - degradar para `single_agent`;
-  - ou abrir decision para continuidade.
+### Outputs obrigatorios
+- `preset_id`
+- `requested_model`
+- `effective_model`
+- `effective_provider`
+- `provider_routing_applied`
+- `fallback_step`
+- `estimated_cost`
+- `decision_explain`
 
-## Tabela A - Classes de Tarefa x Execucao x Modelos/Quants x Validacoes
-| Classe de tarefa | SLA alvo | Padrao de execucao | Perfil VPS (cloud-first) | Perfil Mac (local-first) | Quant Mac recomendada (32GB) | Contexto recomendado | Temperatura/Decoding | Saida auditavel | Verificacao deterministica | Gate cloud/humano |
-|---|---:|---|---|---|---|---:|---|---|---|---|
-| Dispatcher/Router | 0.5-3s | `single_agent` rapido | GPT-5.2 mini/pro para roteamento | Llama 3.x 3B | MLX BF16 ou Q8 | 2k-8k | temp 0-0.3, top_p baixo | JSON fixo com schema | JSON Schema + regras de roteamento | Cloud obrigatoria em risco alto |
-| PM Operacional (Scrum) | 10-60s | `subagent_pod_claude` (estrutura -> critica) | Claude Code (default + strong) | Mistral Small 3.1 24B Instruct | Q4_K_M ou Q5_K_M | 8k-32k | stage1 0.2; stage2 0.1 | YAML + IDs | lint YAML + checklist Scrum | Revisao cloud obrigatoria |
-| RAG Librarian (empresa) | 5-30s | 2-stage (triagem -> resposta) | GPT-4.1 para casos criticos | Qwen2.5 7B Instruct | Q5_K_M/Q6 ou MLX 4-bit | triagem 8k; resposta 16k-32k | triagem 0; resposta 0.1-0.3 | resposta + citacoes doc_id/chunk_id | claim->fonte + dedupe + score minimo | Cloud em caso critico |
-| RAG Geral do Condominio | 2-8s | 1-stage rapido | GPT-5 mini quando necessario | Llama 3.x 3B | Q8/BF16 | 4k-16k | temp 0 | JSON com links internos e versao | validacao de versao (sem drift) | Cloud opcional |
-| Dev Junior Local | 15-90s | simples: `single_agent`; complexo: `subagent_pod_codex` | simples: `codex-mini`; complexo/review: `codex` | Codestral ou Qwen2.5 7B/Mistral 24B | 7B: Q5_K_M; 24B: Q4_K_M/Q5_K_M | 8k-16k | temp 0-0.2 + stop tokens | diff/patch + testes | pytest + lint + typecheck + no network | Review cloud para merge |
-| Tech Lead (codigo) | minutos | `cross_review_codex_claude` ou cloud-first | `codex`/`gpt-5-codex` + revisao `claude-code-strong` | - | - | - | - | review de PR com criterios | CI + seguranca | Cloud obrigatoria |
-| Execucao deterministica (ETL/validacao) | depende | script-first | script + auditoria cloud pontual | script + LLM glue local | - | - | temp 0 | artifacts + logs | testes + idempotencia + checksum | Script prevalece |
-| Raciocinio pesado offline | 60-300s | 3-stage | GPT-5.2 pro (decisao final) | Mistral Small 3.1 24B | Q5_K_M | 16k-64k controlado | temp 0 + verify pass | resposta + claims checklist | consistencia + RAG para fatos | Cloud em decisao final |
-| Design Office (texto->prompt imagem) | 10-60s | 2-stage | OpenAI Images + revisao cloud | Mistral Small 3.1 24B (texto) | Q4_K_M/Q5_K_M | 8k-16k | temp 0.4 com constraints | prompt + negativos + parametros | validacao de formato e seed | Checkpoint humano em risco reputacional |
-
-## Escopo MVP de Roteamento (Fase 0)
-- Classes ativas no MVP:
-  - Dispatcher/Router
-  - RAG Librarian (empresa)
-  - Dev Junior Local
-- Demais classes operam em modo cloud-first simplificado ate estabilizar SLO da Fase 0.
-
-## Token Manager (Router)
-- objetivo:
-  - minimizar custo mantendo SLA e qualidade minima.
-- entradas obrigatorias:
-  - classe de tarefa, risco, SLA, contexto estimado (tokens), budget disponivel.
-- saidas:
-  - `execution_pattern` escolhido;
-  - modelo escolhido;
-  - custo estimado;
-  - fallback previsto;
-  - motivo da escolha (auditavel).
-
-## Session Manager (Assisted Orchestration)
-- para `subagent_pod_codex` e `subagent_pod_claude`, MUST controlar:
-  - capacidade de sessoes simultaneas;
-  - tempo humano disponivel;
-  - fila de pods pendentes.
-- router MUST evitar iniciar pod se a fila assisted ultrapassar limite operacional.
-
-## Catalogo de Modelos (fonte de verdade)
-- MUST manter tabela versionada em banco (ex.: `models_catalog`) com:
-  - `model_id`
-  - `provider`
-  - `cost_input_per_1k`
-  - `cost_output_per_1k`
-  - `latency_p50`
+## Ranking e Decisao
+1. filtrar candidatos por policy (risco, sensibilidade, allowlist de provider, suporte tecnico).
+2. aplicar constraints de SLA e budget.
+3. pontuar por:
+  - `cost_per_success`
+  - `success_rate`
+  - `tool_success_rate` (quando tools)
+  - `parse_rate` (quando structured)
   - `latency_p95`
-  - `quality_score_por_classe`
-  - `max_context`
-  - `status` (active/degraded/disabled)
-- router MUST recusar modelo sem metrica/custo atualizado.
+4. selecionar melhor candidato e fallback chain.
+5. registrar decisao em `router_decisions`.
 
-## Algoritmo de Escolha (custo-prioritario)
-1. escolher `execution_pattern` por risco/complexidade/SLA.
-2. para canais programaticos, filtrar modelos que atendem risco/politica/SLA.
-3. estimar custo por tarefa com tokens previstos.
-4. escolher menor custo com `quality_score` acima do minimo da classe.
-5. para tarefas simples de codigo, preferir `codex-mini`.
-6. se nenhum atender, abrir fallback ladder e/ou decision.
+## Metricas Minimas por task_type/model/provider
+- success_rate
+- tool_success_rate
+- parse_rate
+- retry_rate
+- timeout_rate
+- cost_per_success
+- latency_p95
 
-## SLA p50/p95 por Classe
-- Dispatcher: p50 <= 1s, p95 <= 3s
-- RAG Geral: p50 <= 3s, p95 <= 8s
-- RAG Empresa: p50 <= 12s, p95 <= 30s
-- PM/Dev local: p50 <= 30s, p95 <= 90s
-- Raciocinio pesado: p50 <= 180s, p95 <= 300s
+## Formato de Saida Auditavel
+- roteamento MUST gerar payload JSON com:
+  - constraints de entrada,
+  - candidatos avaliados,
+  - ranking final,
+  - decisao,
+  - fallback aplicado,
+  - justificativa curta.
 
-## Fallback Ladder (ordem obrigatoria)
-1. reduzir temperatura e output token.
-2. reduzir contexto para janela segura.
-3. (perfil Mac) trocar quantizacao para perfil mais rapido.
-4. (perfil Mac) trocar modelo local da mesma classe.
-5. escalar para cloud conforme risco.
-6. abrir decision se houver impacto de risco/custo/prazo.
+## Exemplos Minimos de Implementacao
 
-## Quando abrir Decision
-- risco alto ou acao em ambiente real
-- mais de 2 fallbacks sem sucesso
-- custo estimado acima do teto da tarefa
-- alteracao de modelo padrao de classe critica
+### 1) OpenAI SDK -> OpenRouter
+```python
+from openai import OpenAI
+import os
 
-## Formato de Saida Auditavel por Classe
-- roteamento: JSON com schema e justificativa.
-- PM: YAML de epicos/sprints/tasks com IDs.
-- RAG: resposta com claims e citacoes.
-- DEV: patch + resultado de teste.
-- decisao: proposta, evidencias, risco, custo e status.
+client = OpenAI(
+    api_key=os.environ["OPENROUTER_API_KEY"],
+    base_url="https://openrouter.ai/api/v1",
+)
+
+resp = client.chat.completions.create(
+    model="openai/gpt-4.1-mini",
+    messages=[{"role": "user", "content": "resuma em 3 bullets"}],
+)
+print(resp.choices[0].message.content)
+```
+
+### 2) Chamada com tools
+```python
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "lookup_policy",
+        "description": "consulta politica interna",
+        "parameters": {
+            "type": "object",
+            "properties": {"doc_id": {"type": "string"}},
+            "required": ["doc_id"],
+        },
+    },
+}]
+
+resp = client.chat.completions.create(
+    model="openai/gpt-4.1-mini",
+    messages=[{"role": "user", "content": "buscar policy SEC-015"}],
+    tools=tools,
+)
+```
+
+### 3) Structured output
+```python
+response_format = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "route_result",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "action": {"type": "string"},
+                "risk_class": {"type": "string"}
+            },
+            "required": ["action", "risk_class"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+resp = client.chat.completions.create(
+    model="openai/gpt-4.1-mini",
+    messages=[{"role": "user", "content": "classifique risco da tarefa"}],
+    response_format=response_format,
+)
+```
+
+### 4) Provider selection (include/order/require)
+```python
+resp = client.chat.completions.create(
+    model="openai/gpt-4.1-mini",
+    messages=[{"role": "user", "content": "gerar patch minimo"}],
+    extra_body={
+        "provider": {
+            "order": ["openai", "anthropic"],
+            "allow_fallbacks": True,
+        }
+    },
+)
+```
+
+### 5) Fallback configurado por task_type (exemplo)
+```yaml
+task_type: "dev_patch"
+fallback_chain:
+  - step: 0
+    model: "openai/gpt-4.1-mini"
+    provider_routing:
+      order: ["openai"]
+  - step: 1
+    model: "anthropic/claude-3.7-sonnet"
+    provider_routing:
+      order: ["anthropic"]
+  - step: 2
+    model: "openai/gpt-4.1-nano"
+    provider_routing:
+      order: ["openai"]
+no_fallback: false
+```
+
+### 6) Preset aplicado (exemplo)
+```yaml
+preset_id: "preset.dev_patch_v1"
+task_type: "dev_patch"
+requested_model: "openai/gpt-4.1-mini"
+provider_routing:
+  order: ["openai"]
+pin_provider: false
+no_fallback: false
+exacto_mode: "prefer"
+generation_defaults:
+  temperature: 0.1
+  max_output_tokens: 1800
+```
 
 ## Links Relacionados
 - [ARC Core](./ARC-CORE.md)
-- [Governance Risk](../CORE/GOVERNANCE-RISK.md)
+- [Models Catalog Schema](./schemas/models_catalog.schema.json)
+- [Security Policy](../SEC/SEC-POLICY.md)
 - [Financial Governance](../CORE/FINANCIAL-GOVERNANCE.md)
 - [System Health Thresholds](../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
 - [Decision Protocol](../PM/DECISION-PROTOCOL.md)

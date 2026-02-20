@@ -1,0 +1,18 @@
+schema_version: "1.0"
+last_updated: "2026-02-19"
+default_policy: "deny"
+roles:
+  pm:
+    allow:
+      - "read_files"
+      - "write_docs"
+  dev:
+    allow:
+      - "read_files"
+      - "write_files"
+      - "run_tests"
+  security:
+    allow:
+      - "read_files"
+      - "validate_policies"
+      - "incident_logging"

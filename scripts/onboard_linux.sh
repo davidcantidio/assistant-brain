@@ -121,12 +121,18 @@ create_templates() {
 # OpenClaw Env (exemplo) — NÃO COMMITAR valores reais
 TZ=America/Sao_Paulo
 
-# OpenAI
-OPENAI_API_KEY=
+# OpenRouter
+OPENROUTER_API_KEY=
+OPENROUTER_MANAGEMENT_KEY=
 
 # Telegram
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
+
+# Slack
+SLACK_BOT_TOKEN=
+SLACK_SIGNING_SECRET=
+SLACK_ALERT_CHANNEL_ID=
 
 # Convex
 CONVEX_DEPLOYMENT_URL=
@@ -136,9 +142,9 @@ CONVEX_DEPLOY_KEY=
 HEARTBEAT_MINUTES=20
 STANDUP_TIME=11:30
 
-# Model Router (OpenAI)
-OPENCLAW_MODEL_CHEAP=gpt-4.1-mini
-OPENCLAW_MODEL_STRONG=gpt-4.1
+# Model Router (OpenRouter model IDs)
+OPENCLAW_MODEL_CHEAP=openai/gpt-4.1-mini
+OPENCLAW_MODEL_STRONG=openai/gpt-4.1
 EOT
   fi
 
@@ -175,9 +181,13 @@ configure_env_interactive() {
   tz="$(prompt_text "TZ" "America/Sao_Paulo")"
   set_env_kv "$env_file" "TZ" "$tz"
 
-  local openai
-  openai="$(prompt_secret "OPENAI_API_KEY")"
-  [ -n "$openai" ] && set_env_kv "$env_file" "OPENAI_API_KEY" "$openai"
+  local openrouter
+  openrouter="$(prompt_secret "OPENROUTER_API_KEY")"
+  [ -n "$openrouter" ] && set_env_kv "$env_file" "OPENROUTER_API_KEY" "$openrouter"
+
+  local mgmt
+  mgmt="$(prompt_secret "OPENROUTER_MANAGEMENT_KEY (somente servico de budget)")"
+  [ -n "$mgmt" ] && set_env_kv "$env_file" "OPENROUTER_MANAGEMENT_KEY" "$mgmt"
 
   local tgbot
   tgbot="$(prompt_secret "TELEGRAM_BOT_TOKEN")"
@@ -186,6 +196,18 @@ configure_env_interactive() {
   local chat
   chat="$(prompt_text "TELEGRAM_CHAT_ID (ex: -100...)" "")"
   [ -n "$chat" ] && set_env_kv "$env_file" "TELEGRAM_CHAT_ID" "$chat"
+
+  local slackbot
+  slackbot="$(prompt_secret "SLACK_BOT_TOKEN")"
+  [ -n "$slackbot" ] && set_env_kv "$env_file" "SLACK_BOT_TOKEN" "$slackbot"
+
+  local slacksign
+  slacksign="$(prompt_secret "SLACK_SIGNING_SECRET")"
+  [ -n "$slacksign" ] && set_env_kv "$env_file" "SLACK_SIGNING_SECRET" "$slacksign"
+
+  local slackchan
+  slackchan="$(prompt_text "SLACK_ALERT_CHANNEL_ID (ex: C0123456789)" "")"
+  [ -n "$slackchan" ] && set_env_kv "$env_file" "SLACK_ALERT_CHANNEL_ID" "$slackchan"
 
   local cxurl
   cxurl="$(prompt_text "CONVEX_DEPLOYMENT_URL (https://...convex.cloud)" "")"

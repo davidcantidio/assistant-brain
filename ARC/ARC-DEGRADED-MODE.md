@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-DEGRADED-MODE.md"
-version: "1.0"
+version: "1.2"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-035", "RFC-050"]
 ---
 
@@ -31,7 +31,7 @@ Exclui:
 - [RFC-035] MUST executar reconciliacao automatica deterministica antes de qualquer passo manual.
 
 ## Deteccao e Ativacao
-- gatilhos: indisponibilidade do Convex, falha Telegram, erro de persistencia, timeout sistemico.
+- gatilhos: indisponibilidade do Convex, falha Telegram/Slack, erro de persistencia, timeout sistemico.
 - ao detectar:
   - abrir estado global `SYSTEM_DEGRADED`.
   - publicar alerta local e remoto (quando possivel).
@@ -47,15 +47,34 @@ Exclui:
 - permitir: tarefas de baixo risco idempotentes e de manutencao.
 - medio risco: somente com validacao deterministica estrita.
 
+## Trading com Posicao Aberta em Degradacao
+- regra geral:
+  - degradacao com exposicao aberta MUST entrar em `TRADING_BLOCKED` para novas entradas.
+  - objetivo primario passa a ser protecao de capital e reconciliacao de estado.
+- quando venue estiver acessivel:
+  - cancelar ordens pendentes nao essenciais.
+  - manter/atualizar ordens de protecao (`stoploss`) para toda posicao aberta.
+  - reduzir exposicao para `safe_notional` definido em policy ativa.
+  - registrar `position_snapshot` antes/depois de cada acao.
+- quando venue estiver indisponivel:
+  - marcar estado `UNMANAGED_EXPOSURE`.
+  - abrir incidente `SEV-1` imediatamente.
+  - emitir `human_action_required.md` com passos de contingencia manual.
+- retorno ao normal:
+  - so apos reconciliacao completa de ordens/posicoes e aprovacao HITL.
+
 ## Regra de Usuario (obrigatoria)
 - "se algo cair, informar e criar tarefas pro humano consertar" MUST ser aplicada assim:
   - registrar evento offline imediatamente;
   - notificar humano quando houver canal disponivel;
-  - quando Convex/Telegram indisponivel, gravar instrucoes em `human_action_required.md` com:
+  - quando Convex indisponivel ou ambos Telegram/Slack indisponiveis, gravar instrucoes em `human_action_required.md` com:
     - dependencia falha;
     - impacto atual;
     - passos de recuperacao;
     - criterio de validacao pos-recuperacao;
+  - quando apenas Telegram estiver indisponivel e Slack estiver saudavel:
+    - migrar HITL critico para Slack com challenge e assinatura obrigatorios;
+    - manter trilha de `command_id` idempotente por canal;
   - criar `task` e `decision` de correcao no retorno do sistema.
 
 ## Reconciliacao apos Retorno

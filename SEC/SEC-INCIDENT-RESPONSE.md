@@ -1,9 +1,9 @@
 ---
 doc_id: "SEC-INCIDENT-RESPONSE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-035", "RFC-050"]
 ---
 
@@ -36,15 +36,16 @@ Exclui:
 ## Playbook
 1. Detectar e classificar severidade.
 2. Conter impacto (bloqueio, kill switch, sandbox restrito).
-3. Comunicar humano via Telegram.
+3. Comunicar humano via Telegram (primario) ou Slack (fallback).
 4. Acionar degraded mode se dependencia critica falhar.
 5. Corrigir causa raiz e validar recuperacao.
 6. Fechar com pos-mortem e plano preventivo.
 
 ## Comunicacao
-- Telegram: alerta imediato para SEV-1/SEV-2.
+- Telegram: alerta imediato preferencial para SEV-1/SEV-2.
+- Slack: fallback imediato quando Telegram estiver degradado.
 - fallback offline: registrar em `incidents.log` quando canal indisponivel.
-- se Convex/Telegram indisponivel, gerar `human_action_required.md` com passos de recuperacao.
+- se Convex indisponivel ou ambos Telegram/Slack indisponiveis, gerar `human_action_required.md` com passos de recuperacao.
 - resumo final MUST incluir impacto, causa e medidas.
 
 ## Pos-mortem

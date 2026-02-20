@@ -1,0 +1,48 @@
+schema_version: "1.0"
+last_updated: "2026-02-20"
+default_policy: "deny"
+default_mode: "openrouter_gateway"
+
+profiles:
+  public:
+    require_zdr: false
+    no_fallback_default: false
+    pin_provider_default: false
+    allowed_providers:
+      - "openai"
+      - "anthropic"
+      - "google"
+
+  internal:
+    require_zdr: false
+    no_fallback_default: false
+    pin_provider_default: false
+    allowed_providers:
+      - "openai"
+      - "anthropic"
+      - "google"
+
+  sensitive:
+    require_zdr: true
+    no_fallback_default: true
+    pin_provider_default: true
+    allowed_providers:
+      - "openai"
+      - "anthropic"
+
+task_type_overrides:
+  hitl_critical:
+    profile: "sensitive"
+    exacto_mode: "require_when_available"
+
+  trading_live_gate:
+    profile: "sensitive"
+    exacto_mode: "require_when_available"
+
+  dev_patch:
+    profile: "internal"
+    exacto_mode: "prefer"
+
+breakglass:
+  decision_required: true
+  allow_direct_provider_calls: false

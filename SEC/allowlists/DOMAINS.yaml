@@ -1,0 +1,32 @@
+schema_version: "1.2"
+last_updated: "2026-02-20"
+default_policy: "deny"
+allow:
+  docs:
+    - "docs.github.com"
+    - "github.com"
+  llm_gateway:
+    - "openrouter.ai"
+    - "api.openrouter.ai"
+  control_plane:
+    - "*.convex.cloud"
+    - "api.telegram.org"
+    - "slack.com"
+    - "api.slack.com"
+    - "hooks.slack.com"
+  trading_phase1_binance:
+    - "api.binance.com"
+    - "stream.binance.com"
+    - "data-api.binance.vision"
+    - "testnet.binance.vision"
+  storage:
+    - "*.amazonaws.com"
+    - "*.s3.amazonaws.com"
+breakglass_only:
+  direct_model_providers:
+    - "api.openai.com"
+    - "api.anthropic.com"
+    - "generativelanguage.googleapis.com"
+  trading_phase2_brokers: []
+deny:
+  - "*"

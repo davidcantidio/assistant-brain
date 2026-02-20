@@ -1,9 +1,9 @@
 ---
 doc_id: "SEC-SANDBOXING.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-035", "RFC-050"]
 ---
 
@@ -30,6 +30,10 @@ Exclui:
 
 ## Politica de Execucao
 - rede: deny-by-default.
+- excecao de rede para Trading:
+  - acesso externo a exchange/broker MUST ocorrer somente via `execution_gateway`.
+  - workers/agentes de analise MUST NOT chamar endpoints de ordem diretamente.
+  - dominios de venue MUST existir em `SEC/allowlists/DOMAINS.yaml`.
 - filesystem: acesso apenas ao workspace autorizado.
 - processos: bloquear elevacao de privilegio e comandos destrutivos nao aprovados.
 

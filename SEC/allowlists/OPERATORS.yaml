@@ -1,0 +1,44 @@
+schema_version: "1.2"
+last_updated: "2026-02-20"
+mode: "single_primary"
+readiness:
+  trading_live_requires_backup_operator: true
+  slack_fallback_requires_non_empty_user_and_channel_ids: true
+  live_ready: false
+operators:
+  - operator_id: "primary-01"
+    display_name: "Davi Cantidio"
+    username: "davidcantidio"
+    telegram_user_id: 7165399698
+    telegram_chat_ids:
+      - 7165399698
+    slack_username: "davidcantidio"
+    slack_user_ids: []
+    slack_channel_ids: []
+    slack_ready: false
+    permissions:
+      - "approve"
+      - "reject"
+      - "kill"
+    risk_scope:
+      - "baixo"
+      - "medio"
+      - "alto"
+    enabled: true
+  - operator_id: "backup-breakglass-01"
+    display_name: "Backup Breakglass"
+    telegram_user_id: 222222222
+    telegram_chat_ids:
+      - 222222222
+    slack_user_ids: []
+    slack_channel_ids: []
+    slack_ready: false
+    permissions:
+      - "approve"
+      - "reject"
+      - "kill"
+    risk_scope:
+      - "baixo"
+      - "medio"
+      - "alto"
+    enabled: false

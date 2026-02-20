@@ -1,9 +1,9 @@
 ---
 doc_id: "MODEL-EVALS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-18"
+last_updated: "2026-02-19"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
 ---
 
@@ -17,6 +17,7 @@ Inclui:
 - protocolo de benchmark funcional e operacional
 - estrategia de rollout gradual
 - thresholds de regressao e rollback
+- contrato minimo de harness executavel
 
 Exclui:
 - troca de modelo em producao sem teste
@@ -28,6 +29,16 @@ Exclui:
 - [RFC-030] MUST executar rollout gradual antes de adocao total.
 - [RFC-050] MUST acionar rollback ao ultrapassar threshold de regressao.
 - [RFC-050] MUST atualizar o gate de claim central correspondente apos qualquer troca de modelo.
+- [RFC-050] claim sem harness executavel MUST bloquear release.
+
+## Harness Executavel (contrato)
+- comando padrao:
+  - `make eval-models` (ou script equivalente registrado em CI).
+- saida minima:
+  - `artifacts/evals/models/summary.json`
+  - `artifacts/evals/models/by_class.json`
+- status de execucao:
+  - exit code 0 somente com gates verdes.
 
 ## Protocolo de Avaliacao
 1. definir baseline atual por classe.
