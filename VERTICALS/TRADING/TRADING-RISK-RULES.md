@@ -1,6 +1,6 @@
 ---
 doc_id: "TRADING-RISK-RULES.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-20"
@@ -112,6 +112,17 @@ Exclui:
   - limites definidos explicitamente na decision.
 - regressao obrigatoria:
   - qualquer incidente `SEV-1/SEV-2` ou violacao hard MUST retornar imediatamente para `L0` ou `TRADING_BLOCKED`.
+
+## Definicao de `safe_notional` (degradacao)
+- objetivo:
+  - limitar exposicao residual durante `SYSTEM_DEGRADED` com regra deterministica e reproduzivel.
+- formula canonica:
+  - `safe_notional = min(open_exposure_notional, max_notional_per_order_nivel_atual, 0.25 * max_daily_notional_nivel_atual)`.
+- fonte de parametros:
+  - `max_notional_per_order_nivel_atual` e `max_daily_notional_nivel_atual` devem vir da policy ativa de `capital_ramp_level`.
+  - para classe sem limites explicitos em policy ativa, usar limites de `asset_profile`.
+- regra de falha:
+  - se nao for possivel calcular `safe_notional` por ausencia de parametros, sistema MUST manter `TRADING_BLOCKED` e abrir incidente de risco.
 
 ## Pre-Trade Validator (obrigatorio)
 - validar `min_notional` por simbolo.

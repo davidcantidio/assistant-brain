@@ -27,7 +27,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 ## Regras Operacionais Essenciais
 - baseline de heartbeat: **20 minutos** (`ARC/ARC-HEARTBEAT.md`).
 - workspaces ativos no MVP: **somente** `workspaces/main`.
-- gateway programatico de inferencia: **OpenRouter** (`https://openrouter.ai/api/v1`).
+- gateway programatico de inferencia em cloud/provider externo: **OpenRouter** (`https://openrouter.ai/api/v1`).
 - automacoes com efeito colateral exigem contrato de idempotencia + rollback.
 - aprovacao HITL critica exige allowlist de operador + challenge de segundo fator (Telegram primario, Slack fallback controlado).
 - claims centrais sem eval gate executavel bloqueiam release de fase.
@@ -40,6 +40,16 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
   - `SEC/allowlists/ACTIONS.yaml`
   - `SEC/allowlists/OPERATORS.yaml`
   - `SEC/allowlists/PROVIDERS.yaml`
+
+## Harness de Evals (local)
+```bash
+make eval-models
+make eval-rag
+make eval-trading
+make eval-gates
+make ci-quality
+make ci-security
+```
 
 ## Onboarding Local
 ```bash

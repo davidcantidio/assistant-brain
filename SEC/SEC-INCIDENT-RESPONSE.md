@@ -1,6 +1,6 @@
 ---
 doc_id: "SEC-INCIDENT-RESPONSE.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "Security"
 last_updated: "2026-02-20"
@@ -43,7 +43,7 @@ Exclui:
 
 ## Comunicacao
 - Telegram: alerta imediato preferencial para SEV-1/SEV-2.
-- Slack: fallback imediato quando Telegram estiver degradado.
+- Slack: fallback imediato quando Telegram estiver degradado, somente com operador/canal validados na allowlist.
 - fallback offline: registrar em `incidents.log` quando canal indisponivel.
 - se Convex indisponivel ou ambos Telegram/Slack indisponiveis, gerar `human_action_required.md` com passos de recuperacao.
 - resumo final MUST incluir impacto, causa e medidas.

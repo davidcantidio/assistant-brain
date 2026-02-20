@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-20"
@@ -43,7 +43,7 @@ Exclui:
 ## Componentes do Sistema Nervoso
 - OpenClaw runtime: execucao de agentes e rotinas.
 - Convex: estado compartilhado e feed operacional.
-- OpenRouter gateway: endpoint unico programatico para inferencia LLM.
+- OpenRouter gateway: endpoint unico programatico para inferencia LLM em cloud/provider externo.
 - Worker LLM local: execucao de microtasks pesadas e nao urgentes em host compativel (preferencia: Mac >= 32 GB RAM).
 - Model Catalog Service: sync e versionamento de metadados de modelos.
 - Model Router: selecao de modelo/provider/fallback por task_type/risco/custo/confiabilidade.

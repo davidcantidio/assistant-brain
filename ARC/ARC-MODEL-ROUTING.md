@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-20"
@@ -27,6 +27,7 @@ Exclui:
 
 ## Regras Normativas
 - [RFC-030] MUST usar OpenRouter como gateway padrao para chamadas LLM programaticas.
+- [RFC-030] MUST bloquear chamada cloud direta a provider fora do OpenRouter.
 - [RFC-030] MUST escolher modelo por policy + historico + custo/latencia/confiabilidade.
 - [RFC-030] MUST tratar variancia de provider como risco operacional explicito.
 - [RFC-050] MUST registrar requested/effective model/provider em toda execucao.
@@ -114,7 +115,7 @@ Exclui:
 
 ## Perfis Oficiais de Execucao
 - `VPS-CLOUD` (producao): cloud-first via OpenRouter.
-- `MAC-LOCAL` (dev/operacao assistida): local-first com fallback OpenRouter conforme policy.
+- `MAC-LOCAL` (dev/operacao assistida): local-first para modelos locais, com fallback OpenRouter conforme policy quando houver chamada cloud.
 - Fase 0 MUST suportar `MAC-LOCAL` para tarefas pesadas nao urgentes, com supervisao por modelo robusto de assinatura em checkpoints de risco.
 
 ## Defaults Conservadores (quando nao especificado)

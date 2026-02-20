@@ -1,6 +1,6 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.8"
+version: "1.10"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-20"
@@ -42,7 +42,7 @@ Exclui:
 - risco real: iniciar automacoes sem contrato executavel de idempotencia, rollback, eval gate e politica de privacidade.
 
 ## Arquitetura Alvo Consolidada
-- gateway programatico de LLM: **OpenRouter** (OpenAI-compatible API).
+- gateway programatico de LLM em cloud/provider externo: **OpenRouter** (OpenAI-compatible API).
 - plano de execucao:
   - `Control Plane`: Convex + runtime + adapters de canal (Telegram primario para HITL critico; Slack para colaboracao operacional e fallback controlado de HITL).
   - `Router Plane`: Model Router + Presets + Policy Engine.
@@ -343,8 +343,19 @@ Definicao objetiva de side effect:
 - qualquer acao que leia/escreva/exponha dados sensiveis.
 - qualquer acao que crie, use, rode ou exponha credenciais/chaves/tokens.
 
+## Contrato Minimo de `pre_live_checklist`
+- `pre_live_checklist` e o gate tecnico obrigatorio antes de qualquer `live-run` com side effect.
+- campos minimos:
+  - `checklist_id`, `decision_id`, `risk_tier`, `approved_at`, `operator_id`, `items[]`.
+- regra de validacao:
+  - `items[]` MUST incluir evidencia objetiva (`evidence_ref`) e status `pass|fail`.
+  - qualquer item `fail` MUST bloquear `live-run`.
+- para vertical Trading:
+  - usar checklist detalhado em `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.
+
 ## Decisoes Fechadas
-- OpenRouter e o gateway padrao para chamadas LLM programaticas.
+- OpenRouter e o gateway padrao para chamadas LLM programaticas em cloud/provider externo.
+- inferencia local em `MAC-LOCAL` e permitida para modelos locais sem chamada direta a provider externo.
 - OpenRouter SHOULD manter logging de prompts/respostas desativado por default; qualquer opt-in MUST ser registrado por policy.
 - providers efetivos possuem politicas proprias de retencao e MUST obedecer `provider allowlist` por sensibilidade.
 - roteamento MUST ser orientado por:
@@ -401,7 +412,8 @@ Definicao objetiva de side effect:
 
 ## Fases e Definition of Done
 - Fase 0 (Mission Control MVP):
-  - control-plane minimo + model catalog + model router + memory plane + budget governor + privacidade enforceable.
+  - control-plane minimo + baseline executavel de catalog/router/memory/budget/privacidade.
+  - refinos avancados desses blocos devem ser diferidos para Fase 1/2 conforme `PRD/ROADMAP.md`, sem perda de escopo.
   - DoD MUST: 7 dias estavel, rota explicavel por Issue/Microtask, claims centrais cobertos por gate, sem bypass de policy.
 - Fase 1 (Trading):
   - habilitada somente apos criteria formal de enablement e suite hard-risk verde.

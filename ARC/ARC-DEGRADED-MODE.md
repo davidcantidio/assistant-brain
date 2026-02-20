@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-DEGRADED-MODE.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-20"
@@ -54,7 +54,7 @@ Exclui:
 - quando venue estiver acessivel:
   - cancelar ordens pendentes nao essenciais.
   - manter/atualizar ordens de protecao (`stoploss`) para toda posicao aberta.
-  - reduzir exposicao para `safe_notional` definido em policy ativa.
+  - reduzir exposicao para `safe_notional` definido em `VERTICALS/TRADING/TRADING-RISK-RULES.md`.
   - registrar `position_snapshot` antes/depois de cada acao.
 - quando venue estiver indisponivel:
   - marcar estado `UNMANAGED_EXPOSURE`.
@@ -73,7 +73,9 @@ Exclui:
     - passos de recuperacao;
     - criterio de validacao pos-recuperacao;
   - quando apenas Telegram estiver indisponivel e Slack estiver saudavel:
-    - migrar HITL critico para Slack com challenge e assinatura obrigatorios;
+    - migrar HITL critico para Slack somente com fallback validado:
+      - operador habilitado com `slack_user_ids` e `slack_channel_ids` nao vazios;
+      - challenge + assinatura HMAC + anti-replay obrigatorios;
     - manter trilha de `command_id` idempotente por canal;
   - criar `task` e `decision` de correcao no retorno do sistema.
 

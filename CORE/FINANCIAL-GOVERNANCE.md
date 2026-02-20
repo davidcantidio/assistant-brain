@@ -1,6 +1,6 @@
 ---
 doc_id: "FINANCIAL-GOVERNANCE.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-20"
@@ -37,6 +37,20 @@ Exclui:
   - `credits_snapshots`.
 - frequencia minima:
   - snapshot a cada 5 minutos em horario operacional.
+
+## Conversao Creditos <-> BRL (contrato)
+- objetivo:
+  - eliminar ambiguidade entre limites em creditos e limites em BRL.
+- definicoes:
+  - `credit_balance_usd = balance` (saldo de creditos em unidade monetaria da API).
+  - `fx_usd_brl` = taxa de cambio USD/BRL do snapshot financeiro ativo.
+  - `credit_balance_brl = credit_balance_usd * fx_usd_brl`.
+  - `burn_rate_brl = burn_rate_usd * fx_usd_brl`.
+- regras:
+  - thresholds operacionais podem ser definidos em USD ou BRL, mas avaliados na mesma moeda do limite.
+  - sem `fx_usd_brl` atualizado (< 24h), sistema MUST degradar para modo conservador:
+    - bloquear tarefas nao criticas;
+    - manter apenas operacao critica com teto em USD.
 
 ## Seguranca de Chave
 - endpoint de creditos usa `OPENROUTER_MANAGEMENT_KEY`.

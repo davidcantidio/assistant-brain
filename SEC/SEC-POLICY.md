@@ -1,6 +1,6 @@
 ---
 doc_id: "SEC-POLICY.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "Security"
 last_updated: "2026-02-20"
@@ -73,7 +73,9 @@ Exclui:
   - `./allowlists/PROVIDERS.yaml`
 
 ## OpenRouter e Providers
-- chamadas programaticas de inferencia MUST passar por OpenRouter.
+- chamadas programaticas de inferencia em cloud/provider externo MUST passar por OpenRouter.
+- inferencia local em `MAC-LOCAL` MAY operar sem OpenRouter somente para modelos locais sem chamada a provider externo.
+- chamada direta a API de provider externo fora do OpenRouter MUST ser bloqueada.
 - OpenRouter SHOULD operar com logging de prompts/respostas desativado por default (opt-in explicito por policy).
 - providers efetivos possuem politicas proprias de retencao/privacidade e MUST ser tratados como variancia de risco.
 - provider efetivo MUST ser validado contra `PROVIDERS.yaml`.

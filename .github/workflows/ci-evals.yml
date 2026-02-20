@@ -1,0 +1,14 @@
+name: ci-evals
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run claim gates
+        run: make eval-gates

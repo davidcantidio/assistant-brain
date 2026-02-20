@@ -1,6 +1,6 @@
 ---
 doc_id: "TRADING-ENABLEMENT-CRITERIA.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-20"
@@ -125,6 +125,31 @@ Todos obrigatorios antes da primeira ordem com dinheiro real:
   - permissao sem saque;
   - IP allowlist ativa quando suportado.
 - runbook de degradacao com posicao aberta aprovado e testado em simulacao.
+
+## `pre_live_checklist` (contrato obrigatorio)
+- objetivo:
+  - impedir `live-run` sem evidencias minimas de risco, seguranca e operacao.
+- campos obrigatorios:
+  - `checklist_id`
+  - `decision_id`
+  - `risk_tier`
+  - `asset_class`
+  - `capital_ramp_level`
+  - `operator_id`
+  - `approved_at`
+  - `items[]` com `item_id`, `status(pass|fail)`, `evidence_ref`
+- itens minimos:
+  - `eval_trading_green` (`make eval-trading` verde em CI)
+  - `execution_gateway_only` (sem bypass para venue)
+  - `pre_trade_validator_active` (contrato versionado e carregado)
+  - `credentials_live_no_withdraw` (sem saque + IP allowlist quando suportado)
+  - `hitl_channel_ready` (Telegram pronto; Slack fallback somente se IDs validados)
+  - `degraded_mode_runbook_ok` (simulacao validada)
+  - `backup_operator_enabled` (habilitado para `approve/reject/kill`)
+- regra de bloqueio:
+  - qualquer item `fail` MUST manter `TRADING_BLOCKED`.
+- artifact minimo:
+  - `artifacts/trading/pre_live_checklist/<checklist_id>.json`
 
 ## Gate de Promocao (Micro-live -> Escala)
 Todos obrigatorios:

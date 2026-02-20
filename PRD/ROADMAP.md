@@ -1,6 +1,6 @@
 ---
 doc_id: "ROADMAP.md"
-version: "1.8"
+version: "2.0"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-20"
@@ -39,15 +39,13 @@ Exclui:
 - Convex com colecoes minimas de control-plane.
 - OpenClaw runtime configurado para workspace `workspaces/main`.
 - Worker LLM local habilitado na Fase 0 para tarefas pesadas nao urgentes (host compativel, preferencia Mac >= 32 GB RAM).
-- gateway LLM programatico padrao: OpenRouter (`https://openrouter.ai/api/v1`).
-- Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03), mais adapter Slack para colaboracao operacional, `@mentions` e fallback HITL quando Telegram cair.
-- Model Catalog Service + Model Router + Presets como componentes obrigatorios.
-- Memory plane vetorial hibrido (Postgres + pgvector ou equivalente) para catalogo/runs/decisoes.
-- Budget Governor baseado em saldo de creditos OpenRouter.
-- policy de privacidade/retencao/provider allowlist/ZDR ativa por sensibilidade.
+- gateway LLM programatico padrao para cloud/provider externo: OpenRouter (`https://openrouter.ai/api/v1`).
+- Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03).
+- Model Catalog + Model Router + Memory Plane + Budget + Privacidade entram em baseline minimo na Fase 0.
+- refinos avancados desses blocos sao diferidos para Fase 1/2 sem perda de escopo.
 - Routing MVP limitado a 3 classes: Dispatcher, RAG Librarian (empresa), Dev Junior.
 
-### Backlog de construcao de codigo (obrigatorio na Fase 0)
+### Backlog de construcao de codigo (obrigatorio na Fase 0 - baseline)
 - `B0-01` implementar contratos `work_order`, `decision`, `task_event` com validacao de schema.
 - `B0-02` implementar bot Telegram com autenticacao forte (`from.id` + `chat.id` + challenge).
 - `B0-03` implementar lifecycle completo do challenge HITL.
@@ -55,49 +53,34 @@ Exclui:
 - `B0-05` implementar contrato idempotente para auto-acoes de saude/observabilidade.
 - `B0-06` implementar reconciliador de degraded mode (`idempotency_key` + `replay_key`).
 - `B0-07` implementar OpenRouter client padrao (OpenAI-compatible) no runtime.
-- `B0-08` implementar Model Catalog Service:
+- `B0-08` implementar Model Catalog baseline:
   - sync de Models API,
-  - versionamento de preco/capabilities/limites/supported parameters.
-- `B0-09` implementar Model Router:
-  - provider routing (`include/exclude/order/require`),
-  - `pin provider` para rotas criticas,
-  - fallback chain por `task_type`,
-  - modo `no-fallback` para rotas sensiveis,
-  - modo tool-calling confiavel (exacto/preferido quando disponivel).
-- `B0-10` implementar entidade `presets` para governanca central de roteamento.
-- `B0-11` implementar memory plane vetorial hibrido unico para IA:
-  - `model_catalog`, `llm_runs`, `router_decisions`, `eval_aggregates`, `credits_snapshots`.
-- `B0-12` implementar ingestao de metadados de run (`requested/effective model/provider`, usage, fallback, erros, outcome).
-- `B0-13` implementar Budget Governor por creditos OpenRouter:
+  - metadados minimos para roteamento (`model_id`, provider, capabilities, limits, pricing, status).
+- `B0-09` implementar Model Router baseline:
+  - filtro por policy/risk/sensitivity,
+  - ranking baseline (`capabilities-first`),
+  - trilha obrigatoria `requested/effective`.
+- `B0-11` implementar Memory Plane baseline:
+  - `llm_runs`, `router_decisions`, `credits_snapshots`.
+- `B0-13` implementar Budget Governor baseline:
   - coleta de `credits_snapshots`,
-  - limites por run/task/dia,
-  - circuit breaker de custo.
-- `B0-14` implementar politica de privacidade e retencao:
+  - limites por run/task/dia.
+- `B0-14` implementar privacidade baseline:
   - classificacao `public/internal/sensitive`,
-  - provider allowlist por task_type,
-  - politica ZDR para `sensitive`,
+  - provider allowlist por sensibilidade,
   - prompt storage minimizado (hash + resumo sanitizado por padrao).
 - `B0-15` implementar harness executavel de evals com comando unico (`make eval-gates` ou equivalente).
 - `B0-16` implementar CI gates no GitHub Actions para claims centrais, allowlists, privacidade e roteamento.
-- `B0-17` implementar adapter de eventos Slack:
-  - normalizacao de `@mention` para `task_event` com `idempotency_key`,
-  - deduplicacao por evento/coalescing key,
-  - mapeamento de thread para `issue_id`/`microtask_id`,
-  - sem bypass de gates `R2/R3`.
-- `B0-18` implementar fallback HITL Slack + task automatica de recuperacao Telegram:
-  - validar assinatura HMAC + anti-replay,
-  - aplicar o mesmo challenge de segundo fator,
-  - abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` quando fallback for acionado.
-- `B0-19` preencher e validar `OPERATORS.yaml` para fallback HITL:
-  - `slack_user_ids` e `slack_channel_ids` nao vazios para operador habilitado,
-  - pelo menos 1 `backup_operator` habilitado para capital real.
+- `B0-19` preencher e validar `OPERATORS.yaml` baseline:
+  - IDs Telegram validados para aprovacao critica,
+  - estrategia de `backup_operator` definida e rastreada.
 
 ### DoD Fase 0
 - 7 dias de operacao estavel.
 - uptime operacional >= 99.0% no piloto.
 - reboot sem corrupcao de estado.
 - decisions aprovam/rejeitam corretamente.
-- wake-up por mention funcional.
+- wake-up por evento funcional nos canais habilitados da fase.
 - standup diario entregue de forma consistente.
 - taxa de falha de tarefa < 10% por hora.
 - delay de heartbeat p95 <= 5 minutos vs agenda.
@@ -125,7 +108,6 @@ Exclui:
 - `B1-01` integrar adapter de `TradingAgents` com contrato `signal_intent` canonico.
 - `B1-02` implementar `signal_normalizer` + deduplicacao + trace de origem do engine.
 - `B1-03` bloquear tecnicamente caminho de ordem direta de framework externo para exchange.
-- `B1-04` habilitar `single_engine_mode` (degradacao segura) para falha de engine secundaria/auxiliar.
 - `B1-05` reforcar `pre_trade_validator` com `capital_ramp_level` por simbolo.
 - `B1-06` validar idempotencia de ordem (`client_order_id`) e reconciliacao em falha parcial.
 - `B1-07` implementar `fail_closed` para falha de engine primaria de sinal.
@@ -136,7 +118,36 @@ Exclui:
 - `B1-12` tornar `make eval-trading` gate obrigatorio em CI para mudancas de trading.
 - `B1-13` formalizar estagio `S0 - paper/sandbox` com evidencias obrigatorias e bloqueio de ordem real.
 - `B1-14` habilitar modo assistido humano por ordem de entrada na janela inicial de `S1`.
-- `B1-15` definir criterios objetivos de promocao `S1 -> S2` (30 dias, sem `SEV-1/SEV-2`, sem violacao hard).
+
+### Refinos diferidos da Fase 0 (sem perda de informacao)
+- `B1-R08` (origem `B0-08`) expandir Model Catalog:
+  - versionamento de preco/capabilities/limites/supported parameters.
+- `B1-R09` (origem `B0-09`) expandir Model Router:
+  - provider routing (`include/exclude/order/require`),
+  - `pin provider` para rotas criticas,
+  - fallback chain por `task_type`,
+  - modo `no-fallback` para rotas sensiveis,
+  - modo tool-calling confiavel (exacto/preferido quando disponivel).
+- `B1-R10` (origem `B0-10`) implementar entidade `presets` para governanca central de roteamento.
+- `B1-R11` (origem `B0-11`) expandir memory plane vetorial hibrido:
+  - `model_catalog`, `eval_aggregates` e embeddings operacionais.
+- `B1-R12` (origem `B0-12`) implementar ingestao completa de metadados de run (`requested/effective model/provider`, usage, fallback, erros, outcome).
+- `B1-R13` (origem `B0-13`) expandir Budget Governor:
+  - circuit breaker de custo e politicas de burn-rate.
+- `B1-R14` (origem `B0-14`) expandir privacidade/retencao:
+  - ZDR por task_type `sensitive` e politicas de retention detalhadas.
+- `B1-R17` (origem `B0-17`) implementar adapter de eventos Slack:
+  - normalizacao de `@mention` para `task_event` com `idempotency_key`,
+  - deduplicacao por evento/coalescing key,
+  - mapeamento de thread para `issue_id`/`microtask_id`,
+  - sem bypass de gates `R2/R3`.
+- `B1-R18` (origem `B0-18`) implementar fallback HITL Slack + task automatica de recuperacao Telegram:
+  - validar assinatura HMAC + anti-replay,
+  - aplicar o mesmo challenge de segundo fator,
+  - abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` quando fallback for acionado.
+- `B1-R19` (origem `B0-19`) concluir prontidao de fallback HITL Slack:
+  - `slack_user_ids` e `slack_channel_ids` nao vazios para operador habilitado,
+  - `backup_operator` habilitado para capital real.
 
 ### DoD Fase 1
 - gating de enablement totalmente verde.
@@ -160,6 +171,10 @@ Exclui:
 - `B2-03` estender `pre_trade_validator` para calendario de mercado, lote/tick/notional e custos por classe.
 - `B2-04` criar suites `eval-trading-<asset_class>` com cenarios hard-risk bloqueantes.
 - `B2-05` implantar `shadow_mode` por classe com criterio de promote para live.
+
+### Refinos diferidos da Fase 1 (sem perda de informacao)
+- `B2-R04` (origem `B1-04`) habilitar `single_engine_mode` (degradacao segura) para falha de engine secundaria/auxiliar.
+- `B2-R15` (origem `B1-15`) definir criterios objetivos de promocao `S1 -> S2` (30 dias, sem `SEV-1/SEV-2`, sem violacao hard).
 
 ### DoD Fase 2
 - novas verticais operando sem violacao de politica.

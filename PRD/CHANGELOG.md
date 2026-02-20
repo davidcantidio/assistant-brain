@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "1.8"
+version: "2.0"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-20"
@@ -28,6 +28,39 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-20 - Rebalanceamento de fases (reduzir carga inicial sem perda de informacao)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - reduz escopo obrigatorio da Fase 0 para baseline executavel.
+  - move refinos de catalog/router/presets/memory/budget/privacidade/Slack para Fase 1 com rastreabilidade de origem (`B1-R*`).
+  - move refinos de resiliencia/escala de Trading para Fase 2 com rastreabilidade de origem (`B2-R*`).
+  - preserva 100% das informacoes de backlog, sem descarte de requisito.
+- Migracao:
+  - seguir novos blocos de backlog em `PRD/ROADMAP.md`:
+    - `Backlog ... baseline` (fase atual),
+    - `Refinos diferidos ...` (fases seguintes).
+  - manter gates obrigatorios por fase sem antecipar refino nao bloqueante.
+
+### 2026-02-20 - Correcoes de coerencia pos-auditoria (stop-ship)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - remove contradicao entre OpenRouter obrigatorio e uso de LLM local (`cloud/provider externo` via OpenRouter; local permitido em `MAC-LOCAL` sem chamada direta a provider).
+  - endurece fallback HITL em Slack no degradado para exigir IDs validados + assinatura + anti-replay + challenge.
+  - torna `risk_tier` obrigatorio no Work Order para evitar gate ambiguo.
+  - define contrato objetivo de `safe_notional` e referencia canonica em degradacao.
+  - formaliza contrato minimo de `pre_live_checklist` para bloquear live-run sem evidencia.
+  - formaliza conversao creditos <-> BRL no Budget Governor.
+  - revoga explicitamente a entrada historica de `live-first` e mantem `S0 -> S1 -> S2` como regra vigente.
+  - elimina bypass de governanca nos scripts de backup (`git add/commit/push` automatico removido).
+  - adiciona harness/workflows minimos executaveis:
+    - `Makefile` com `eval-models`, `eval-rag`, `eval-trading`, `eval-gates`;
+    - `scripts/ci/*.sh`;
+    - `.github/workflows/ci-quality.yml`, `ci-security.yml`, `ci-routing.yml`, `ci-evals.yml`, `ci-trading.yml`.
+- Migracao:
+  - executar `make eval-gates` e `make eval-trading` antes de promover mudancas criticas;
+  - manter fallback Slack de trading live bloqueado enquanto IDs de Slack estiverem vazios no operador habilitado;
+  - manter `TRADING_BLOCKED` quando checklist/gates obrigatorios falharem.
 
 ### 2026-02-20 - Trading em rollout conservador (paper-first -> micro-live -> escala)
 - RFCs afetadas: RFC-010, RFC-050, RFC-060.
@@ -80,17 +113,13 @@ Exclui:
   - implementar `single_engine_mode` para degradacao segura.
   - habilitar modulos de `AgenticTrading` somente apos criterio de ganho comprovado e decision registrada.
 
-### 2026-02-20 - Trading em modo live-first (dinheiro real) sem etapa obrigatoria de dry-run
-- RFCs afetadas: RFC-010, RFC-050, RFC-060.
-- Impacto:
-  - remove obrigatoriedade de `dry-run` como precondicao universal para entrada em live na vertical Trading.
-  - adota fluxo `backtest -> live` com `pre_live_checklist` obrigatorio para acoes com side effects.
-  - formaliza `capital_ramp_level=L0` obrigatorio no inicio do live e evolucao somente por decision.
-  - reforca regras hard para regressao imediata de nivel em incidente critico.
-- Migracao:
-  - atualizar runtime para carregar `capital_ramp_level` e limites `L0` do documento de risco.
-  - bloquear envio de ordem quando `pre_trade_validator` falhar ou `capital_ramp_level` estiver ausente.
-  - manter `eval-trading` verde para qualquer alteracao critica em live.
+### 2026-02-20 - Entrada historica revogada: "live-first sem etapa obrigatoria"
+- Status: **REVOGADA no mesmo dia** pela entrada "Trading em rollout conservador (paper-first -> micro-live -> escala)".
+- Motivo da revogacao:
+  - conflito normativo com `S0` obrigatorio antes de capital real.
+  - risco operacional alto sem janela minima de estabilizacao.
+- Regra vigente:
+  - permanece `S0 -> S1 -> S2` com gate formal de enablement, `pre_live_checklist` e decision `R3` para promote.
 
 ### 2026-02-20 - HITL multi-canal, operador registrado e migracao final para OPENROUTER_*
 - RFCs afetadas: RFC-010, RFC-015, RFC-035, RFC-050.

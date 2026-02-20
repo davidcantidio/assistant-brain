@@ -1,6 +1,6 @@
 ---
 doc_id: "WORK-ORDER-SPEC.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-20"
@@ -41,7 +41,7 @@ target_office: "..."
 objective: "texto claro"
 sla_class: "instantaneo|normal|overnight"
 risk_class: "baixo|medio|alto"
-risk_tier: "R0|R1|R2|R3|null"
+risk_tier: "R0|R1|R2|R3"
 data_sensitivity: "public|internal|sensitive"
 priority: "P0|P1|P2|P3"
 created_at: "ISO-8601"
@@ -83,7 +83,10 @@ status: "DRAFT|APPROVED|IN_PROGRESS|DONE|CANCELLED"
   - `baixo -> R1` (ou `R0` quando doc-only).
   - `medio -> R2`.
   - `alto -> R3`.
-- Work Order SHOULD incluir `risk_tier` quando houver side effect ou gate formal.
+- Work Order MUST incluir `risk_tier` em todos os casos.
+- consistencia obrigatoria:
+  - `risk_tier=R0` apenas para `doc-only` sem side effect.
+  - qualquer side effect MUST usar `R1`, `R2` ou `R3`.
 
 ## Regras de Sensibilidade
 - `public`: sem restricao adicional de provider alem da policy base.

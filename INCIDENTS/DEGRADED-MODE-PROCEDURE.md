@@ -1,6 +1,6 @@
 ---
 doc_id: "DEGRADED-MODE-PROCEDURE.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "Security"
 last_updated: "2026-02-20"
@@ -33,7 +33,7 @@ Exclui:
 2. bloquear tarefas de alto risco.
 3. manter apenas tarefas idempotentes de baixo risco.
 4. registrar toda acao offline.
-5. notificar stakeholders via Telegram (primario) ou Slack (fallback), se disponivel.
+5. notificar stakeholders via Telegram (primario) ou Slack (fallback validado), se disponivel.
 6. se Convex estiver indisponivel ou ambos Telegram/Slack indisponiveis, registrar aviso em `human_action_required.md`.
 
 ## Checklist de Exposicao Aberta (Trading)
@@ -42,7 +42,7 @@ Exclui:
 3. se venue estiver acessivel:
   - cancelar ordens pendentes nao essenciais;
   - garantir `stoploss` ativo por posicao;
-  - reduzir exposicao para `safe_notional` definido em policy.
+  - reduzir exposicao para `safe_notional` definido em `VERTICALS/TRADING/TRADING-RISK-RULES.md`.
 4. se venue estiver indisponivel:
   - marcar `UNMANAGED_EXPOSURE`;
   - abrir incidente `SEV-1`;
