@@ -1,0 +1,16 @@
+version: "1.0"
+last_updated: "2026-02-18"
+default_policy: "deny"
+categories:
+  docs:
+    - "developers.openai.com"
+    - "huggingface.co"
+    - "github.com"
+  infra:
+    - "api.telegram.org"
+    - "cloud.convex.dev"
+  exchange:
+    - "api.binance.com"
+rules:
+  - "Any domain outside allowlist MUST be blocked."
+  - "New domain requires RFC-linked review."

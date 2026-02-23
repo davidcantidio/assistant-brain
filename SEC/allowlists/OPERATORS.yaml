@@ -1,0 +1,17 @@
+version: "1.0"
+last_updated: "2026-02-19"
+default_policy: "deny"
+operators:
+  - name: "Davi"
+    username: "davidcantidio"
+    telegram_user_id: 7165399698
+    telegram_chat_id: 7165399698
+    critical_command_auth:
+      required: true
+      methods:
+        - "challenge_secret_ttl"
+        - "personal_domain_confirmation"
+rules:
+  - "Command approval/reject/kill MUST match both telegram_user_id and telegram_chat_id."
+  - "Critical commands MUST require second-factor challenge."
+  - "Unknown operator MUST trigger SECURITY_VIOLATION_REVIEW."

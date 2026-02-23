@@ -1,0 +1,20 @@
+version: "1.0"
+last_updated: "2026-02-18"
+default_policy: "deny"
+allowed_actions:
+  low_risk:
+    - "read_docs"
+    - "create_artifact"
+    - "update_task_status"
+  medium_risk:
+    - "apply_patch"
+    - "run_tests"
+blocked_actions:
+  - "deploy_prod"
+  - "live_trading_enable"
+  - "secrets_export"
+conditional_actions:
+  - action: "live_trading_enable"
+    requires: ["decision_approved", "human_checkpoint"]
+rules:
+  - "Blocked action MUST open SECURITY_VIOLATION_REVIEW if attempted."
