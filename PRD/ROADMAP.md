@@ -1,16 +1,16 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.0"
+version: "2.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # Roadmap
 
 ## Objetivo
-Definir fases, milestones e criterios objetivos de saida para evolucao do OpenClaw Agent OS com OpenRouter + Model Router + memoria vetorial hibrida sob controle de risco.
+Definir fases, milestones e criterios objetivos de saida para evolucao do Nanobot Agent OS com OpenRouter + Model Router + memoria vetorial hibrida sob controle de risco.
 
 ## Escopo
 Inclui:
@@ -37,7 +37,13 @@ Exclui:
 
 ## Fase 0 - Mission Control Minimo
 - Convex com colecoes minimas de control-plane.
-- OpenClaw runtime configurado para workspace `workspaces/main`.
+- Nanobot runtime configurado para workspace `workspaces/main`.
+- bootstrap runtime obrigatorio:
+  - `nanobot onboard` concluido;
+  - `~/.nanobot/config.json` valido;
+  - wrapper oficial `clawmode_integration` ativo;
+  - skill clawmode instalada em `~/.nanobot/workspace/skills/clawmode/SKILL.md`;
+  - bridge de estado repo <-> `~/.nanobot/workspace` com fonte canonica no repo.
 - Worker LLM local habilitado na Fase 0 para tarefas pesadas nao urgentes (host compativel, preferencia Mac >= 32 GB RAM).
 - gateway LLM programatico padrao para cloud/provider externo: OpenRouter (`https://openrouter.ai/api/v1`).
 - Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03).
@@ -46,6 +52,10 @@ Exclui:
 - Routing MVP limitado a 3 classes: Dispatcher, RAG Librarian (empresa), Dev Junior.
 
 ### Backlog de construcao de codigo (obrigatorio na Fase 0 - baseline)
+- `B0-20` implementar bootstrap automatizado Nanobot (source editable) com validacao de versao `>=0.1.4`.
+- `B0-21` implementar setup oficial do wrapper ClawWork (`clawmode_integration`) com smoke tests de `agent` e `gateway`.
+- `B0-22` implementar instalacao e validacao da skill clawmode em `~/.nanobot/workspace/skills/clawmode/SKILL.md`.
+- `B0-23` implementar bridge de estado repo <-> `~/.nanobot/workspace` mantendo `workspaces/main/.nanobot/workspace-state.json` como fonte canonica.
 - `B0-01` implementar contratos `work_order`, `decision`, `task_event` com validacao de schema.
 - `B0-02` implementar bot Telegram com autenticacao forte (`from.id` + `chat.id` + challenge).
 - `B0-03` implementar lifecycle completo do challenge HITL.

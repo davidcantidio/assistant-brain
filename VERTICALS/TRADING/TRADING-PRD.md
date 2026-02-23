@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-PRD.md"
-version: "1.7"
+version: "1.8"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-050", "RFC-060"]
 ---
 
@@ -66,7 +66,8 @@ Exclui:
 
 ## Estrategia de Integracao de Frameworks Externos
 - Backbone canonico de producao:
-  - OpenClaw control-plane + risk engine + execution gateway + auditoria imutavel.
+  - Nanobot control-plane canonico + risk engine + execution gateway + auditoria imutavel.
+  - `clawmode_integration` (ClawWork wrapper) pode ser usado como adaptador operacional sem bypass de gates.
 - Regra de acoplamento:
   - frameworks externos MUST operar como plugins de analise/sinal.
   - framework externo MUST NOT enviar ordem diretamente para exchange.
@@ -82,7 +83,7 @@ Exclui:
   - qualquer modulo novo MUST entrar em shadow mode antes de afetar decisao live.
   - falha de engine secundaria/auxiliar MAY ativar `single_engine_mode` com engine primaria saudavel.
 - Governanca:
-  - OpenClaw permanece fonte de verdade para `decision`, `order_intent`, `execution_report` e incidentes.
+  - Nanobot permanece fonte de verdade para `decision`, `order_intent`, `execution_report` e incidentes.
   - mudanca de peso entre engines ou ativacao de novo modulo MUST exigir decision registrada.
 
 ## Expansao Multiativos (pos-Fase 1)
@@ -98,7 +99,7 @@ Exclui:
   - primeira ativacao live de classe nova MUST iniciar em `capital_ramp_level=L0` da classe e exigir decision `R3` + checkpoint humano.
 - Regra de execucao:
   - toda ordem de qualquer classe MUST passar por `execution_gateway` unico e `pre_trade_validator` especifico da classe.
-  - fonte de sinal pode variar, mas a fonte de verdade de execucao/auditoria permanece no OpenClaw.
+  - fonte de sinal pode variar, mas a fonte de verdade de execucao/auditoria permanece no Nanobot.
 
 ## Contratos Operacionais (versionados)
 - `execution_gateway` (v1 minimo):

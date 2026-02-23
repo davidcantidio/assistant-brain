@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050"]
 ---
 
@@ -41,7 +41,8 @@ Exclui:
   - MUST suportar consultas estruturadas (filtros, joins, agregacoes) e busca semantica por embeddings no mesmo plano de dados.
 
 ## Componentes do Sistema Nervoso
-- OpenClaw runtime: execucao de agentes e rotinas.
+- Nanobot runtime: execucao de agentes e rotinas.
+- ClawMode integration adapter: wrapper oficial (`clawmode_integration`) para integrar Nanobot com ClawWork sem alterar gates canonicos.
 - Convex: estado compartilhado e feed operacional.
 - OpenRouter gateway: endpoint unico programatico para inferencia LLM em cloud/provider externo.
 - Worker LLM local: execucao de microtasks pesadas e nao urgentes em host compativel (preferencia: Mac >= 32 GB RAM).
@@ -53,13 +54,14 @@ Exclui:
 - Execution sandbox: ambiente restrito para scripts e validacoes deterministicas.
 
 ## Regra de Backbone Unico (trading live)
-- OpenClaw runtime MUST ser o unico backbone de producao para:
+- Nanobot runtime MUST ser o unico backbone de producao para:
   - gate de risco,
   - aprovacao HITL,
   - emissao de ordem,
   - reconciliacao,
   - auditoria e incidentes.
 - engines externas de trading MUST operar apenas como provedores de analise/sinal.
+- ClawMode/ClawWork MUST operar como adaptador e NAO pode bypassar `execution_gateway`, `pre_live_checklist`, challenge HITL e gates `R2/R3`.
 - caminho de ordem direta de framework externo para exchange MUST ser bloqueado por policy.
 - falha da engine primaria de sinal em trading live MUST operar em `fail_closed` para novas entradas.
 
@@ -120,15 +122,15 @@ Exclui:
 - memoria operacional de workspace:
   - `workspaces/main/memory/`
 - estado de workspace:
-  - `workspaces/main/.openclaw/workspace-state.json`
+  - `workspaces/main/.nanobot/workspace-state.json`
 - memoria vetorial (catalogo/runs):
   - banco operacional dedicado (nao versionado em git)
 
 ## Trilha Auditavel Persistente (nao versionada)
 - buffer local append-only (MVP):
-  - `workspaces/main/.openclaw/audit/task_events.jsonl`
-  - `workspaces/main/.openclaw/audit/decisions.jsonl`
-  - `workspaces/main/.openclaw/audit/critical_actions.jsonl`
+  - `workspaces/main/.nanobot/audit/task_events.jsonl`
+  - `workspaces/main/.nanobot/audit/decisions.jsonl`
+  - `workspaces/main/.nanobot/audit/critical_actions.jsonl`
 - espelhamento:
   - object storage imutavel (S3 compativel) por particao diaria.
   - modo recomendado: Object Lock (compliance) + versionamento + retention de 90 dias quente e 365 dias frio.

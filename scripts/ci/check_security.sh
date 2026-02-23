@@ -16,7 +16,7 @@ for f in "${required_files[@]}"; do
 done
 
 # basic leak signatures in tracked files
-if git ls-files | xargs rg -n --no-heading -e 'sk-[A-Za-z0-9]{20,}' -e 'xox[baprs]-[A-Za-z0-9-]{10,}' -e 'AKIA[0-9A-Z]{16}' >/tmp/security_hits.txt; then
+if git ls-files | xargs rg -n --no-messages --no-heading -e 'sk-[A-Za-z0-9]{20,}' -e 'xox[baprs]-[A-Za-z0-9-]{10,}' -e 'AKIA[0-9A-Z]{16}' >/tmp/security_hits.txt; then
   echo "Possivel segredo detectado em arquivos versionados:"
   cat /tmp/security_hits.txt
   exit 1

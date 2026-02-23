@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openclaw.local/schemas/models_catalog.schema.json",
+  "$id": "https://nanobot.local/schemas/models_catalog.schema.json",
   "title": "models_catalog",
   "type": "object",
   "required": [

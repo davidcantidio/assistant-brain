@@ -1,9 +1,9 @@
 ---
 doc_id: "INCIDENT-LOG-POLICY.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -56,7 +56,7 @@ entry_hash: "hex"
 - incidentes criticos: 24 meses.
 - tokens/chaves/dados pessoais MUST ser mascarados.
 - storage recomendado:
-  - primario: `workspaces/main/.openclaw/audit/incidents.log` (append-only local).
+  - primario: `workspaces/main/.nanobot/audit/incidents.log` (append-only local).
   - secundario: bucket imutavel (S3 compativel) com Object Lock (compliance), versionamento e trilha diaria assinada.
   - politica eficiente: 90 dias em camada quente + 365 dias em camada fria com acesso sob trilha de auditoria.
 

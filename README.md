@@ -1,6 +1,6 @@
-# assistant-brain (OpenClaw PRD Repo)
+# assistant-brain (Nanobot PRD Repo)
 
-Repositorio de governanca e arquitetura do OpenClaw Agent OS.
+Repositorio de governanca e arquitetura do Nanobot Agent OS.
 
 ## Status Atual
 - fase atual: **PRD / arquitetura de papel** (sem control-plane implementado ainda).
@@ -57,6 +57,32 @@ bash scripts/onboard_linux.sh
 bash scripts/verify_linux.sh
 ```
 
+## Quickstart Minimo (Nanobot + ClawWork)
+```bash
+# 1) Runtime Nanobot (source editable)
+git clone https://github.com/HKUDS/nanobot.git ~/.local/src/nanobot
+python3 -m venv ~/.local/src/.venv-nanobot
+~/.local/src/.venv-nanobot/bin/pip install -U pip wheel setuptools
+~/.local/src/.venv-nanobot/bin/pip install -e ~/.local/src/nanobot
+
+# 2) ClawWork + clawmode wrapper
+git clone https://github.com/HKUDS/ClawWork.git ~/.local/src/ClawWork
+~/.local/src/.venv-nanobot/bin/pip install -r ~/.local/src/ClawWork/requirements.txt
+
+# 3) Bootstrap Nanobot
+~/.local/src/.venv-nanobot/bin/nanobot onboard
+```
+
+Comandos oficiais de integracao:
+```bash
+nanobot --version
+python -m clawmode_integration.cli agent
+python -m clawmode_integration.cli gateway
+```
+
+Guia completo Linux + macOS:
+- `DEV/DEV-NANOBOT-CLAWWORK-SETUP.md`
+
 ## Contribuicao em Documentacao
 - atualize `version` e `last_updated` no header do arquivo alterado.
 - se houver impacto normativo, registre em `PRD/CHANGELOG.md`.
@@ -64,5 +90,5 @@ bash scripts/verify_linux.sh
 
 ## Nao Versionar
 - `.env`, secrets, chaves e tokens
-- estado em `~/.openclaw*`
+- estado em `~/.nanobot*`
 - logs/sessoes brutos com payload sensivel

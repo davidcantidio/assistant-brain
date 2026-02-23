@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-RISK-RULES.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-060"]
 ---
 
@@ -32,6 +32,7 @@ Exclui:
 - [RFC-060] MUST reprovar transicao de modo se `eval-trading` falhar.
 - [RFC-060] MUST aplicar ramp-up progressivo de capital somente apos estagio `paper/sandbox` concluido.
 - [RFC-060] MUST manter `asset_profile` por classe de ativo para qualquer execucao live fora de `crypto_spot`.
+- [RFC-060] MUST bloquear qualquer bypass de gateway/gates por adapter ou wrapper operacional.
 
 ## Regras Hard
 - Risco por trade:

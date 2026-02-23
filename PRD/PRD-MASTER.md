@@ -1,16 +1,16 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.10"
+version: "1.11"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # PRD Master
 
 ## Objetivo
-Definir a constituicao executiva do OpenClaw Agent OS com governanca por risco, auditabilidade ponta a ponta e operacao implementavel com OpenRouter como gateway padrao de inferencia.
+Definir a constituicao executiva do Nanobot Agent OS com governanca por risco, auditabilidade ponta a ponta e operacao implementavel com OpenRouter como gateway padrao de inferencia.
 
 ## Escopo
 Inclui:
@@ -49,6 +49,21 @@ Exclui:
   - `Memory Plane`: banco vetorizado hibrido unico (Postgres + pgvector ou equivalente) para catalogo de modelos, runs e decisoes de roteamento.
 - `Model Catalog Service` MUST sincronizar catalogo de modelos/provedores/capacidades/precos/limites.
 - `Budget Governor` MUST usar saldo de creditos do OpenRouter como referencia primaria de orcamento.
+
+### Bootstrap Runtime: Nanobot + ClawWork
+- runtime oficial MUST ser `Nanobot >= 0.1.4`.
+- integracao de escritorio/agentes MUST usar `clawmode_integration` oficial (ClawWork wrapper) sem fork inicial.
+- bootstrap minimo de runtime MUST incluir:
+  - `nanobot onboard` concluido com `~/.nanobot/config.json` valido;
+  - skill clawmode instalada em `~/.nanobot/workspace/skills/clawmode/SKILL.md`;
+  - bridge de estado repo <-> runtime local com fonte canonica no repo:
+    - `workspaces/main/.nanobot/workspace-state.json`.
+- comandos base de execucao:
+  - `nanobot ...` para runtime principal;
+  - `python -m clawmode_integration.cli agent` e `python -m clawmode_integration.cli gateway` para integracao economica/operacional.
+- regra de seguranca e governanca:
+  - ClawWork/ClawMode MUST NOT bypass `execution_gateway`, `pre_live_checklist`, challenge HITL e gates `R2/R3`.
+  - qualquer tentativa de bypass MUST gerar bloqueio + incidente + trilha auditavel.
 
 ### Papeis de Agentes
 Esta subsecao define papeis funcionais para executar o [Paradigma de Execucao: Microtasks e Delegacao Sob Demanda](#paradigma-de-execucao-microtasks-e-delegacao-sob-demanda), respeitando [Governanca de Risco (Nivel Alto)](#governanca-de-risco-nivel-alto) e [Regra de Testabilidade de Claims Centrais](#regra-de-testabilidade-de-claims-centrais).
@@ -370,7 +385,8 @@ Definicao objetiva de side effect:
 - memoria vetorial hibrida (estruturado + embeddings) e obrigatoria para metadados de modelos e execucoes.
 - budget operacional e derivado de `credits_snapshots` do OpenRouter.
 - `OPENROUTER_MANAGEMENT_KEY` MUST ficar isolada fora do runtime comum.
-- em trading live, OpenClaw e o backbone unico de producao para risco, HITL, execucao e auditoria.
+- em trading live, Nanobot e o backbone unico de producao para risco, HITL, execucao e auditoria.
+- ClawMode adapter e permitido como camada de execucao, mas sem bypass de gateways/gates obrigatorios.
 - em trading fase 1, o escopo de ativos live e `crypto_spot` via Binance Spot.
 - em trading fase 1, `TradingAgents` e a engine primaria de sinal sob contrato `signal_intent`.
 - em trading fase 2, `AgenticTrading` entra apenas por modulos seletivos (risco/custo/portfolio), sem substituir backbone.
@@ -450,12 +466,14 @@ Definicao objetiva de side effect:
 - automacao com efeito colateral sem idempotencia/rollback MUST ser stop-ship.
 - decisao de roteamento sem rastro (`requested/effective`) MUST ser falha de compliance.
 
-## Mudancas Aplicadas (2026-02-20)
+## Mudancas Aplicadas (2026-02-23)
 - OpenRouter consolidado como gateway padrao de inferencia programatica.
 - Model Catalog + Model Router + Presets formalizados como bloco central da arquitetura.
 - memoria vetorial hibrida obrigatoria para metadados de modelos e execucoes.
 - privacidade/retencao/ZDR/provider allowlist formalizadas com regra por sensibilidade.
 - budget governor migrado para saldo de creditos OpenRouter com key de management isolada.
+- runtime oficial migrado para Nanobot com integracao oficial ClawWork (`clawmode_integration`).
+- estado canonico operacional consolidado em `workspaces/main/.nanobot/workspace-state.json` com bridge para `~/.nanobot/workspace`.
 
 ## Links Relacionados
 - [Roadmap](./ROADMAP.md)
@@ -466,6 +484,7 @@ Definicao objetiva de side effect:
 - [Secrets](../SEC/SEC-SECRETS.md)
 - [System Health Thresholds](../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
 - [Financial Governance](../CORE/FINANCIAL-GOVERNANCE.md)
+- [Nanobot + ClawWork Setup](../DEV/DEV-NANOBOT-CLAWWORK-SETUP.md)
 
 ## MVP do Paradigma (Implementacao Minima)
 Implementar primeiro:

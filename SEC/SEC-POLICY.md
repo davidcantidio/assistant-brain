@@ -1,9 +1,9 @@
 ---
 doc_id: "SEC-POLICY.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-20"
+last_updated: "2026-02-23"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050"]
 ---
 
@@ -36,6 +36,7 @@ Exclui:
 - [RFC-060] MUST permitir envio/cancelamento de ordem somente via `execution_gateway`.
 - [RFC-015] MUST bloquear credencial de trading com permissao de saque.
 - [RFC-015] MUST exigir IP allowlist nas credenciais de venue quando o provedor suportar.
+- [RFC-015] MUST impedir que adapters/wrappers (incluindo ClawMode/ClawWork) bypassem gates de risco e controles de execucao.
 
 ## Menor Privilegio
 - cada agente recebe apenas escopos necessarios para sua funcao.
@@ -80,6 +81,15 @@ Exclui:
 - providers efetivos possuem politicas proprias de retencao/privacidade e MUST ser tratados como variancia de risco.
 - provider efetivo MUST ser validado contra `PROVIDERS.yaml`.
 - rota `sensitive` sem provider compativel com policy MUST falhar com bloqueio.
+
+## Runtime e Adapters
+- runtime oficial de execucao: Nanobot (`nanobot ...`).
+- adapter oficial para integracao com ClawWork: `clawmode_integration`.
+- wrappers/adapters MUST operar dentro do mesmo contrato de seguranca do runtime:
+  - sem bypass de `execution_gateway`;
+  - sem bypass de `pre_live_checklist`;
+  - sem bypass de challenge HITL e gates `R2/R3`;
+  - toda tentativa de bypass MUST abrir incidente `SECURITY_VIOLATION_REVIEW`.
 
 ## HITL Operators (Multi-canal)
 - fonte de identidade: `./allowlists/OPERATORS.yaml`.
