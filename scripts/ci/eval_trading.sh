@@ -4,6 +4,16 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+search_re() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -n -- "$pattern" "$@" >/dev/null
+  else
+    grep -nE -- "$pattern" "$@" >/dev/null
+  fi
+}
+
 required_files=(
   "VERTICALS/TRADING/TRADING-PRD.md"
   "VERTICALS/TRADING/TRADING-RISK-RULES.md"
@@ -14,11 +24,11 @@ for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
 done
 
-rg -n "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md >/dev/null
-rg -n "execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md >/dev/null
-rg -n "pre_trade_validator" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md >/dev/null
-rg -n "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md >/dev/null
-rg -n "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md >/dev/null
-rg -n "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md >/dev/null
+search_re "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re "execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re "pre_trade_validator" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md
+search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md
+search_re "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md
 
 echo "eval-trading: PASS"

@@ -4,6 +4,26 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+search_re() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -n -- "$pattern" "$@" >/dev/null
+  else
+    grep -nE -- "$pattern" "$@" >/dev/null
+  fi
+}
+
+search_fixed() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -Fn -- "$pattern" "$@" >/dev/null
+  else
+    grep -Fn -- "$pattern" "$@" >/dev/null
+  fi
+}
+
 python3 -m json.tool ARC/schemas/models_catalog.schema.json >/dev/null
 
 required_patterns=(
@@ -14,7 +34,7 @@ required_patterns=(
   "## Perfis Oficiais de Execucao"
 )
 for pattern in "${required_patterns[@]}"; do
-  rg -Fn "$pattern" ARC/ARC-MODEL-ROUTING.md >/dev/null
+  search_fixed "$pattern" ARC/ARC-MODEL-ROUTING.md
 done
 
 required_files=(
@@ -26,7 +46,7 @@ for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
 done
 
-rg -n "cloud/provider externo MUST passar por OpenRouter" SEC/SEC-POLICY.md >/dev/null
-rg -n "chamada direta a API de provider externo fora do OpenRouter MUST ser bloqueada" SEC/SEC-POLICY.md >/dev/null
+search_re "cloud/provider externo MUST passar por OpenRouter" SEC/SEC-POLICY.md
+search_re "chamada direta a API de provider externo fora do OpenRouter MUST ser bloqueada" SEC/SEC-POLICY.md
 
 echo "eval-models: PASS"
