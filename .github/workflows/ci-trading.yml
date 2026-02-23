@@ -1,0 +1,32 @@
+name: ci-trading
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'VERTICALS/TRADING/**'
+      - 'SEC/**'
+      - 'PRD/**'
+      - 'PM/**'
+      - 'ARC/**'
+      - 'DEV/**'
+      - 'Makefile'
+      - 'scripts/ci/**'
+  pull_request:
+    paths:
+      - 'VERTICALS/TRADING/**'
+      - 'SEC/**'
+      - 'PRD/**'
+      - 'PM/**'
+      - 'ARC/**'
+      - 'DEV/**'
+      - 'Makefile'
+      - 'scripts/ci/**'
+
+jobs:
+  trading:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run trading eval harness
+        run: make eval-trading

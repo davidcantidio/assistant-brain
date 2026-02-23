@@ -1,20 +1,26 @@
-version: "1.0"
-last_updated: "2026-02-18"
+schema_version: "1.1"
+last_updated: "2026-02-20"
 default_policy: "deny"
-allowed_actions:
-  low_risk:
-    - "read_docs"
-    - "create_artifact"
-    - "update_task_status"
-  medium_risk:
-    - "apply_patch"
-    - "run_tests"
-blocked_actions:
-  - "deploy_prod"
-  - "live_trading_enable"
-  - "secrets_export"
-conditional_actions:
-  - action: "live_trading_enable"
-    requires: ["decision_approved", "human_checkpoint"]
-rules:
-  - "Blocked action MUST open SECURITY_VIOLATION_REVIEW if attempted."
+actions:
+  - action: "deploy_production"
+    policy: "blocked"
+  - action: "change_global_policy"
+    policy: "decision_required"
+  - action: "trading_live_enable"
+    policy: "decision_and_hitl_required"
+  - action: "kill_switch"
+    policy: "hitl_challenge_required"
+  - action: "trading_place_order"
+    policy: "execution_gateway_only"
+  - action: "trading_cancel_order"
+    policy: "execution_gateway_only"
+  - action: "trading_replace_order"
+    policy: "execution_gateway_only"
+  - action: "trading_reconcile_orders"
+    policy: "execution_gateway_only"
+  - action: "trading_withdraw_funds"
+    policy: "blocked"
+  - action: "trading_api_key_create"
+    policy: "decision_required"
+  - action: "trading_api_key_rotate"
+    policy: "decision_required"

@@ -1,9 +1,9 @@
 ---
 doc_id: "RAG-EVALS-TESTS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "RAG Librarian"
-last_updated: "2026-02-18"
+last_updated: "2026-02-19"
 rfc_refs: ["RFC-001", "RFC-025", "RFC-050"]
 ---
 
@@ -17,6 +17,7 @@ Inclui:
 - casos de teste por empresa
 - formato de execucao e coleta de resultado
 - criterios de aprovacao/reprovacao
+- contrato de harness executavel
 
 Exclui:
 - avaliacao sem gabarito
@@ -27,6 +28,19 @@ Exclui:
 - [RFC-025] MUST testar citacao, precisao, vazamento e injecao.
 - [RFC-050] MUST publicar relatorio com score e recomendacao de acao.
 - [RFC-025] MUST separar execucao entre holdout fixo e suite rolling temporal.
+- [RFC-050] MUST bloquear release quando suite nao for executavel em CI.
+
+## Harness Executavel (contrato)
+- comando padrao:
+  - `make eval-rag` (ou script equivalente versionado).
+- entradas minimas:
+  - dataset `holdout_fixed`
+  - dataset `rolling_weekly`
+- saidas minimas:
+  - `artifacts/evals/rag/results.jsonl`
+  - `artifacts/evals/rag/summary.json`
+- regra:
+  - exit code 0 somente com score minimo atendido.
 
 ## Formato de Caso de Teste
 ```yaml

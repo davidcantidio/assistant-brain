@@ -1,0 +1,14 @@
+name: ci-routing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  routing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Eval models/routing contracts
+        run: make eval-models

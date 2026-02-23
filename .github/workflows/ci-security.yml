@@ -1,0 +1,14 @@
+name: ci-security
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run security checks
+        run: bash scripts/ci/check_security.sh

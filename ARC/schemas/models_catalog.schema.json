@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/models_catalog.schema.json",
+  "title": "models_catalog",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "model_id",
+    "openrouter_model_id",
+    "model_family",
+    "model_tier",
+    "risk_scope",
+    "provider_variants",
+    "supported_parameters",
+    "capabilities",
+    "pricing",
+    "limits",
+    "tags",
+    "status",
+    "effective_from",
+    "updated_at",
+    "updated_by"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "openrouter_model_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "model_family": {
+      "type": "string",
+      "minLength": 2
+    },
+    "model_tier": {
+      "type": "string",
+      "minLength": 2
+    },
+    "risk_scope": {
+      "type": "string",
+      "enum": ["baixo", "medio", "alto"]
+    },
+    "provider_variants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["provider", "status"],
+        "properties": {
+          "provider": { "type": "string", "minLength": 2 },
+          "status": { "type": "string", "enum": ["active", "degraded", "disabled"] },
+          "latency_p50": { "type": "number", "minimum": 0 },
+          "latency_p95": { "type": "number", "minimum": 0 },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "supported_parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["boolean", "number", "string", "array", "object", "null"]
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": [
+        "tools",
+        "structured_output",
+        "reasoning",
+        "multimodal"
+      ],
+      "properties": {
+        "tools": { "type": "boolean" },
+        "structured_output": { "type": "boolean" },
+        "reasoning": { "type": "boolean" },
+        "multimodal": { "type": "boolean" },
+        "exacto_available": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "pricing": {
+      "type": "object",
+      "required": ["input_per_million", "output_per_million", "currency"],
+      "properties": {
+        "input_per_million": { "type": "number", "minimum": 0 },
+        "output_per_million": { "type": "number", "minimum": 0 },
+        "cached_input_per_million": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 }
+      },
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "required": ["max_context", "max_output_tokens"],
+      "properties": {
+        "max_context": { "type": "integer", "minimum": 1 },
+        "max_output_tokens": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "default": []
+    },
+    "quality_score_por_classe": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "model_card_embedding": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "degraded", "disabled"]
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effective_to": {
+      "anyOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_by": {
+      "type": "string",
+      "minLength": 2
+    },
+    "catalog_version": {
+      "type": "string",
+      "minLength": 2
+    }
+  },
+  "additionalProperties": false
+}

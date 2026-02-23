@@ -1,10 +1,10 @@
 ---
 doc_id: "WORK-ORDER-SPEC.md"
-version: "1.0"
+version: "1.3"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-18"
-rfc_refs: ["RFC-001", "RFC-020", "RFC-010", "RFC-050"]
+last_updated: "2026-02-20"
+rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-050"]
 ---
 
 # Work Order Spec
@@ -25,6 +25,7 @@ Exclui:
 ## Regras Normativas
 - [RFC-020] MUST validar schema antes de aceitar Work Order.
 - [RFC-010] MUST classificar risco e gate na criacao.
+- [RFC-015] MUST classificar sensibilidade de dados (`public|internal|sensitive`) na criacao.
 - [RFC-020] MUST definir output esperado e DoD da entrega.
 - [RFC-050] MUST registrar custo e artifacts vinculados ao Work Order.
 - [RFC-020] MUST incluir `idempotency_key` e `schema_version` para reconciliacao segura.
@@ -40,6 +41,8 @@ target_office: "..."
 objective: "texto claro"
 sla_class: "instantaneo|normal|overnight"
 risk_class: "baixo|medio|alto"
+risk_tier: "R0|R1|R2|R3"
+data_sensitivity: "public|internal|sensitive"
 priority: "P0|P1|P2|P3"
 created_at: "ISO-8601"
 due_at: "ISO-8601"
@@ -69,6 +72,26 @@ status: "DRAFT|APPROVED|IN_PROGRESS|DONE|CANCELLED"
 - baixo: execucao local com validacao deterministica.
 - medio: revisao por amostragem/checkpoint.
 - alto: decision obrigatoria e gate cloud/humano.
+
+## Mapeamento de Risco (compatibilidade)
+- taxonomia canonica de gates:
+  - `R0`: doc-only sem impacto funcional/side effect.
+  - `R1`: baixo risco funcional local.
+  - `R2`: medio risco com side effect controlado/cross-modulo.
+  - `R3`: alto risco critico/regulatorio/financeiro.
+- mapeamento com `risk_class`:
+  - `baixo -> R1` (ou `R0` quando doc-only).
+  - `medio -> R2`.
+  - `alto -> R3`.
+- Work Order MUST incluir `risk_tier` em todos os casos.
+- consistencia obrigatoria:
+  - `risk_tier=R0` apenas para `doc-only` sem side effect.
+  - qualquer side effect MUST usar `R1`, `R2` ou `R3`.
+
+## Regras de Sensibilidade
+- `public`: sem restricao adicional de provider alem da policy base.
+- `internal`: provider allowlist moderada e redacao de logs obrigatoria.
+- `sensitive`: provider allowlist restrita + politica ZDR + armazenamento minimizado de prompt.
 
 ## Criterios de Aceite (DoD)
 - artefato no formato acordado.

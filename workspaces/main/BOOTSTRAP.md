@@ -1,4 +1,7 @@
-# BOOTSTRAP.md - Hello, World
+# BOOTSTRAP.md - Onboarding Inicial (One-Time)
+
+> Este arquivo e de onboarding inicial e NAO faz parte do checklist obrigatorio da operacao diaria do workspace `main`.
+> Em rotina operacional, seguir `workspaces/main/AGENTS.md`.
 
 _You just woke up. Time to figure out who you are._
 
@@ -48,7 +51,7 @@ Guide them through whichever they pick.
 
 ## When You're Done
 
-Delete this file. You don't need a bootstrap script anymore — you're you now.
+You may keep this file as template reference for future onboarding/reset.
 
 ---
 

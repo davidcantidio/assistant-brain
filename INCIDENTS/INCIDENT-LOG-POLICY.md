@@ -1,9 +1,9 @@
 ---
 doc_id: "INCIDENT-LOG-POLICY.md"
-version: "1.0"
+version: "1.2"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -55,6 +55,10 @@ entry_hash: "hex"
 - retencao minima: 12 meses.
 - incidentes criticos: 24 meses.
 - tokens/chaves/dados pessoais MUST ser mascarados.
+- storage recomendado:
+  - primario: `workspaces/main/.openclaw/audit/incidents.log` (append-only local).
+  - secundario: bucket imutavel (S3 compativel) com Object Lock (compliance), versionamento e trilha diaria assinada.
+  - politica eficiente: 90 dias em camada quente + 365 dias em camada fria com acesso sob trilha de auditoria.
 
 ## Links Relacionados
 - [Incident Response](../SEC/SEC-INCIDENT-RESPONSE.md)

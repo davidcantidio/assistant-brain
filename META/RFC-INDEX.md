@@ -1,9 +1,9 @@
 ---
 doc_id: "RFC-INDEX.md"
-version: "1.0"
+version: "1.2"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -20,7 +20,7 @@ Inclui:
 
 Exclui:
 - texto completo de cada norma
-- historico detalhado de alteracoes de versao
+- historico detalhado de versao
 
 ## Regras Normativas
 - [RFC-001] MUST manter formato de ID `RFC-XXX`.
@@ -45,7 +45,7 @@ Exclui:
 
 ### RFC-015 - Politica de seguranca operacional
 - Status: active
-- Resumo: define menor privilegio, sandbox, secrets, redaction e resposta a incidente.
+- Resumo: define menor privilegio, sandbox, allowlists, redaction, secrets e policy por sensibilidade.
 - Implementacao:
   - [Security Policy](../SEC/SEC-POLICY.md)
   - [Secrets](../SEC/SEC-SECRETS.md)
@@ -53,6 +53,7 @@ Exclui:
   - [Prompt Injection](../SEC/SEC-PROMPT-INJECTION.md)
   - [Incident Response](../SEC/SEC-INCIDENT-RESPONSE.md)
   - [Operators Allowlist](../SEC/allowlists/OPERATORS.yaml)
+  - [Providers Allowlist](../SEC/allowlists/PROVIDERS.yaml)
 
 ### RFC-020 - Work Order schema
 - Status: active
@@ -73,9 +74,11 @@ Exclui:
 
 ### RFC-030 - Model routing e fallback
 - Status: active
-- Resumo: define roteamento por classe de tarefa, SLA e fallback ladder.
+- Resumo: define roteamento por task_type, provider routing, fallback policy e uso de catalogo vivo.
 - Implementacao:
   - [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
+  - [Models Catalog Schema](../ARC/schemas/models_catalog.schema.json)
+  - [Financial Governance](../CORE/FINANCIAL-GOVERNANCE.md)
   - [System Health Thresholds](../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
 
 ### RFC-035 - Degraded mode e reconciliacao

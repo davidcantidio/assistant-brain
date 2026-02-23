@@ -5,6 +5,10 @@
 **/secrets*
 **/.env
 
+# --- macOS ---
+.DS_Store
+**/.DS_Store
+
 # --- runtime / lixo ---
 /tmp/
 /logs/

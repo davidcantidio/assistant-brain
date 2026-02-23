@@ -1,9 +1,9 @@
 ---
 doc_id: "DEGRADED-MODE-PROCEDURE.md"
-version: "1.0"
+version: "1.3"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-035", "RFC-050"]
 ---
 
@@ -33,13 +33,26 @@ Exclui:
 2. bloquear tarefas de alto risco.
 3. manter apenas tarefas idempotentes de baixo risco.
 4. registrar toda acao offline.
-5. notificar stakeholders via Telegram (se disponivel).
-6. se Telegram/Convex estiverem indisponiveis, registrar aviso em `human_action_required.md`.
+5. notificar stakeholders via Telegram (primario) ou Slack (fallback validado), se disponivel.
+6. se Convex estiver indisponivel ou ambos Telegram/Slack indisponiveis, registrar aviso em `human_action_required.md`.
+
+## Checklist de Exposicao Aberta (Trading)
+1. colocar sistema em `TRADING_BLOCKED` para novas entradas.
+2. capturar `position_snapshot` e `open_orders_snapshot`.
+3. se venue estiver acessivel:
+  - cancelar ordens pendentes nao essenciais;
+  - garantir `stoploss` ativo por posicao;
+  - reduzir exposicao para `safe_notional` definido em `VERTICALS/TRADING/TRADING-RISK-RULES.md`.
+4. se venue estiver indisponivel:
+  - marcar `UNMANAGED_EXPOSURE`;
+  - abrir incidente `SEV-1`;
+  - registrar passos manuais obrigatorios em `human_action_required.md`.
+5. registrar evidencia de cada acao (timestamp, operador/canal, resultado).
 
 ## Template de Aviso ao Humano (quando canal cair)
 ```md
 titulo: HUMAN_ACTION_REQUIRED
-dependencia_falha: "Convex|Telegram|ambos"
+dependencia_falha: "Convex|Telegram|Slack|combinado"
 impacto: "quais fluxos estao bloqueados"
 acoes_imediatas:
   - "passo 1"
@@ -51,7 +64,7 @@ validacao_pos_fix:
 
 ## Recuperacao
 1. restaurar dependencia falha.
-2. validar conectividade com Convex e Telegram.
+2. validar conectividade com Convex, Telegram e Slack.
 3. processar backlog offline por ordem temporal.
 4. rodar reconciliador deterministico (`idempotency_key`, `replay_key`, hash-chain).
 5. deduplicar e reconciliar tasks/decisions.
@@ -64,6 +77,7 @@ validacao_pos_fix:
 - fila de excecoes manuais zerada.
 - logs sincronizados e auditados.
 - aprovacao do responsavel de operacao.
+- para trading: posicoes e ordens reconciliadas, sem `UNMANAGED_EXPOSURE`.
 
 ## Links Relacionados
 - [ARC Degraded Mode](../ARC/ARC-DEGRADED-MODE.md)

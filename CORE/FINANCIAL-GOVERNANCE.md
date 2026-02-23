@@ -1,39 +1,67 @@
 ---
 doc_id: "FINANCIAL-GOVERNANCE.md"
-version: "1.0"
+version: "1.2"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-18"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-030", "RFC-050"]
 ---
 
 # Financial Governance
 
 ## Objetivo
-Definir controles de custo por empresa e por tarefa, garantindo operacao previsivel e escalonamento seguro.
+Definir controles de custo por empresa e por tarefa com Budget Governor baseado em saldo de creditos OpenRouter, garantindo operacao previsivel e escalonamento seguro.
 
 ## Escopo
 Inclui:
-- teto de budget por empresa/tarefa/sprint
-- alertas de consumo e rate limiting
+- teto de budget por run/tarefa/dia/sprint
+- monitoramento de saldo e burn-rate por `credits_snapshots`
+- circuit breakers de custo
 - relatorios operacionais para acompanhamento humano
 
 Exclui:
 - contabilizacao fiscal/legal externa
-- precificacao detalhada de fornecedores
+- precificacao de fornecedor fora da politica interna
 
 ## Regras Normativas
 - [RFC-050] MUST registrar custo por tarefa, empresa e decision.
 - [RFC-010] MUST bloquear execucao de alto risco sem budget aprovado.
 - [RFC-030] MUST acionar fallback de modelo quando teto estiver proximo.
+- [RFC-050] MUST calcular budget operacional a partir de saldo de creditos OpenRouter.
 - [RFC-001] SHOULD revisar parametros de custo em ciclo semanal.
-- [RFC-030] MUST considerar diferenca entre canal de assinatura (humano) e canal programatico (router).
-- [RFC-030] MUST separar estrategia de custo para `single_agent` e `subagent_pod`.
+
+## Budget Governor (creditos OpenRouter)
+- entrada primaria:
+  - `total_credits`, `total_usage`, `balance` via endpoint de creditos.
+- tabela canonica:
+  - `credits_snapshots`.
+- frequencia minima:
+  - snapshot a cada 5 minutos em horario operacional.
+
+## Conversao Creditos <-> BRL (contrato)
+- objetivo:
+  - eliminar ambiguidade entre limites em creditos e limites em BRL.
+- definicoes:
+  - `credit_balance_usd = balance` (saldo de creditos em unidade monetaria da API).
+  - `fx_usd_brl` = taxa de cambio USD/BRL do snapshot financeiro ativo.
+  - `credit_balance_brl = credit_balance_usd * fx_usd_brl`.
+  - `burn_rate_brl = burn_rate_usd * fx_usd_brl`.
+- regras:
+  - thresholds operacionais podem ser definidos em USD ou BRL, mas avaliados na mesma moeda do limite.
+  - sem `fx_usd_brl` atualizado (< 24h), sistema MUST degradar para modo conservador:
+    - bloquear tarefas nao criticas;
+    - manter apenas operacao critica com teto em USD.
+
+## Seguranca de Chave
+- endpoint de creditos usa `OPENROUTER_MANAGEMENT_KEY`.
+- essa chave MUST ficar isolada do runtime comum de agentes.
+- workers de inferencia usam somente `OPENROUTER_API_KEY`.
 
 ## Regras de Budget
+- teto por run: definido por preset/policy.
 - teto por tarefa: definido no Work Order.
-- teto por sprint: consolidado por escritorio.
-- teto mensal por empresa: aprovado por decision.
+- teto diario por escritorio: definido por decision.
+- teto mensal por empresa: definido por decision.
 - alerta 70%: notificar PM e sugerir ajuste de roteamento.
 - alerta 90%: restringir tarefas nao criticas e abrir decision.
 
@@ -46,48 +74,39 @@ Exclui:
   - teto cloud auxiliar mensal: BRL 1200.
 - valores sao defaults iniciais e MAY ser alterados por decision.
 
-## Canais de Consumo de Modelo
-- canal humano por assinatura:
-  - uso manual, fora do roteamento automatico.
-  - nao deve ser considerado capacidade garantida para automacao.
-- canal programatico (router):
-  - usado para execucao automatica de tarefas.
-  - MUST ter custo/latencia monitorados e versionados no catalogo de modelos.
+## Circuit Breakers de Custo
+- gatilhos:
+  - burn-rate horario > limite de policy
+  - burn-rate diario > limite de policy
+  - custo por sucesso degradado por janela consecutiva
+- acoes:
+  - trocar para preset economico
+  - reduzir output tokens e reasoning depth
+  - reduzir retries
+  - bloquear tarefas nao criticas
+  - abrir decision de budget quando persistente
 
 ## Custo por Pattern de Execucao
 - `deterministic_script`:
-  - custo de modelo tende a zero; priorizar sempre que possivel.
+  - prioridade maxima quando atender qualidade.
 - `single_agent`:
-  - canal economico default para tarefas simples.
-  - para codigo simples, usar tier `codex-mini` como padrao.
-- `subagent_pod_codex` / `subagent_pod_claude`:
-  - usar apenas quando ganho esperado de qualidade justificar custo/tempo.
-  - MUST respeitar limites de pod definidos no router.
-- `cross_review_codex_claude`:
-  - reservado para risco alto ou mudanca estrutural.
-
-## Rate Limiting de Custo
-- limitar chamadas cloud por janela de tempo.
-- priorizar modelos locais para baixo risco.
-- reduzir contexto e temperatura antes de escalar para cloud.
-- bloquear classes nao essenciais quando incidente de custo estiver ativo.
-
-## Integracao com Model Routing e Circuit Breaker
-- custo alto repetido MUST acionar circuit breaker.
-- fallback ladder MUST seguir: reduzir temp -> reduzir quant/contexto -> trocar modelo -> cloud/humano.
-- qualquer override de teto MUST abrir decision com justificativa.
-- router MUST registrar custo por pattern (`single_agent` vs `subagent_pod`) para calibracao semanal.
+  - default para tarefas simples.
+- `subagent_pod`:
+  - somente quando ganho esperado justificar custo/tempo.
+- `cross_review`:
+  - reservado para risco alto/criticidade elevada.
 
 ## Relatorios para Humano
 - semanal:
-  - custo por escritorio e top 10 tarefas por gasto
-  - taxa de fallback e retrabalho por causa de custo
+  - custo total, custo por sucesso, top 10 rotas por gasto
+  - burn-rate medio e picos
+  - fallback por motivo de custo
 - mensal:
-  - variacao de custo vs SLA e qualidade
-  - recomendacao de rebalanceamento de budget
+  - variacao custo vs SLA e qualidade
+  - recomendacao de rebalanceamento por preset/task_type
 
 ## Links Relacionados
 - [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
 - [ARC Observability](../ARC/ARC-OBSERVABILITY.md)
-- [Work Order Spec](../PM/WORK-ORDER-SPEC.md)
+- [SEC Secrets](../SEC/SEC-SECRETS.md)
 - [System Health Thresholds](../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)

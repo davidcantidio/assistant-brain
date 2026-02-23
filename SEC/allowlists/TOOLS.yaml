@@ -1,19 +1,18 @@
-version: "1.0"
-last_updated: "2026-02-18"
+schema_version: "1.0"
+last_updated: "2026-02-19"
 default_policy: "deny"
 roles:
-  marvin:
-    - "task_dispatch"
-    - "decision_management"
-  formiga:
-    - "sandbox_exec"
-    - "artifact_write"
-  frederisk:
-    - "risk_checks"
-    - "trading_guardrails"
-  lupa:
-    - "rag_query"
-    - "citation_builder"
-rules:
-  - "Role must execute only listed tools."
-  - "Privilege elevation requires decision."
+  pm:
+    allow:
+      - "read_files"
+      - "write_docs"
+  dev:
+    allow:
+      - "read_files"
+      - "write_files"
+      - "run_tests"
+  security:
+    allow:
+      - "read_files"
+      - "validate_policies"
+      - "incident_logging"
