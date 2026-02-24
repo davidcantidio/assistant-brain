@@ -3,7 +3,7 @@ doc_id: "CHANGELOG.md"
 version: "2.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-23"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -29,21 +29,18 @@ Exclui:
 
 ## Entradas
 
-### 2026-02-23 - Migracao de plataforma: OpenClaw -> Nanobot + ClawWork
-- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+### 2026-02-24 - Readequacao completa para OpenClaw (rollback da migracao Nanobot)
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
 - Impacto:
-  - runtime oficial passa para `Nanobot >= 0.1.4`.
-  - integra `clawmode_integration` (ClawWork wrapper) como camada oficial de adaptacao operacional.
-  - atualiza comandos publicos para `nanobot ...` e `python -m clawmode_integration.cli ...`.
-  - converte paths canonicos de estado/auditoria de `.openclaw` para `.nanobot`.
-  - preserva regras de risco e bloqueia bypass por wrapper em `execution_gateway`, `pre_live_checklist`, challenge HITL e gates `R2/R3`.
+  - runtime oficial volta para OpenClaw.
+  - paths canonicos de estado/auditoria voltam para `.openclaw`.
+  - onboarding e verify retornam ao fluxo OpenClaw (Node/NVM/npm + `openclaw` CLI).
+  - remove referencias operacionais a Nanobot/ClawWork e contratos associados.
+  - adiciona guia tecnico de setup em `DEV/DEV-OPENCLAW-SETUP.md`.
 - Migracao:
-  - executar onboarding novo (`scripts/onboard_linux.sh`) e verificacao (`scripts/verify_linux.sh`);
-  - preencher `~/.nanobot/config.json` + skill clawmode + `PYTHONPATH` da integracao;
-  - validar bridge de estado repo <-> `~/.nanobot/workspace` com arquivo canonico no repo.
-- Rollback documental:
-  - permitido apenas por decision formal `R3` com plano explicito de restauracao de nomenclatura/paths/comandos.
-  - rollback tecnico sem decision deve ser tratado como desvio de governanca.
+  - remover estados locais legados do runtime anterior nos ambientes operacionais.
+  - adotar `workspaces/main/.openclaw/workspace-state.json` como estado canonico versionado.
+  - rerodar `bash scripts/onboard_linux.sh` e `bash scripts/verify_linux.sh` em hosts ativos.
 
 ### 2026-02-20 - Rebalanceamento de fases (reduzir carga inicial sem perda de informacao)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
@@ -120,7 +117,7 @@ Exclui:
 ### 2026-02-20 - Estrategia de frameworks para Trading: TradingAgents primario, AgenticTrading modular
 - RFCs afetadas: RFC-010, RFC-050, RFC-060.
 - Impacto:
-  - define Nanobot como backbone unico de producao para trading live.
+  - define OpenClaw como backbone unico de producao para trading live.
   - define `TradingAgents` como engine primaria de sinal na Fase 1.
   - define `AgenticTrading` como fonte de modulos seletivos (risco/custo/portfolio) na Fase 2.
   - bloqueia caminho de ordem direta de framework externo para exchange.
@@ -205,7 +202,7 @@ Exclui:
 - Migracao:
   - preencher IDs reais em `SEC/allowlists/OPERATORS.yaml`;
   - implementar workflows de CI e comandos `make eval-*`;
-  - configurar trilha auditavel nao versionada em `workspaces/main/.nanobot/audit/` e espelhamento externo.
+  - configurar trilha auditavel nao versionada em `workspaces/main/.openclaw/audit/` e espelhamento externo.
 
 ### 2026-02-19 - Ajustes de viabilidade MVP e controle operacional
 - RFCs afetadas: RFC-015, RFC-030, RFC-040, RFC-050.

@@ -1,9 +1,9 @@
 ---
 doc_id: "SEC-SECRETS.md"
-version: "1.5"
+version: "1.4"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-23"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -27,7 +27,7 @@ Exclui:
 - [RFC-015] MUST armazenar secrets em `.env` local ou secret manager do host.
 - [RFC-015] MUST manter escopo minimo de secret por workspace/servico.
 - [RFC-050] MUST registrar acesso administrativo a segredo.
-- [RFC-015] MUST proibir commit de `~/.nanobot/`, chaves e tokens.
+- [RFC-015] MUST proibir commit de `~/.openclaw/`, chaves e tokens.
 - [RFC-015] MUST armazenar challenge HITL apenas em forma hasheada com TTL.
 - [RFC-015] MUST isolar `OPENROUTER_MANAGEMENT_KEY` do runtime comum.
 - [RFC-015] MUST validar requests Slack com `SLACK_SIGNING_SECRET` armazenado em secret manager/.env seguro.
@@ -35,7 +35,6 @@ Exclui:
 ## Onde os Secrets Vivem
 - `.env` local ignorado por git (uso local).
 - secret manager do host/VPS para runtime e automacoes.
-- `~/.nanobot/config.json` pode referenciar chaves por nome/alias, mas valor sensivel SHOULD permanecer no secret manager/.env.
 - nunca em markdown, issue tracker, logs publicos ou artifacts externos.
 
 ## Segredos OpenRouter
@@ -107,7 +106,7 @@ Exclui:
 - revogar acesso ocioso > 30 dias.
 
 ## Proibicoes
-- commit de `.env`, `.pem`, `.key`, `~/.nanobot/`.
+- commit de `.env`, `.pem`, `.key`, `~/.openclaw/`.
 - envio de segredo em chat, ticket ou artifact nao criptografado.
 - reuso da management key para inferencia de rotina.
 

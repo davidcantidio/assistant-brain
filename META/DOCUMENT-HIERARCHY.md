@@ -1,9 +1,9 @@
 ---
 doc_id: "DOCUMENT-HIERARCHY.md"
-version: "1.3"
+version: "1.2"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-23"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -65,8 +65,7 @@ Exclui:
   - eliminar ambiguidade entre memoria de raiz e memoria de workspace.
 - canonico (MVP/Fase 0):
   - memoria operacional: `workspaces/main/memory/`.
-  - estado de workspace: `workspaces/main/.nanobot/workspace-state.json`.
-  - runtime local em `~/.nanobot/workspace/` MUST operar como bridge sincronizada com a fonte canonica do repo.
+  - estado de workspace: `workspaces/main/.openclaw/workspace-state.json`.
 - nao canonico:
   - `memory/` na raiz (deve ser apenas ponteiro informativo, sem dados operacionais).
   - `sessions/` versionado em git (proibido; usar armazenamento local/segregado).

@@ -18,7 +18,7 @@ Em contradicao, a hierarquia acima prevalece.
 
 ## Inicio de sessao (operacao diaria - obrigatorio)
 1. Ler `workspaces/main/HEARTBEAT.md`
-2. Ler `workspaces/main/.nanobot/workspace-state.json`
+2. Ler `workspaces/main/.openclaw/workspace-state.json`
 3. Ler memoria canonica em `workspaces/main/memory/*`
 4. Revisar tasks/mentions/decisions pendentes antes de qualquer acao
 
@@ -50,8 +50,7 @@ Em contradicao, a hierarquia acima prevalece.
 
 ## Memoria e estado canonicos
 - memoria operacional: `workspaces/main/memory/`
-- estado de workspace: `workspaces/main/.nanobot/workspace-state.json`
-- runtime local em `~/.nanobot/workspace/workspace-state.json` MUST funcionar como bridge sincronizada para o estado canonico do repo.
+- estado de workspace: `workspaces/main/.openclaw/workspace-state.json`
 - qualquer estado divergente fora desses caminhos deve gerar incidente de reconciliacao.
 
 ## Seguranca minima

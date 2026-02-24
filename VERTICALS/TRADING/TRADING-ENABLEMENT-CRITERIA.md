@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-ENABLEMENT-CRITERIA.md"
-version: "1.8"
+version: "1.7"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-23"
+last_updated: "2026-02-20"
 rfc_refs: ["RFC-001", "RFC-050", "RFC-060"]
 ---
 
@@ -44,7 +44,6 @@ Exclui:
 - `TradingAgents` conectado como engine primaria de sinal, com output normalizado para `signal_intent`.
 - caminho de execucao unico confirmado: somente `execution_gateway` pode enviar ordem live.
 - nenhum framework externo com permissao direta de credencial/endpoint de ordem.
-- nenhum adapter/wrapper (incluindo ClawWork/ClawMode) com bypass de `execution_gateway`, `pre_live_checklist` ou gates `R2/R3`.
 - classe de ativo ativa com `asset_profile` versionado e aprovado.
 - dominio de venue ativo em `SEC/allowlists/DOMAINS.yaml` e bloqueio comprovado para dominio fora da allowlist.
 - operador backup habilitado em `SEC/allowlists/OPERATORS.yaml`.

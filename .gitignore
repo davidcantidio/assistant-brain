@@ -1,42 +1,40 @@
 # --- segredos / auth ---
-**/.env
-**/.env.*
-!**/.env.example
-!**/*.env.example
 **/auth*.json
 **/oauth*.json
 **/*token*
 **/secrets*
-**/*.pem
-**/*.key
+**/.env
 
 # --- macOS ---
 .DS_Store
 **/.DS_Store
 
-# --- runtime / temporarios ---
+# --- runtime / lixo ---
 /tmp/
 /logs/
 **/*.log
 **/cache/
 **/.cache/
+**/sessions/
+!sessions/
+!sessions/README.md
 **/cookies/
 **/storage_state*.json
 **/playwright/.cache/
 
-# sessions locais nao versionadas (manter README)
-**/sessions/
-!sessions/
-!sessions/README.md
+# --- OpenClaw auth (NUNCA versionar) ---
+agent/auth.json
+agent/auth-profiles.json
+**/auth*.json
+**/oauth*.json
+**/*token*
+**/secrets*
+**/.env
 
-# --- Nanobot runtime local/sensivel ---
-/.nanobot/
-!workspaces/main/.nanobot/
-!workspaces/main/.nanobot/workspace-state.json
-workspaces/main/.nanobot/audit/
-workspaces/main/.nanobot/runs/
-workspaces/main/.nanobot/tmp/
-
-# --- backups locais ---
-*.bak
-*.tmp
+# --- OpenClaw runtime local/sensivel ---
+/.openclaw/
+!workspaces/main/.openclaw/
+!workspaces/main/.openclaw/workspace-state.json
+workspaces/main/.openclaw/audit/
+workspaces/main/.openclaw/runs/
+workspaces/main/.openclaw/tmp/
