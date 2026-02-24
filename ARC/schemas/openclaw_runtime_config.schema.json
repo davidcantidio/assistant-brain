@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/openclaw_runtime_config.schema.json",
+  "title": "openclaw_runtime_config",
+  "type": "object",
+  "required": [
+    "agents",
+    "tools",
+    "channels",
+    "hooks",
+    "memory",
+    "gateway"
+  ],
+  "properties": {
+    "agents": {
+      "type": "object",
+      "required": ["defaults"],
+      "properties": {
+        "defaults": {
+          "type": "object",
+          "required": ["maxConcurrent", "subagents"],
+          "properties": {
+            "maxConcurrent": { "type": "integer", "minimum": 1 },
+            "subagents": {
+              "type": "object",
+              "required": ["maxConcurrent"],
+              "properties": {
+                "maxConcurrent": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "tools": {
+      "type": "object",
+      "required": ["agentToAgent"],
+      "properties": {
+        "agentToAgent": {
+          "type": "object",
+          "required": ["enabled", "allow"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "allow": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "channels": {
+      "type": "object",
+      "required": ["telegram", "slack", "discord", "signal", "imessage"],
+      "properties": {
+        "telegram": { "$ref": "#/$defs/channelConfig" },
+        "slack": { "$ref": "#/$defs/channelConfig" },
+        "discord": { "$ref": "#/$defs/channelConfig" },
+        "signal": { "$ref": "#/$defs/channelConfig" },
+        "imessage": { "$ref": "#/$defs/channelConfig" }
+      },
+      "additionalProperties": true
+    },
+    "hooks": {
+      "type": "object",
+      "required": ["enabled", "mappings", "internal"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "match", "transform"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "match": {
+                "type": "object",
+                "required": ["path"],
+                "properties": {
+                  "path": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": true
+              },
+              "transform": {
+                "type": "object",
+                "required": ["module"],
+                "properties": {
+                  "module": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "internal": {
+          "type": "object",
+          "required": ["entries"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "entries": {
+              "type": "object",
+              "required": ["boot-md", "command-logger", "session-memory"],
+              "properties": {
+                "boot-md": { "$ref": "#/$defs/enabledConfig" },
+                "command-logger": { "$ref": "#/$defs/enabledConfig" },
+                "session-memory": { "$ref": "#/$defs/enabledConfig" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "memory": {
+      "type": "object",
+      "required": ["backend", "qmd"],
+      "properties": {
+        "backend": {
+          "type": "string",
+          "const": "qmd"
+        },
+        "qmd": {
+          "type": "object",
+          "required": ["paths", "update"],
+          "properties": {
+            "paths": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["path", "name", "pattern"],
+                "properties": {
+                  "path": { "type": "string", "minLength": 1 },
+                  "name": { "type": "string", "minLength": 1 },
+                  "pattern": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": true
+              }
+            },
+            "update": {
+              "type": "object",
+              "required": ["interval"],
+              "properties": {
+                "interval": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "gateway": {
+      "type": "object",
+      "required": ["bind", "http"],
+      "properties": {
+        "bind": {
+          "type": "string",
+          "const": "loopback"
+        },
+        "http": {
+          "type": "object",
+          "required": ["endpoints"],
+          "properties": {
+            "endpoints": {
+              "type": "object",
+              "required": ["chatCompletions"],
+              "properties": {
+                "chatCompletions": {
+                  "type": "object",
+                  "required": ["enabled"],
+                  "properties": {
+                    "enabled": { "type": "boolean" }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "enabledConfig": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "channelConfig": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

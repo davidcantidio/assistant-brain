@@ -9,8 +9,14 @@ import os,re,sys
 root='.'
 pat=re.compile(r'\[[^\]]+\]\(([^)]+)\)')
 missing=[]
+def skip_dir(dp: str) -> bool:
+    norm=dp.replace('\\','/')
+    if '/.git' in norm:
+        return True
+    parts=[p for p in norm.split('/') if p]
+    return any(p.startswith('.venv') for p in parts)
 for dp,_,fs in os.walk(root):
-    if '/.git' in dp.replace('\\','/'): 
+    if skip_dir(dp):
         continue
     for fn in fs:
         if not fn.endswith('.md'):
@@ -33,7 +39,7 @@ if missing:
 # unique doc_id check for markdown files with frontmatter
 ids={}
 for dp,_,fs in os.walk(root):
-    if '/.git' in dp.replace('\\','/'): 
+    if skip_dir(dp):
         continue
     for fn in fs:
         if not fn.endswith('.md'):

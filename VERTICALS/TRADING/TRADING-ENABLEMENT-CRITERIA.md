@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-ENABLEMENT-CRITERIA.md"
-version: "1.7"
+version: "1.8"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-050", "RFC-060"]
 ---
 
@@ -31,6 +31,7 @@ Exclui:
 - [RFC-060] MUST executar suite de validacao de trading antes de cada alteracao critica em live.
 - [RFC-060] MUST operar entrada em live com `capital_ramp_level=L0` por default.
 - [RFC-060] MUST concluir estagio `paper/sandbox` antes da primeira ordem com dinheiro real.
+- [RFC-060] MUST exigir aprovacao humana explicita por ordem com side effect financeiro em todos os estagios.
 
 ## Criterios de Habilitacao (todos obrigatorios)
 - 7 dias sem incidentes criticos.
@@ -58,11 +59,12 @@ Exclui:
 - `S1 - Micro-live`:
   - iniciar em `capital_ramp_level=L0`.
   - capital de risco minimo (perda total aceitavel).
-  - aprovacao humana por ordem de entrada durante janela inicial.
+  - aprovacao humana explicita por ordem.
   - janela minima recomendada antes de escala: 30 dias corridos.
 - `S2 - Escala gradual`:
   - promocao de limite/capital somente por decision `R3`.
   - exige historico estavel do `S1` sem regressao critica.
+  - aprovacao humana explicita por ordem permanece obrigatoria.
 
 ## Suite de Validacao de Trading (obrigatoria)
 - comando padrao:
@@ -146,6 +148,7 @@ Todos obrigatorios antes da primeira ordem com dinheiro real:
   - `hitl_channel_ready` (Telegram pronto; Slack fallback somente se IDs validados)
   - `degraded_mode_runbook_ok` (simulacao validada)
   - `backup_operator_enabled` (habilitado para `approve/reject/kill`)
+  - `explicit_order_approval_active` (sem bypass para aprovacao por ordem)
 - regra de bloqueio:
   - qualquer item `fail` MUST manter `TRADING_BLOCKED`.
 - artifact minimo:

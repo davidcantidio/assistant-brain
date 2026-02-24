@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-PRD.md"
-version: "1.7"
+version: "1.8"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-050", "RFC-060"]
 ---
 
@@ -30,6 +30,7 @@ Exclui:
 - [RFC-010] MUST exigir gates de aprovacao para transicoes de modo.
 - [RFC-050] MUST registrar logs e artifacts de cada operacao.
 - [RFC-060] MUST bloquear live sem criterios de enablement atendidos.
+- [RFC-060] MUST exigir aprovacao humana explicita por ordem com side effect financeiro.
 
 ## Pipeline Operacional
 1. Backtest:
@@ -44,7 +45,7 @@ Exclui:
   - iniciar somente por decision aprovada com `risk_tier=R3`.
   - iniciar em `capital_ramp_level=L0` com limites reduzidos por ordem/dia.
   - usar apenas capital de perda total aceitavel.
-  - manter aprovacao humana por ordem de entrada durante a janela inicial de estabilizacao.
+  - manter aprovacao humana explicita por ordem em todo o estagio.
   - consumir sinal apenas via `signal_intent` normalizado e auditavel.
   - passar obrigatoriamente no `pre_trade_validator` antes de cada ordem.
   - operar com protecoes hard-coded.
@@ -52,6 +53,7 @@ Exclui:
 4. Escala gradual:
   - aumento de capital e limite so por decision explicita apos historico real estavel.
   - promocao de nivel MUST ser bloqueada se houver regressao de risco/confiabilidade.
+  - execucao de ordem permanece sob aprovacao humana explicita por ordem.
 
 ## Integracoes
 - Exchange/Venue (Fase 1): Binance Spot.

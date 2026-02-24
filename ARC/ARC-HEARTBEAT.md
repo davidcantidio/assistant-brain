@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-HEARTBEAT.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-18"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
 ---
 
@@ -26,14 +26,16 @@ Exclui:
 - [RFC-050] MUST registrar heartbeat com timestamp e estado do agente.
 - [RFC-030] MUST acionar wake-up por evento sem aguardar janela periodica.
 - [RFC-001] SHOULD manter politicas de periodicidade consistentes entre escritorios.
-- [RFC-030] MUST usar baseline unico de 20 minutos para cadencia periodica.
+- [RFC-030] MUST usar baseline unico de 15 minutos para cadencia periodica.
+- [RFC-050] MUST executar ciclo noturno de extracao de memoria diariamente.
 
 ## Intervalos Oficiais
-- base global: 20 minutos.
-- Dispatcher: event-driven + varredura periodica a cada 20 minutos.
-- Workers: 20 minutos.
-- Risk/Compliance: 20 minutos.
+- base global: 15 minutos.
+- Dispatcher: event-driven + varredura periodica a cada 15 minutos.
+- Workers: 15 minutos.
+- Risk/Compliance: 15 minutos.
 - Standup diario: 11:30 no fuso -03 (America/Sao_Paulo).
+- Nightly extraction de memoria: 23:00 no fuso -03 (America/Sao_Paulo).
 
 ## Algoritmo de Heartbeat
 1. carregar contexto minimo (`working.md`, tasks abertas, mentions pendentes).
@@ -53,6 +55,7 @@ Exclui:
 - tarefas sem evento SHOULD usar contexto reduzido.
 - agentes ociosos MAY aumentar janela dentro do limite de papel.
 - loop de wake-up sem progresso MUST abrir task de diagnostico.
+- processos longos em tmux/loop MUST ser checados a cada heartbeat e relancados quando `stalled`.
 
 ## Links Relacionados
 - [ARC Core](./ARC-CORE.md)

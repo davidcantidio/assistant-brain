@@ -13,6 +13,8 @@
 /tmp/
 /logs/
 **/*.log
+.venv-docling/
+.venv*/
 **/cache/
 **/.cache/
 **/sessions/

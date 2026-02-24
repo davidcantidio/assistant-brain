@@ -1,7 +1,8 @@
-schema_version: "1.0"
-last_updated: "2026-02-20"
+schema_version: "1.1"
+last_updated: "2026-02-24"
 default_policy: "deny"
-default_mode: "openrouter_gateway"
+default_mode: "openclaw_gateway"
+cloud_adapter_preferred: "openrouter"
 
 profiles:
   public:

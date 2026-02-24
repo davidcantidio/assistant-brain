@@ -6,7 +6,7 @@
   "required": [
     "schema_version",
     "model_id",
-    "openrouter_model_id",
+    "provider_model_ref",
     "model_family",
     "model_tier",
     "risk_scope",
@@ -27,6 +27,10 @@
       "pattern": "^\\d+\\.\\d+$"
     },
     "model_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "provider_model_ref": {
       "type": "string",
       "minLength": 2
     },

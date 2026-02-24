@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-CI-RULES.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -44,7 +44,7 @@ Exclui:
   - `SEC/allowlists/*.yaml` incluindo `PROVIDERS.yaml`.
 - bloqueio de merge para:
   - rota sensitive sem policy adequada,
-  - uso programatico fora do gateway OpenRouter.
+  - uso programatico fora do gateway OpenClaw.
 
 ## Gates de Roteamento
 - valida schema de `models_catalog`.

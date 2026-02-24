@@ -8,6 +8,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - regra: MVP documental pode estar completo mesmo sem MVP operacional.
 
 ## Fonte Canonica
+- referencia arquitetural suprema: `felixcraft.md`
 - hierarquia e precedencia: `META/DOCUMENT-HIERARCHY.md`
 - visao executiva do produto: `PRD/PRD-MASTER.md`
 - fases e backlog de implementacao: `PRD/ROADMAP.md`
@@ -25,11 +26,14 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - `workspaces/main/`: workspace operacional canonico do MVP
 
 ## Regras Operacionais Essenciais
-- baseline de heartbeat: **20 minutos** (`ARC/ARC-HEARTBEAT.md`).
+- baseline de heartbeat: **15 minutos** (`ARC/ARC-HEARTBEAT.md`).
 - workspaces ativos no MVP: **somente** `workspaces/main`.
-- gateway programatico de inferencia em cloud/provider externo: **OpenRouter** (`https://openrouter.ai/api/v1`).
+- gateway programatico de inferencia: **OpenClaw Gateway** (`bind=loopback`).
+- adaptador cloud recomendado quando necessario: **OpenRouter** (`https://openrouter.ai/api/v1`).
 - automacoes com efeito colateral exigem contrato de idempotencia + rollback.
 - aprovacao HITL critica exige allowlist de operador + challenge de segundo fator (Telegram primario, Slack fallback controlado).
+- email nunca e canal de comando confiavel.
+- side effect financeiro exige aprovacao humana explicita por ordem.
 - claims centrais sem eval gate executavel bloqueiam release de fase.
 
 ## CI e Seguranca
@@ -59,6 +63,23 @@ bash scripts/verify_linux.sh
 
 Guia operacional detalhado:
 - `DEV/DEV-OPENCLAW-SETUP.md`
+
+## Docling PDF -> MD
+Tooling Python opcional e isolado para conversao de PDF em Markdown.
+
+```bash
+make docling-install
+make pdf-to-md PDF=felixcraft.pdf MD=felixcraft.md
+```
+
+Notas operacionais:
+- `.venv-docling` e um ambiente local isolado de tooling; nao faz parte do runtime principal do OpenClaw.
+- runtime principal continua Node/OpenClaw (onboarding via `scripts/onboard_linux.sh`).
+- policy de CI/local: se `felixcraft.pdf` mudar, `felixcraft.md` deve ser commitado junto.
+- validacao local da policy:
+```bash
+make check-pdf-md-sync
+```
 
 ## Contribuicao em Documentacao
 - atualize `version` e `last_updated` no header do arquivo alterado.

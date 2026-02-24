@@ -1,9 +1,9 @@
 ---
 doc_id: "TRADING-RISK-RULES.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-060"]
 ---
 
@@ -32,6 +32,7 @@ Exclui:
 - [RFC-060] MUST reprovar transicao de modo se `eval-trading` falhar.
 - [RFC-060] MUST aplicar ramp-up progressivo de capital somente apos estagio `paper/sandbox` concluido.
 - [RFC-060] MUST manter `asset_profile` por classe de ativo para qualquer execucao live fora de `crypto_spot`.
+- [RFC-060] MUST exigir aprovacao humana explicita por ordem com side effect financeiro em todos os estagios.
 
 ## Regras Hard
 - Risco por trade:
@@ -80,9 +81,10 @@ Exclui:
   - qualquer tentativa de ordem real MUST bloquear e abrir evento de risco.
 - `S1 - Micro-live (L0)`:
   - exposicao real minima com capital de perda total aceitavel.
-  - aprovacao humana por ordem de entrada na janela inicial de estabilizacao.
+  - aprovacao humana explicita por ordem.
 - `S2 - Escala gradual`:
   - promocao de limites somente por decision `R3` apos historico estavel.
+  - aprovacao humana explicita por ordem permanece obrigatoria.
 
 ## Regras Adicionais para Classe Nova
 - `asset_profile` obrigatorio por classe:

@@ -1,9 +1,9 @@
 ---
 doc_id: "DOCUMENT-HIERARCHY.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -31,6 +31,7 @@ Exclui:
 - [RFC-001] MUST tratar README e guias auxiliares de workspace como documentacao de apoio, nunca como fonte normativa primaria.
 
 ## Ordem de Precedencia
+0. `felixcraft.md` (fonte arquitetural suprema; prevalece em conflito explicito)
 1. SEC/
 2. CORE/
 3. ARC/
@@ -44,6 +45,7 @@ Exclui:
 ## Regra de Resolucao de Conflitos
 - identificar o conflito e os docs envolvidos.
 - aplicar precedencia da lista acima.
+- se `felixcraft.md` contiver regra explicita para o tema, essa regra prevalece.
 - se conflito continuar, abrir decision com evidencias e impacto.
 - atualizar documento de menor precedencia para eliminar contradicao futura.
 - registrar no changelog normativo.
@@ -64,13 +66,16 @@ Exclui:
 - objetivo:
   - eliminar ambiguidade entre memoria de raiz e memoria de workspace.
 - canonico (MVP/Fase 0):
-  - memoria operacional: `workspaces/main/memory/`.
+  - memoria tacita: `workspaces/main/MEMORY.md`.
+  - notas diarias: `workspaces/main/memory/YYYY-MM-DD.md`.
   - estado de workspace: `workspaces/main/.openclaw/workspace-state.json`.
+  - memoria semantica/indexada: backend `qmd` configurado no runtime OpenClaw.
 - nao canonico:
   - `memory/` na raiz (deve ser apenas ponteiro informativo, sem dados operacionais).
+  - `deep-research-report.md` como fonte de decisao (historico/analise; nao normativo).
   - `sessions/` versionado em git (proibido; usar armazenamento local/segregado).
 - em conflito de estado:
-  - `workspaces/main/memory/` prevalece;
+  - `workspaces/main/MEMORY.md` e `workspaces/main/memory/` prevalecem;
   - discrepancia MUST abrir incident + task de reconciliacao.
 
 ## Versionamento Documental

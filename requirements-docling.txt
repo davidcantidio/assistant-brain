@@ -1,0 +1,2 @@
+# Base dependency used in isolated Docling environment (PDF -> Markdown)
+docling==2.74.0

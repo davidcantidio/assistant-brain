@@ -1,0 +1,30 @@
+name: ci-pdf-sync
+
+on:
+  push:
+    paths:
+      - 'felixcraft.pdf'
+      - 'felixcraft.md'
+      - 'scripts/ci/check_pdf_md_sync.sh'
+      - 'scripts/pdf_to_md_docling.py'
+      - 'requirements-docling.txt'
+      - 'Makefile'
+  pull_request:
+    paths:
+      - 'felixcraft.pdf'
+      - 'felixcraft.md'
+      - 'scripts/ci/check_pdf_md_sync.sh'
+      - 'scripts/pdf_to_md_docling.py'
+      - 'requirements-docling.txt'
+      - 'Makefile'
+
+jobs:
+  pdf-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check PDF/MD sync policy
+        run: bash scripts/ci/check_pdf_md_sync.sh

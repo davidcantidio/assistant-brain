@@ -1,16 +1,16 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.0"
+version: "2.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # Roadmap
 
 ## Objetivo
-Definir fases, milestones e criterios objetivos de saida para evolucao do OpenClaw Agent OS com OpenRouter + Model Router + memoria vetorial hibrida sob controle de risco.
+Definir fases, milestones e criterios objetivos de saida para evolucao do OpenClaw Agent OS com OpenClaw gateway-first + Model Router + memoria vetorial hibrida sob controle de risco.
 
 ## Escopo
 Inclui:
@@ -39,7 +39,8 @@ Exclui:
 - Convex com colecoes minimas de control-plane.
 - OpenClaw runtime configurado para workspace `workspaces/main`.
 - Worker LLM local habilitado na Fase 0 para tarefas pesadas nao urgentes (host compativel, preferencia Mac >= 32 GB RAM).
-- gateway LLM programatico padrao para cloud/provider externo: OpenRouter (`https://openrouter.ai/api/v1`).
+- gateway LLM programatico padrao: OpenClaw Gateway (`bind=loopback`); providers cloud entram por adaptador plugavel.
+- OpenRouter e o adaptador recomendado quando operacao multi-provider estiver habilitada.
 - Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03).
 - Model Catalog + Model Router + Memory Plane + Budget + Privacidade entram em baseline minimo na Fase 0.
 - refinos avancados desses blocos sao diferidos para Fase 1/2 sem perda de escopo.
@@ -52,7 +53,10 @@ Exclui:
 - `B0-04` implementar enforcement idempotente e rollback para `SPRINT_OVERRIDE`.
 - `B0-05` implementar contrato idempotente para auto-acoes de saude/observabilidade.
 - `B0-06` implementar reconciliador de degraded mode (`idempotency_key` + `replay_key`).
-- `B0-07` implementar OpenRouter client padrao (OpenAI-compatible) no runtime.
+- `B0-07` implementar contrato do OpenClaw Gateway:
+  - `bind=loopback`,
+  - endpoint `chatCompletions` opcional sob policy,
+  - adaptador cloud plugavel (OpenRouter recomendado).
 - `B0-08` implementar Model Catalog baseline:
   - sync de Models API,
   - metadados minimos para roteamento (`model_id`, provider, capabilities, limits, pricing, status).
@@ -71,9 +75,24 @@ Exclui:
   - prompt storage minimizado (hash + resumo sanitizado por padrao).
 - `B0-15` implementar harness executavel de evals com comando unico (`make eval-gates` ou equivalente).
 - `B0-16` implementar CI gates no GitHub Actions para claims centrais, allowlists, privacidade e roteamento.
+- `B0-17` implementar contrato A2A baseline:
+  - `tools.agentToAgent.enabled`,
+  - `tools.agentToAgent.allow[]`,
+  - trilha de delegacao com `trace_id`.
+- `B0-18` implementar contrato de hooks/webhooks baseline:
+  - `hooks.enabled`,
+  - `hooks.mappings[]` com transform tipada,
+  - `hooks.internal.entries[]` (`boot-md`, `command-logger`, `session-memory`).
 - `B0-19` preencher e validar `OPERATORS.yaml` baseline:
   - IDs Telegram validados para aprovacao critica,
   - estrategia de `backup_operator` definida e rastreada.
+- `B0-20` implementar `memory_contract` baseline:
+  - `workspaces/main/MEMORY.md`,
+  - `workspaces/main/memory/YYYY-MM-DD.md`,
+  - cron `nightly-extraction` obrigatorio.
+- `B0-21` implementar `approval_policy` baseline:
+  - `financial_side_effect_requires_explicit_human_approval=true`,
+  - `email_command_channel_trusted=false`.
 
 ### DoD Fase 0
 - 7 dias de operacao estavel.
@@ -97,7 +116,7 @@ Exclui:
 - Integracao Binance Spot + Freqtrade em sandbox isolado.
 - Escopo de ativos da fase: `crypto_spot` apenas.
 - Guardrails obrigatorios de risco e kill switch.
-- Aprovar entrada e mudancas em live somente via decision + checkpoint humano.
+- Toda ordem com side effect financeiro exige aprovacao humana explicita por ordem + decision/checkpoint humano.
 - Suite de validacao de trading executavel obrigatoria antes de live.
 - Operar com `capital_ramp_level=L0` por default e evoluir nivel somente por decision.
 - estrategia de framework:
@@ -136,7 +155,11 @@ Exclui:
   - circuit breaker de custo e politicas de burn-rate.
 - `B1-R14` (origem `B0-14`) expandir privacidade/retencao:
   - ZDR por task_type `sensitive` e politicas de retention detalhadas.
-- `B1-R17` (origem `B0-17`) implementar adapter de eventos Slack:
+- `B1-R16` (origem `B0-17`) expandir A2A:
+  - delegacao cross-workspace com allowlist por papel,
+  - limites por concorrencia e custo,
+  - fallback para fila serial em conflito.
+- `B1-R17` (origem `B0-18`) implementar adapter de eventos Slack:
   - normalizacao de `@mention` para `task_event` com `idempotency_key`,
   - deduplicacao por evento/coalescing key,
   - mapeamento de thread para `issue_id`/`microtask_id`,

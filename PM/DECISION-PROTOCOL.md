@@ -1,16 +1,16 @@
 ---
 doc_id: "DECISION-PROTOCOL.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # Decision Protocol
 
 ## Objetivo
-Definir quando abrir decision, qual formato minimo usar e como executar aprovacao/rejeicao/kill via HITL multi-canal (Telegram primario, Slack fallback).
+Definir quando abrir decision, qual formato minimo usar e como executar aprovacao/rejeicao/kill via HITL multi-canal com confianca de canal explicita (Telegram primario, Slack fallback).
 
 ## Escopo
 Inclui:
@@ -37,6 +37,8 @@ Exclui:
 - [RFC-030] MUST registrar `requested_model`, `effective_model` e `effective_provider` em decisions de roteamento critico.
 - [RFC-015] MUST validar assinatura e anti-replay de requests Slack (`timestamp` + assinatura HMAC) quando Slack for usado como canal HITL.
 - [RFC-060] MUST operar Trading live em `fail-closed` quando canal HITL critico estiver indisponivel sem fallback validado.
+- [RFC-015] MUST tratar email como canal nao confiavel para comando.
+- [RFC-060] MUST exigir aprovacao humana explicita para toda acao financeira com side effect.
 
 ## Taxonomia de Risco Canonica (compatibilidade)
 - taxonomia canonica para gates tecnicos:
@@ -56,6 +58,7 @@ Exclui:
 - override de sprint/budget/model routing.
 - habilitacao de vertical de risco elevado.
 - uso de `cross_review_codex_claude` fora de classes criticas preaprovadas.
+- qualquer ordem financeira real (entrada, saida, ajuste de exposicao) em qualquer fase.
 
 ## Formato da Decision
 ```yaml
@@ -132,6 +135,11 @@ challenge_expires_at: "ISO-8601|null"
   - Telegram e canal primario para comandos criticos.
   - indisponibilidade de Telegram por > 2 heartbeats permite fallback em Slack com os mesmos controles de autenticacao, challenge e auditoria.
   - fallback Slack para trading live so e permitido quando operador habilitado tiver `slack_user_ids` e `slack_channel_ids` nao vazios.
+
+## Regra de Confianca de Canal
+- email e canal de informacao/triagem, nunca canal confiavel para comando.
+- pedido recebido por email MUST ser encaminhado para confirmacao em Telegram (ou Slack fallback validado) antes de executar.
+- comando vindo exclusivamente por email MUST ser registrado como `UNTRUSTED_COMMAND_SOURCE`.
 
 ## Controle de Identidade/Autorizacao (HITL)
 - fonte de verdade de aprovadores: `../SEC/allowlists/OPERATORS.yaml`.
