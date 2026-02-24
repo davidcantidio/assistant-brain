@@ -64,6 +64,11 @@ bash scripts/onboard_linux.sh
 bash scripts/verify_linux.sh
 ```
 
+Notas:
+- os scripts acima sao o contrato oficial de onboarding para Linux e macOS (detecao automatica no `onboard_linux.sh`).
+- `scripts/verify_linux.sh` e gate bloqueante e retorna `exit code != 0` quando faltar requisito obrigatorio.
+- template canonico de configuracao: `config/openclaw.env.example` (espelho em `.env_example`).
+
 Guia operacional detalhado:
 - `DEV/DEV-OPENCLAW-SETUP.md`
 

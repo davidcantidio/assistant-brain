@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.9"
+version: "2.11"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -28,6 +28,40 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-24 - Execucao do EPIC-F1-02 (contrato de configuracao local)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050.
+- Impacto:
+  - atualiza `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md` para refletir gate executavel por `exit code` e defaults normativos verificaveis.
+  - endurece `scripts/verify_linux.sh` com validacao explicita de defaults de runtime:
+    - `HEARTBEAT_MINUTES=15`
+    - `STANDUP_TIME=11:30`
+    - `OPENCLAW_GATEWAY_URL=http://127.0.0.1:18789/v1`
+    - `LITELLM_BASE_URL=http://127.0.0.1:4000/v1`
+    - `OPENCLAW_SUPERVISOR_PRIMARY=codex-main`
+    - `OPENCLAW_SUPERVISOR_SECONDARY=claude-review`
+  - adiciona carregamento defensivo de NVM no `verify_linux.sh` para reduzir falso negativo de PATH em shells sem perfil carregado.
+  - registra evidencias Red/Green/Refactor do epico em `artifacts/phase-f1/epic-f1-02-config-validation.md`.
+  - atualiza `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md` com `EPIC-F1-02` em status `done`.
+- Migracao:
+  - executar `bash scripts/onboard_linux.sh` para bootstrap local (quando necessario).
+  - executar `bash scripts/verify_linux.sh` e corrigir qualquer divergence de `.env` antes da promocao de fase.
+  - executar `make eval-models` para validar politica de cloud opcional desabilitada por default.
+
+### 2026-02-24 - F1-01 cross-platform (Linux/macOS) com gate real de verify
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050.
+- Impacto:
+  - atualiza `scripts/onboard_linux.sh` para detectar plataforma (`Linux`/`Darwin`) e executar dependencias por SO sem trocar o comando oficial da fase.
+  - adiciona validacoes de macOS no onboarding (`brew` + Command Line Tools) e persistencia de NVM em shell novo (`.bashrc` e `.zshrc`).
+  - endurece `scripts/verify_linux.sh` para gate bloqueante com `exit code != 0` em requisito faltante.
+  - formaliza contrato hibrido de `.env`: chaves operacionais do projeto obrigatorias + chaves completas do template como referencia opcional.
+  - formaliza regra Telegram: `TELEGRAM_CHAT_ID` canonico com aliases aceitos (`TELEGRAM_USER_ID`, `TELEGRAM_GROUP_ID`).
+  - cria template canonico `config/openclaw.env.example` e alinha `.env_example` como espelho.
+  - atualiza docs de F1 (`EPIC-F1-01`, `EPICS`, `DEV-OPENCLAW-SETUP`, `PHASE-USABILITY-GUIDE`, `README`) para refletir suporte Linux/macOS e gate do verify.
+- Migracao:
+  - executar `bash scripts/onboard_linux.sh` no host local (Linux ou macOS).
+  - executar `bash scripts/verify_linux.sh` e bloquear promocao de fase se retorno for diferente de zero.
+  - usar `config/openclaw.env.example` como base unica para criar/atualizar `.env`.
 
 ### 2026-02-24 - Fechamento de lacunas F2/F5 e rastreabilidade roadmap-felix
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.

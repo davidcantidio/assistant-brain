@@ -1,6 +1,6 @@
 ---
 doc_id: "DEV-OPENCLAW-SETUP.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "Engineering"
 last_updated: "2026-02-24"
@@ -10,7 +10,7 @@ rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-050", "RFC-060"]
 # Dev OpenClaw Setup
 
 ## Objetivo
-Definir instalacao minima e verificavel de `OpenClaw` para Linux, com gateway runtime local (`loopback`) e estado canonico no repositorio.
+Definir instalacao minima e verificavel de `OpenClaw` para Linux/macOS, com gateway runtime local (`loopback`) e estado canonico no repositorio.
 
 ## Escopo
 Inclui:
@@ -24,8 +24,10 @@ Exclui:
 - bypass de gates de risco/compliance
 
 ## Pre-requisitos
-- Linux (Debian/Ubuntu recomendado)
-- `git`, `curl`, `python3`, `build-essential`
+- Linux (Debian/Ubuntu recomendado) **ou** macOS (Darwin + Homebrew)
+- `git`, `curl`, `python3`
+- Linux: `build-essential`
+- macOS: Xcode Command Line Tools (`xcode-select --install`)
 - `nvm` + Node `22.22.0`
 
 ## Instalacao
@@ -33,21 +35,25 @@ Exclui:
 ```bash
 bash scripts/onboard_linux.sh
 ```
+> O script detecta automaticamente Linux/macOS e aplica o fluxo da plataforma.
+
 2. Validar setup:
 ```bash
 bash scripts/verify_linux.sh
 ```
+> `verify_linux.sh` e gate bloqueante: retorna `exit code != 0` com requisito faltante.
 
 ## Contrato de Configuracao
 - arquivo local:
   - `.env` (na raiz do repo)
+  - template canonico: `config/openclaw.env.example` (espelho em `.env_example`)
 - variaveis obrigatorias:
   - `LITELLM_API_KEY`
   - `LITELLM_MASTER_KEY` (somente para budget governor/administracao)
   - `CODEX_OAUTH_ACCESS_TOKEN` (alias `codex-main`)
   - `ANTHROPIC_API_KEY` (alias `claude-review`)
   - `TELEGRAM_BOT_TOKEN`
-  - `TELEGRAM_CHAT_ID`
+  - `TELEGRAM_CHAT_ID` (canonico; aliases aceitos: `TELEGRAM_USER_ID`, `TELEGRAM_GROUP_ID`)
   - `SLACK_BOT_TOKEN`
   - `SLACK_SIGNING_SECRET`
   - `CONVEX_DEPLOYMENT_URL`
