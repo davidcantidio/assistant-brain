@@ -12,11 +12,12 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - hierarquia e precedencia: `META/DOCUMENT-HIERARCHY.md`
 - visao executiva do produto: `PRD/PRD-MASTER.md`
 - fases e backlog de implementacao: `PRD/ROADMAP.md`
+- fases usaveis com teste humano por etapa: `PRD/PHASE-USABILITY-GUIDE.md`
 - historico normativo: `PRD/CHANGELOG.md`
 
 ## Estrutura
 - `PRD/`: produto, fases e changelog
-- `PM/`: decisoes, work order, sprint governance
+- `PM/`: decisoes, work order, sprint governance e planejamento por fase (`PM/PHASES/`)
 - `ARC/`: arquitetura operacional e roteamento
 - `SEC/`: seguranca, secrets, sandbox, allowlists
 - `INTEGRATIONS/`: contratos normativos para integracoes externas (AI-Trader, ClawWork, OpenClaw upstream)

@@ -1,6 +1,6 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.2"
+version: "2.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -34,6 +34,14 @@ Exclui:
 ## Plataforma de CI (decisao fechada)
 - plataforma oficial: **GitHub Actions**.
 - todo gate obrigatorio MUST ter workflow reproduzivel versionado no repositorio.
+
+## Overlay de Fases Usaveis (operacao humana)
+- trilha operacional por etapas usaveis esta definida em `PRD/PHASE-USABILITY-GUIDE.md`.
+- cada fase usavel MUST terminar com:
+  - uso humano direto;
+  - teste humano objetivo;
+  - gate de saida com comando/evidencia explicita.
+- promocao de fase usavel MUST ficar bloqueada quando o gate de saida da etapa atual falhar.
 
 ## Fase 0 - Mission Control Minimo
 - Convex com colecoes minimas de control-plane.
@@ -218,6 +226,7 @@ Exclui:
 
 ## Links Relacionados
 - [PRD Master](./PRD-MASTER.md)
+- [Phase Usability Guide](./PHASE-USABILITY-GUIDE.md)
 - [Changelog](./CHANGELOG.md)
 - [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
 - [Integrations](../INTEGRATIONS/README.md)

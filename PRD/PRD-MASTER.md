@@ -1,6 +1,6 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.13"
+version: "1.14"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-24"
@@ -639,6 +639,7 @@ Definicao objetiva de side effect:
 ## Links Relacionados
 - [Felixcraft Architecture](../felixcraft.md)
 - [Roadmap](./ROADMAP.md)
+- [Phase Usability Guide](./PHASE-USABILITY-GUIDE.md)
 - [Changelog](./CHANGELOG.md)
 - [Integrations](../INTEGRATIONS/README.md)
 - [ARC Core](../ARC/ARC-CORE.md)
