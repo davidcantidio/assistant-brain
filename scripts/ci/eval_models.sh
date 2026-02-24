@@ -24,10 +24,26 @@ search_fixed() {
   fi
 }
 
+search_absent_re() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    if rg -n -- "$pattern" "$@" >/dev/null; then
+      echo "Padrao proibido encontrado: $pattern"
+      exit 1
+    fi
+  else
+    if grep -nE -- "$pattern" "$@" >/dev/null; then
+      echo "Padrao proibido encontrado: $pattern"
+      exit 1
+    fi
+  fi
+}
+
 python3 -m json.tool ARC/schemas/models_catalog.schema.json >/dev/null
 
 required_patterns=(
-  "## OpenRouter como Camada Padrao"
+  "## OpenClaw Gateway e Adapters Cloud"
   "## Provider Variance e Provider Routing"
   "## Fallback Policy"
   "## Presets (governanca central)"
@@ -46,7 +62,14 @@ for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
 done
 
-search_re "cloud/provider externo MUST passar por OpenRouter" SEC/SEC-POLICY.md
-search_re "chamada direta a API de provider externo fora do OpenRouter MUST ser bloqueada" SEC/SEC-POLICY.md
+search_re "chamadas programaticas de inferencia MUST passar pelo gateway OpenClaw" SEC/SEC-POLICY.md
+search_re "chamada direta a API de provider externo fora do gateway OpenClaw MUST ser bloqueada" SEC/SEC-POLICY.md
+search_re "LiteLLM MUST operar como adaptador padrao para supervisores pagos" SEC/SEC-POLICY.md
+search_re "gateway\\.supervisor_adapter.*LiteLLM" PRD/PRD-MASTER.md
+search_re "qwen2\\.5-coder:32b" PRD/PRD-MASTER.md
+search_re "deepseek-r1:32b" PRD/PRD-MASTER.md
+search_re "OpenRouter fica desabilitado no baseline" PRD/PRD-MASTER.md
+search_absent_re "OpenRouter e o adaptador padrao recomendado" PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md
+search_absent_re "OpenRouter MAY operar como adaptador cloud recomendado" SEC/SEC-POLICY.md
 
 echo "eval-models: PASS"

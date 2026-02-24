@@ -1,9 +1,9 @@
 ---
 doc_id: "SYSTEM-HEALTH-THRESHOLDS.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
 ---
 
@@ -42,6 +42,7 @@ Exclui:
 | Fallback em cascata | > 3 por tarefa | escalar cloud/humano |
 | Parse rate (structured) | < 98% em janela | bloquear rota + abrir tuning |
 | Tool success rate (tools) | < 95% em janela | trocar preset/provider e abrir decision |
+| Worker local sem capacidade | `context_fit=false` ou `latency_p95` acima do limite por task_type | escalar para supervisor pago + registrar fallback |
 | Incidente critico | >= 1 | ativar degraded mode e checklist incidente |
 
 ## Calibragem por Fase
@@ -81,7 +82,7 @@ status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
 ## EVAL Gates de Claims Centrais (obrigatorio)
 | Claim central | Gate minimo | Threshold inicial | Acao em falha |
 |---|---|---|---|
-| OpenRouter e gateway programatico padrao | chamada programatica fora do gateway | 0 casos | bloquear release + abrir incident |
+| OpenClaw gateway programatico padrao | chamada programatica fora do gateway OpenClaw | 0 casos | bloquear release + abrir incident |
 | requested/effective model/provider auditavel | run sem campos de roteamento | 0 casos | bloquear pipeline + task de contrato |
 | provider allowlist aplicada por sensibilidade | rota sensitive fora de allowlist | 0 casos | bloquear comando + incidente de seguranca |
 | ZDR em fluxo sensitive | run sensitive sem policy ZDR quando exigido | 0 casos | stop-ship + incidente de seguranca |
@@ -91,7 +92,11 @@ status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
 | reconciliacao offline sem duplicidade | eventos duplicados pos-replay | 0 casos | manter degraded + abrir decision |
 | allowlists aplicadas corretamente | taxa de bloqueio de acao proibida | 100% | bloquear deploy + incidente |
 | trilha auditavel integra (hash-chain) | quebra de cadeia | 0 casos | stop-ship + incidente de integridade |
-| budget governor por creditos ativo | snapshot de creditos desatualizado > 10 min | 0 casos | bloquear tarefas nao criticas |
+| budget governor ativo por LiteLLM/supervisores | snapshot de custo desatualizado > 10 min | 0 casos | bloquear tarefas nao criticas |
+| roteamento por papel (local bracal vs supervisor pago) | task de revisao critica executada fora de supervisor pago | 0 casos | bloquear release + abrir incidente |
+| fallback auditavel obrigatorio | run sem `requested_model/effective_model/fallback_step/reason` | 0 casos | bloquear pipeline + task de contrato |
+| email nao confiavel para comando | comando executado a partir de email sem confirmacao em canal confiavel | 0 casos | bloquear comando + incidente |
+| aprovacao humana explicita em side effect financeiro | ordem/acao financeira executada sem aprovacao por ordem | 0 casos | stop-ship + incidente |
 | `execution_gateway` como unico caminho de ordem live | ordem emitida fora do gateway | 0 casos | stop-ship + incidente de seguranca |
 | `make eval-trading` executavel para release de trading | comando ausente/falha em CI | 0 casos | bloquear merge/deploy de trading |
 | engine primaria indisponivel => `fail_closed` | nova entrada aceita com engine primaria indisponivel | 0 casos | stop-ship + incidente |

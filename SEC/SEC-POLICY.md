@@ -1,9 +1,9 @@
 ---
 doc_id: "SEC-POLICY.md"
-version: "1.5"
+version: "1.7"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050"]
 ---
 
@@ -36,6 +36,8 @@ Exclui:
 - [RFC-060] MUST permitir envio/cancelamento de ordem somente via `execution_gateway`.
 - [RFC-015] MUST bloquear credencial de trading com permissao de saque.
 - [RFC-015] MUST exigir IP allowlist nas credenciais de venue quando o provedor suportar.
+- [RFC-015] MUST tratar email como canal nao confiavel para comando operacional.
+- [RFC-060] MUST exigir aprovacao humana explicita para qualquer side effect financeiro.
 
 ## Menor Privilegio
 - cada agente recebe apenas escopos necessarios para sua funcao.
@@ -72,14 +74,30 @@ Exclui:
 - providers por task/sensibilidade:
   - `./allowlists/PROVIDERS.yaml`
 
-## OpenRouter e Providers
-- chamadas programaticas de inferencia em cloud/provider externo MUST passar por OpenRouter.
-- inferencia local em `MAC-LOCAL` MAY operar sem OpenRouter somente para modelos locais sem chamada a provider externo.
-- chamada direta a API de provider externo fora do OpenRouter MUST ser bloqueada.
-- OpenRouter SHOULD operar com logging de prompts/respostas desativado por default (opt-in explicito por policy).
+## Gateway OpenClaw, LiteLLM e Providers
+- chamadas programaticas de inferencia MUST passar pelo gateway OpenClaw.
+- inferencia local em `MAC-LOCAL` MAY operar sem adaptador cloud somente para modelos locais sem chamada a provider externo.
+- LiteLLM MUST operar como adaptador padrao para supervisores pagos (`codex-main`, `claude-review`).
+- OpenRouter MAY operar apenas como fallback opcional e permanece desabilitado por default.
+- chamada direta a API de provider externo fora do gateway OpenClaw MUST ser bloqueada.
+- adaptador cloud ativo SHOULD operar com logging de prompts/respostas desativado por default (opt-in explicito por policy).
 - providers efetivos possuem politicas proprias de retencao/privacidade e MUST ser tratados como variancia de risco.
 - provider efetivo MUST ser validado contra `PROVIDERS.yaml`.
 - rota `sensitive` sem provider compativel com policy MUST falhar com bloqueio.
+
+## Confianca de Canal de Comando
+- canais confiaveis de comando:
+  - Telegram (primario)
+  - Slack fallback validado (assinatura + anti-replay + challenge)
+- email:
+  - e canal de informacao, triagem e notificacao.
+  - NUNCA e canal confiavel para instrucoes de execucao.
+  - solicitacao recebida por email MUST ser confirmada em canal confiavel antes de acao.
+
+## Hard Gate de Side Effect Financeiro
+- qualquer acao que mova, bloqueie, arrisque ou comprometa dinheiro MUST exigir aprovacao humana explicita.
+- essa regra vale para todas as fases (`S0`, `S1`, `S2`) e para qualquer classe de ativo.
+- tentativa de execucao financeira sem aprovacao explicita MUST ser bloqueada e auditada.
 
 ## HITL Operators (Multi-canal)
 - fonte de identidade: `./allowlists/OPERATORS.yaml`.

@@ -121,9 +121,16 @@ create_templates() {
 # OpenClaw Env (exemplo) — NÃO COMMITAR valores reais
 TZ=America/Sao_Paulo
 
-# OpenRouter
-OPENROUTER_API_KEY=
-OPENROUTER_MANAGEMENT_KEY=
+# LiteLLM (supervisores pagos)
+LITELLM_API_KEY=
+LITELLM_MASTER_KEY=
+LITELLM_BASE_URL=http://127.0.0.1:4000/v1
+
+# Supervisores
+CODEX_OAUTH_ACCESS_TOKEN=
+ANTHROPIC_API_KEY=
+OPENCLAW_SUPERVISOR_PRIMARY=codex-main
+OPENCLAW_SUPERVISOR_SECONDARY=claude-review
 
 # Telegram
 TELEGRAM_BOT_TOKEN=
@@ -139,12 +146,16 @@ CONVEX_DEPLOYMENT_URL=
 CONVEX_DEPLOY_KEY=
 
 # Runtime
-HEARTBEAT_MINUTES=20
+HEARTBEAT_MINUTES=15
 STANDUP_TIME=11:30
+OPENCLAW_GATEWAY_URL=http://127.0.0.1:18789/v1
 
-# Model Router (OpenRouter model IDs)
-OPENCLAW_MODEL_CHEAP=openai/gpt-4.1-mini
-OPENCLAW_MODEL_STRONG=openai/gpt-4.1
+# Workers locais (tarefa bracal)
+OPENCLAW_WORKER_CODE_MODEL=ollama/qwen2.5-coder:32b
+OPENCLAW_WORKER_REASON_MODEL=ollama/deepseek-r1:32b
+
+# Fallback cloud opcional (desabilitado por default)
+OPENROUTER_API_KEY=
 EOT
   fi
 
@@ -181,13 +192,25 @@ configure_env_interactive() {
   tz="$(prompt_text "TZ" "America/Sao_Paulo")"
   set_env_kv "$env_file" "TZ" "$tz"
 
-  local openrouter
-  openrouter="$(prompt_secret "OPENROUTER_API_KEY")"
-  [ -n "$openrouter" ] && set_env_kv "$env_file" "OPENROUTER_API_KEY" "$openrouter"
+  local litellm_key
+  litellm_key="$(prompt_secret "LITELLM_API_KEY")"
+  [ -n "$litellm_key" ] && set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
 
-  local mgmt
-  mgmt="$(prompt_secret "OPENROUTER_MANAGEMENT_KEY (somente servico de budget)")"
-  [ -n "$mgmt" ] && set_env_kv "$env_file" "OPENROUTER_MANAGEMENT_KEY" "$mgmt"
+  local litellm_master
+  litellm_master="$(prompt_secret "LITELLM_MASTER_KEY (somente servico de budget/admin)")"
+  [ -n "$litellm_master" ] && set_env_kv "$env_file" "LITELLM_MASTER_KEY" "$litellm_master"
+
+  local litellm_url
+  litellm_url="$(prompt_text "LITELLM_BASE_URL" "http://127.0.0.1:4000/v1")"
+  set_env_kv "$env_file" "LITELLM_BASE_URL" "$litellm_url"
+
+  local codex_oauth
+  codex_oauth="$(prompt_secret "CODEX_OAUTH_ACCESS_TOKEN (alias codex-main)")"
+  [ -n "$codex_oauth" ] && set_env_kv "$env_file" "CODEX_OAUTH_ACCESS_TOKEN" "$codex_oauth"
+
+  local anthropic_key
+  anthropic_key="$(prompt_secret "ANTHROPIC_API_KEY (alias claude-review)")"
+  [ -n "$anthropic_key" ] && set_env_kv "$env_file" "ANTHROPIC_API_KEY" "$anthropic_key"
 
   local tgbot
   tgbot="$(prompt_secret "TELEGRAM_BOT_TOKEN")"
@@ -218,12 +241,32 @@ configure_env_interactive() {
   [ -n "$cxkey" ] && set_env_kv "$env_file" "CONVEX_DEPLOY_KEY" "$cxkey"
 
   local hb
-  hb="$(prompt_text "HEARTBEAT_MINUTES" "20")"
+  hb="$(prompt_text "HEARTBEAT_MINUTES" "15")"
   set_env_kv "$env_file" "HEARTBEAT_MINUTES" "$hb"
 
   local st
   st="$(prompt_text "STANDUP_TIME (HH:MM)" "11:30")"
   set_env_kv "$env_file" "STANDUP_TIME" "$st"
+
+  local gw
+  gw="$(prompt_text "OPENCLAW_GATEWAY_URL" "http://127.0.0.1:18789/v1")"
+  set_env_kv "$env_file" "OPENCLAW_GATEWAY_URL" "$gw"
+
+  local sup_primary
+  sup_primary="$(prompt_text "OPENCLAW_SUPERVISOR_PRIMARY" "codex-main")"
+  set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_PRIMARY" "$sup_primary"
+
+  local sup_secondary
+  sup_secondary="$(prompt_text "OPENCLAW_SUPERVISOR_SECONDARY" "claude-review")"
+  set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_SECONDARY" "$sup_secondary"
+
+  local worker_code
+  worker_code="$(prompt_text "OPENCLAW_WORKER_CODE_MODEL" "ollama/qwen2.5-coder:32b")"
+  set_env_kv "$env_file" "OPENCLAW_WORKER_CODE_MODEL" "$worker_code"
+
+  local worker_reason
+  worker_reason="$(prompt_text "OPENCLAW_WORKER_REASON_MODEL" "ollama/deepseek-r1:32b")"
+  set_env_kv "$env_file" "OPENCLAW_WORKER_REASON_MODEL" "$worker_reason"
 
   echo
   echo "OK: .env atualizado."

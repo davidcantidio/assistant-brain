@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.1"
+version: "2.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -28,6 +28,36 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-24 - Merge do paradigma `llms_locais.md` com OpenClaw-first + LiteLLM
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.
+- Impacto:
+  - remove OpenRouter como recomendacao padrao e corrige desalinhamento para baseline OpenClaw-first.
+  - formaliza stack de roteamento: `OpenClaw -> LiteLLM -> supervisores pagos` + workers locais bracais.
+  - define contratos normativos: `routing_stack_contract`, `supervisor_contract`, `local_worker_contract`, `capacity_guard_contract`, `fallback_contract`.
+  - fixa aliases de supervisores: `codex-main` (primario) e `claude-review` (secundario).
+  - explicita regra de capacidade local: maior potencia local possivel somente dentro de gates de sucesso/latencia/retry/contexto.
+  - reforca auditoria obrigatoria de fallback (`requested_model`, `effective_model`, `fallback_step`, `reason`) em 100% das execucoes.
+  - atualiza setup/env/scripts para LiteLLM e ajusta gates `eval-models` para o novo contrato.
+- Migracao:
+  - atualizar `.env` com `LITELLM_API_KEY`, `LITELLM_MASTER_KEY`, `CODEX_OAUTH_ACCESS_TOKEN`, `ANTHROPIC_API_KEY`.
+  - manter OpenRouter desabilitado por default; habilitar apenas via decision formal.
+  - rerodar `bash scripts/onboard_linux.sh`, `bash scripts/verify_linux.sh` e `make eval-models`.
+
+### 2026-02-24 - Reauditoria de inadequacoes com `felixcraft.md` como fonte suprema
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - `felixcraft.md` passa a referencia arquitetural suprema na hierarquia documental.
+  - arquitetura realinhada para OpenClaw gateway-first com providers cloud plugaveis.
+  - contratos normativos adicionados: `openclaw_runtime_config`, `approval_policy`, `memory_contract`, `ops_autonomy_contract`.
+  - A2A, hooks/webhooks, `bind=loopback` e `chatCompletions` entram como contrato explicito de runtime.
+  - regra endurecida: email nunca e canal confiavel de comando.
+  - regra endurecida: side effect financeiro sempre exige aprovacao humana explicita por ordem.
+  - heartbeat baseline ajustado para 15 minutos e ciclo noturno de memoria formalizado as 23:00.
+- Migracao:
+  - criar/manter `workspaces/main/MEMORY.md` e notas diarias `workspaces/main/memory/YYYY-MM-DD.md`.
+  - ajustar ambientes para `HEARTBEAT_MINUTES=15`.
+  - revisar gates/scripts para validar novos contratos e evitar bypass por canal nao confiavel.
 
 ### 2026-02-24 - Readequacao completa para OpenClaw (rollback da migracao Nanobot)
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.

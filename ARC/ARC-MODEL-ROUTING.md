@@ -1,20 +1,22 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.4"
+version: "1.6"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
 # ARC Model Routing
 
 ## Objetivo
-Definir regras executaveis de roteamento por classe de tarefa com OpenRouter como gateway padrao, provider routing explicito, fallback controlado, governanca por preset e trilha auditavel completa.
+Definir regras executaveis de roteamento por classe de tarefa com OpenClaw gateway-first, provider routing explicito, fallback controlado, governanca por preset e trilha auditavel completa.
 
 ## Escopo
 Inclui:
-- OpenRouter OpenAI-compatible como endpoint unico programatico
+- OpenClaw Gateway como endpoint unico programatico
+- LiteLLM como adaptador padrao para supervisores pagos
+- workers locais via Ollama/vLLM para execucao bracal
 - Model Catalog Service como fonte viva de metadados
 - Model Router com ranking por capabilities + historico real + custo/latencia/confiabilidade
 - provider selection/pin/no-fallback/fallback chain
@@ -26,8 +28,8 @@ Exclui:
 - tuning fino de prompt por caso especifico
 
 ## Regras Normativas
-- [RFC-030] MUST usar OpenRouter como gateway padrao para chamadas LLM programaticas.
-- [RFC-030] MUST bloquear chamada cloud direta a provider fora do OpenRouter.
+- [RFC-030] MUST usar OpenClaw Gateway como ponto unico de chamada LLM programatica.
+- [RFC-030] MUST bloquear chamada cloud direta a provider fora do gateway OpenClaw.
 - [RFC-030] MUST escolher modelo por policy + historico + custo/latencia/confiabilidade.
 - [RFC-030] MUST tratar variancia de provider como risco operacional explicito.
 - [RFC-050] MUST registrar requested/effective model/provider em toda execucao.
@@ -35,11 +37,14 @@ Exclui:
 - [RFC-010] MUST aplicar gate de risco para rotas criticas.
 - [RFC-060] MUST tratar Trading com rotas restritas e checkpoint humano.
 
-## OpenRouter como Camada Padrao
-- endpoint canonico:
-  - `https://openrouter.ai/api/v1`
+## OpenClaw Gateway e Adapters Cloud
+- endpoint canonico do runtime: Gateway OpenClaw local.
+- adaptador de supervisao padrao:
+  - LiteLLM (`/v1`) com aliases gerenciados por preset (`codex-main`, `claude-review`).
+- adaptadores cloud adicionais:
+  - OpenRouter ou outro agregador MAY ser habilitado somente por decision formal e default `disabled`.
 - cliente:
-  - OpenAI SDK compativel (troca de modelo via campo `model`).
+  - OpenAI SDK compativel (troca de modelo via campo `model`) pode apontar para o gateway OpenClaw.
 - capacidades:
   - tools, structured outputs, reasoning e multimodal conforme suporte do modelo efetivo.
 
@@ -114,9 +119,17 @@ Exclui:
 - runtime MUST consumir `preset_id` aprovado.
 
 ## Perfis Oficiais de Execucao
-- `VPS-CLOUD` (producao): cloud-first via OpenRouter.
-- `MAC-LOCAL` (dev/operacao assistida): local-first para modelos locais, com fallback OpenRouter conforme policy quando houver chamada cloud.
+- `VPS-CLOUD` (producao): OpenClaw + LiteLLM para supervisores pagos; workers locais opcionais quando host permitir.
+- `MAC-LOCAL` (dev/operacao assistida): local-first para modelos locais, com escalonamento para supervisores pagos via LiteLLM quando gate local falhar.
 - Fase 0 MUST suportar `MAC-LOCAL` para tarefas pesadas nao urgentes, com supervisao por modelo robusto de assinatura em checkpoints de risco.
+
+## Regra Operacional de Capacidade Local
+- selecao local MUST usar a maior potencia disponivel que passe simultaneamente nos gates:
+  - `success_rate_min`
+  - `latency_p95_max`
+  - `retry_rate_max`
+  - `context_fit=true`
+- se qualquer gate falhar para o `task_type`, Router MUST escalar para supervisor pago e registrar motivo.
 
 ## Defaults Conservadores (quando nao especificado)
 - default de tipo: texto-only.
@@ -188,21 +201,34 @@ Exclui:
 
 ## Exemplos Minimos de Implementacao
 
-### 1) OpenAI SDK -> OpenRouter
+### 1) OpenAI SDK -> OpenClaw Gateway
 ```python
 from openai import OpenAI
 import os
 
 client = OpenAI(
-    api_key=os.environ["OPENROUTER_API_KEY"],
-    base_url="https://openrouter.ai/api/v1",
+    api_key=os.environ["OPENCLAW_GATEWAY_API_KEY"],
+    base_url=os.environ.get("OPENCLAW_GATEWAY_URL", "http://127.0.0.1:18789/v1"),
 )
 
 resp = client.chat.completions.create(
-    model="openai/gpt-4.1-mini",
+    model="local/code-worker",
     messages=[{"role": "user", "content": "resuma em 3 bullets"}],
 )
 print(resp.choices[0].message.content)
+```
+
+### 1.1) Adaptador de supervisao LiteLLM (padrao)
+```python
+client = OpenAI(
+    api_key=os.environ["LITELLM_API_KEY"],
+    base_url=os.environ.get("LITELLM_BASE_URL", "http://127.0.0.1:4000/v1"),
+)
+
+resp = client.chat.completions.create(
+    model="codex-main",
+    messages=[{"role": "user", "content": "revisar risco do patch"}],
+)
 ```
 
 ### 2) Chamada com tools
@@ -221,7 +247,7 @@ tools = [{
 }]
 
 resp = client.chat.completions.create(
-    model="openai/gpt-4.1-mini",
+    model="codex-main",
     messages=[{"role": "user", "content": "buscar policy SEC-015"}],
     tools=tools,
 )
@@ -246,7 +272,7 @@ response_format = {
 }
 
 resp = client.chat.completions.create(
-    model="openai/gpt-4.1-mini",
+    model="claude-review",
     messages=[{"role": "user", "content": "classifique risco da tarefa"}],
     response_format=response_format,
 )
@@ -255,14 +281,8 @@ resp = client.chat.completions.create(
 ### 4) Provider selection (include/order/require)
 ```python
 resp = client.chat.completions.create(
-    model="openai/gpt-4.1-mini",
+    model="local/code-worker",
     messages=[{"role": "user", "content": "gerar patch minimo"}],
-    extra_body={
-        "provider": {
-            "order": ["openai", "anthropic"],
-            "allow_fallbacks": True,
-        }
-    },
 )
 ```
 
@@ -271,17 +291,17 @@ resp = client.chat.completions.create(
 task_type: "dev_patch"
 fallback_chain:
   - step: 0
-    model: "openai/gpt-4.1-mini"
+    model: "local/code-worker"
     provider_routing:
-      order: ["openai"]
+      order: ["ollama"]
   - step: 1
-    model: "anthropic/claude-3.7-sonnet"
+    model: "claude-review"
     provider_routing:
-      order: ["anthropic"]
+      order: ["litellm"]
   - step: 2
-    model: "openai/gpt-4.1-nano"
+    model: "codex-main"
     provider_routing:
-      order: ["openai"]
+      order: ["litellm"]
 no_fallback: false
 ```
 
@@ -289,9 +309,9 @@ no_fallback: false
 ```yaml
 preset_id: "preset.dev_patch_v1"
 task_type: "dev_patch"
-requested_model: "openai/gpt-4.1-mini"
+requested_model: "local/code-worker"
 provider_routing:
-  order: ["openai"]
+  order: ["ollama", "litellm"]
 pin_provider: false
 no_fallback: false
 exacto_mode: "prefer"

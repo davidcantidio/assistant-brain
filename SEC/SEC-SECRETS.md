@@ -1,23 +1,23 @@
 ---
 doc_id: "SEC-SECRETS.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "Security"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
 # SEC Secrets
 
 ## Objetivo
-Definir armazenamento, escopo, rotacao e auditoria de segredos operacionais com separacao clara entre chave de inferencia e chave de management.
+Definir armazenamento, escopo, rotacao e auditoria de segredos operacionais com separacao clara entre runtime local, supervisao paga (LiteLLM) e billing.
 
 ## Escopo
 Inclui:
 - local correto de armazenamento de secrets
 - separacao por workspace e por servico
 - rotacao e auditoria de acesso
-- segredos de OpenRouter, Slack e challenge HITL
+- segredos de LiteLLM/supervisores, Slack e challenge HITL
 
 Exclui:
 - exposicao de segredo em docs, logs ou repositorio
@@ -29,7 +29,7 @@ Exclui:
 - [RFC-050] MUST registrar acesso administrativo a segredo.
 - [RFC-015] MUST proibir commit de `~/.openclaw/`, chaves e tokens.
 - [RFC-015] MUST armazenar challenge HITL apenas em forma hasheada com TTL.
-- [RFC-015] MUST isolar `OPENROUTER_MANAGEMENT_KEY` do runtime comum.
+- [RFC-015] MUST isolar credenciais de billing/management (`LITELLM_MASTER_KEY`) do runtime comum.
 - [RFC-015] MUST validar requests Slack com `SLACK_SIGNING_SECRET` armazenado em secret manager/.env seguro.
 
 ## Onde os Secrets Vivem
@@ -37,16 +37,22 @@ Exclui:
 - secret manager do host/VPS para runtime e automacoes.
 - nunca em markdown, issue tracker, logs publicos ou artifacts externos.
 
-## Segredos OpenRouter
-- `OPENROUTER_API_KEY`:
-  - uso: inferencia programatica no runtime.
-  - escopo: menor privilegio para chamadas de modelos.
-- `OPENROUTER_MANAGEMENT_KEY`:
-  - uso: endpoint de creditos/saldo para Budget Governor.
+## Segredos LiteLLM e Supervisores
+- `LITELLM_API_KEY`:
+  - uso: autenticacao de chamadas do OpenClaw ao gateway LiteLLM.
+  - escopo: runtime/orchestrator; sem permissao administrativa.
+- `LITELLM_MASTER_KEY`:
+  - uso: administracao do LiteLLM e coleta consolidada de custo/budget.
   - escopo: apenas servico de governanca financeira.
   - proibido em workers de agente comuns.
-- recomendacao:
-  - service account dedicada para coleta de creditos.
+- `CODEX_OAUTH_ACCESS_TOKEN`:
+  - uso: credencial do alias `codex-main` no LiteLLM.
+  - escopo: somente processo de supervisao; proibido em logs.
+- `ANTHROPIC_API_KEY`:
+  - uso: credencial do alias `claude-review` no LiteLLM.
+  - escopo: somente processo de supervisao; proibido em logs.
+- fallback opcional (desabilitado por default):
+  - `OPENROUTER_API_KEY` so pode existir quando fallback cloud for aprovado por decision.
 
 ## Segredos de Exchange/Broker (Trading)
 - `TRADING_VENUE_API_KEY_LIVE` e `TRADING_VENUE_API_SECRET_LIVE`:
@@ -91,8 +97,11 @@ Exclui:
   - nunca logar valor bruto do challenge.
 
 ## Rotacao
-- `OPENROUTER_API_KEY`: rotacao minima trimestral.
-- `OPENROUTER_MANAGEMENT_KEY`: rotacao minima mensal ou apos incidente.
+- `LITELLM_API_KEY`: rotacao minima trimestral.
+- `LITELLM_MASTER_KEY`: rotacao minima mensal ou apos incidente.
+- `CODEX_OAUTH_ACCESS_TOKEN`: rotacao/revalidacao mensal ou apos revogacao de sessao OAuth.
+- `ANTHROPIC_API_KEY`: rotacao minima trimestral ou apos incidente.
+- `OPENROUTER_API_KEY` (se habilitado): rotacao minima trimestral.
 - `SLACK_BOT_TOKEN`: rotacao minima trimestral ou apos suspeita de exposicao.
 - `SLACK_SIGNING_SECRET`: rotacao minima trimestral ou apos incidente de webhook.
 - `HITL_CHALLENGE_HMAC_KEY`: rotacao minima mensal.
@@ -108,7 +117,7 @@ Exclui:
 ## Proibicoes
 - commit de `.env`, `.pem`, `.key`, `~/.openclaw/`.
 - envio de segredo em chat, ticket ou artifact nao criptografado.
-- reuso da management key para inferencia de rotina.
+- reuso da `LITELLM_MASTER_KEY` para inferencia de rotina.
 
 ## Links Relacionados
 - [Security Policy](./SEC-POLICY.md)

@@ -1,21 +1,21 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.10"
+version: "1.12"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # PRD Master
 
 ## Objetivo
-Definir a constituicao executiva do OpenClaw Agent OS com governanca por risco, auditabilidade ponta a ponta e operacao implementavel com OpenRouter como gateway padrao de inferencia.
+Definir a constituicao executiva do OpenClaw Agent OS com governanca por risco, auditabilidade ponta a ponta e operacao implementavel com OpenClaw gateway-first (providers plugaveis).
 
 ## Escopo
 Inclui:
 - visao de produto, organizacao, governanca de risco e fases 0/1/2
-- arquitetura alvo consolidada (OpenRouter + Model Router + memoria vetorial hibrida)
+- arquitetura alvo consolidada (OpenClaw gateway + Model Router + memoria vetorial hibrida)
 - regras de privacidade/retencao/provider allowlist/ZDR
 - budget governor baseado em saldo de creditos
 
@@ -36,19 +36,22 @@ Exclui:
 - [RFC-050] MUST registrar observabilidade e auditoria por tarefa/empresa/decisao.
 - [RFC-060] MUST tratar Trading como vertical de alto risco estrutural.
 
-## Status de Maturidade (2026-02-20)
+## Status de Maturidade (2026-02-24)
 - estado atual do repo: **planejamento/PRD**, sem control-plane implementado.
 - isso e esperado na fase atual e NAO caracteriza falha por si so.
 - risco real: iniciar automacoes sem contrato executavel de idempotencia, rollback, eval gate e politica de privacidade.
 
 ## Arquitetura Alvo Consolidada
-- gateway programatico de LLM em cloud/provider externo: **OpenRouter** (OpenAI-compatible API).
+- gateway programatico principal: **OpenClaw Gateway** (loopback-first e contratos de policy no runtime).
+- stack de roteamento para supervisao: **LiteLLM** como adaptador padrao de modelos pagos (`codex-main` primario, `claude-review` secundario).
+- stack de execucao bracal: workers locais via Ollama/vLLM (`qwen2.5-coder:32b`, `deepseek-r1:32b`) com escalonamento por gates de capacidade.
+- OpenRouter fica fora do baseline operacional e so pode entrar como fallback opcional por `decision` explicita (default: desabilitado).
 - plano de execucao:
-  - `Control Plane`: Convex + runtime + adapters de canal (Telegram primario para HITL critico; Slack para colaboracao operacional e fallback controlado de HITL).
+  - `Control Plane`: Convex + runtime + adapters de canal (Telegram primario para HITL critico; Slack para colaboracao operacional e fallback controlado de HITL; Discord/Signal/iMessage opcionais por policy).
   - `Router Plane`: Model Router + Presets + Policy Engine.
   - `Memory Plane`: banco vetorizado hibrido unico (Postgres + pgvector ou equivalente) para catalogo de modelos, runs e decisoes de roteamento.
 - `Model Catalog Service` MUST sincronizar catalogo de modelos/provedores/capacidades/precos/limites.
-- `Budget Governor` MUST usar saldo de creditos do OpenRouter como referencia primaria de orcamento.
+- `Budget Governor` MUST usar a telemetria de custo consolidada do LiteLLM + snapshots financeiros do provedor efetivo habilitado por policy.
 
 ### Papeis de Agentes
 Esta subsecao define papeis funcionais para executar o [Paradigma de Execucao: Microtasks e Delegacao Sob Demanda](#paradigma-de-execucao-microtasks-e-delegacao-sob-demanda), respeitando [Governanca de Risco (Nivel Alto)](#governanca-de-risco-nivel-alto) e [Regra de Testabilidade de Claims Centrais](#regra-de-testabilidade-de-claims-centrais).
@@ -287,6 +290,167 @@ Fonte da verdade operacional:
   - mensagem de Slack e sinal de entrada/colaboracao.
   - estado final de execucao continua em artifacts e logs canonicos do Orchestrator.
 
+### Contrato Canonico `openclaw_runtime_config`
+O runtime MUST manter contrato de configuracao versionado com os campos minimos abaixo:
+- concorrencia e agentes:
+  - `agents.defaults.maxConcurrent`
+  - `agents.defaults.subagents.maxConcurrent`
+- agent-to-agent:
+  - `tools.agentToAgent.enabled`
+  - `tools.agentToAgent.allow[]` (allowlist obrigatoria de delegacao)
+- canais:
+  - `channels.telegram`
+  - `channels.slack`
+  - `channels.discord`
+  - `channels.signal`
+  - `channels.imessage`
+- hooks:
+  - `hooks.enabled`
+  - `hooks.mappings[]` (webhooks externos -> evento interno)
+  - `hooks.internal.entries[]` (`boot-md`, `command-logger`, `session-memory`)
+- memoria:
+  - `memory.backend = qmd`
+  - `memory.qmd.paths[]`
+  - `memory.qmd.update.interval`
+- gateway:
+  - `gateway.bind = loopback`
+  - `gateway.http.endpoints.chatCompletions.enabled`
+
+### Contrato `routing_stack_contract`
+```yaml
+schema_version: "1.0"
+gateway:
+  primary: "openclaw"
+  supervisor_adapter: "litellm"
+  cloud_optional: "disabled"
+```
+
+Regras mandatarias:
+- `gateway.primary` MUST permanecer OpenClaw em todos os ambientes.
+- `gateway.supervisor_adapter` MUST ser LiteLLM para chamadas de supervisores pagos.
+- `gateway.cloud_optional` default MUST ser `disabled`; habilitacao de cloud adicional exige decision formal.
+
+### Contrato `supervisor_contract`
+```yaml
+schema_version: "1.0"
+supervisors:
+  primary: "litellm/codex-main"
+  secondary: "litellm/claude-review"
+roles:
+  - approval
+  - critique
+  - correction
+  - delegation
+  - risk_review
+```
+
+Regras mandatarias:
+- tarefas de aprovacao, critica, correcao e risco MUST passar por supervisor pago.
+- alias de supervisor MUST ser resolvido por preset versionado (sem `model_id` hardcoded por agente).
+
+### Contrato `local_worker_contract`
+```yaml
+schema_version: "1.0"
+workers:
+  local:
+    code: "ollama/qwen2.5-coder:32b"
+    reason: "ollama/deepseek-r1:32b"
+policy:
+  max_local_power_mode: true
+```
+
+Regras mandatarias:
+- tarefa bracal (`code_change`, `doc_change`, `triage`, `verify`) SHOULD executar local-first.
+- selecao local MUST usar a maior potencia disponivel que passe nos gates de capacidade.
+
+### Contrato `capacity_guard_contract`
+```yaml
+schema_version: "1.0"
+gates:
+  success_rate_min: 0.85
+  latency_p95_max_ms: 120000
+  retry_rate_max: 0.15
+  context_fit: true
+```
+
+Regras mandatarias:
+- qualquer falha de gate local MUST bloquear persistencia local para `task_type` afetado e escalar para supervisor pago.
+- capacidade local MUST considerar memoria efetiva, `num_ctx`, KV cache e latencia alvo.
+
+### Contrato `fallback_contract`
+```yaml
+schema_version: "1.0"
+order:
+  - "local_worker"
+  - "litellm/claude-review"
+  - "litellm/codex-main"
+audit_fields:
+  - requested_model
+  - effective_model
+  - fallback_step
+  - reason
+```
+
+Regras mandatarias:
+- cada execucao MUST registrar `requested_model`, `effective_model`, `fallback_step` e `reason`.
+- `task_type` critico MAY inverter a ordem de fallback por preset aprovado, sem remover auditoria obrigatoria.
+
+Regras de hardening do gateway:
+- runtime exposto externamente MUST permanecer `bind=loopback` e ser publicado apenas por tunel/autenticacao na borda.
+- endpoint `chatCompletions` MAY ficar habilitado para interoperabilidade, mas MUST obedecer as mesmas policies de risco/allowlist/auditoria do runtime.
+
+### Contrato de Hooks e Webhooks
+- webhook externo MUST ser mapeado por `hooks.mappings[]` com transform explicita para evento interno tipado.
+- evento de webhook MUST carregar `trace_id`, `idempotency_key` e `source_hook_id`.
+- hooks internos (`boot-md`, `command-logger`, `session-memory`) SHOULD ficar ativos por default no workspace principal.
+- webhook sem mapping valido ou sem assinatura exigida pela policy MUST ser bloqueado e auditado.
+
+### Contrato `approval_policy`
+```yaml
+schema_version: "1.0"
+financial_side_effect_requires_explicit_human_approval: true
+email_command_channel_trusted: false
+trusted_instruction_channels:
+  - "telegram"
+  - "slack_fallback_validado"
+```
+
+Regras mandatarias:
+- toda acao com side effect financeiro exige aprovacao humana explicita sempre (sem excecao por fase).
+- email e canal de informacao; nunca canal confiavel de comando.
+- instrucao recebida por email MUST exigir confirmacao em canal confiavel antes de qualquer execucao.
+
+### Contrato `memory_contract`
+```yaml
+schema_version: "1.0"
+tacit_memory_file: "workspaces/main/MEMORY.md"
+daily_notes_path: "workspaces/main/memory/YYYY-MM-DD.md"
+nightly_extraction:
+  name: "nightly-extraction"
+  schedule: "0 23 * * *"
+  timezone: "America/Sao_Paulo"
+  required: true
+semantic_backend:
+  backend: "qmd"
+  update_interval: "5m"
+```
+
+Regras mandatarias:
+- `MEMORY.md` MUST existir e registrar padroes operacionais duraveis.
+- notas diarias MUST ser atualizadas por ciclo noturno com decisoes, mudancas de status e fatos duraveis.
+- extracao noturna sem sucesso por 24h MUST abrir incident operacional.
+
+### Contrato `ops_autonomy_contract`
+- execucoes longas de agentes (`ralph`/loops equivalentes) SHOULD rodar em sessao isolada (`tmux` ou equivalente) com:
+  - health-check periodico,
+  - deteccao de estagnacao,
+  - kill/restart controlado,
+  - log de reinicio com `trace_id`.
+- regras minimas:
+  - se sessao cair, relancar e registrar evento.
+  - se output ficar estagnado por 2 checks consecutivos, marcar `stalled`, matar sessao e relancar.
+  - toda relargada MUST preservar referencia da Issue e estado do DAG.
+
 ## Visao Executiva
 - O sistema opera como edificio com escritorios por empresa e servicos compartilhados.
 - O roteamento de modelo e central e governado por policy/preset, nao por escolha ad hoc de agente.
@@ -354,22 +518,31 @@ Definicao objetiva de side effect:
   - usar checklist detalhado em `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.
 
 ## Decisoes Fechadas
-- OpenRouter e o gateway padrao para chamadas LLM programaticas em cloud/provider externo.
+- OpenClaw Gateway e o gateway padrao para chamadas LLM programaticas.
+- LiteLLM e o adaptador padrao para supervisores pagos (`codex-main` primario; `claude-review` secundario).
+- workers locais operam como camada bracal default em modo local-first (`ollama/qwen2.5-coder:32b`, `ollama/deepseek-r1:32b`).
+- OpenRouter fica desabilitado no baseline e so pode ser habilitado por decision formal para fallback especifico.
 - inferencia local em `MAC-LOCAL` e permitida para modelos locais sem chamada direta a provider externo.
-- OpenRouter SHOULD manter logging de prompts/respostas desativado por default; qualquer opt-in MUST ser registrado por policy.
+- adaptador de supervisao ativo SHOULD manter logging de prompts/respostas desativado por default; qualquer opt-in MUST ser registrado por policy.
 - providers efetivos possuem politicas proprias de retencao e MUST obedecer `provider allowlist` por sensibilidade.
 - roteamento MUST ser orientado por:
   - capabilities e limites do modelo,
   - historico real (`cost_per_success`, confiabilidade, latencia),
   - constraints de risco/privacidade/orcamento.
+- runtime multiagente e delegacao A2A sao permitidos somente com allowlist explicita por agente.
+- hooks externos e internos fazem parte do contrato operacional e MUST gerar eventos rastreaveis com `trace_id`.
+- gateway externo MUST operar com `bind=loopback` no processo local + tunel/autenticacao na borda.
+- endpoint `chatCompletions` pode ser habilitado para interoperabilidade, sem bypass de policy/gates.
+- email nunca e canal de comando confiavel; apenas canal de informacao.
+- toda acao financeira com side effect exige aprovacao humana explicita sempre.
 - existe um Model Catalog versionado com metadados vivos.
 - existe um Model Router com fallback chain declarativa por `task_type`.
 - existe modo `no-fallback` para rotas sensiveis.
 - existe modo de alta confiabilidade para tool-calling critico (preferencia por variante curada/exacto quando disponivel).
 - existe entidade de configuracao `preset` para centralizar governanca de roteamento.
 - memoria vetorial hibrida (estruturado + embeddings) e obrigatoria para metadados de modelos e execucoes.
-- budget operacional e derivado de `credits_snapshots` do OpenRouter.
-- `OPENROUTER_MANAGEMENT_KEY` MUST ficar isolada fora do runtime comum.
+- budget operacional e derivado da telemetria de custo do LiteLLM e do provedor efetivo habilitado por policy.
+- credenciais de billing/management MUST ficar isoladas fora do runtime comum.
 - em trading live, OpenClaw e o backbone unico de producao para risco, HITL, execucao e auditoria.
 - em trading fase 1, o escopo de ativos live e `crypto_spot` via Binance Spot.
 - em trading fase 1, `TradingAgents` e a engine primaria de sinal sob contrato `signal_intent`.
@@ -380,6 +553,7 @@ Definicao objetiva de side effect:
   - `S0` paper/sandbox obrigatorio,
   - `S1` micro-live com capital minimo,
   - `S2` escala gradual apenas com historico real estavel.
+- em `S0`, `S1` e `S2`, ordem com side effect financeiro so executa apos aprovacao humana explicita por ordem.
 - falha de engine primaria de sinal em live MUST operar em `fail_closed` para novas entradas.
 - `single_engine_mode` e permitido apenas para falha de engine secundaria/auxiliar com engine primaria saudavel.
 - `make eval-trading` MUST existir e passar em CI antes de qualquer operacao com capital real.
@@ -402,7 +576,7 @@ Definicao objetiva de side effect:
 - fallback masking (impacto alto, prob media):
   - mitigacao: `no-fallback` em rotas sensiveis e log de motivo de fallback.
 - custo imprevisivel (impacto alto, prob alta):
-  - mitigacao: budget governor por creditos, burn-rate limits e circuit breaker.
+  - mitigacao: budget governor por telemetria LiteLLM, burn-rate limits e circuit breaker.
 - retencao/privacidade (impacto alto, prob media):
   - mitigacao: classificacao `public/internal/sensitive`, provider allowlist e politica ZDR.
 - drift de catalogo (impacto medio, prob alta):
@@ -450,14 +624,16 @@ Definicao objetiva de side effect:
 - automacao com efeito colateral sem idempotencia/rollback MUST ser stop-ship.
 - decisao de roteamento sem rastro (`requested/effective`) MUST ser falha de compliance.
 
-## Mudancas Aplicadas (2026-02-20)
-- OpenRouter consolidado como gateway padrao de inferencia programatica.
-- Model Catalog + Model Router + Presets formalizados como bloco central da arquitetura.
-- memoria vetorial hibrida obrigatoria para metadados de modelos e execucoes.
-- privacidade/retencao/ZDR/provider allowlist formalizadas com regra por sensibilidade.
-- budget governor migrado para saldo de creditos OpenRouter com key de management isolada.
+## Mudancas Aplicadas (2026-02-24)
+- `felixcraft.md` adotado como referencia arquitetural suprema.
+- arquitetura realinhada para OpenClaw gateway-first com providers plugaveis.
+- contratos canonicos adicionados: `openclaw_runtime_config`, `approval_policy`, `memory_contract`, `ops_autonomy_contract`.
+- A2A, hooks/webhooks, `bind=loopback` e endpoint `chatCompletions` formalizados como contrato de runtime.
+- regra endurecida: email nunca e canal de comando confiavel.
+- regra endurecida: side effect financeiro exige aprovacao humana explicita sempre (todas as fases).
 
 ## Links Relacionados
+- [Felixcraft Architecture](../felixcraft.md)
 - [Roadmap](./ROADMAP.md)
 - [Changelog](./CHANGELOG.md)
 - [ARC Core](../ARC/ARC-CORE.md)

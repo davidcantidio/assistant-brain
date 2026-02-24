@@ -1,6 +1,6 @@
 ---
 doc_id: "DEV-OPENCLAW-SETUP.md"
-version: "1.0"
+version: "1.3"
 status: "active"
 owner: "Engineering"
 last_updated: "2026-02-24"
@@ -10,7 +10,7 @@ rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-050", "RFC-060"]
 # Dev OpenClaw Setup
 
 ## Objetivo
-Definir instalacao minima e verificavel de `OpenClaw` para Linux, com configuracao via `.env` local e estado canonico no repositorio.
+Definir instalacao minima e verificavel de `OpenClaw` para Linux, com gateway runtime local (`loopback`) e estado canonico no repositorio.
 
 ## Escopo
 Inclui:
@@ -42,8 +42,10 @@ bash scripts/verify_linux.sh
 - arquivo local:
   - `.env` (na raiz do repo)
 - variaveis obrigatorias:
-  - `OPENROUTER_API_KEY`
-  - `OPENROUTER_MANAGEMENT_KEY` (somente para budget governor)
+  - `LITELLM_API_KEY`
+  - `LITELLM_MASTER_KEY` (somente para budget governor/administracao)
+  - `CODEX_OAUTH_ACCESS_TOKEN` (alias `codex-main`)
+  - `ANTHROPIC_API_KEY` (alias `claude-review`)
   - `TELEGRAM_BOT_TOKEN`
   - `TELEGRAM_CHAT_ID`
   - `SLACK_BOT_TOKEN`
@@ -51,10 +53,15 @@ bash scripts/verify_linux.sh
   - `CONVEX_DEPLOYMENT_URL`
   - `CONVEX_DEPLOY_KEY`
 - variaveis de runtime:
-  - `HEARTBEAT_MINUTES=20`
+  - `HEARTBEAT_MINUTES=15`
   - `STANDUP_TIME=11:30`
-  - `OPENCLAW_MODEL_CHEAP`
-  - `OPENCLAW_MODEL_STRONG`
+  - `OPENCLAW_GATEWAY_URL` (default: `http://127.0.0.1:18789/v1`)
+  - `LITELLM_BASE_URL` (default: `http://127.0.0.1:4000/v1`)
+  - `OPENCLAW_SUPERVISOR_PRIMARY=codex-main`
+  - `OPENCLAW_SUPERVISOR_SECONDARY=claude-review`
+  - `OPENCLAW_WORKER_CODE_MODEL=ollama/qwen2.5-coder:32b`
+  - `OPENCLAW_WORKER_REASON_MODEL=ollama/deepseek-r1:32b`
+  - `OPENROUTER_API_KEY` (opcional; fallback cloud desabilitado por default)
 
 ## Estado Canonico
 - arquivo de estado do workspace:
@@ -68,6 +75,27 @@ openclaw --version
 make ci-quality
 make ci-security
 make eval-gates
+```
+
+## Opcional: Tooling Docling (isolado)
+O pipeline PDF -> MD usa um ambiente Python dedicado e nao acopla o runtime principal do OpenClaw.
+
+### Instalacao do tooling local
+```bash
+make docling-install
+```
+
+### Conversao PDF -> Markdown
+```bash
+make pdf-to-md PDF=felixcraft.pdf MD=felixcraft.md
+```
+
+### Policy local/CI de sincronia
+Regra: se `felixcraft.pdf` mudar, `felixcraft.md` tambem deve mudar no mesmo commit/PR.
+
+Verificacao local:
+```bash
+make check-pdf-md-sync
 ```
 
 ## Links Relacionados

@@ -1,27 +1,27 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "1.6"
+version: "1.8"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-20"
+last_updated: "2026-02-24"
 rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050"]
 ---
 
 # ARC Core
 
 ## Objetivo
-Definir a arquitetura operacional do Mission Control com OpenRouter como gateway de inferencia, Model Router central e memoria vetorial hibrida auditavel.
+Definir a arquitetura operacional do Mission Control com OpenClaw gateway-first, Model Router central e memoria vetorial hibrida auditavel.
 
 ## Escopo
 Inclui:
-- componentes nucleares (runtime, Convex, OpenRouter, Telegram, Slack, sandbox, LLM local)
+- componentes nucleares (runtime, Convex, OpenClaw Gateway, providers cloud plugaveis, Telegram/Slack/Discord/Signal/iMessage, sandbox, LLM local)
 - plano de dados do control-plane
 - plano de memoria vetorial para catalogo/runs/roteamento
 - lifecycle task -> routing -> execucao -> validacao -> observabilidade
 
 Exclui:
 - detalhes de UI alem do necessario para operacao
-- implementacao de provider especifico fora da camada OpenRouter
+- implementacao de provider especifico fora da camada de adapters do gateway OpenClaw
 
 ## Regras Normativas
 - [RFC-020] MUST receber demandas inter-escritorios somente via Work Order valido.
@@ -42,15 +42,73 @@ Exclui:
 
 ## Componentes do Sistema Nervoso
 - OpenClaw runtime: execucao de agentes e rotinas.
+- OpenClaw Gateway: endpoint unico do runtime para chamadas LLM e eventos operacionais.
 - Convex: estado compartilhado e feed operacional.
-- OpenRouter gateway: endpoint unico programatico para inferencia LLM em cloud/provider externo.
+- LiteLLM supervisor adapter (padrao): aliases de supervisores pagos (`codex-main`, `claude-review`) e contabilizacao de uso.
+- OpenRouter adapter (opcional/desabilitado por default): fallback cloud somente com decision explicita.
 - Worker LLM local: execucao de microtasks pesadas e nao urgentes em host compativel (preferencia: Mac >= 32 GB RAM).
 - Model Catalog Service: sync e versionamento de metadados de modelos.
 - Model Router: selecao de modelo/provider/fallback por task_type/risco/custo/confiabilidade.
 - Strategy engine adapters: integracao controlada de engines externas (TradingAgents primario; AgenticTrading modular) para gerar `signal_intent`.
 - Telegram bot: HITL para approve/reject/kill e alertas.
 - Slack adapter: colaboracao operacional e fallback controlado para HITL quando Telegram cair.
+- adapters de canal opcionais: Discord/Signal/iMessage (habilitacao por allowlist/policy).
 - Execution sandbox: ambiente restrito para scripts e validacoes deterministicas.
+
+## Contratos de Roteamento por Papel
+- `routing_stack_contract`:
+  - `gateway.primary=openclaw`
+  - `gateway.supervisor_adapter=litellm`
+  - `gateway.cloud_optional=disabled`
+- `supervisor_contract`:
+  - `primary=litellm/codex-main`
+  - `secondary=litellm/claude-review`
+  - aplicacao: aprovacao, critica, correcao, delegacao e revisao de risco.
+- `local_worker_contract`:
+  - `workers.local.code=ollama/qwen2.5-coder:32b`
+  - `workers.local.reason=ollama/deepseek-r1:32b`
+  - regra: local-first para tarefa bracal, com escalonamento por gates de capacidade.
+- `fallback_contract`:
+  - ordem default: `local_worker -> claude-review -> codex-main`
+  - logging obrigatorio: `requested_model`, `effective_model`, `fallback_step`, `reason`.
+
+## Contrato Minimo de Runtime (`openclaw_runtime_config`)
+- concorrencia:
+  - `agents.defaults.maxConcurrent`
+  - `agents.defaults.subagents.maxConcurrent`
+- delegacao A2A:
+  - `tools.agentToAgent.enabled`
+  - `tools.agentToAgent.allow[]`
+- canais:
+  - `channels.telegram`, `channels.slack`, `channels.discord`, `channels.signal`, `channels.imessage`
+- hooks:
+  - `hooks.enabled`
+  - `hooks.mappings[]` (webhooks externos)
+  - `hooks.internal.entries[]` (`boot-md`, `command-logger`, `session-memory`)
+- memoria:
+  - `memory.backend=qmd`
+  - `memory.qmd.paths[]`
+  - `memory.qmd.update.interval`
+- gateway:
+  - `gateway.bind=loopback`
+  - `gateway.http.endpoints.chatCompletions.enabled`
+
+## Delegacao A2A (Agent-to-Agent)
+- delegacao entre agentes MUST obedecer allowlist `tools.agentToAgent.allow[]`.
+- agente solicitante MUST registrar `trace_id`, `delegation_id`, `requester_agent`, `target_agent`.
+- resposta A2A MUST registrar estado final (`succeeded|failed|blocked`) e evidence refs.
+- delegacao fora de allowlist MUST falhar com bloqueio + evento de seguranca.
+
+## Hooks e Webhooks
+- webhook externo MUST entrar por mapping explicito em `hooks.mappings[]`.
+- mapping MUST transformar payload externo em evento interno tipado antes de entrar no Orchestrator.
+- hooks internos MUST carregar contexto (`boot-md`), trilha de comando (`command-logger`) e memoria de sessao (`session-memory`).
+- hooks sem assinatura/validacao de origem exigida por policy MUST ser bloqueados.
+
+## Hardening do Gateway
+- processo local MUST operar com `bind=loopback`.
+- exposicao externa do gateway somente via tunel/autenticacao na borda (sem bind publico direto).
+- endpoint `chatCompletions` MAY ser habilitado, mas com as mesmas politicas de allowlist, risco e auditoria do runtime.
 
 ## Regra de Backbone Unico (trading live)
 - OpenClaw runtime MUST ser o unico backbone de producao para:
@@ -77,7 +135,7 @@ Exclui:
 
 ### 1) `model_catalog`
 - estruturado:
-  - `model_id`, `openrouter_model_id`, `provider_variants`, `pricing`, `limits`, `supported_parameters`, `capabilities`, `tags`, `status`, `version`, timestamps
+  - `model_id`, `provider_model_ref`, `provider_variants`, `pricing`, `limits`, `supported_parameters`, `capabilities`, `tags`, `status`, `version`, timestamps
 - embedding:
   - `model_card_embedding` (descricao/capabilities/model card)
 
@@ -110,7 +168,7 @@ Exclui:
 
 ### 5) `credits_snapshots`
 - estruturado:
-  - `snapshot_at`, `total_credits`, `total_usage`, `balance`, `burn_rate_hour`, `burn_rate_day`
+  - `snapshot_at`, `billing_source`, `period_limit`, `period_usage`, `balance`, `burn_rate_hour`, `burn_rate_day`
 
 ### 6) `router_presets`
 - estruturado:
@@ -118,7 +176,8 @@ Exclui:
 
 ## Fonte Canonica de Estado Operacional (MVP)
 - memoria operacional de workspace:
-  - `workspaces/main/memory/`
+  - `workspaces/main/MEMORY.md`
+  - `workspaces/main/memory/YYYY-MM-DD.md`
 - estado de workspace:
   - `workspaces/main/.openclaw/workspace-state.json`
 - memoria vetorial (catalogo/runs):
@@ -137,7 +196,7 @@ Exclui:
 1. Entrada: Work Order valido.
 2. Dispatch: Router avalia risco, sensibilidade, SLA, budget, capabilities.
 3. Selecao: escolhe preset/model/provider e fallback chain.
-4. Execucao: chamada OpenRouter com log de requested/effective.
+4. Execucao: chamada via OpenClaw Gateway com log de requested/effective.
 5. Validacao: checks deterministicas + parse/structured output.
 6. Review: cloud/humano conforme risco.
 7. Encerramento: `DONE` + metrica + evidencia + auditoria.
@@ -163,8 +222,8 @@ Exclui:
 ## Mitigacao de SPOF
 - Convex indisponivel:
   - MUST entrar em degraded mode com fila offline local.
-- OpenRouter indisponivel:
-  - MUST aplicar fallback chain permitida por policy;
+- adapter cloud indisponivel:
+  - MUST aplicar fallback chain permitida por policy (cloud alternativo ou local, conforme risco/policy);
   - se `no-fallback`, MUST bloquear e abrir incident.
 - Telegram indisponivel:
   - com fallback Slack validado, MUST ativar fallback para comandos HITL criticos (mesmo auth/challenge/gates).
@@ -172,6 +231,7 @@ Exclui:
 
 ## Links Relacionados
 - [ARC Model Routing](./ARC-MODEL-ROUTING.md)
+- [OpenClaw Runtime Config Schema](./schemas/openclaw_runtime_config.schema.json)
 - [ARC Observability](./ARC-OBSERVABILITY.md)
 - [ARC Degraded Mode](./ARC-DEGRADED-MODE.md)
 - [Work Order Spec](../PM/WORK-ORDER-SPEC.md)
