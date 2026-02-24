@@ -1,0 +1,2 @@
+# Base dependency used in local document pipeline (PDF -> Markdown)
+docling==2.74.0
