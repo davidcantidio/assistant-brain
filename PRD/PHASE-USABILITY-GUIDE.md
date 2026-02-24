@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-USABILITY-GUIDE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -58,7 +58,13 @@ Exclui:
 
 ## Artefatos de Planejamento por Fase
 - `F1`: [EPICS da fase](../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md)
-- `F2..F8`: pendente de criacao.
+- `F2`: [EPICS da fase](../PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md)
+- `F3`: [EPICS da fase](../PM/PHASES/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md)
+- `F4`: [EPICS da fase](../PM/PHASES/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md)
+- `F5`: [EPICS da fase](../PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md)
+- `F6`: [EPICS da fase](../PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPICS.md)
+- `F7`: [EPICS da fase](../PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md)
+- `F8`: [EPICS da fase](../PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md)
 
 ## Links Relacionados
 - [Roadmap](./ROADMAP.md)

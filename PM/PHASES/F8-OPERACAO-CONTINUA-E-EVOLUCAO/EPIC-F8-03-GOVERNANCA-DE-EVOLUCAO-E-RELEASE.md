@@ -65,7 +65,7 @@ Como operador, quero um sumario executivo semanal para auditoria rapida e handof
 ## Artifact Minimo do Epico
 - registrar sumario em `artifacts/phase-f8/validation-summary-<week_id>.md` com:
   - status de `eval-gates`, `ci-quality`, `ci-security`;
-  - status dos epicos `EPIC-F8-01..EPIC-F8-03`;
+  - status dos epicos `EPIC-F8-01..EPIC-F8-04`;
   - decisao `promote|hold` e justificativa;
   - risco residual, rollback e `next_actions`.
 

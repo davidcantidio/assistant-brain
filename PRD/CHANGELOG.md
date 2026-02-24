@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.8"
+version: "2.9"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -28,6 +28,26 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-24 - Fechamento de lacunas F2/F5 e rastreabilidade roadmap-felix
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria fase `F2` em `PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/` com epics para:
+    - baseline de seguranca/gates,
+    - contratos idempotentes/reconciliacao,
+    - catalog/router/memory/budget baseline.
+  - cria fase `F5` em `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/` com epics para:
+    - integracoes governadas e anti-bypass,
+    - hardening de trading e prontidao live,
+    - autonomia operacional + blast radius.
+  - adiciona `PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md` para rastrear alinhamento de temas `felixcraft.md` e `felix-openclaw-pontos-relevantes.md` para epics/issues.
+  - adiciona `PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md` com cobertura completa de IDs `B*`.
+  - atualiza `PRD/PHASE-USABILITY-GUIDE.md` para remover estado inconsistente de "pendente de criacao" e listar links de `F1..F8`.
+  - expande `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` com `EPIC-F8-04` para backlog multiativos (`B2-*`).
+- Migracao:
+  - usar `PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md` como check obrigatorio de cobertura antes de promover fase.
+  - usar `PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md` para validar alinhamento com fontes Felix e registrar qualquer `override_documentado`.
+  - executar os novos epicos de `F2` e `F5` antes de ampliar risco operacional em canais e trading.
 
 ### 2026-02-24 - Estrutura da F8 com epicos de operacao continua e evolucao
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.

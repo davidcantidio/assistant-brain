@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F8-EPICS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -31,7 +31,8 @@ Criterio objetivo:
 | `EPIC-F8-01` | Cadencia semanal de gates | formalizar rotina semanal de execucao e evidencia dos gates obrigatorios | planned | [EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md](./EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md) |
 | `EPIC-F8-02` | Revisao periodica de contratos e drift | identificar e tratar drift normativo/contratual de forma recorrente | planned | [EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md](./EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md) |
 | `EPIC-F8-03` | Governanca de evolucao e release | consolidar decisao semanal `promote|hold` com trilha de release/auditoria | planned | [EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md](./EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md) |
+| `EPIC-F8-04` | Expansao multiativos por enablement | fechar backlog multiativos (`B2-*`) com gate por classe e decisao formal | planned | [EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md](./EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md) |
 
 ## Escopo Desta Entrega
 - fase `F8` inicializada na estrutura de planejamento.
-- epicos `EPIC-F8-01..03` definidos para concluir a fase.
+- epicos `EPIC-F8-01..04` definidos para concluir a fase.
