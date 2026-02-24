@@ -1,10 +1,10 @@
 ---
 doc_id: "SEC-POLICY.md"
-version: "1.7"
+version: "1.8"
 status: "active"
 owner: "Security"
 last_updated: "2026-02-24"
-rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050"]
+rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # Security Policy
@@ -78,7 +78,7 @@ Exclui:
 - chamadas programaticas de inferencia MUST passar pelo gateway OpenClaw.
 - inferencia local em `MAC-LOCAL` MAY operar sem adaptador cloud somente para modelos locais sem chamada a provider externo.
 - LiteLLM MUST operar como adaptador padrao para supervisores pagos (`codex-main`, `claude-review`).
-- OpenRouter MAY operar apenas como fallback opcional e permanece desabilitado por default.
+- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - chamada direta a API de provider externo fora do gateway OpenClaw MUST ser bloqueada.
 - adaptador cloud ativo SHOULD operar com logging de prompts/respostas desativado por default (opt-in explicito por policy).
 - providers efetivos possuem politicas proprias de retencao/privacidade e MUST ser tratados como variancia de risco.

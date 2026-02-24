@@ -1,6 +1,6 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.12"
+version: "1.13"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-24"
@@ -45,7 +45,7 @@ Exclui:
 - gateway programatico principal: **OpenClaw Gateway** (loopback-first e contratos de policy no runtime).
 - stack de roteamento para supervisao: **LiteLLM** como adaptador padrao de modelos pagos (`codex-main` primario, `claude-review` secundario).
 - stack de execucao bracal: workers locais via Ollama/vLLM (`qwen2.5-coder:32b`, `deepseek-r1:32b`) com escalonamento por gates de capacidade.
-- OpenRouter fica fora do baseline operacional e so pode entrar como fallback opcional por `decision` explicita (default: desabilitado).
+- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - plano de execucao:
   - `Control Plane`: Convex + runtime + adapters de canal (Telegram primario para HITL critico; Slack para colaboracao operacional e fallback controlado de HITL; Discord/Signal/iMessage opcionais por policy).
   - `Router Plane`: Model Router + Presets + Policy Engine.
@@ -314,7 +314,8 @@ O runtime MUST manter contrato de configuracao versionado com os campos minimos 
   - `memory.qmd.update.interval`
 - gateway:
   - `gateway.bind = loopback`
-  - `gateway.http.endpoints.chatCompletions.enabled`
+  - `gateway.control_plane.ws` (canonico)
+  - `gateway.http.endpoints.chatCompletions.enabled` (opcional sob policy)
 
 ### Contrato `routing_stack_contract`
 ```yaml
@@ -521,7 +522,7 @@ Definicao objetiva de side effect:
 - OpenClaw Gateway e o gateway padrao para chamadas LLM programaticas.
 - LiteLLM e o adaptador padrao para supervisores pagos (`codex-main` primario; `claude-review` secundario).
 - workers locais operam como camada bracal default em modo local-first (`ollama/qwen2.5-coder:32b`, `ollama/deepseek-r1:32b`).
-- OpenRouter fica desabilitado no baseline e so pode ser habilitado por decision formal para fallback especifico.
+- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - inferencia local em `MAC-LOCAL` e permitida para modelos locais sem chamada direta a provider externo.
 - adaptador de supervisao ativo SHOULD manter logging de prompts/respostas desativado por default; qualquer opt-in MUST ser registrado por policy.
 - providers efetivos possuem politicas proprias de retencao e MUST obedecer `provider allowlist` por sensibilidade.
@@ -546,6 +547,9 @@ Definicao objetiva de side effect:
 - em trading live, OpenClaw e o backbone unico de producao para risco, HITL, execucao e auditoria.
 - em trading fase 1, o escopo de ativos live e `crypto_spot` via Binance Spot.
 - em trading fase 1, `TradingAgents` e a engine primaria de sinal sob contrato `signal_intent`.
+- AI-Trader e permitido somente em modo `signal_only` e MUST operar sob contrato `signal_intent`.
+- payload de AI-Trader que represente ordem direta MUST ser rejeitado e auditado como violacao de policy.
+- ClawWork opera em `lab_isolated` por default; modo `governed` exige gateway-only, provider allowlist e politica de dados explicita para ambiente externo.
 - em trading fase 2, `AgenticTrading` entra apenas por modulos seletivos (risco/custo/portfolio), sem substituir backbone.
 - expansao para `equities_br`, `fii_br` e `fixed_income_br` e permitida somente por enablement formal por classe (`asset_profile` + eval da classe + shadow mode + decision `R3`).
 - framework externo MUST NOT enviar ordem diretamente para exchange.
@@ -636,6 +640,7 @@ Definicao objetiva de side effect:
 - [Felixcraft Architecture](../felixcraft.md)
 - [Roadmap](./ROADMAP.md)
 - [Changelog](./CHANGELOG.md)
+- [Integrations](../INTEGRATIONS/README.md)
 - [ARC Core](../ARC/ARC-CORE.md)
 - [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
 - [Security Policy](../SEC/SEC-POLICY.md)

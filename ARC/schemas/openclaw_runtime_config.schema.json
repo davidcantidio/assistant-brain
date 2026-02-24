@@ -161,11 +161,27 @@
     },
     "gateway": {
       "type": "object",
-      "required": ["bind", "http"],
+      "required": ["bind", "control_plane"],
       "properties": {
         "bind": {
           "type": "string",
           "const": "loopback"
+        },
+        "control_plane": {
+          "type": "object",
+          "required": ["ws"],
+          "properties": {
+            "ws": {
+              "type": "object",
+              "required": ["enabled", "url"],
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "url": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
         },
         "http": {
           "type": "object",

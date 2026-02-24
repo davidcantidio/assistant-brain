@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.3"
+version: "2.4"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -28,6 +28,21 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-24 - Pacote normativo de integracoes e hardening de coerencia
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - unifica regra canonica de OpenRouter: adaptador cloud opcional, desabilitado por default, habilitacao somente por decision formal; preferido apenas quando cloud adicional estiver habilitado.
+  - remove linguagem ambigua de "recomendado por padrao" em docs operacionais e allowlists.
+  - cria pacote normativo `INTEGRATIONS/` para AI-Trader, ClawWork e OpenClaw upstream com contratos, riscos e testes.
+  - formaliza compatibilidade dual de interface do runtime: `gateway.control_plane.ws` (canonico) + `chatCompletions` opcional sob policy.
+  - registra override deliberado de timezone operacional para `America/Sao_Paulo` neste repositorio, mantendo rastreabilidade do exemplo original em `felixcraft.md`.
+  - adiciona gate `make eval-integrations` com validacao de docs/schemas/regras anti-bypass.
+  - endurece `eval-runtime` para validar qualidade minima de notas diarias de memoria (secoes e bullets obrigatorios).
+- Migracao:
+  - rodar `make eval-models`, `make eval-integrations`, `make eval-runtime` e `make eval-gates`.
+  - manter qualquer integracao de AI-Trader em modo `signal_only`.
+  - manter ClawWork em `lab_isolated` por default e habilitar `governed` somente com gateway-only + policy.
 
 ### 2026-02-24 - Merge do paradigma `llms_locais.md` com OpenClaw-first + LiteLLM
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.

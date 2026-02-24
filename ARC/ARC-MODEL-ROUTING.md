@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-24"
@@ -42,7 +42,8 @@ Exclui:
 - adaptador de supervisao padrao:
   - LiteLLM (`/v1`) com aliases gerenciados por preset (`codex-main`, `claude-review`).
 - adaptadores cloud adicionais:
-  - OpenRouter ou outro agregador MAY ser habilitado somente por decision formal e default `disabled`.
+  - OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+  - outro agregador cloud MAY ser habilitado somente por decision formal e com registro explicito em policy.
 - cliente:
   - OpenAI SDK compativel (troca de modelo via campo `model`) pode apontar para o gateway OpenClaw.
 - capacidades:
@@ -199,6 +200,12 @@ Exclui:
   - fallback aplicado,
   - justificativa curta.
 
+## Integrações Externas (pacote normativo)
+- integracoes externas MUST seguir contrato normativo em `INTEGRATIONS/`.
+- AI-Trader MUST operar em modo `signal_only`, sem permissao de ordem direta.
+- ClawWork em modo `governed` MUST usar gateway-only para chamadas LLM.
+- compatibilidade com OpenClaw upstream MUST ser mantida pela matriz versionada em `INTEGRATIONS/OPENCLAW-UPSTREAM.md`.
+
 ## Exemplos Minimos de Implementacao
 
 ### 1) OpenAI SDK -> OpenClaw Gateway
@@ -322,6 +329,7 @@ generation_defaults:
 
 ## Links Relacionados
 - [ARC Core](./ARC-CORE.md)
+- [Integrations](../INTEGRATIONS/README.md)
 - [Models Catalog Schema](./schemas/models_catalog.schema.json)
 - [Security Policy](../SEC/SEC-POLICY.md)
 - [Financial Governance](../CORE/FINANCIAL-GOVERNANCE.md)

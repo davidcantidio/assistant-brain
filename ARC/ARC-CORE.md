@@ -1,10 +1,10 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "1.8"
+version: "1.9"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-24"
-rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050"]
+rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050", "RFC-060"]
 ---
 
 # ARC Core
@@ -45,7 +45,7 @@ Exclui:
 - OpenClaw Gateway: endpoint unico do runtime para chamadas LLM e eventos operacionais.
 - Convex: estado compartilhado e feed operacional.
 - LiteLLM supervisor adapter (padrao): aliases de supervisores pagos (`codex-main`, `claude-review`) e contabilizacao de uso.
-- OpenRouter adapter (opcional/desabilitado por default): fallback cloud somente com decision explicita.
+- OpenRouter adapter (opcional/desabilitado por default): habilitacao somente por decision explicita; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - Worker LLM local: execucao de microtasks pesadas e nao urgentes em host compativel (preferencia: Mac >= 32 GB RAM).
 - Model Catalog Service: sync e versionamento de metadados de modelos.
 - Model Router: selecao de modelo/provider/fallback por task_type/risco/custo/confiabilidade.
@@ -91,7 +91,8 @@ Exclui:
   - `memory.qmd.update.interval`
 - gateway:
   - `gateway.bind=loopback`
-  - `gateway.http.endpoints.chatCompletions.enabled`
+  - `gateway.control_plane.ws` (canonico)
+  - `gateway.http.endpoints.chatCompletions.enabled` (opcional sob policy)
 
 ## Delegacao A2A (Agent-to-Agent)
 - delegacao entre agentes MUST obedecer allowlist `tools.agentToAgent.allow[]`.
@@ -108,6 +109,7 @@ Exclui:
 ## Hardening do Gateway
 - processo local MUST operar com `bind=loopback`.
 - exposicao externa do gateway somente via tunel/autenticacao na borda (sem bind publico direto).
+- control plane WS (`gateway.control_plane.ws`) MUST ser o endpoint canonico de orquestracao do runtime.
 - endpoint `chatCompletions` MAY ser habilitado, mas com as mesmas politicas de allowlist, risco e auditoria do runtime.
 
 ## Regra de Backbone Unico (trading live)
@@ -232,6 +234,7 @@ Exclui:
 ## Links Relacionados
 - [ARC Model Routing](./ARC-MODEL-ROUTING.md)
 - [OpenClaw Runtime Config Schema](./schemas/openclaw_runtime_config.schema.json)
+- [Integrations](../INTEGRATIONS/README.md)
 - [ARC Observability](./ARC-OBSERVABILITY.md)
 - [ARC Degraded Mode](./ARC-DEGRADED-MODE.md)
 - [Work Order Spec](../PM/WORK-ORDER-SPEC.md)

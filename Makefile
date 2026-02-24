@@ -6,11 +6,14 @@ DOCLING_PIP := $(VENV_DOCLING)/bin/pip
 PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
-.PHONY: eval-models eval-runtime eval-rag eval-trading eval-gates ci-quality ci-security \
+.PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-gates ci-quality ci-security \
 	docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
 	@bash scripts/ci/eval_models.sh
+
+eval-integrations:
+	@bash scripts/ci/eval_integrations.sh
 
 eval-runtime:
 	@bash scripts/ci/eval_runtime_contracts.sh

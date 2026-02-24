@@ -19,6 +19,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - `PM/`: decisoes, work order, sprint governance
 - `ARC/`: arquitetura operacional e roteamento
 - `SEC/`: seguranca, secrets, sandbox, allowlists
+- `INTEGRATIONS/`: contratos normativos para integracoes externas (AI-Trader, ClawWork, OpenClaw upstream)
 - `EVALS/`: gates de qualidade e saude
 - `VERTICALS/`: PRDs por vertical (inclui Trading)
 - `INCIDENTS/`: politicas e procedimentos de incidente
@@ -29,7 +30,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - baseline de heartbeat: **15 minutos** (`ARC/ARC-HEARTBEAT.md`).
 - workspaces ativos no MVP: **somente** `workspaces/main`.
 - gateway programatico de inferencia: **OpenClaw Gateway** (`bind=loopback`).
-- adaptador cloud recomendado quando necessario: **OpenRouter** (`https://openrouter.ai/api/v1`).
+- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - automacoes com efeito colateral exigem contrato de idempotencia + rollback.
 - aprovacao HITL critica exige allowlist de operador + challenge de segundo fator (Telegram primario, Slack fallback controlado).
 - email nunca e canal de comando confiavel.
@@ -48,6 +49,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 ## Harness de Evals (local)
 ```bash
 make eval-models
+make eval-integrations
 make eval-rag
 make eval-trading
 make eval-gates

@@ -1,6 +1,6 @@
 ---
 doc_id: "TRADING-ENABLEMENT-CRITERIA.md"
-version: "1.8"
+version: "1.9"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-24"
@@ -43,6 +43,8 @@ Exclui:
 - `capital_ramp_level=L0` ativo e confirmado em configuracao de runtime.
 - kill switch validado nas ultimas 24h com evidencia auditavel.
 - `TradingAgents` conectado como engine primaria de sinal, com output normalizado para `signal_intent`.
+- `AI-Trader` (quando habilitado) operando estritamente em `signal_only`, sem permissao de ordem direta.
+- fluxo oficial de integracao de sinal externo confirmado: `AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway`.
 - caminho de execucao unico confirmado: somente `execution_gateway` pode enviar ordem live.
 - nenhum framework externo com permissao direta de credencial/endpoint de ordem.
 - classe de ativo ativa com `asset_profile` versionado e aprovado.
@@ -99,6 +101,7 @@ Regra de bloqueio:
   - bloquear trading imediatamente;
   - abrir decision de reavaliacao;
   - notificar humano responsavel.
+- qualquer payload que represente ordem direta originada do AI-Trader MUST ser rejeitado e auditado.
 
 ## Checkpoint Humano
 - habilitacao inicial live.
@@ -165,5 +168,7 @@ Todos obrigatorios:
 ## Links Relacionados
 - [Trading PRD](./TRADING-PRD.md)
 - [Trading Risk Rules](./TRADING-RISK-RULES.md)
+- [Integration: AI-Trader](../../INTEGRATIONS/AI-TRADER.md)
+- [Integration: ClawWork](../../INTEGRATIONS/CLAWWORK.md)
 - [Decision Protocol](../../PM/DECISION-PROTOCOL.md)
 - [System Health Thresholds](../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)

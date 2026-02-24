@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/order_intent.schema.json",
+  "title": "order_intent",
+  "type": "object",
+  "required": [
+    "order_intent_id",
+    "signal_intent_id",
+    "symbol",
+    "side",
+    "order_type",
+    "quantity",
+    "stage",
+    "decision_id",
+    "approved_by",
+    "approved_at"
+  ],
+  "properties": {
+    "order_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signal_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "symbol": {
+      "type": "string",
+      "minLength": 1
+    },
+    "side": {
+      "type": "string",
+      "enum": ["buy", "sell"]
+    },
+    "order_type": {
+      "type": "string",
+      "enum": ["market", "limit", "stop", "stop_limit"]
+    },
+    "quantity": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["S0", "S1", "S2"]
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "stop_price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "asset_class": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

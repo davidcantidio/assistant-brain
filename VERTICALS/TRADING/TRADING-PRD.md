@@ -1,6 +1,6 @@
 ---
 doc_id: "TRADING-PRD.md"
-version: "1.8"
+version: "1.9"
 status: "active"
 owner: "Frederisk"
 last_updated: "2026-02-24"
@@ -63,6 +63,7 @@ Exclui:
 - Engine: Freqtrade em sandbox isolado.
 - Frameworks de decisao externos:
   - `TradingAgents` = engine primaria de sinal na Fase 1.
+  - `AI-Trader` = engine secundaria de pesquisa/sinal em modo estritamente `signal_only`.
   - `AgenticTrading` = fonte secundaria de modulos especificos (risco/custo/portfolio) na Fase 2.
 - Supervisao: Mission Control + HITL multi-canal (Telegram primario, Slack fallback controlado).
 
@@ -74,7 +75,10 @@ Exclui:
   - framework externo MUST NOT enviar ordem diretamente para exchange.
 - Fase 1 (prioridade):
   - integrar `TradingAgents` como engine primaria de `signal_intent`.
+  - integrar AI-Trader somente como produtor de intencao (`signal_intent`), sem permissao de enviar ordem.
+  - pipeline oficial de integracao externa: `AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway`.
   - `signal_intent` passa por normalizacao, deduplicacao e `pre_trade_validator`.
+  - qualquer payload que represente ordem direta originada do AI-Trader MUST ser rejeitado e auditado.
   - indisponibilidade da engine primaria MUST operar em `fail_closed` para novas entradas.
 - Fase 2 (evolucao controlada):
   - integrar de `AgenticTrading` somente modulos com ganho comprovado:
@@ -163,4 +167,6 @@ Exclui:
 ## Links Relacionados
 - [Trading Risk Rules](./TRADING-RISK-RULES.md)
 - [Trading Enablement](./TRADING-ENABLEMENT-CRITERIA.md)
+- [Integration: AI-Trader](../../INTEGRATIONS/AI-TRADER.md)
+- [Integration: ClawWork](../../INTEGRATIONS/CLAWWORK.md)
 - [Decision Protocol](../../PM/DECISION-PROTOCOL.md)

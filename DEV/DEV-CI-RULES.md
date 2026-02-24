@@ -1,6 +1,6 @@
 ---
 doc_id: "DEV-CI-RULES.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-24"
@@ -35,6 +35,7 @@ Exclui:
 - testes unitarios/minimos.
 - validacao de schema de artifacts.
 - execucao de eval gates centrais (`claim gates`).
+- execucao de `make eval-integrations` para mudancas em `INTEGRATIONS/`, `ARC/schemas/*` e contratos de trading.
 - em mudancas sob `VERTICALS/TRADING/*`: `make eval-trading` MUST executar e passar.
 
 ## Gates de Seguranca e Policy
@@ -58,7 +59,7 @@ Exclui:
   - `ci-quality.yml` (lint/typecheck/tests)
   - `ci-security.yml` (secret scan, allowlists, policy)
   - `ci-routing.yml` (catalog/presets/router contracts)
-  - `ci-evals.yml` (claim gates e suites de avaliacao)
+  - `ci-evals.yml` (claim gates, `eval-integrations` e suites de avaliacao)
   - `ci-trading.yml` (harness `eval-trading`, contratos `execution_gateway`/`pre_trade_validator`, cenarios hard-risk)
 
 ## Criterios de Merge

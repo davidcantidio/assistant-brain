@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/execution_report.schema.json",
+  "title": "execution_report",
+  "type": "object",
+  "required": [
+    "execution_report_id",
+    "order_intent_id",
+    "venue",
+    "status",
+    "filled_qty",
+    "avg_price",
+    "timestamp",
+    "gateway_trace_id"
+  ],
+  "properties": {
+    "execution_report_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "order_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "venue": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["accepted", "partially_filled", "filled", "rejected", "canceled", "failed"]
+    },
+    "filled_qty": {
+      "type": "number",
+      "minimum": 0
+    },
+    "avg_price": {
+      "type": "number",
+      "minimum": 0
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gateway_trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "venue_order_id": {
+      "type": "string"
+    },
+    "reject_reason": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,6 +1,6 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.1"
+version: "2.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -40,7 +40,7 @@ Exclui:
 - OpenClaw runtime configurado para workspace `workspaces/main`.
 - Worker LLM local habilitado na Fase 0 para tarefas pesadas nao urgentes (host compativel, preferencia Mac >= 32 GB RAM).
 - gateway LLM programatico padrao: OpenClaw Gateway (`bind=loopback`); providers cloud entram por adaptador plugavel.
-- OpenRouter e o adaptador recomendado quando operacao multi-provider estiver habilitada.
+- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
 - Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03).
 - Model Catalog + Model Router + Memory Plane + Budget + Privacidade entram em baseline minimo na Fase 0.
 - refinos avancados desses blocos sao diferidos para Fase 1/2 sem perda de escopo.
@@ -56,7 +56,7 @@ Exclui:
 - `B0-07` implementar contrato do OpenClaw Gateway:
   - `bind=loopback`,
   - endpoint `chatCompletions` opcional sob policy,
-  - adaptador cloud plugavel (OpenRouter recomendado).
+  - adaptador cloud plugavel (OpenRouter preferido somente quando cloud adicional estiver habilitado por decision formal).
 - `B0-08` implementar Model Catalog baseline:
   - sync de Models API,
   - metadados minimos para roteamento (`model_id`, provider, capabilities, limits, pricing, status).
@@ -137,6 +137,11 @@ Exclui:
 - `B1-12` tornar `make eval-trading` gate obrigatorio em CI para mudancas de trading.
 - `B1-13` formalizar estagio `S0 - paper/sandbox` com evidencias obrigatorias e bloqueio de ordem real.
 - `B1-14` habilitar modo assistido humano por ordem de entrada na janela inicial de `S1`.
+- `B1-20` criar pacote normativo `INTEGRATIONS/` para AI-Trader, ClawWork e OpenClaw upstream com template obrigatorio (objetivo, modo permitido, contratos, riscos, testes e rollback).
+- `B1-21` adicionar contratos versionados em `ARC/schemas/` (`signal_intent`, `order_intent`, `execution_report`, `economic_run`) e gate `make eval-integrations`.
+- `B1-22` formalizar AI-Trader em modo `signal_only`, com bloqueio explicito de qualquer caminho de ordem direta para venue.
+- `B1-23` formalizar ClawWork com modos `lab_isolated` (default) e `governed` (gateway-only + policy), incluindo politica de dados para E2B.
+- `B1-24` formalizar matriz de compatibilidade do runtime com OpenClaw upstream (`gateway.control_plane.ws` canonico + `chatCompletions` opcional sob policy).
 
 ### Refinos diferidos da Fase 0 (sem perda de informacao)
 - `B1-R08` (origem `B0-08`) expandir Model Catalog:
@@ -215,6 +220,7 @@ Exclui:
 - [PRD Master](./PRD-MASTER.md)
 - [Changelog](./CHANGELOG.md)
 - [ARC Model Routing](../ARC/ARC-MODEL-ROUTING.md)
+- [Integrations](../INTEGRATIONS/README.md)
 - [System Health Thresholds](../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
 - [Decision Protocol](../PM/DECISION-PROTOCOL.md)
 - [Dev CI Rules](../DEV/DEV-CI-RULES.md)

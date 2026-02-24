@@ -2,7 +2,9 @@ schema_version: "1.1"
 last_updated: "2026-02-24"
 default_policy: "deny"
 default_mode: "openclaw_gateway"
-cloud_adapter_preferred: "openrouter"
+cloud_adapter_default: "disabled"
+cloud_adapter_enablement: "decision_required"
+cloud_adapter_preferred_when_enabled: "openrouter"
 
 profiles:
   public:

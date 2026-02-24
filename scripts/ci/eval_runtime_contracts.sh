@@ -24,6 +24,7 @@ required_files=(
   "ARC/ARC-HEARTBEAT.md"
   "workspaces/main/HEARTBEAT.md"
   "workspaces/main/MEMORY.md"
+  "PRD/CHANGELOG.md"
 )
 for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
@@ -42,6 +43,7 @@ search_re "hooks\.enabled" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.mappings\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.internal\.entries\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "gateway\.bind = loopback" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "gateway\.control_plane\.ws" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "chatCompletions" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 
 # Memory lifecycle contract
@@ -52,6 +54,40 @@ if ! ls workspaces/main/memory/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].md >/d
   echo "Nenhuma nota diaria encontrada em workspaces/main/memory/YYYY-MM-DD.md"
   exit 1
 fi
+python3 - <<'PY'
+import glob
+import re
+import sys
+
+daily_files = sorted(glob.glob("workspaces/main/memory/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].md"))
+required_sections = ("Key Events", "Decisions Made", "Facts Extracted")
+errors = []
+
+for path in daily_files:
+    text = open(path, "r", encoding="utf-8", errors="ignore").read().splitlines()
+    if not text or not re.match(r"^#\s+\d{4}-\d{2}-\d{2}\s*$", text[0].strip()):
+        errors.append(f"{path}: cabecalho diario invalido (esperado '# YYYY-MM-DD').")
+        continue
+
+    bullets = {section: 0 for section in required_sections}
+    current = None
+    for line in text:
+        m = re.match(r"^##\s+(Key Events|Decisions Made|Facts Extracted)\s*$", line.strip())
+        if m:
+            current = m.group(1)
+            continue
+        if current and re.match(r"^\s*-\s+\S+", line):
+            bullets[current] += 1
+
+    for section in required_sections:
+        if bullets.get(section, 0) == 0:
+            errors.append(f"{path}: secao '{section}' sem bullet obrigatorio.")
+
+if errors:
+    for err in errors:
+        print(err)
+    sys.exit(1)
+PY
 
 # Channel trust + financial hard gate
 search_re "email.*nunca.*canal confiavel de comando|canal nao confiavel para comando" PRD/PRD-MASTER.md SEC/SEC-POLICY.md PM/DECISION-PROTOCOL.md
@@ -60,5 +96,7 @@ search_re "aprovacao humana explicita" PRD/PRD-MASTER.md SEC/SEC-POLICY.md VERTI
 # Heartbeat baseline alignment
 search_re "baseline unico de 15 minutos|base global: 15 minutos" ARC/ARC-HEARTBEAT.md
 search_re "Baseline oficial: 15 minutos" workspaces/main/HEARTBEAT.md
+search_re "America/Sao_Paulo" ARC/ARC-HEARTBEAT.md PRD/PRD-MASTER.md workspaces/main/HEARTBEAT.md
+search_re "override deliberado de timezone.*America/Sao_Paulo" PRD/CHANGELOG.md
 
 echo "eval-runtime-contracts: PASS"

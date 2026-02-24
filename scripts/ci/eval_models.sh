@@ -57,6 +57,8 @@ required_files=(
   "SEC/allowlists/PROVIDERS.yaml"
   "SEC/SEC-POLICY.md"
   "PRD/PRD-MASTER.md"
+  "PRD/ROADMAP.md"
+  "README.md"
 )
 for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
@@ -68,8 +70,11 @@ search_re "LiteLLM MUST operar como adaptador padrao para supervisores pagos" SE
 search_re "gateway\\.supervisor_adapter.*LiteLLM" PRD/PRD-MASTER.md
 search_re "qwen2\\.5-coder:32b" PRD/PRD-MASTER.md
 search_re "deepseek-r1:32b" PRD/PRD-MASTER.md
-search_re "OpenRouter fica desabilitado no baseline" PRD/PRD-MASTER.md
-search_absent_re "OpenRouter e o adaptador padrao recomendado" PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md
+search_fixed "OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido." PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md PRD/ROADMAP.md README.md
+search_re 'cloud_adapter_default: "disabled"' SEC/allowlists/PROVIDERS.yaml
+search_re 'cloud_adapter_enablement: "decision_required"' SEC/allowlists/PROVIDERS.yaml
+search_re 'cloud_adapter_preferred_when_enabled: "openrouter"' SEC/allowlists/PROVIDERS.yaml
+search_absent_re "OpenRouter e o adaptador padrao recomendado" PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md PRD/ROADMAP.md README.md
 search_absent_re "OpenRouter MAY operar como adaptador cloud recomendado" SEC/SEC-POLICY.md
 
 echo "eval-models: PASS"
