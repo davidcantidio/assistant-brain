@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.4"
+version: "2.8"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-24"
@@ -28,6 +28,52 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-24 - Estrutura da F8 com epicos de operacao continua e evolucao
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` com gate semanal de governanca (`eval-gates`, `ci-quality`, `ci-security`).
+  - cria `EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md` com issues para cadencia semanal e regra fail-fast.
+  - cria `EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md` com issues para revisao de contratos e tratamento de drift.
+  - cria `EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md` com issues para decisao semanal `promote|hold` e trilha de release.
+  - formaliza contrato documental de relatorio semanal da F8 em `artifacts/phase-f8/weekly-governance/<week_id>.md`.
+- Migracao:
+  - adotar rotina semanal com execucao do trio de gates obrigatorios.
+  - registrar revisao de contratos/drift com owner e prazo em cada ciclo.
+  - consolidar decisao semanal `promote|hold` com risco residual, rollback e `next_actions`.
+
+### 2026-02-24 - Expansao da F1 com epicos seguintes (Scrum + TDD)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - atualiza `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md` para incluir `EPIC-F1-02`, `EPIC-F1-03` e `EPIC-F1-04`.
+  - cria `EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md` com issues e gate (`verify_linux.sh` + `eval-models`).
+  - cria `EPIC-F1-03-WORKSPACE-STATE-MEMORY.md` com issues e gate (`eval-runtime`).
+  - cria `EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md` com issues e gate (`ci-security` + `ci-quality`).
+  - padroniza no planejamento da F1: user story, plano TDD (`Red/Green/Refactor`) e criterios Given/When/Then por issue.
+- Migracao:
+  - executar os novos epicos em ordem `F1-02 -> F1-03 -> F1-04`.
+  - promover `F1 -> F2` somente com epicos `F1-01..F1-04` concluidos e gates verdes.
+
+### 2026-02-24 - Estrutura de fases com epicos/issue no padrao Scrum + TDD (F1 inicial)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050.
+- Impacto:
+  - cria estrutura inicial `PM/PHASES/` com a primeira fase (`F1-INSTALACAO-BASE-OPENCLAW`).
+  - adiciona `EPICS.md` da fase `F1` com gate de saida objetivo.
+  - adiciona `EPIC-F1-01-INSTALACAO-VERIFY.md` com issues em padrao Scrum, estrategia TDD e criterios de aceitacao.
+  - conecta o guia de usabilidade de fases (`PRD/PHASE-USABILITY-GUIDE.md`) ao artefato de planejamento da `F1`.
+- Migracao:
+  - usar `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md` como ponto de entrada da fase.
+  - executar as issues do `EPIC-F1-01` com evidencias de validacao da fase.
+
+### 2026-02-24 - Guia de fases usaveis com teste humano por etapa
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria `PRD/PHASE-USABILITY-GUIDE.md` com fases `F1` a `F8`, cada uma com uso humano, teste humano e gate de saida explicito.
+  - conecta o guia de fases usaveis ao `README`, `PRD/ROADMAP.md` e `PRD/PRD-MASTER.md`.
+  - padroniza promocao de fase por comando/evidencia e bloqueio automatico quando gate falhar.
+- Migracao:
+  - adotar a trilha `F1..F8` para planejamento e execucao operacional.
+  - usar os gates definidos por fase (`verify`, `ci-*`, `eval-*`) antes de promover etapa.
 
 ### 2026-02-24 - Pacote normativo de integracoes e hardening de coerencia
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
