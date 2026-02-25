@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F1-01-INSTALACAO-VERIFY.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-040", "RFC-050"]
 ---
 
@@ -71,6 +71,12 @@ Como operador, quero validar os gates minimos de governanca apos instalacao para
   - host alvo;
   - comandos executados;
   - status final (`PASS`/`FAIL`).
+
+## Resultado desta Rodada
+- `bash scripts/verify_linux.sh` final: `PASS` (`exit code 0`).
+- `openclaw --version` validado no host local e nova sessao.
+- evidencia consolidada e atualizada em `artifacts/phase-f1/validation-summary.md`.
+- conclusao: EPIC-F1-01 apto para status `done` no fechamento da F1.
 
 ## Dependencias
 - [Dev OpenClaw Setup](../../../DEV/DEV-OPENCLAW-SETUP.md)

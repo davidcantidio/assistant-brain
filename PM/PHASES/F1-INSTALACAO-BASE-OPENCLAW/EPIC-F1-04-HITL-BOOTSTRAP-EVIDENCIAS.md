@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -69,6 +69,13 @@ Como operador, quero um artifact unico da fase para auditoria e handoff operacio
   - resultado de `ci-quality` e `ci-security`;
   - status dos epicos `EPIC-F1-01..EPIC-F1-04`;
   - decisao de promocao da fase (`promote|hold`) e justificativa.
+
+## Resultado desta Rodada
+- `make ci-security` final: `PASS` (`security-check: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- checklist HITL bootstrap consolidado com Telegram primario validado e fallback Slack pendente para F6 sem bypass de policy.
+- evidencia consolidada de fase: `artifacts/phase-f1/validation-summary.md`.
+- decisao de fase registrada: `promote` (`F1 -> F2`).
 
 ## Dependencias
 - [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
