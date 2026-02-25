@@ -1,9 +1,11 @@
 schema_version: "1.2"
-last_updated: "2026-02-20"
+last_updated: "2026-02-25"
 mode: "single_primary"
 readiness:
   trading_live_requires_backup_operator: true
   slack_fallback_requires_non_empty_user_and_channel_ids: true
+  backup_operator_strategy: "breakglass_designated"
+  backup_operator_operator_id: "backup-breakglass-01"
   live_ready: false
 operators:
   - operator_id: "primary-01"
