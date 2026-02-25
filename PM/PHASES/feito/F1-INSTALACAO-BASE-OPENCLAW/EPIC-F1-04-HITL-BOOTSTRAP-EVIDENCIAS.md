@@ -43,12 +43,12 @@ Como operador, quero confirmar o canal humano confiavel para comandos criticos a
 
 **Plano TDD**
 1. `Red`: checklist HITL incompleto (operador/canal nao validado).
-2. `Green`: preencher checklist com Telegram primario e Slack fallback validado por policy.
+2. `Green`: preencher checklist com Telegram primario validado e status de fallback Slack explicitamente registrado conforme policy da fase (`pending_f6` no fechamento da F1).
 3. `Refactor`: revisar `PM/DECISION-PROTOCOL.md` e `SEC/SEC-POLICY.md` para aderencia.
 
 **Criterios de aceitacao**
 - Given checklist HITL incompleto, When revisao de fase ocorre, Then promocao para F2 fica bloqueada.
-- Given checklist HITL completo, When revisao de fase ocorre, Then fase fica apta sob criterio humano de canal confiavel.
+- Given checklist HITL completo com Telegram primario validado e fallback Slack com status explicitamente registrado por policy, When revisao de fase ocorre, Then fase fica apta sob criterio humano de canal confiavel.
 
 ### ISSUE-F1-04-03 - Consolidar evidencias da F1 em artifact unico
 **User story**  
