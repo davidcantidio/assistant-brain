@@ -22,6 +22,8 @@ required_files=(
   "PM/DECISION-PROTOCOL.md"
   "ARC/ARC-CORE.md"
   "PM/SPRINT-LIMITS.md"
+  "ARC/ARC-OBSERVABILITY.md"
+  "EVALS/SYSTEM-HEALTH-THRESHOLDS.md"
 )
 
 for f in "${required_files[@]}"; do
@@ -39,6 +41,20 @@ search_re "rollback_token" PM/SPRINT-LIMITS.md
 search_re "rollback_snapshot_ref" PM/SPRINT-LIMITS.md
 search_re 'reaplicacao com mesma `override_key` MUST ser no-op' PM/SPRINT-LIMITS.md
 search_re 'antes de `APPLIED`, MUST existir `rollback_snapshot_ref` valido' PM/SPRINT-LIMITS.md
+
+search_re "## Contrato de Auto-Acao \\(obrigatorio\\)" ARC/ARC-OBSERVABILITY.md
+search_re "automation_action_id" ARC/ARC-OBSERVABILITY.md
+search_re "automation_action_id" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "coalescing_key" ARC/ARC-OBSERVABILITY.md
+search_re "coalescing_key" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "idempotency_key" ARC/ARC-OBSERVABILITY.md
+search_re "idempotency_key" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "rollback_plan_ref" ARC/ARC-OBSERVABILITY.md
+search_re "rollback_plan_ref" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "NO_OP_DUPLICATE" ARC/ARC-OBSERVABILITY.md
+search_re "NO_OP_DUPLICATE" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "notify-only" ARC/ARC-OBSERVABILITY.md
+search_re "notify-only" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 python3 - <<'PY'
 import datetime as dt
@@ -206,6 +222,57 @@ def apply_sprint_override(state: dict, payload: dict, ctx: str) -> str:
     return "APPLIED"
 
 
+def validate_automation_action_payload(payload: dict, ctx: str) -> None:
+    required_fields = {
+        "automation_action_id",
+        "coalescing_key",
+        "idempotency_key",
+        "action_type",
+        "status",
+    }
+    missing = sorted([k for k in required_fields if k not in payload])
+    if missing:
+        fail(f"{ctx} invalido: campos obrigatorios ausentes: {missing}")
+
+    assert_string(payload, "automation_action_id", ctx)
+    assert_string(payload, "coalescing_key", ctx)
+    assert_string(payload, "idempotency_key", ctx)
+    assert_string(payload, "action_type", ctx)
+    assert_string(payload, "status", ctx)
+
+    if "rollback_plan_ref" in payload and payload["rollback_plan_ref"] is not None:
+        value = payload["rollback_plan_ref"]
+        if not isinstance(value, str):
+            fail(f"{ctx} invalido: campo 'rollback_plan_ref' deve ser string quando presente.")
+
+    assert_enum(
+        payload,
+        "status",
+        {"CREATED", "APPLIED", "NO_OP_DUPLICATE", "ROLLED_BACK", "FAILED"},
+        ctx,
+    )
+
+
+def apply_automation_action(state: dict, payload: dict, ctx: str) -> str:
+    validate_automation_action_payload(payload, ctx)
+    coalescing_key = payload["coalescing_key"]
+    idempotency_key = payload["idempotency_key"]
+
+    if coalescing_key in state["coalescing_in_cooldown"]:
+        return "NO_OP_DUPLICATE"
+    if idempotency_key in state["idempotency_seen"]:
+        return "NO_OP_DUPLICATE"
+
+    state["coalescing_in_cooldown"].add(coalescing_key)
+    state["idempotency_seen"].add(idempotency_key)
+
+    rollback_ref = payload.get("rollback_plan_ref")
+    if rollback_ref is None or (isinstance(rollback_ref, str) and not rollback_ref.strip()):
+        return "NOTIFY_ONLY"
+
+    return "APPLIED"
+
+
 work_order_schema = json.loads(Path("ARC/schemas/work_order.schema.json").read_text(encoding="utf-8"))
 decision_schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
 task_event_schema = json.loads(Path("ARC/schemas/task_event.schema.json").read_text(encoding="utf-8"))
@@ -322,6 +389,23 @@ valid_sprint_override = {
 invalid_sprint_override_missing_rollback = dict(valid_sprint_override)
 invalid_sprint_override_missing_rollback.pop("rollback_snapshot_ref", None)
 
+valid_automation_action = {
+    "automation_action_id": "AUTO-20260225-001",
+    "coalescing_key": "main:latency_p95:timeout",
+    "idempotency_key": "IDEMP-AUTO-001",
+    "action_type": "open_task",
+    "status": "CREATED",
+    "rollback_plan_ref": "artifact://automation/AUTO-20260225-001/rollback",
+}
+
+invalid_automation_action_missing_id = dict(valid_automation_action)
+invalid_automation_action_missing_id.pop("automation_action_id", None)
+
+automation_without_rollback = dict(valid_automation_action)
+automation_without_rollback["automation_action_id"] = "AUTO-20260225-002"
+automation_without_rollback["idempotency_key"] = "IDEMP-AUTO-002"
+automation_without_rollback["rollback_plan_ref"] = ""
+
 validate_work_order(valid_work_order, work_order_schema, "work_order.valid")
 validate_decision(valid_decision, decision_schema, "decision.valid")
 validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
@@ -344,6 +428,34 @@ expect_invalid(
     invalid_sprint_override_missing_rollback,
     {},
     "sprint_override.invalid_missing_rollback",
+)
+
+automation_state = {"coalescing_in_cooldown": set(), "idempotency_seen": set()}
+first_auto_apply = apply_automation_action(automation_state, valid_automation_action, "automation_action.first_apply")
+if first_auto_apply != "APPLIED":
+    fail("automation_action.first_apply deveria retornar APPLIED.")
+
+duplicate_auto_apply = apply_automation_action(
+    automation_state, valid_automation_action, "automation_action.duplicate_apply"
+)
+if duplicate_auto_apply != "NO_OP_DUPLICATE":
+    fail("automation_action.duplicate_apply deveria retornar NO_OP_DUPLICATE.")
+
+notify_only_apply = apply_automation_action(
+    {"coalescing_in_cooldown": set(), "idempotency_seen": set()},
+    automation_without_rollback,
+    "automation_action.notify_only",
+)
+if notify_only_apply != "NOTIFY_ONLY":
+    fail("automation_action.notify_only deveria retornar NOTIFY_ONLY.")
+
+expect_invalid(
+    lambda payload, _schema, ctx: apply_automation_action(
+        {"coalescing_in_cooldown": set(), "idempotency_seen": set()}, payload, ctx
+    ),
+    invalid_automation_action_missing_id,
+    {},
+    "automation_action.invalid_missing_id",
 )
 PY
 
