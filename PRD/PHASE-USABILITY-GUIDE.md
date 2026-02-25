@@ -57,7 +57,7 @@ Exclui:
 - `F7 -> F8`: readiness de trading sem item `fail`.
 
 ## Artefatos de Planejamento por Fase
-- `F1`: [EPICS da fase](../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md)
+- `F1`: [EPICS da fase](../PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md)
 - `F2`: [EPICS da fase](../PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md)
 - `F3`: [EPICS da fase](../PM/PHASES/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md)
 - `F4`: [EPICS da fase](../PM/PHASES/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md)

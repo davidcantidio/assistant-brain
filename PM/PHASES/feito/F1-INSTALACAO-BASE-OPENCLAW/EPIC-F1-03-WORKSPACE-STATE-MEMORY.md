@@ -75,6 +75,6 @@ Como operador, quero confirmar baseline de heartbeat e nightly extraction para o
 - conclusao: EPIC-F1-03 concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [ARC Heartbeat](../../../ARC/ARC-HEARTBEAT.md)
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [ARC Heartbeat](../../../../ARC/ARC-HEARTBEAT.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)

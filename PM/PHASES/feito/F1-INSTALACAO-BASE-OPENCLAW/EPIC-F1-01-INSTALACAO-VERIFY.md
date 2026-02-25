@@ -79,6 +79,6 @@ Como operador, quero validar os gates minimos de governanca apos instalacao para
 - conclusao: EPIC-F1-01 apto para status `done` no fechamento da F1.
 
 ## Dependencias
-- [Dev OpenClaw Setup](../../../DEV/DEV-OPENCLAW-SETUP.md)
-- [Work Order Spec](../../../PM/WORK-ORDER-SPEC.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [Dev OpenClaw Setup](../../../../DEV/DEV-OPENCLAW-SETUP.md)
+- [Work Order Spec](../../../../PM/WORK-ORDER-SPEC.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)

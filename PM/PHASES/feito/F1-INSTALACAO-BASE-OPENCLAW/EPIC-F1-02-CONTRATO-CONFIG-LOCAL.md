@@ -76,7 +76,7 @@ Como operador, quero garantir que OpenRouter fique desabilitado por default no b
 - evidencia consolidada: `artifacts/phase-f1/epic-f1-02-config-validation.md`.
 
 ## Dependencias
-- [Dev OpenClaw Setup](../../../DEV/DEV-OPENCLAW-SETUP.md)
-- [ARC Model Routing](../../../ARC/ARC-MODEL-ROUTING.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [Dev OpenClaw Setup](../../../../DEV/DEV-OPENCLAW-SETUP.md)
+- [ARC Model Routing](../../../../ARC/ARC-MODEL-ROUTING.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)

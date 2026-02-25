@@ -37,10 +37,10 @@
 
 ## Evidencias consolidadas
 
-- onboarding/verify baseline: [EPIC-F1-01-INSTALACAO-VERIFY.md](../../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md)
+- onboarding/verify baseline: [EPIC-F1-01-INSTALACAO-VERIFY.md](../../PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md)
 - config local: [epic-f1-02-config-validation.md](./epic-f1-02-config-validation.md)
 - runtime/memory: [epic-f1-03-runtime-memory.md](./epic-f1-03-runtime-memory.md)
-- HITL/policy: [EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md](../../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md)
+- HITL/policy: [EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md](../../PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md)
 
 ## Decisao de fase (F1 -> F2)
 

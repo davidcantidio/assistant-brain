@@ -78,6 +78,6 @@ Como operador, quero um artifact unico da fase para auditoria e handoff operacio
 - decisao de fase registrada: `promote` (`F1 -> F2`).
 
 ## Dependencias
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)
