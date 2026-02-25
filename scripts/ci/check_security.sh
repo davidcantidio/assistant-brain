@@ -56,6 +56,18 @@ search_re "prompt bruto MUST ser bloqueado por default" SEC/SEC-POLICY.md
 search_re '`sensitive` MUST aplicar provider allowlist restrita' PRD/PRD-MASTER.md
 search_re 'classificacao `public/internal/sensitive`' PRD/PRD-MASTER.md
 search_re "backup_operator" PRD/PRD-MASTER.md
+search_re "financial_side_effect_requires_explicit_human_approval: true" PRD/PRD-MASTER.md
+search_re "email_command_channel_trusted: false" PRD/PRD-MASTER.md
+
+search_re "email.*canal nao confiavel para comando|nunca canal confiavel de comando" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
+search_re "UNTRUSTED_COMMAND_SOURCE" PM/DECISION-PROTOCOL.md
+search_re "MUST exigir challenge valido de uso unico" PM/DECISION-PROTOCOL.md
+search_re "comandos criticos MUST incluir challenge valido" SEC/SEC-POLICY.md
+search_re "approval queue para acao sensivel" PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md
+search_re "trust ladder|concessao gradual de permissoes" PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md
+search_re "email nao confiavel para comando" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "lifecycle de challenge HITL completo" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "aprovacao humana explicita em side effect financeiro" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 python3 - <<'PY'
 import re

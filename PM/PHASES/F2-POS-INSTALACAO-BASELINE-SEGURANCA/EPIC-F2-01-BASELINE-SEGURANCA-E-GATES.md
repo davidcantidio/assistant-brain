@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -75,6 +75,14 @@ Como operador, quero fila de aprovacao para acao sensivel e bloqueio de comando 
   - status de allowlists e operador/canal;
   - evidencias de approval queue e bloqueio de canal nao confiavel;
   - referencias `B*` cobertas.
+
+## Resultado desta Rodada
+- `make ci-quality`: `PASS` (`quality-check: PASS`).
+- `make ci-security`: `PASS` (`security-check: PASS`).
+- `make eval-gates`: `PASS` (`eval-gates: PASS`).
+- `make phase-f2-gate`: `PASS` (`phase-f2-gate: PASS`).
+- artifact final publicado: `artifacts/phase-f2/epic-f2-01-security-gates.md`.
+- status do epico nesta rodada: `done`.
 
 ## Dependencias
 - [Security Policy](../../../SEC/SEC-POLICY.md)

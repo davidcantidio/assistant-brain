@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.13"
+version: "2.14"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-25"
@@ -28,6 +28,24 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-25 - Execucao do EPIC-F2-01 (baseline de seguranca e gates)
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - adiciona gate agregado de fase `make phase-f2-gate` com fail-fast para o trio obrigatorio (`ci-quality`, `ci-security`, `eval-gates`).
+  - adiciona workflow dedicado `.github/workflows/ci-phase-f2-gate.yml` para validar o gate agregado em `push`/`pull_request`.
+  - normaliza `PRD/PHASE-USABILITY-GUIDE.md` para exigir trio completo de gates na fase `F2`.
+  - endurece `scripts/ci/check_security.sh` para cobrir explicitamente:
+    - classificacao `public/internal/sensitive` e minimizacao de prompt por policy;
+    - baseline de `SEC/allowlists/PROVIDERS.yaml` por sensibilidade;
+    - estrategia de `backup_operator` rastreada em `SEC/allowlists/OPERATORS.yaml`;
+    - regra de canal confiavel (`email` nao confiavel), `UNTRUSTED_COMMAND_SOURCE`, challenge para comando critico, e rastreabilidade de approval queue/trust ladder.
+  - atualiza status de `EPIC-F2-01` para `done` em `PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md`.
+  - publica artifact auditavel da rodada em `artifacts/phase-f2/epic-f2-01-security-gates.md`.
+- Migracao:
+  - executar `make phase-f2-gate` como gate de consolidacao de fase.
+  - manter `SEC/allowlists/OPERATORS.yaml` com `backup_operator_strategy` e `backup_operator_operator_id` validos.
+  - tratar qualquer regressao de canal confiavel/approval queue como bloqueio imediato em `make ci-security`.
 
 ### 2026-02-25 - Execucao do EPIC-F1-04 (HITL bootstrap e fechamento da F1)
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.
