@@ -1,9 +1,9 @@
 ---
 doc_id: "PHASE-F1-EPICS.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-040", "RFC-050"]
 ---
 
@@ -28,7 +28,7 @@ Criterio objetivo:
 |---|---|---|---|---|
 | `EPIC-F1-01` | Baseline de instalacao e verify | garantir setup minimo, validacao e evidencias operacionais da fase | planned | [EPIC-F1-01-INSTALACAO-VERIFY.md](./EPIC-F1-01-INSTALACAO-VERIFY.md) |
 | `EPIC-F1-02` | Contrato de configuracao local | validar coerencia de `.env`, variaveis obrigatorias e defaults operacionais sem vazamento de segredo | done | [EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md](./EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md) |
-| `EPIC-F1-03` | Workspace state e memoria operacional minima | garantir estado canonico e baseline de memoria/heartbeat prontos para uso humano real | planned | [EPIC-F1-03-WORKSPACE-STATE-MEMORY.md](./EPIC-F1-03-WORKSPACE-STATE-MEMORY.md) |
+| `EPIC-F1-03` | Workspace state e memoria operacional minima | garantir estado canonico e baseline de memoria/heartbeat prontos para uso humano real | done | [EPIC-F1-03-WORKSPACE-STATE-MEMORY.md](./EPIC-F1-03-WORKSPACE-STATE-MEMORY.md) |
 | `EPIC-F1-04` | HITL bootstrap e evidencias de fase | fechar F1 com seguranca operacional humana minima e pacote de evidencias para promover F2 | planned | [EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md](./EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md) |
 
 ## Escopo Desta Entrega

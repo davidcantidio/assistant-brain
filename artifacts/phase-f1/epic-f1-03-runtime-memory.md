@@ -74,3 +74,13 @@
 
 - `make eval-runtime`: PASS
 - conclusao: EPIC-F1-03 apto no escopo documental/tdd desta rodada
+
+## Validacao final do pacote (2026-02-25)
+
+- `make eval-runtime`: PASS (`eval-runtime-contracts: PASS`)
+- `make eval-gates`: PASS
+  - `eval-models: PASS`
+  - `eval-integrations: PASS`
+  - `eval-runtime-contracts: PASS`
+  - `eval-rag: PASS`
+  - `eval-trading: PASS`

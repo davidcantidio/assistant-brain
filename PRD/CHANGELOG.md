@@ -1,9 +1,9 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.11"
+version: "2.12"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-25 - Execucao do EPIC-F1-03 (workspace state e memoria operacional minima)
+- RFCs afetadas: RFC-001, RFC-010, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - endurece `scripts/ci/eval_runtime_contracts.sh` para validar estado canonico de workspace:
+    - `workspaces/main/.openclaw/workspace-state.json` obrigatorio;
+    - parse JSON obrigatorio;
+    - `version` inteiro `>= 1`;
+    - `bootstrapSeededAt` obrigatorio em ISO-8601 UTC (`Z`).
+  - endurece `eval-runtime` para exigir contrato explicito de ciclo noturno:
+    - `nightly-extraction`;
+    - `schedule: "0 23 * * *"`;
+    - `timezone: "America/Sao_Paulo"`;
+    - alinhamento com baseline de heartbeat em `15 minutos`.
+  - adiciona nota diaria operacional `workspaces/main/memory/2026-02-25.md` no formato canonico.
+  - adiciona evidencia auditavel do epico em `artifacts/phase-f1/epic-f1-03-runtime-memory.md`.
+  - atualiza `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md` com `EPIC-F1-03` em status `done`.
+  - registra resultado final da rodada no `EPIC-F1-03-WORKSPACE-STATE-MEMORY.md`.
+- Migracao:
+  - manter `workspaces/main/.openclaw/workspace-state.json` sempre valido pelo contrato minimo (`version`, `bootstrapSeededAt`).
+  - manter notas diarias em `workspaces/main/memory/YYYY-MM-DD.md` com header e secoes obrigatorias (`Key Events`, `Decisions Made`, `Facts Extracted`) com bullet minimo.
+  - executar `make eval-runtime` antes de promover alteracao documental que toque memoria/heartbeat/runtime.
 
 ### 2026-02-24 - Execucao do EPIC-F1-02 (contrato de configuracao local)
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050.
