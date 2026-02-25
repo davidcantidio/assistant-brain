@@ -24,6 +24,8 @@ required_files=(
   "PM/SPRINT-LIMITS.md"
   "ARC/ARC-OBSERVABILITY.md"
   "EVALS/SYSTEM-HEALTH-THRESHOLDS.md"
+  "ARC/ARC-DEGRADED-MODE.md"
+  "INCIDENTS/DEGRADED-MODE-PROCEDURE.md"
 )
 
 for f in "${required_files[@]}"; do
@@ -55,6 +57,15 @@ search_re "NO_OP_DUPLICATE" ARC/ARC-OBSERVABILITY.md
 search_re "NO_OP_DUPLICATE" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "notify-only" ARC/ARC-OBSERVABILITY.md
 search_re "notify-only" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+
+search_re "idempotency_key" ARC/ARC-DEGRADED-MODE.md
+search_re "replay_key" ARC/ARC-DEGRADED-MODE.md
+search_re "replay_key = work_order_id \\+ \":\" \\+ task_id \\+ \":\" \\+ event_type \\+ \":\" \\+ attempt" ARC/ARC-DEGRADED-MODE.md
+search_re 'qualquer evento com `replay_key` repetida MUST ser ignorado e auditado' ARC/ARC-DEGRADED-MODE.md
+search_re 'reconciliador deterministico \(`idempotency_key`, `replay_key`, hash-chain\)' INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re "idempotency_key" PM/WORK-ORDER-SPEC.md
+search_re "replay_key" PM/WORK-ORDER-SPEC.md
+search_re "reconciliacao offline sem duplicidade" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 python3 - <<'PY'
 import datetime as dt
@@ -273,6 +284,44 @@ def apply_automation_action(state: dict, payload: dict, ctx: str) -> str:
     return "APPLIED"
 
 
+def validate_reconciliation_event(payload: dict, ctx: str) -> None:
+    required_fields = {
+        "work_order_id",
+        "task_id",
+        "event_type",
+        "attempt",
+        "idempotency_key",
+        "replay_key",
+    }
+    missing = sorted([k for k in required_fields if k not in payload])
+    if missing:
+        fail(f"{ctx} invalido: campos obrigatorios ausentes: {missing}")
+
+    assert_string(payload, "work_order_id", ctx)
+    assert_string(payload, "task_id", ctx)
+    assert_string(payload, "event_type", ctx)
+    assert_min_int(payload, "attempt", 1, ctx)
+    assert_string(payload, "idempotency_key", ctx)
+    assert_string(payload, "replay_key", ctx)
+
+    expected_replay_key = (
+        f"{payload['work_order_id']}:{payload['task_id']}:{payload['event_type']}:{payload['attempt']}"
+    )
+    if payload["replay_key"] != expected_replay_key:
+        fail(f"{ctx} invalido: replay_key fora da formula canonica.")
+
+
+def apply_reconciliation_event(state: dict, payload: dict, ctx: str) -> str:
+    validate_reconciliation_event(payload, ctx)
+    replay_key = payload["replay_key"]
+
+    if replay_key in state["replay_seen"]:
+        return "IGNORED_DUPLICATE_AUDITED"
+
+    state["replay_seen"].add(replay_key)
+    return "APPLIED"
+
+
 work_order_schema = json.loads(Path("ARC/schemas/work_order.schema.json").read_text(encoding="utf-8"))
 decision_schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
 task_event_schema = json.loads(Path("ARC/schemas/task_event.schema.json").read_text(encoding="utf-8"))
@@ -406,6 +455,21 @@ automation_without_rollback["automation_action_id"] = "AUTO-20260225-002"
 automation_without_rollback["idempotency_key"] = "IDEMP-AUTO-002"
 automation_without_rollback["rollback_plan_ref"] = ""
 
+valid_reconciliation_event = {
+    "work_order_id": "WO-20260225-001",
+    "task_id": "TASK-F2-02-04",
+    "event_type": "REPLAY_APPLY",
+    "attempt": 1,
+    "idempotency_key": "IDEMP-WO-001",
+    "replay_key": "WO-20260225-001:TASK-F2-02-04:REPLAY_APPLY:1",
+}
+
+invalid_reconciliation_missing_idempotency = dict(valid_reconciliation_event)
+invalid_reconciliation_missing_idempotency.pop("idempotency_key", None)
+
+invalid_reconciliation_missing_replay = dict(valid_reconciliation_event)
+invalid_reconciliation_missing_replay.pop("replay_key", None)
+
 validate_work_order(valid_work_order, work_order_schema, "work_order.valid")
 validate_decision(valid_decision, decision_schema, "decision.valid")
 validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
@@ -456,6 +520,37 @@ expect_invalid(
     invalid_automation_action_missing_id,
     {},
     "automation_action.invalid_missing_id",
+)
+
+reconciliation_state = {"replay_seen": set()}
+first_reconciliation = apply_reconciliation_event(
+    reconciliation_state,
+    valid_reconciliation_event,
+    "reconciliation.first_apply",
+)
+if first_reconciliation != "APPLIED":
+    fail("reconciliation.first_apply deveria retornar APPLIED.")
+
+duplicate_reconciliation = apply_reconciliation_event(
+    reconciliation_state,
+    valid_reconciliation_event,
+    "reconciliation.duplicate_apply",
+)
+if duplicate_reconciliation != "IGNORED_DUPLICATE_AUDITED":
+    fail("reconciliation.duplicate_apply deveria retornar IGNORED_DUPLICATE_AUDITED.")
+
+expect_invalid(
+    lambda payload, _schema, ctx: apply_reconciliation_event({"replay_seen": set()}, payload, ctx),
+    invalid_reconciliation_missing_idempotency,
+    {},
+    "reconciliation.invalid_missing_idempotency",
+)
+
+expect_invalid(
+    lambda payload, _schema, ctx: apply_reconciliation_event({"replay_seen": set()}, payload, ctx),
+    invalid_reconciliation_missing_replay,
+    {},
+    "reconciliation.invalid_missing_replay",
 )
 PY
 

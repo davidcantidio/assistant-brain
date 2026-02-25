@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.14"
+version: "2.15"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-25"
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-25 - Execucao do EPIC-F2-02 (contratos idempotentes e reconciliacao)
+- RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-040, RFC-050.
+- Impacto:
+  - adiciona schemas versionados para contratos canonicos:
+    - `ARC/schemas/work_order.schema.json`;
+    - `ARC/schemas/decision.schema.json`;
+    - `ARC/schemas/task_event.schema.json`.
+  - adiciona gate executavel `make eval-idempotency` com script `scripts/ci/eval_idempotency_reconciliation.sh`.
+  - integra `eval-idempotency` ao harness de fase (`scripts/ci/eval_gates.sh`), mantendo fail-fast por contrato.
+  - valida explicitamente no gate:
+    - contratos `work_order/decision/task_event` (samples valid/invalid);
+    - `SPRINT_OVERRIDE` com no-op por `override_key` e rollback obrigatorio;
+    - auto-acoes com `automation_action_id`, deduplicacao por `coalescing_key`/cooldown e fallback `notify-only` sem rollback;
+    - reconciliacao em degraded mode com `idempotency_key` + `replay_key`, formula canonica e deduplicacao auditavel.
+  - atualiza `DEV/DEV-CI-RULES.md` e `README.md` para incluir `make eval-idempotency` no fluxo oficial.
+  - atualiza status de `EPIC-F2-02` para `done` em `PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md`.
+  - publica artifact auditavel da rodada em `artifacts/phase-f2/epic-f2-02-idempotency-reconciliation.md`.
+- Migracao:
+  - executar `make eval-idempotency` em qualquer alteracao que toque contratos `work_order/decision/task_event`, `PM/SPRINT-LIMITS.md`, `ARC/ARC-OBSERVABILITY.md` ou `ARC/ARC-DEGRADED-MODE.md`.
+  - manter formula canonica de `replay_key` e regra de deduplicacao auditavel como bloqueantes de release.
+  - tratar override sem rollback e auto-acao sem idempotencia como `stop-ship`.
 
 ### 2026-02-25 - Execucao do EPIC-F2-01 (baseline de seguranca e gates)
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.

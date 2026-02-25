@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050"]
 ---
 
@@ -88,6 +88,13 @@ Como operador, quero reconciliacao controlada no degradado para evitar perda de 
   - evidencias de no-op duplicate e rollback;
   - evidencias de reconciliacao em degraded mode;
   - referencias `B*` cobertas.
+
+## Resultado desta Rodada
+- `make eval-idempotency`: `PASS` (`eval-idempotency: PASS`).
+- `make eval-gates`: `PASS` (`eval-gates: PASS`).
+- `make phase-f2-gate`: `PASS` (`phase-f2-gate: PASS`).
+- artifact final publicado: `artifacts/phase-f2/epic-f2-02-idempotency-reconciliation.md`.
+- status do epico nesta rodada: `done`.
 
 ## Dependencias
 - [Sprint Limits](../../../PM/SPRINT-LIMITS.md)
