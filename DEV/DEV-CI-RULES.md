@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-CI-RULES.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -35,6 +35,7 @@ Exclui:
 - testes unitarios/minimos.
 - validacao de schema de artifacts.
 - execucao de eval gates centrais (`claim gates`).
+- execucao de `make eval-idempotency` para mudancas em contratos `work_order/decision/task_event`, `PM/SPRINT-LIMITS.md`, `ARC/ARC-OBSERVABILITY.md` e `ARC/ARC-DEGRADED-MODE.md`.
 - execucao de `make eval-integrations` para mudancas em `INTEGRATIONS/`, `ARC/schemas/*` e contratos de trading.
 - em mudancas sob `VERTICALS/TRADING/*`: `make eval-trading` MUST executar e passar.
 

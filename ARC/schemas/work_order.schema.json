@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/work_order.schema.json",
+  "title": "work_order",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "work_order_id",
+    "idempotency_key",
+    "objective",
+    "risk_class",
+    "risk_tier",
+    "data_sensitivity",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_order_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": ["baixo", "medio", "alto"]
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": ["R0", "R1", "R2", "R3"]
+    },
+    "data_sensitivity": {
+      "type": "string",
+      "enum": ["public", "internal", "sensitive"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "APPROVED", "IN_PROGRESS", "DONE", "CANCELLED"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

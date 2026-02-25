@@ -51,6 +51,7 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 ```bash
 make eval-models
 make eval-integrations
+make eval-idempotency
 make eval-rag
 make eval-trading
 make eval-gates
