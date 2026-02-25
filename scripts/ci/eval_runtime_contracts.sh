@@ -24,6 +24,7 @@ required_files=(
   "ARC/ARC-HEARTBEAT.md"
   "workspaces/main/HEARTBEAT.md"
   "workspaces/main/MEMORY.md"
+  "workspaces/main/.openclaw/workspace-state.json"
   "PRD/CHANGELOG.md"
 )
 for f in "${required_files[@]}"; do
@@ -31,6 +32,41 @@ for f in "${required_files[@]}"; do
 done
 
 python3 -m json.tool ARC/schemas/openclaw_runtime_config.schema.json >/dev/null
+
+python3 - <<'PY'
+import datetime as dt
+import json
+import pathlib
+import re
+import sys
+
+path = pathlib.Path("workspaces/main/.openclaw/workspace-state.json")
+try:
+    data = json.loads(path.read_text(encoding="utf-8"))
+except Exception as exc:
+    print(f"workspace-state invalido: {path}: {exc}")
+    sys.exit(1)
+
+version = data.get("version")
+if not isinstance(version, int) or version < 1:
+    print("workspace-state invalido: campo 'version' deve ser inteiro >= 1.")
+    sys.exit(1)
+
+seeded = data.get("bootstrapSeededAt")
+if not isinstance(seeded, str):
+    print("workspace-state invalido: campo 'bootstrapSeededAt' ausente ou nao-string.")
+    sys.exit(1)
+
+if not re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$", seeded):
+    print("workspace-state invalido: 'bootstrapSeededAt' deve estar em ISO-8601 UTC (terminando com 'Z').")
+    sys.exit(1)
+
+try:
+    dt.datetime.fromisoformat(seeded.replace("Z", "+00:00"))
+except ValueError:
+    print("workspace-state invalido: 'bootstrapSeededAt' nao representa timestamp valido.")
+    sys.exit(1)
+PY
 
 # Canonical precedence
 search_re "felixcraft\.md" META/DOCUMENT-HIERARCHY.md
