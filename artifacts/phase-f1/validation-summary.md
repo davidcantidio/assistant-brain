@@ -1,8 +1,15 @@
 # F1 Validation Summary
 
-- data/hora: 2026-02-25 10:07:00 -0300
+- data/hora: 2026-02-25 17:53:38 -0300
 - host alvo: Darwin arm64
-- escopo: EPIC-F1-04 (HITL bootstrap + evidencias de fase)
+- escopo: EPIC-F1-04 (HITL bootstrap + consolidacao de evidencias da fase F1)
+- fonte de verdade: `PRD/PRD-MASTER.md`, `SEC/SEC-POLICY.md`, `PM/DECISION-PROTOCOL.md`
+
+## Comandos executados nesta rodada
+
+1. `bash scripts/verify_linux.sh` -> PASS (`verify: PASS`)
+2. `make ci-security` -> PASS (`security-check: PASS`)
+3. `make ci-quality` -> PASS (`quality-check: PASS`)
 
 ## HITL Readiness Checklist (F1 Bootstrap)
 
@@ -14,7 +21,32 @@
 - slack_fallback_validated: pending_f6
 - challenge_policy_ref: `PM/DECISION-PROTOCOL.md#lifecycle-do-challenge-segundo-fator`
 - decision_protocol_ref: `PM/DECISION-PROTOCOL.md`
-- result: hold
-- justification: checklist HITL bootstrap completo, com fallback Slack explicitamente pendente para F6 sem bypass de policy.
-- residual_risk: indisponibilidade simultanea de Telegram e operador primario antes de fallback Slack fully-ready.
-- next_step: consolidar evidencias executaveis da fase (`verify`, `ci-security`, `ci-quality`) e decidir `promote|hold` no fechamento do EPIC-F1-04.
+- result: promote
+- justification: Telegram primario validado para bootstrap F1; fallback Slack permanece pendente para F6 sem bypass de policy.
+- residual_risk: indisponibilidade simultanea de Telegram e operador primario antes de prontidao completa do fallback Slack.
+- next_step: concluir formalizacao de fallback Slack/challenge/idempotencia na fase F6 (EPIC-F6-01..03).
+
+## Matriz de status dos epicos da F1 (rodada atual)
+
+| Epic | Status na rodada | Evidencia |
+|---|---|---|
+| `EPIC-F1-01` | pass (pronto para `done`) | `bash scripts/verify_linux.sh` -> PASS |
+| `EPIC-F1-02` | done | [epic-f1-02-config-validation.md](./epic-f1-02-config-validation.md) |
+| `EPIC-F1-03` | done | [epic-f1-03-runtime-memory.md](./epic-f1-03-runtime-memory.md) |
+| `EPIC-F1-04` | pass (fechamento em curso) | checklist HITL + `ci-security` + `ci-quality` |
+
+## Evidencias consolidadas
+
+- onboarding/verify baseline: [EPIC-F1-01-INSTALACAO-VERIFY.md](../../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md)
+- config local: [epic-f1-02-config-validation.md](./epic-f1-02-config-validation.md)
+- runtime/memory: [epic-f1-03-runtime-memory.md](./epic-f1-03-runtime-memory.md)
+- HITL/policy: [EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md](../../PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md)
+
+## Decisao de fase (F1 -> F2)
+
+- decisao: `promote`
+- justificativa:
+  - gate operacional de verify em `PASS`;
+  - gates de seguranca e qualidade em `PASS`;
+  - canal humano confiavel primario (Telegram) validado;
+  - pendencia de fallback Slack explicitamente rastreada para F6, sem relaxar policy da F1.
