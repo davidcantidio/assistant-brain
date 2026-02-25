@@ -30,10 +30,10 @@
 
 | Epic | Status na rodada | Evidencia |
 |---|---|---|
-| `EPIC-F1-01` | pass (pronto para `done`) | `bash scripts/verify_linux.sh` -> PASS |
+| `EPIC-F1-01` | done | `bash scripts/verify_linux.sh` -> PASS |
 | `EPIC-F1-02` | done | [epic-f1-02-config-validation.md](./epic-f1-02-config-validation.md) |
 | `EPIC-F1-03` | done | [epic-f1-03-runtime-memory.md](./epic-f1-03-runtime-memory.md) |
-| `EPIC-F1-04` | pass (fechamento em curso) | checklist HITL + `ci-security` + `ci-quality` |
+| `EPIC-F1-04` | done | checklist HITL + `ci-security` + `ci-quality` |
 
 ## Evidencias consolidadas
 
