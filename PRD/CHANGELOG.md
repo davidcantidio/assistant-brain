@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.12"
+version: "2.13"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-25"
@@ -28,6 +28,24 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-25 - Execucao do EPIC-F1-04 (HITL bootstrap e fechamento da F1)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - endurece `scripts/ci/check_security.sh` para validar baseline HITL de operadores em `SEC/allowlists/OPERATORS.yaml`, incluindo:
+    - flags de prontidao obrigatorias no bloco `readiness`;
+    - existencia de operador habilitado;
+    - identidade Telegram minima por operador habilitado;
+    - permissoes `approve/reject/kill` obrigatorias;
+    - validacao de coerencia de `slack_ready`.
+  - consolida checklist HITL bootstrap e evidencias executaveis da fase em `artifacts/phase-f1/validation-summary.md`.
+  - formaliza decisao de fase `F1 -> F2` como `promote`, com Telegram primario validado e fallback Slack explicitamente pendente para F6 (sem bypass de policy).
+  - atualiza `PM/PHASES/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md` com `EPIC-F1-01` e `EPIC-F1-04` em status `done`.
+  - atualiza resultados de rodada nos epicos `EPIC-F1-01` e `EPIC-F1-04`.
+- Migracao:
+  - manter `SEC/allowlists/OPERATORS.yaml` aderente ao baseline HITL exigido por `make ci-security`.
+  - usar `artifacts/phase-f1/validation-summary.md` como artifact unico para revisao de fechamento da F1.
+  - tratar prontidao de fallback Slack (IDs/canal/challenge/idempotencia) como obrigatoria na fase F6 antes de ampliar risco operacional humano.
 
 ### 2026-02-25 - Execucao do EPIC-F1-03 (workspace state e memoria operacional minima)
 - RFCs afetadas: RFC-001, RFC-010, RFC-030, RFC-040, RFC-050.
