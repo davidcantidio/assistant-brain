@@ -7,7 +7,7 @@ PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
 .PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-gates ci-quality ci-security \
-	docling-install pdf-to-md check-pdf-md-sync
+	phase-f2-gate docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
 	@bash scripts/ci/eval_models.sh
@@ -32,6 +32,9 @@ ci-quality:
 
 ci-security:
 	@bash scripts/ci/check_security.sh
+
+phase-f2-gate:
+	@bash scripts/ci/check_phase_f2_gate.sh
 
 docling-install:
 	@if [[ ! -f requirements-docling.txt ]]; then \

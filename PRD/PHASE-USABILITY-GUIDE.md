@@ -1,9 +1,9 @@
 ---
 doc_id: "PHASE-USABILITY-GUIDE.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-25"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -32,7 +32,7 @@ Exclui:
 | Fase | Entregavel usavel | Como usar (humano) | Como testar (humano) | Gate de saida | Evidencia minima |
 |---|---|---|---|---|---|
 | `F1` Instalacao base OpenClaw | Ambiente local operacional | executar setup local (Linux/macOS) e iniciar operacao no workspace principal | `bash scripts/onboard_linux.sh` e `bash scripts/verify_linux.sh` | `verify_linux.sh` com `exit code 0` | log de execucao local e versao `openclaw --version` |
-| `F2` Pos-instalacao + baseline de seguranca | Regras minimas de qualidade e seguranca ativas | operar somente com allowlists e policy canonica | `make ci-quality` e `make ci-security` | ambos `PASS` | output dos dois comandos no ciclo da fase |
+| `F2` Pos-instalacao + baseline de seguranca | Regras minimas de qualidade e seguranca ativas | operar somente com allowlists e policy canonica | `make ci-quality`, `make ci-security` e `make eval-gates` | trio de gates `PASS` | output dos tres comandos no mesmo ciclo da fase |
 | `F3` Runtime minimo, memoria e heartbeat | Rotina operacional minima (daily note + ciclo noturno) | registrar atividades em `workspaces/main/memory/YYYY-MM-DD.md` e manter heartbeat | `make eval-runtime` apos atualizar nota diaria | `eval-runtime-contracts: PASS` | nota diaria com secoes obrigatorias + heartbeat alinhado |
 | `F4` Onboarding de repositorios e contexto externo | Base integrada de contratos externos | usar `INTEGRATIONS/` para decidir modo permitido por integracao | `make eval-integrations` | `eval-integrations: PASS` | docs e schemas de integracao validos |
 | `F5` Integracoes externas governadas | AI-Trader/ClawWork/OpenClaw upstream com modo permitido explicito | operar AI-Trader apenas como `signal_intent` e ClawWork em `lab_isolated` por default | `make eval-integrations` e `make eval-trading` | ambos `PASS` sem bypass | evidencia de bloqueio para ordem direta externa |

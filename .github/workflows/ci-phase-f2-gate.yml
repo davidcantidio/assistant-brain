@@ -1,0 +1,14 @@
+name: ci-phase-f2-gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  phase_f2_gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run F2 promotion fail-fast gate
+        run: make phase-f2-gate
