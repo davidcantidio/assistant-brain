@@ -1,20 +1,20 @@
 # F1 Validation Summary
 
-- data/hora: 2026-02-24 18:54:06 -0300
+- data/hora: 2026-02-25 10:07:00 -0300
 - host alvo: Darwin arm64
-- escopo: EPIC-F1-01 (implementacao documental e scripts)
+- escopo: EPIC-F1-04 (HITL bootstrap + evidencias de fase)
 
-## Comandos executados
+## HITL Readiness Checklist (F1 Bootstrap)
 
-1. `bash -n scripts/onboard_linux.sh` -> PASS
-2. `bash -n scripts/verify_linux.sh` -> PASS
-3. `bash scripts/verify_linux.sh` -> FAIL (esperado em estado Red sem onboarding/.env)
-4. `make ci-quality` -> PASS
-5. `make ci-security` -> PASS
-6. `make eval-gates` -> PASS
-
-## Status final
-
-- status final: FAIL
-- motivo: pre-requisitos locais ainda nao aplicados (OpenClaw CLI ausente e .env ausente).
-- proximo passo: executar `bash scripts/onboard_linux.sh` e rerodar `bash scripts/verify_linux.sh`.
+- checklist_id: HITL-F1-20260225-01
+- operator_id: primary-01
+- primary_channel: telegram
+- fallback_channel: slack
+- telegram_identity_validated: pass
+- slack_fallback_validated: pending_f6
+- challenge_policy_ref: `PM/DECISION-PROTOCOL.md#lifecycle-do-challenge-segundo-fator`
+- decision_protocol_ref: `PM/DECISION-PROTOCOL.md`
+- result: hold
+- justification: checklist HITL bootstrap completo, com fallback Slack explicitamente pendente para F6 sem bypass de policy.
+- residual_risk: indisponibilidade simultanea de Telegram e operador primario antes de fallback Slack fully-ready.
+- next_step: consolidar evidencias executaveis da fase (`verify`, `ci-security`, `ci-quality`) e decidir `promote|hold` no fechamento do EPIC-F1-04.
