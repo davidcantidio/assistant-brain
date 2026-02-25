@@ -4,6 +4,16 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+search_re() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -n -- "$pattern" "$@" >/dev/null
+  else
+    grep -nE -- "$pattern" "$@" >/dev/null
+  fi
+}
+
 required_files=(
   "ARC/schemas/work_order.schema.json"
   "ARC/schemas/decision.schema.json"
@@ -11,6 +21,7 @@ required_files=(
   "PM/WORK-ORDER-SPEC.md"
   "PM/DECISION-PROTOCOL.md"
   "ARC/ARC-CORE.md"
+  "PM/SPRINT-LIMITS.md"
 )
 
 for f in "${required_files[@]}"; do
@@ -20,6 +31,14 @@ done
 python3 -m json.tool ARC/schemas/work_order.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/task_event.schema.json >/dev/null
+
+search_re "## Contrato SPRINT_OVERRIDE" PM/SPRINT-LIMITS.md
+search_re "override_key" PM/SPRINT-LIMITS.md
+search_re "coalescing_key" PM/SPRINT-LIMITS.md
+search_re "rollback_token" PM/SPRINT-LIMITS.md
+search_re "rollback_snapshot_ref" PM/SPRINT-LIMITS.md
+search_re 'reaplicacao com mesma `override_key` MUST ser no-op' PM/SPRINT-LIMITS.md
+search_re 'antes de `APPLIED`, MUST existir `rollback_snapshot_ref` valido' PM/SPRINT-LIMITS.md
 
 python3 - <<'PY'
 import datetime as dt
@@ -139,6 +158,54 @@ def expected_required_in_schema(schema: dict, expected_fields: set[str], label: 
         fail(f"{label} deve definir additionalProperties=false")
 
 
+def validate_sprint_override_payload(payload: dict, ctx: str) -> None:
+    required_fields = {
+        "override_key",
+        "coalescing_key",
+        "sprint_id",
+        "limit_type",
+        "requested_delta",
+        "status",
+        "source_alert_id",
+        "rollback_token",
+        "rollback_snapshot_ref",
+    }
+    missing = sorted([k for k in required_fields if k not in payload])
+    if missing:
+        fail(f"{ctx} invalido: campos obrigatorios ausentes: {missing}")
+
+    assert_string(payload, "override_key", ctx)
+    assert_string(payload, "coalescing_key", ctx)
+    assert_string(payload, "sprint_id", ctx)
+    assert_string(payload, "limit_type", ctx)
+    assert_string(payload, "requested_delta", ctx)
+    assert_string(payload, "status", ctx)
+    assert_string(payload, "source_alert_id", ctx)
+    assert_string(payload, "rollback_token", ctx)
+    assert_string(payload, "rollback_snapshot_ref", ctx)
+
+    assert_enum(
+        payload,
+        "status",
+        {"REQUESTED", "APPROVED", "APPLIED", "ROLLED_BACK", "REJECTED", "EXPIRED"},
+        ctx,
+    )
+
+
+def apply_sprint_override(state: dict, payload: dict, ctx: str) -> str:
+    validate_sprint_override_payload(payload, ctx)
+    key = payload["override_key"]
+
+    if key in state["applied_by_key"]:
+        return "NO_OP_DUPLICATE"
+
+    if payload["status"] == "APPLIED" and not payload.get("rollback_snapshot_ref"):
+        fail(f"{ctx} invalido: rollback_snapshot_ref obrigatorio para status APPLIED.")
+
+    state["applied_by_key"].add(key)
+    return "APPLIED"
+
+
 work_order_schema = json.loads(Path("ARC/schemas/work_order.schema.json").read_text(encoding="utf-8"))
 decision_schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
 task_event_schema = json.loads(Path("ARC/schemas/task_event.schema.json").read_text(encoding="utf-8"))
@@ -240,6 +307,21 @@ invalid_decision["risk_tier"] = "R4"
 invalid_task_event = dict(valid_task_event)
 invalid_task_event["attempt"] = 0
 
+valid_sprint_override = {
+    "override_key": "SPR-OVR-SPR-20260225-001-max_items-W01",
+    "coalescing_key": "SPR-20260225-001:max_items:W01",
+    "sprint_id": "SPR-20260225-001",
+    "limit_type": "max_items",
+    "requested_delta": "aumentar limite de 12 para 14",
+    "status": "APPLIED",
+    "source_alert_id": "ALERT-SPR-001",
+    "rollback_token": "RBK-20260225-001",
+    "rollback_snapshot_ref": "artifact://sprint/SPR-20260225-001/pre-override",
+}
+
+invalid_sprint_override_missing_rollback = dict(valid_sprint_override)
+invalid_sprint_override_missing_rollback.pop("rollback_snapshot_ref", None)
+
 validate_work_order(valid_work_order, work_order_schema, "work_order.valid")
 validate_decision(valid_decision, decision_schema, "decision.valid")
 validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
@@ -247,6 +329,22 @@ validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
 expect_invalid(validate_work_order, invalid_work_order, work_order_schema, "work_order.invalid")
 expect_invalid(validate_decision, invalid_decision, decision_schema, "decision.invalid")
 expect_invalid(validate_task_event, invalid_task_event, task_event_schema, "task_event.invalid")
+
+sprint_state = {"applied_by_key": set()}
+first_apply = apply_sprint_override(sprint_state, valid_sprint_override, "sprint_override.first_apply")
+if first_apply != "APPLIED":
+    fail("sprint_override.first_apply deveria retornar APPLIED.")
+
+duplicate_apply = apply_sprint_override(sprint_state, valid_sprint_override, "sprint_override.duplicate_apply")
+if duplicate_apply != "NO_OP_DUPLICATE":
+    fail("sprint_override.duplicate_apply deveria retornar NO_OP_DUPLICATE.")
+
+expect_invalid(
+    lambda payload, _schema, ctx: apply_sprint_override({"applied_by_key": set()}, payload, ctx),
+    invalid_sprint_override_missing_rollback,
+    {},
+    "sprint_override.invalid_missing_rollback",
+)
 PY
 
 echo "eval-idempotency: PASS"
