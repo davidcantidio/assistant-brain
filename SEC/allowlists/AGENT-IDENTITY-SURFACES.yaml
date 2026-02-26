@@ -1,0 +1,34 @@
+schema_version: "1.0"
+last_updated: "2026-02-26"
+policy:
+  segregation_required: true
+  least_privilege_required: true
+surfaces:
+  - surface: "social"
+    agent_account_id: "agent-social-001"
+    personal_account_id: "personal-social-owner"
+    segregation_enforced: true
+    minimum_scope:
+      - "read_messages"
+      - "publish_posts"
+  - surface: "email"
+    agent_account_id: "agent-email-001"
+    personal_account_id: "personal-email-owner"
+    segregation_enforced: true
+    minimum_scope:
+      - "read_headers"
+      - "send_limited"
+  - surface: "pagamentos"
+    agent_account_id: "agent-payments-001"
+    personal_account_id: "personal-payments-owner"
+    segregation_enforced: true
+    minimum_scope:
+      - "read_balance"
+      - "create_limited_charge"
+  - surface: "carteira"
+    agent_account_id: "agent-wallet-001"
+    personal_account_id: "personal-wallet-owner"
+    segregation_enforced: true
+    minimum_scope:
+      - "read_positions"
+      - "trade_only"

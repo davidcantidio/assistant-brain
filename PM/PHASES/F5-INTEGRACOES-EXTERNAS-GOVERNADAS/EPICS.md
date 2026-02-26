@@ -29,7 +29,7 @@ Criterio objetivo:
 |---|---|---|---|---|
 | `EPIC-F5-01` | Integracoes governadas e anti-bypass | fechar regras de integracao externa sem caminho direto de ordem para venue | done | [EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md](./EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md) |
 | `EPIC-F5-02` | Trading hardening e prontidao live | cobrir controles operacionais de ordem, degradacao, credenciais e CI de trading | done | [EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md](./EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md) |
-| `EPIC-F5-03` | Autonomia operacional e blast radius | formalizar cron/heartbeat/delegacao longa e segregacao de contas/ativos do agente | planned | [EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md](./EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md) |
+| `EPIC-F5-03` | Autonomia operacional e blast radius | formalizar cron/heartbeat/delegacao longa e segregacao de contas/ativos do agente | done | [EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md](./EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md) |
 
 ## Escopo Desta Entrega
 - fase `F5` adicionada para remover lacuna entre `F4` e `F6` do overlay de fases usaveis.

@@ -597,6 +597,8 @@ Definicao objetiva de side effect:
 - credenciais de trading live MUST operar sem permissao de saque e com IP allowlist quando suportado.
 - fallback HITL em Slack para trading live exige `slack_user_ids` e `slack_channel_ids` nao vazios para operador habilitado.
 - Trading live MUST ter `backup_operator` habilitado; sem isso, estado operacional e `TRADING_BLOCKED`.
+- segregacao de contas/credenciais do agente por superficie (`social`, `email`, `pagamentos`, `carteira`) e obrigatoria em `SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml`.
+- em cada superficie, `agent_account_id` MUST ser diferente de `personal_account_id` com escopo minimo de permissao (`least privilege`).
 
 ## Resposta Formal aos Bloqueadores Criticos
 - STOP-SHIP (`SPRINT_OVERRIDE`): contrato com idempotencia + rollback explicito em `PM/SPRINT-LIMITS.md`.

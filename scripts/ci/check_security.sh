@@ -20,6 +20,7 @@ required_files=(
   "SEC/allowlists/ACTIONS.yaml"
   "SEC/allowlists/OPERATORS.yaml"
   "SEC/allowlists/PROVIDERS.yaml"
+  "SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml"
 )
 for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
@@ -56,6 +57,9 @@ search_re "prompt bruto MUST ser bloqueado por default" SEC/SEC-POLICY.md
 search_re '`sensitive` MUST aplicar provider allowlist restrita' PRD/PRD-MASTER.md
 search_re 'classificacao `public/internal/sensitive`' PRD/PRD-MASTER.md
 search_re "backup_operator" PRD/PRD-MASTER.md
+search_re "AGENT-IDENTITY-SURFACES\\.yaml" PRD/PRD-MASTER.md SEC/SEC-POLICY.md
+search_re "agent_account_id.*personal_account_id|personal_account_id.*agent_account_id" PRD/PRD-MASTER.md SEC/SEC-POLICY.md
+search_re "least privilege" PRD/PRD-MASTER.md SEC/SEC-POLICY.md
 search_re "financial_side_effect_requires_explicit_human_approval: true" PRD/PRD-MASTER.md
 search_re "email_command_channel_trusted: false" PRD/PRD-MASTER.md
 
@@ -350,6 +354,103 @@ if missing_backup_permissions:
 
 if mode == "single_primary" and backup_op.get("enabled") is True:
     fail("OPERATORS.yaml invalido: backup operator deve ficar desabilitado em mode=single_primary.")
+PY
+
+python3 - <<'PY'
+import re
+import sys
+from pathlib import Path
+
+path = Path("SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml")
+text = path.read_text(encoding="utf-8")
+lines = text.splitlines()
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+if not re.search(r'^\s*segregation_required\s*:\s*true\s*$', text, re.MULTILINE):
+    fail("AGENT-IDENTITY-SURFACES.yaml sem segregation_required=true.")
+if not re.search(r'^\s*least_privilege_required\s*:\s*true\s*$', text, re.MULTILINE):
+    fail("AGENT-IDENTITY-SURFACES.yaml sem least_privilege_required=true.")
+
+surfaces = []
+current = None
+section = None
+
+for raw in lines:
+    stripped = raw.strip()
+    if not stripped or stripped.startswith("#"):
+        continue
+
+    if stripped.startswith("- surface:"):
+        if current:
+            surfaces.append(current)
+        current = {
+            "surface": stripped.split(":", 1)[1].strip().strip('"'),
+            "agent_account_id": None,
+            "personal_account_id": None,
+            "segregation_enforced": None,
+            "minimum_scope": [],
+        }
+        section = None
+        continue
+
+    if current is None:
+        continue
+
+    if stripped.startswith("minimum_scope:"):
+        section = "minimum_scope"
+        continue
+
+    if stripped.startswith("- "):
+        if section == "minimum_scope":
+            current["minimum_scope"].append(stripped[2:].strip().strip('"'))
+        continue
+
+    section = None
+    if ":" not in stripped:
+        continue
+    key, value = stripped.split(":", 1)
+    key = key.strip()
+    value = value.strip().strip('"')
+
+    if key in {"agent_account_id", "personal_account_id"}:
+        current[key] = value
+    elif key == "segregation_enforced":
+        if value not in {"true", "false"}:
+            fail(f"AGENT-IDENTITY-SURFACES.yaml com segregation_enforced invalido para superficie {current['surface']}.")
+        current["segregation_enforced"] = value == "true"
+
+if current:
+    surfaces.append(current)
+
+if not surfaces:
+    fail("AGENT-IDENTITY-SURFACES.yaml sem bloco de surfaces.")
+
+required_surfaces = {"social", "email", "pagamentos", "carteira"}
+found_surfaces = {s["surface"] for s in surfaces}
+missing_surfaces = sorted(required_surfaces - found_surfaces)
+if missing_surfaces:
+    fail(f"AGENT-IDENTITY-SURFACES.yaml sem superficies obrigatorias: {missing_surfaces}")
+
+for entry in surfaces:
+    surface = entry["surface"] or "<surface_vazia>"
+    agent_account_id = entry.get("agent_account_id")
+    personal_account_id = entry.get("personal_account_id")
+
+    if not agent_account_id:
+        fail(f"Superficie sem agent_account_id: {surface}")
+    if not personal_account_id:
+        fail(f"Superficie sem personal_account_id: {surface}")
+    if agent_account_id == personal_account_id:
+        fail(f"Superficie com agent_account_id igual a personal_account_id: {surface}")
+    if entry.get("segregation_enforced") is not True:
+        fail(f"Superficie sem segregation_enforced=true: {surface}")
+    if not entry.get("minimum_scope"):
+        fail(f"Superficie sem minimum_scope para least privilege: {surface}")
 PY
 
 echo "security-check: PASS"

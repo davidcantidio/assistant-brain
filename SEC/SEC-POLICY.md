@@ -121,6 +121,17 @@ Exclui:
   - IP allowlist obrigatoria quando suportado.
 - qualquer tentativa de emissao de ordem fora do `execution_gateway` MUST ser bloqueada e auditada como violacao.
 
+## Segregacao de Identidade por Superficie (Blast Radius)
+- arquivo canonico: `./allowlists/AGENT-IDENTITY-SURFACES.yaml`.
+- superficies minimas obrigatorias: `social`, `email`, `pagamentos`, `carteira`.
+- cada superficie MUST declarar:
+  - `agent_account_id`;
+  - `personal_account_id`;
+  - `segregation_enforced=true`;
+  - `minimum_scope[]` (least privilege).
+- `agent_account_id` MUST ser diferente de `personal_account_id` em todas as superficies.
+- qualquer mistura de conta pessoal com conta do agente MUST bloquear promote em `ci-security`.
+
 ## Logging Seguro e Retencao
 - mascarar token, chave, senha, email e dados pessoais.
 - armazenar hash/referencia quando necessario para auditoria.

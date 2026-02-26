@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.26"
+version: "2.27"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,33 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-06 (segregacao de contas/credenciais) + fechamento do EPIC-F5-03
+- RFCs afetadas: RFC-001, RFC-015, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-06` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R14`) como fonte de verdade para reforcar:
+    - segregacao obrigatoria por superficie (`social`, `email`, `pagamentos`, `carteira`);
+    - diferenca obrigatoria entre `agent_account_id` e `personal_account_id`;
+    - menor privilegio explicito por `minimum_scope`.
+  - adiciona contrato canonico:
+    - `SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml`.
+  - endurece `scripts/ci/check_security.sh` para validar:
+    - superfícies obrigatórias;
+    - `segregation_enforced=true`;
+    - `minimum_scope[]` não vazio;
+    - bloqueio quando conta pessoal/agente estiver misturada.
+  - alinha regras normativas em:
+    - `SEC/SEC-POLICY.md`
+    - `PRD/PRD-MASTER.md`
+  - publica evidencias:
+    - `artifacts/phase-f5/epic-f5-03-issue-06-account-credential-segregation-blast-radius.md`
+    - `artifacts/phase-f5/epic-f5-03-autonomy-blast-radius.md`
+  - fecha o `EPIC-F5-03`:
+    - atualiza `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md` com resultado da rodada;
+    - atualiza status para `done` em `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md`.
+- Migracao:
+  - qualquer alteracao em identidade/credencial do agente MUST preservar segregacao por superficie e least privilege.
+  - ausencia de segregacao explicita MUST bloquear `make ci-security`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-05 (fallback HITL Slack seguro + restauracao Telegram)
 - RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-050.
