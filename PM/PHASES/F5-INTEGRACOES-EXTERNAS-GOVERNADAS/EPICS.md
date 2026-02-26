@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F5-EPICS.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,7 +28,7 @@ Criterio objetivo:
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
 | `EPIC-F5-01` | Integracoes governadas e anti-bypass | fechar regras de integracao externa sem caminho direto de ordem para venue | done | [EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md](./EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md) |
-| `EPIC-F5-02` | Trading hardening e prontidao live | cobrir controles operacionais de ordem, degradacao, credenciais e CI de trading | planned | [EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md](./EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md) |
+| `EPIC-F5-02` | Trading hardening e prontidao live | cobrir controles operacionais de ordem, degradacao, credenciais e CI de trading | done | [EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md](./EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md) |
 | `EPIC-F5-03` | Autonomia operacional e blast radius | formalizar cron/heartbeat/delegacao longa e segregacao de contas/ativos do agente | planned | [EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md](./EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md) |
 
 ## Escopo Desta Entrega

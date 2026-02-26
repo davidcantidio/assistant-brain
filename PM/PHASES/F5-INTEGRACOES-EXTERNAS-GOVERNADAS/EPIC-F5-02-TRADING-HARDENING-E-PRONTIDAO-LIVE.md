@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-050", "RFC-060"]
 ---
 
@@ -102,6 +102,20 @@ Como operador, quero runbook seguro para posicao aberta em degradacao sem perda 
   - status de fail_closed/single_engine_mode;
   - status de credenciais e CI;
   - referencias `B*` cobertas.
+
+## Resultado desta Rodada
+- `make eval-trading` final: `PASS` (`eval-trading: PASS`).
+- `make eval-integrations` final: `PASS` (`eval-integrations: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f5/epic-f5-02-issue-01-validator-contracts.md`;
+  - `artifacts/phase-f5/epic-f5-02-issue-02-idempotency-reconciliation.md`;
+  - `artifacts/phase-f5/epic-f5-02-issue-03-fail-closed-single-engine.md`;
+  - `artifacts/phase-f5/epic-f5-02-issue-04-credentials-ci-gate.md`;
+  - `artifacts/phase-f5/epic-f5-02-issue-05-degraded-open-position-runbook.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f5/epic-f5-02-trading-hardening.md`.
+- conclusao: `EPIC-F5-02` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [Trading PRD](../../../VERTICALS/TRADING/TRADING-PRD.md)

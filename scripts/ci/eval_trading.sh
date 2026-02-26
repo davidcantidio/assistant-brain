@@ -120,6 +120,8 @@ required_files=(
   "VERTICALS/TRADING/TRADING-PRD.md"
   "VERTICALS/TRADING/TRADING-RISK-RULES.md"
   "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md"
+  "ARC/ARC-DEGRADED-MODE.md"
+  "INCIDENTS/DEGRADED-MODE-PROCEDURE.md"
   "SEC/allowlists/ACTIONS.yaml"
   "SEC/allowlists/DOMAINS.yaml"
   ".github/workflows/ci-trading.yml"
@@ -170,6 +172,12 @@ search_re_each_file 'caminho de execucao unico confirmado: somente `execution_ga
 search_re_each_file "dominio de venue ativo.*SEC/allowlists/DOMAINS\\.yaml.*dominio fora da allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "sem permissao de saque|permissao sem saque" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "IP allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "TRADING_BLOCKED" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re "position_snapshot" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re "open_orders_snapshot" INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re_each_file "reconcili" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re_each_file "UNMANAGED_EXPOSURE" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re "posicoes e ordens reconciliadas" INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md
 search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md
 search_re "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md

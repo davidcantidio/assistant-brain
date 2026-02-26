@@ -29,6 +29,24 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-02-05 (runbook de degradacao com posicao aberta + fechamento do EPIC-F5-02)
+- RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-02-05` do `EPIC-F5-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-08`) como fonte de verdade para reforcar:
+    - exigencia de `TRADING_BLOCKED` em degradacao com posicao aberta;
+    - exigencia de `position_snapshot`/`open_orders_snapshot`;
+    - exigencia de reconciliacao e criterio de retorno seguro sem exposicao nao gerenciada.
+  - endurece `scripts/ci/eval_trading.sh` para validar runbook de degradacao em:
+    - `ARC/ARC-DEGRADED-MODE.md`
+    - `INCIDENTS/DEGRADED-MODE-PROCEDURE.md`
+  - publica evidencias:
+    - `artifacts/phase-f5/epic-f5-02-issue-05-degraded-open-position-runbook.md`
+    - `artifacts/phase-f5/epic-f5-02-trading-hardening.md`
+  - atualiza status do `EPIC-F5-02` para `done` em `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md`.
+- Migracao:
+  - qualquer alteracao no runbook de degradacao de trading MUST preservar `TRADING_BLOCKED`, snapshots e reconciliacao auditavel.
+  - ausencia desses requisitos MUST bloquear `make eval-trading`.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-02-04 (credenciais live restritas + gate CI de trading)
 - RFCs afetadas: RFC-001, RFC-015, RFC-050, RFC-060.
 - Impacto:
