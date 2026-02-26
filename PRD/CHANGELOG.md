@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.18"
+version: "2.19"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,23 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F4-01 (pacote INTEGRATIONS baseline)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa cenarios `Red/Green/Refactor` do `EPIC-F4-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` como fonte de verdade para:
+    - presenca dos docs obrigatorios do pacote `INTEGRATIONS/`;
+    - regra mandataria de AI-Trader em modo `signal_intent` only com anti-bypass;
+    - regra mandataria de ClawWork com `lab_isolated` default e `governed` gateway-only.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md`
+    - `artifacts/phase-f4/epic-f4-01-issue-02-ai-trader-signal-only.md`
+    - `artifacts/phase-f4/epic-f4-01-issue-03-clawwork-governed-gateway-only.md`
+    - `artifacts/phase-f4/epic-f4-01-integrations-baseline.md`
+  - atualiza status do `EPIC-F4-01` para `done` em `PM/PHASES/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md`.
+- Migracao:
+  - executar `make eval-integrations` em alteracoes que toquem `INTEGRATIONS/`, `ARC/schemas/*` de integracao ou `scripts/ci/eval_integrations.sh`.
+  - tratar linguagem ambigua para AI-Trader/ClawWork como bloqueante de promote da fase `F4`.
 
 ### 2026-02-26 - Execucao do EPIC-F3-03 (heartbeat, timezone e operacao critica)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.

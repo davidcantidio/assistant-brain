@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -67,6 +67,16 @@ Como operador, quero validar modos de operacao do ClawWork para manter governanc
   - status dos docs obrigatorios de integracao;
   - status de regras AI-Trader e ClawWork;
   - resultado final de `make eval-integrations`.
+
+## Resultado desta Rodada
+- `make eval-integrations` final: `PASS` (`eval-integrations: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md`;
+  - `artifacts/phase-f4/epic-f4-01-issue-02-ai-trader-signal-only.md`;
+  - `artifacts/phase-f4/epic-f4-01-issue-03-clawwork-governed-gateway-only.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f4/epic-f4-01-integrations-baseline.md`.
+- conclusao: `EPIC-F4-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [Integrations Readme](../../../INTEGRATIONS/README.md)
