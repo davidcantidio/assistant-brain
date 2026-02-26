@@ -79,8 +79,8 @@ Como operador, quero validar modos de operacao do ClawWork para manter governanc
 - conclusao: `EPIC-F4-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [Integrations Readme](../../../INTEGRATIONS/README.md)
-- [Integration AI-Trader](../../../INTEGRATIONS/AI-TRADER.md)
-- [Integration ClawWork](../../../INTEGRATIONS/CLAWWORK.md)
-- [Integration OpenClaw Upstream](../../../INTEGRATIONS/OPENCLAW-UPSTREAM.md)
-- [Eval Integrations Script](../../../scripts/ci/eval_integrations.sh)
+- [Integrations Readme](../../../../INTEGRATIONS/README.md)
+- [Integration AI-Trader](../../../../INTEGRATIONS/AI-TRADER.md)
+- [Integration ClawWork](../../../../INTEGRATIONS/CLAWWORK.md)
+- [Integration OpenClaw Upstream](../../../../INTEGRATIONS/OPENCLAW-UPSTREAM.md)
+- [Eval Integrations Script](../../../../scripts/ci/eval_integrations.sh)

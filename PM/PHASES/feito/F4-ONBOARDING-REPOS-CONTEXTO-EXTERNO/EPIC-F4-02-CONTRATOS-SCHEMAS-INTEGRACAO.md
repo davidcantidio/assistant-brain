@@ -79,9 +79,9 @@ Como operador, quero validar compatibilidade dual de interface no runtime e tril
 - conclusao: `EPIC-F4-02` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [Signal Intent Schema](../../../ARC/schemas/signal_intent.schema.json)
-- [Order Intent Schema](../../../ARC/schemas/order_intent.schema.json)
-- [Execution Report Schema](../../../ARC/schemas/execution_report.schema.json)
-- [Economic Run Schema](../../../ARC/schemas/economic_run.schema.json)
-- [OpenClaw Runtime Config Schema](../../../ARC/schemas/openclaw_runtime_config.schema.json)
-- [Eval Integrations Script](../../../scripts/ci/eval_integrations.sh)
+- [Signal Intent Schema](../../../../ARC/schemas/signal_intent.schema.json)
+- [Order Intent Schema](../../../../ARC/schemas/order_intent.schema.json)
+- [Execution Report Schema](../../../../ARC/schemas/execution_report.schema.json)
+- [Economic Run Schema](../../../../ARC/schemas/economic_run.schema.json)
+- [OpenClaw Runtime Config Schema](../../../../ARC/schemas/openclaw_runtime_config.schema.json)
+- [Eval Integrations Script](../../../../scripts/ci/eval_integrations.sh)
