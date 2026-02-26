@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-050", "RFC-060"]
 ---
 
@@ -88,6 +88,19 @@ Como operador, quero regras explicitas de modo permitido para AI-Trader e ClawWo
   - evidencias de bloqueio de ordem direta;
   - status de contratos versionados e compatibilidade dual;
   - referencias `B*` cobertas.
+
+## Resultado desta Rodada
+- `make eval-integrations` final: `PASS` (`eval-integrations: PASS`).
+- `make eval-trading` final: `PASS` (`eval-trading: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f5/epic-f5-01-issue-01-tradingagents-signal-intent.md`;
+  - `artifacts/phase-f5/epic-f5-01-issue-02-direct-order-block-venue-allowlist.md`;
+  - `artifacts/phase-f5/epic-f5-01-issue-03-versioned-contracts-runtime-dual.md`;
+  - `artifacts/phase-f5/epic-f5-01-issue-04-allowed-modes-no-ambiguity.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f5/epic-f5-01-integrations-anti-bypass.md`.
+- conclusao: `EPIC-F5-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [Integrations Readme](../../../INTEGRATIONS/README.md)

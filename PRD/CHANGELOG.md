@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-01-04 (modo permitido explicito por integracao sem ambiguidade)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-01-04` do `EPIC-F5-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-20`, `B1-22`, `B1-23`, `B1-24`) como fonte de verdade para explicitar:
+    - `AI-Trader` em modo `signal_only`;
+    - `ClawWork` em `lab_isolated` (default) e `governed` (`gateway-only`);
+    - compatibilidade upstream via `gateway.control_plane.ws` canonico + `chatCompletions` opcional sob policy.
+  - atualiza `INTEGRATIONS/README.md` com matriz canonica de modos permitidos por integracao.
+  - endurece `scripts/ci/eval_integrations.sh` para exigir a matriz e suas regras de modo permitido no pacote `INTEGRATIONS`.
+  - publica evidencias:
+    - `artifacts/phase-f5/epic-f5-01-issue-04-allowed-modes-no-ambiguity.md`;
+    - `artifacts/phase-f5/epic-f5-01-integrations-anti-bypass.md`.
+  - atualiza status do `EPIC-F5-01` para `done` em `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md`.
+- Migracao:
+  - qualquer alteracao em `INTEGRATIONS/*` MUST preservar a matriz de modos permitidos e suas regras anti-bypass.
+  - tratar ambiguidade de modo permitido como bloqueante de promote da fase `F5`.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-01-03 (contratos versionados + compatibilidade dual runtime)
 - RFCs afetadas: RFC-001, RFC-030, RFC-050, RFC-060.
 - Impacto:

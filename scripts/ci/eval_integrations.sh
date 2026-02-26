@@ -350,6 +350,10 @@ search_re "chatCompletions" PRD/PRD-MASTER.md ARC/ARC-CORE.md INTEGRATIONS/OPENC
 search_re_each_file "Matriz de Compatibilidade" INTEGRATIONS/OPENCLAW-UPSTREAM.md
 search_re_each_file "control plane WS \\(canonico\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
 search_re_each_file "chatCompletions HTTP \\(opcional\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
+search_re_each_file "Matriz de Modos Permitidos" INTEGRATIONS/README.md
+search_re_each_file "AI-Trader.*signal_only" INTEGRATIONS/README.md
+search_re_each_file "ClawWork.*lab_isolated.*default.*governed.*gateway-only" INTEGRATIONS/README.md
+search_re_each_file "OpenClaw upstream.*gateway\\.control_plane\\.ws.*chatCompletions.*opcional" INTEGRATIONS/README.md
 
 search_fixed "MUST operar somente como gerador de \`signal_intent\`." INTEGRATIONS/AI-TRADER.md
 search_fixed "MUST NOT enviar \`order_intent\` diretamente para venue/exchange." INTEGRATIONS/AI-TRADER.md

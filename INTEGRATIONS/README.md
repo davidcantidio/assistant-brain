@@ -33,6 +33,13 @@ Cada documento em `INTEGRATIONS/` MUST conter:
 - checklist minimo de testes/gates.
 - estrategia de rollback/fail-closed.
 
+## Matriz de Modos Permitidos
+| Integracao | Modo permitido | Regra anti-bypass |
+|---|---|---|
+| AI-Trader | `signal_only` | gera apenas `signal_intent`; envio direto de `order_intent` para venue e bloqueado |
+| ClawWork | `lab_isolated` (default) e `governed` (gateway-only) | em `governed`, chamada direta a provider externo e bloqueada |
+| OpenClaw upstream | runtime canonico via `gateway.control_plane.ws` com `chatCompletions` opcional sob policy | interface opcional HTTP nao pode criar bypass de policy/gates |
+
 ## Artefatos Canonicos
 - [AI-Trader](./AI-TRADER.md)
 - [ClawWork](./CLAWWORK.md)
