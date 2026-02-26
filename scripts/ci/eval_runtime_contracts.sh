@@ -803,7 +803,8 @@ search_re "email.*nunca.*canal confiavel de comando|canal nao confiavel para com
 search_re "aprovacao humana explicita" PRD/PRD-MASTER.md SEC/SEC-POLICY.md VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-RISK-RULES.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 
 # Heartbeat baseline alignment
-search_re "baseline unico de 15 minutos|base global: 15 minutos" ARC/ARC-HEARTBEAT.md
+search_re "baseline unico de 15 minutos" ARC/ARC-HEARTBEAT.md
+search_re "base global: 15 minutos" ARC/ARC-HEARTBEAT.md
 search_re "Baseline oficial: 15 minutos" workspaces/main/HEARTBEAT.md
 search_re "America/Sao_Paulo" ARC/ARC-HEARTBEAT.md PRD/PRD-MASTER.md workspaces/main/HEARTBEAT.md
 search_re "Nightly extraction de memoria: 23:00" ARC/ARC-HEARTBEAT.md
