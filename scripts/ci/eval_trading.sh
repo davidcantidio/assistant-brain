@@ -122,6 +122,7 @@ required_files=(
   "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md"
   "SEC/allowlists/ACTIONS.yaml"
   "SEC/allowlists/DOMAINS.yaml"
+  ".github/workflows/ci-trading.yml"
   "ARC/schemas/execution_gateway.schema.json"
   "ARC/schemas/pre_trade_validator.schema.json"
 )
@@ -167,11 +168,22 @@ search_re_each_file "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> 
 search_re_each_file "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file 'caminho de execucao unico confirmado: somente `execution_gateway` pode enviar ordem live' VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "dominio de venue ativo.*SEC/allowlists/DOMAINS\\.yaml.*dominio fora da allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "sem permissao de saque|permissao sem saque" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "IP allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md
 search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md
 search_re "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md
 search_re "trading_phase1_binance" SEC/allowlists/DOMAINS.yaml
 search_re "api\\.binance\\.com" SEC/allowlists/DOMAINS.yaml
 search_re "deny:" SEC/allowlists/DOMAINS.yaml
+search_re 'action: "trading_place_order"' SEC/allowlists/ACTIONS.yaml
+search_re 'action: "trading_cancel_order"' SEC/allowlists/ACTIONS.yaml
+search_re 'action: "trading_replace_order"' SEC/allowlists/ACTIONS.yaml
+search_re 'action: "trading_reconcile_orders"' SEC/allowlists/ACTIONS.yaml
+search_re 'policy: "execution_gateway_only"' SEC/allowlists/ACTIONS.yaml
+search_re 'action: "trading_withdraw_funds"' SEC/allowlists/ACTIONS.yaml
+search_re 'policy: "blocked"' SEC/allowlists/ACTIONS.yaml
+search_re "Run trading eval harness" .github/workflows/ci-trading.yml
+search_re "make eval-trading" .github/workflows/ci-trading.yml
 
 echo "eval-trading: PASS"

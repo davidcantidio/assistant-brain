@@ -29,6 +29,22 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-02-04 (credenciais live restritas + gate CI de trading)
+- RFCs afetadas: RFC-001, RFC-015, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-02-04` do `EPIC-F5-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-09`, `B1-12`) como fonte de verdade para reforcar:
+    - politica de credenciais live com principio `no-withdraw` e `IP allowlist` quando suportado;
+    - gate CI obrigatorio de trading com execucao de `make eval-trading`.
+  - endurece `scripts/ci/eval_trading.sh` para exigir:
+    - regras de credencial live (`sem permissao de saque`, `IP allowlist`) nos docs normativos de trading;
+    - politicas em `SEC/allowlists/ACTIONS.yaml` (`execution_gateway_only` para acoes de ordem e `trading_withdraw_funds` bloqueado);
+    - presenca do workflow `.github/workflows/ci-trading.yml` com etapa de `make eval-trading`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-02-issue-04-credentials-ci-gate.md`.
+- Migracao:
+  - mudanca em credenciais/politicas de trading live MUST preservar bloqueio de saque e restricao via gateway.
+  - ausencia de workflow CI com `make eval-trading` MUST bloquear promote de alteracao de trading.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-02-03 (fail_closed primaria + single_engine_mode secundaria)
 - RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.
 - Impacto:
