@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "1.9"
+version: "2.0"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050", "RFC-060"]
 ---
 
@@ -153,6 +153,7 @@ Exclui:
 - embeddings:
   - `task_spec_embedding`
   - `outcome_embedding`
+- contrato executavel: `ARC/schemas/llm_run.schema.json`
 
 ### 3) `router_decisions`
 - estruturado:
@@ -161,6 +162,7 @@ Exclui:
   - ranking e score
   - decisao final e justificativa curta
   - fallback chain acionada e motivo
+- contrato executavel: `ARC/schemas/router_decision.schema.json`
 
 ### 4) `eval_aggregates`
 - estruturado:
@@ -171,6 +173,7 @@ Exclui:
 ### 5) `credits_snapshots`
 - estruturado:
   - `snapshot_at`, `billing_source`, `period_limit`, `period_usage`, `balance`, `burn_rate_hour`, `burn_rate_day`
+- contrato executavel: `ARC/schemas/credits_snapshot.schema.json`
 
 ### 6) `router_presets`
 - estruturado:
