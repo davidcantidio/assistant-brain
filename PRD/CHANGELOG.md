@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.17"
+version: "2.18"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,27 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F3-03 (heartbeat, timezone e operacao critica)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa cenarios `Red/Green/Refactor` para validar coerencia de heartbeat, timezone e regras criticas no gate `make eval-runtime`, cobrindo:
+    - baseline oficial de heartbeat em 15 minutos (`ARC/ARC-HEARTBEAT.md` + `workspaces/main/HEARTBEAT.md`);
+    - timezone canonico `America/Sao_Paulo` e nightly extraction as `23:00`;
+    - regra de email como canal nao confiavel para comando;
+    - regra de aprovacao humana explicita para side effect financeiro.
+  - endurece `scripts/ci/eval_runtime_contracts.sh` para baseline do ARC exigir simultaneamente:
+    - `baseline unico de 15 minutos`;
+    - `base global: 15 minutos`.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md`
+    - `artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md`
+    - `artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md`
+    - `artifacts/phase-f3/epic-f3-03-heartbeat-timezone-operation.md`
+  - atualiza status do `EPIC-F3-03` para `done` em `PM/PHASES/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md`.
+- Migracao:
+  - manter baseline de heartbeat do ARC com as duas ancoras canonicas (normativa e operacional) para evitar drift parcial.
+  - executar `make eval-runtime` em alteracoes que toquem heartbeat, timezone, regras de canal ou aprovacao financeira.
 
 ### 2026-02-26 - Execucao do EPIC-F3-02 (memoria diaria com contrato minimo)
 - RFCs afetadas: RFC-001, RFC-030, RFC-040, RFC-050.

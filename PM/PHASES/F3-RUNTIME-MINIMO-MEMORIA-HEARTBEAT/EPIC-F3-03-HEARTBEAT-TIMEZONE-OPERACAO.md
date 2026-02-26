@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -63,11 +63,22 @@ Como operador, quero garantir que regras criticas de seguranca e aprovacao finan
 - Given regra critica explicita e coerente, When `make eval-runtime` roda, Then a validacao retorna `PASS`.
 
 ## Artifact Minimo do Epico
-- registrar resumo em `artifacts/phase-f3/validation-summary.md` com:
+- registrar resumo em `artifacts/phase-f3/epic-f3-03-heartbeat-timezone-operation.md` com:
   - status de baseline heartbeat e timezone;
   - status das regras criticas de canal/aprovacao;
   - resultado final de `make eval-runtime`;
   - decisao de fase (`promote|hold`) com justificativa.
+
+## Resultado desta Rodada
+- `make eval-runtime` final: `PASS` (`eval-runtime-contracts: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md`;
+  - `artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md`;
+  - `artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f3/epic-f3-03-heartbeat-timezone-operation.md`.
+- decisao de fase: `promote` (gate `eval-runtime` verde com `F3-01..03` em `done`).
+- conclusao: `EPIC-F3-03` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [ARC Heartbeat](../../../ARC/ARC-HEARTBEAT.md)
