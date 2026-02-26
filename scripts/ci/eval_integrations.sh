@@ -83,6 +83,129 @@ if missing_required or missing_properties:
 PY
 }
 
+schema_assert_runtime_dual_contract() {
+  local schema_path="$1"
+
+  python3 - "$schema_path" <<'PY'
+import json
+import sys
+
+schema_path = sys.argv[1]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+def fail(msg):
+    print(f"Runtime dual contract check failed: {schema_path}")
+    print(msg)
+    sys.exit(1)
+
+properties = schema.get("properties", {})
+if not isinstance(properties, dict):
+    fail("top-level properties MUST be a JSON object.")
+
+gateway = properties.get("gateway")
+if not isinstance(gateway, dict):
+    fail("properties.gateway MUST exist as a JSON object.")
+
+gateway_required = gateway.get("required", [])
+if not isinstance(gateway_required, list):
+    fail("gateway.required MUST be a JSON array.")
+
+for field in ("bind", "control_plane"):
+    if field not in gateway_required:
+        fail(f"gateway.required MUST include '{field}'.")
+
+if "http" in gateway_required:
+    fail("gateway.required MUST NOT include 'http' (chatCompletions remains optional under policy).")
+
+gateway_props = gateway.get("properties", {})
+if not isinstance(gateway_props, dict):
+    fail("gateway.properties MUST be a JSON object.")
+
+control_plane = gateway_props.get("control_plane")
+if not isinstance(control_plane, dict):
+    fail("gateway.properties.control_plane MUST exist as a JSON object.")
+
+control_plane_required = control_plane.get("required", [])
+if not isinstance(control_plane_required, list) or "ws" not in control_plane_required:
+    fail("gateway.properties.control_plane.required MUST include 'ws'.")
+
+http = gateway_props.get("http")
+if not isinstance(http, dict):
+    fail("gateway.properties.http MUST exist as a JSON object.")
+
+http_props = http.get("properties", {})
+if not isinstance(http_props, dict):
+    fail("gateway.properties.http.properties MUST be a JSON object.")
+
+endpoints = http_props.get("endpoints")
+if not isinstance(endpoints, dict):
+    fail("gateway.properties.http.properties.endpoints MUST exist as a JSON object.")
+
+endpoints_props = endpoints.get("properties", {})
+if not isinstance(endpoints_props, dict):
+    fail("gateway.properties.http.properties.endpoints.properties MUST be a JSON object.")
+
+chat_completions = endpoints_props.get("chatCompletions")
+if not isinstance(chat_completions, dict):
+    fail("gateway.http.endpoints.chatCompletions path MUST exist in schema.")
+
+chat_required = chat_completions.get("required", [])
+if not isinstance(chat_required, list) or "enabled" not in chat_required:
+    fail("gateway.http.endpoints.chatCompletions.required MUST include 'enabled'.")
+
+chat_props = chat_completions.get("properties", {})
+if not isinstance(chat_props, dict) or "enabled" not in chat_props:
+    fail("gateway.http.endpoints.chatCompletions.properties.enabled MUST exist in schema.")
+PY
+}
+
+schema_assert_provider_path_shape() {
+  local schema_path="$1"
+
+  python3 - "$schema_path" <<'PY'
+import json
+import sys
+
+schema_path = sys.argv[1]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+def fail(msg):
+    print(f"provider_path shape check failed: {schema_path}")
+    print(msg)
+    sys.exit(1)
+
+properties = schema.get("properties", {})
+if not isinstance(properties, dict):
+    fail("top-level properties MUST be a JSON object.")
+
+provider_path = properties.get("provider_path")
+if not isinstance(provider_path, dict):
+    fail("properties.provider_path MUST exist as a JSON object.")
+
+if provider_path.get("type") != "array":
+    fail("provider_path.type MUST be 'array'.")
+
+min_items = provider_path.get("minItems")
+if not isinstance(min_items, int) or min_items < 1:
+    fail("provider_path.minItems MUST be an integer >= 1.")
+
+items = provider_path.get("items")
+if not isinstance(items, dict):
+    fail("provider_path.items MUST be a JSON object.")
+
+if items.get("type") != "string":
+    fail("provider_path.items.type MUST be 'string'.")
+
+min_length = items.get("minLength")
+if not isinstance(min_length, int) or min_length < 1:
+    fail("provider_path.items.minLength MUST be an integer >= 1.")
+PY
+}
+
 required_files=(
   "INTEGRATIONS/README.md"
   "INTEGRATIONS/AI-TRADER.md"
@@ -128,6 +251,9 @@ schema_assert_minimum_contract \
   "ARC/schemas/economic_run.schema.json" \
   "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at" \
   "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at"
+
+schema_assert_runtime_dual_contract "ARC/schemas/openclaw_runtime_config.schema.json"
+schema_assert_provider_path_shape "ARC/schemas/economic_run.schema.json"
 
 openrouter_rule="OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido."
 search_fixed "$openrouter_rule" README.md PRD/ROADMAP.md PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
