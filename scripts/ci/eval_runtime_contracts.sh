@@ -666,6 +666,26 @@ invalid_webhook_trace.pop("trace_id")
 expect_invalid(validate_webhook, invalid_webhook_trace, webhook_required, "invalid_webhook_missing_trace_id")
 PY
 
+workspace_state_candidates=()
+while IFS= read -r candidate_path; do
+  workspace_state_candidates+=("$candidate_path")
+done < <(find workspaces -type f -path "*/.openclaw/workspace-state.json" 2>/dev/null | sort)
+
+if (( ${#workspace_state_candidates[@]} != 1 )); then
+  echo "workspace-state invalido: esperado exatamente 1 caminho canonico em workspaces/*/.openclaw/workspace-state.json; encontrados ${#workspace_state_candidates[@]}."
+  if (( ${#workspace_state_candidates[@]} > 0 )); then
+    for candidate_path in "${workspace_state_candidates[@]}"; do
+      echo "workspace-state encontrado: $candidate_path"
+    done
+  fi
+  exit 1
+fi
+
+if [[ "${workspace_state_candidates[0]}" != "workspaces/main/.openclaw/workspace-state.json" ]]; then
+  echo "workspace-state invalido: caminho canonico esperado 'workspaces/main/.openclaw/workspace-state.json', encontrado '${workspace_state_candidates[0]}'."
+  exit 1
+fi
+
 python3 - <<'PY'
 import datetime as dt
 import json

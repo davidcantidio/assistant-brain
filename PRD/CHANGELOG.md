@@ -29,6 +29,34 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do EPIC-F3-01 (contrato de runtime minimo)
+- RFCs afetadas: RFC-001, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - endurece `scripts/ci/eval_runtime_contracts.sh` para detectar caminhos duplicados em `required_files`.
+  - endurece `eval-runtime` para reportar todos os arquivos obrigatorios ausentes no mesmo ciclo (falha agregada).
+  - adiciona validacao executavel do contrato estrutural de `ARC/schemas/openclaw_runtime_config.schema.json`, cobrindo:
+    - required top-level (`agents`, `tools`, `channels`, `hooks`, `memory`, `gateway`);
+    - required de A2A (`enabled`, `allow`);
+    - required de hooks (`enabled`, `mappings`, `internal`) e hooks internos (`boot-md`, `command-logger`, `session-memory`);
+    - `gateway.bind.const=loopback`;
+    - `gateway.control_plane.ws.required` (`enabled`, `url`);
+    - `gateway.http.endpoints.chatCompletions.required` (`enabled`).
+  - adiciona fixtures `valid/invalid` no gate para bloquear drift estrutural do contrato de runtime.
+  - endurece `eval-runtime` para exigir fonte canonica unica de estado:
+    - busca `workspaces/*/.openclaw/workspace-state.json`;
+    - bloqueia quando houver 0 ou mais de 1 caminho;
+    - exige caminho unico em `workspaces/main/.openclaw/workspace-state.json`.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f3/epic-f3-01-issue-01-required-files.md`
+    - `artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md`
+    - `artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md`
+    - `artifacts/phase-f3/epic-f3-01-runtime-contract.md`
+  - atualiza status do `EPIC-F3-01` para `done` em `PM/PHASES/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md`.
+- Migracao:
+  - executar `make eval-runtime` em alteracoes que toquem contratos de runtime, schemas, memoria operacional ou heartbeat.
+  - tratar multiplos caminhos de `workspace-state.json` em `workspaces/*/.openclaw/` como `stop-ship`.
+  - manter `openclaw_runtime_config.schema.json` alinhado aos required estruturais validados pelo gate.
+
 ### 2026-02-26 - Execucao do EPIC-F2-03 (catalog/router/memory/budget + A2A/hooks)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.
 - Impacto:

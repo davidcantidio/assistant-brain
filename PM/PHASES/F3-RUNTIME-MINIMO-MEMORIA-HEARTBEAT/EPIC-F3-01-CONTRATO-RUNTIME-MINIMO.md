@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-040", "RFC-050"]
 ---
 
@@ -67,6 +67,16 @@ Como operador, quero garantir o caminho canonico de estado do workspace para evi
   - arquivos obrigatorios verificados;
   - status do schema de runtime;
   - resultado final de `make eval-runtime`.
+
+## Resultado desta Rodada
+- `make eval-runtime` final: `PASS` (`eval-runtime-contracts: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f3/epic-f3-01-issue-01-required-files.md`;
+  - `artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md`;
+  - `artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f3/epic-f3-01-runtime-contract.md`.
+- conclusao: `EPIC-F3-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [PRD Master](../../../PRD/PRD-MASTER.md)
