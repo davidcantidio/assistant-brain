@@ -29,6 +29,27 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-01-02 (bloqueio de ordem direta externa + allowlist de venue)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-01-02` do `EPIC-F5-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-03`, `B1-11`, `B1-22`) como fonte de verdade para reforcar:
+    - caminho unico de execucao live via `execution_gateway`;
+    - bloqueio hard de ordem direta externa (anti-bypass);
+    - allowlist de dominios de venue com bloqueio para dominio fora da allowlist.
+  - endurece `scripts/ci/eval_trading.sh` com:
+    - exigencia de `SEC/allowlists/DOMAINS.yaml` como arquivo obrigatorio de trading;
+    - validacao por arquivo da regra `somente execution_gateway pode enviar ordem live`;
+    - validacao por arquivo da regra de allowlist de venue;
+    - validacao de baseline da allowlist Binance fase 1 (`trading_phase1_binance`, `api.binance.com`, `deny` default).
+  - atualiza `VERTICALS/TRADING/TRADING-PRD.md` para alinhar explicitamente:
+    - caminho unico de execucao live via gateway;
+    - dependencia de allowlist de venue em `SEC/allowlists/DOMAINS.yaml`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-01-issue-02-direct-order-block-venue-allowlist.md`.
+- Migracao:
+  - executar `make eval-trading` em alteracoes que toquem regras de execucao de ordem, venue, allowlists ou contratos de trading.
+  - tratar qualquer ausencia de regra de `execution_gateway only` ou allowlist de venue como bloqueante para operacao live.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-01-01 (TradingAgents + signal_intent + normalizacao/deduplicacao)
 - RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.
 - Impacto:

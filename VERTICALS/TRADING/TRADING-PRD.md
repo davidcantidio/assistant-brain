@@ -77,6 +77,8 @@ Exclui:
   - integrar `TradingAgents` como engine primaria de `signal_intent`.
   - integrar AI-Trader somente como produtor de intencao (`signal_intent`), sem permissao de enviar ordem.
   - pipeline oficial de integracao externa: `AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway`.
+  - caminho de execucao unico confirmado: somente `execution_gateway` pode enviar ordem live.
+  - dominio de venue ativo em `SEC/allowlists/DOMAINS.yaml` e bloqueio comprovado para dominio fora da allowlist.
   - `signal_intent` passa por normalizacao, deduplicacao e `pre_trade_validator`.
   - qualquer payload que represente ordem direta originada do AI-Trader MUST ser rejeitado e auditado.
   - indisponibilidade da engine primaria MUST operar em `fail_closed` para novas entradas.
