@@ -51,6 +51,21 @@
       "type": "string",
       "minLength": 8
     },
+    "thread_context": {
+      "type": "object",
+      "required": ["issue_id", "microtask_id"],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "microtask_id": {
+          "type": "string",
+          "minLength": 2
+        }
+      },
+      "additionalProperties": false
+    },
     "received_at": {
       "type": "string",
       "format": "date-time"

@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.24"
+version: "2.25"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,27 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-04 (A2A cross-workspace + Slack event normalizado)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-04` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R16`, `B1-R17`) como fonte de verdade para reforcar:
+    - delegacao A2A cross-workspace com allowlist + limites de concorrencia/custo;
+    - fallback para fila serial em conflito de capacidade/custo;
+    - normalizacao de evento Slack com `idempotency_key` e `thread_context` tipado (`issue_id` + `microtask_id`).
+  - endurece contratos versionados:
+    - `ARC/schemas/a2a_delegation_event.schema.json`;
+    - `ARC/schemas/webhook_ingest_event.schema.json`.
+  - endurece validacao executavel em:
+    - `scripts/ci/eval_runtime_contracts.sh`.
+  - alinha docs normativos:
+    - `ARC/ARC-CORE.md`
+    - `PRD/PRD-MASTER.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-03-issue-04-a2a-cross-workspace-slack-normalization.md`.
+- Migracao:
+  - qualquer delegacao A2A cross-workspace MUST preservar limites explicitos de concorrencia/custo e fallback serial em conflito.
+  - evento Slack com contexto de thread incompleto MUST bloquear `make eval-runtime`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-03 (governanca avancada de catalog/router custo e privacidade por preset)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.

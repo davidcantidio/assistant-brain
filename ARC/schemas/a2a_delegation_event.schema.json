@@ -9,8 +9,13 @@
     "trace_id",
     "requester_agent",
     "target_agent",
+    "source_workspace",
+    "target_workspace",
     "allowlist_entry",
     "allowed",
+    "max_concurrency",
+    "max_cost_usd",
+    "serial_fallback_on_conflict",
     "status",
     "created_at"
   ],
@@ -35,11 +40,30 @@
       "type": "string",
       "minLength": 2
     },
+    "source_workspace": {
+      "type": "string",
+      "minLength": 2
+    },
+    "target_workspace": {
+      "type": "string",
+      "minLength": 2
+    },
     "allowlist_entry": {
       "type": "string",
       "minLength": 2
     },
     "allowed": {
+      "type": "boolean"
+    },
+    "max_concurrency": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_cost_usd": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "serial_fallback_on_conflict": {
       "type": "boolean"
     },
     "status": {

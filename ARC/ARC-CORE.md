@@ -97,6 +97,9 @@ Exclui:
 ## Delegacao A2A (Agent-to-Agent)
 - delegacao entre agentes MUST obedecer allowlist `tools.agentToAgent.allow[]`.
 - agente solicitante MUST registrar `trace_id`, `delegation_id`, `requester_agent`, `target_agent`.
+- delegacao cross-workspace MUST registrar `source_workspace` e `target_workspace`.
+- delegacao MUST declarar limites de execucao (`max_concurrency`, `max_cost_usd`).
+- conflito de capacidade/custo MUST aplicar `serial_fallback_on_conflict=true`.
 - resposta A2A MUST registrar estado final (`succeeded|failed|blocked`) e evidence refs.
 - delegacao fora de allowlist MUST falhar com bloqueio + evento de seguranca.
 - contrato executavel: `ARC/schemas/a2a_delegation_event.schema.json`.
@@ -104,6 +107,7 @@ Exclui:
 ## Hooks e Webhooks
 - webhook externo MUST entrar por mapping explicito em `hooks.mappings[]`.
 - mapping MUST transformar payload externo em evento interno tipado antes de entrar no Orchestrator.
+- evento Slack normalizado MAY carregar `thread_context`, mas quando presente MUST incluir `issue_id` e `microtask_id`.
 - hooks internos MUST carregar contexto (`boot-md`), trilha de comando (`command-logger`) e memoria de sessao (`session-memory`).
 - hooks sem assinatura/validacao de origem exigida por policy MUST ser bloqueados.
 - contrato executavel: `ARC/schemas/webhook_ingest_event.schema.json`.

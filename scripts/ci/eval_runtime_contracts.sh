@@ -879,10 +879,20 @@ def validate_a2a(payload: dict, required_fields: set[str], label: str) -> None:
     if missing:
         raise ValueError(f"{label} sem campos obrigatorios: {missing}")
 
-    for field in ("trace_id", "requester_agent", "target_agent", "allowlist_entry"):
+    for field in ("trace_id", "requester_agent", "target_agent", "source_workspace", "target_workspace", "allowlist_entry"):
         value = payload.get(field)
         if not isinstance(value, str) or len(value.strip()) < 2:
             raise ValueError(f"{label} com {field} invalido.")
+
+    max_concurrency = payload.get("max_concurrency")
+    if not isinstance(max_concurrency, int) or max_concurrency < 1:
+        raise ValueError(f"{label} com max_concurrency invalido.")
+    max_cost_usd = payload.get("max_cost_usd")
+    if not isinstance(max_cost_usd, (int, float)) or max_cost_usd <= 0:
+        raise ValueError(f"{label} com max_cost_usd invalido.")
+    serial_fallback_on_conflict = payload.get("serial_fallback_on_conflict")
+    if not isinstance(serial_fallback_on_conflict, bool):
+        raise ValueError(f"{label} com serial_fallback_on_conflict invalido.")
 
     if payload.get("allowed") is not True:
         raise ValueError(f"{label} invalido: delegacao fora de allowlist.")
@@ -901,6 +911,17 @@ def validate_webhook(payload: dict, required_fields: set[str], label: str) -> No
         value = payload.get(field)
         if not isinstance(value, str) or len(value.strip()) < 2:
             raise ValueError(f"{label} com {field} invalido.")
+
+    thread_context = payload.get("thread_context")
+    if thread_context is not None:
+        if not isinstance(thread_context, dict):
+            raise ValueError(f"{label} com thread_context invalido.")
+        issue_id = thread_context.get("issue_id")
+        microtask_id = thread_context.get("microtask_id")
+        if not isinstance(issue_id, str) or len(issue_id.strip()) < 2:
+            raise ValueError(f"{label} com thread_context.issue_id invalido.")
+        if not isinstance(microtask_id, str) or len(microtask_id.strip()) < 2:
+            raise ValueError(f"{label} com thread_context.microtask_id invalido.")
 
     if payload.get("status") not in {"accepted", "rejected", "blocked"}:
         raise ValueError(f"{label} com status invalido.")
@@ -922,7 +943,19 @@ webhook_schema = json.loads(Path("ARC/schemas/webhook_ingest_event.schema.json")
 a2a_required = set(a2a_schema.get("required", []))
 webhook_required = set(webhook_schema.get("required", []))
 
-missing_a2a = sorted({"trace_id", "allowlist_entry", "allowed"} - a2a_required)
+missing_a2a = sorted(
+    {
+        "trace_id",
+        "allowlist_entry",
+        "allowed",
+        "source_workspace",
+        "target_workspace",
+        "max_concurrency",
+        "max_cost_usd",
+        "serial_fallback_on_conflict",
+    }
+    - a2a_required
+)
 if missing_a2a:
     fail(f"a2a_delegation_event.schema.json sem required obrigatorio: {missing_a2a}")
 
@@ -936,8 +969,13 @@ valid_a2a = {
     "trace_id": "TRACE-A2A-001",
     "requester_agent": "orchestrator",
     "target_agent": "dev-worker",
+    "source_workspace": "workspaces/main",
+    "target_workspace": "workspaces/dev-worker",
     "allowlist_entry": "orchestrator->dev-worker",
     "allowed": True,
+    "max_concurrency": 2,
+    "max_cost_usd": 20.0,
+    "serial_fallback_on_conflict": True,
     "status": "queued",
     "created_at": "2026-02-26T10:40:00Z"
 }
@@ -951,6 +989,10 @@ valid_webhook = {
     "idempotency_key": "HOOK-IDEMP-001",
     "event_type": "task_event",
     "status": "accepted",
+    "thread_context": {
+        "issue_id": "OC-123",
+        "microtask_id": "MT-01"
+    },
     "received_at": "2026-02-26T10:40:05Z"
 }
 
@@ -974,6 +1016,10 @@ expect_invalid(validate_webhook, invalid_webhook, webhook_required, "invalid_web
 invalid_webhook_trace = deepcopy(valid_webhook)
 invalid_webhook_trace.pop("trace_id")
 expect_invalid(validate_webhook, invalid_webhook_trace, webhook_required, "invalid_webhook_missing_trace_id")
+
+invalid_webhook_thread = deepcopy(valid_webhook)
+invalid_webhook_thread["thread_context"].pop("microtask_id")
+expect_invalid(validate_webhook, invalid_webhook_thread, webhook_required, "invalid_webhook_thread_context")
 PY
 
 workspace_state_candidates=()
@@ -1038,10 +1084,16 @@ search_re "felixcraft\.md" META/DOCUMENT-HIERARCHY.md
 search_re 'Contrato Canonico `openclaw_runtime_config`' PRD/PRD-MASTER.md
 search_re "tools\.agentToAgent\.enabled" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "tools\.agentToAgent\.allow\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "max_concurrency|maxConcurrent" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "max_cost_usd|maxCostUsd" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "serial_fallback_on_conflict|serialFallbackOnConflict|fila serial em conflito" PRD/PRD-MASTER.md ARC/ARC-CORE.md PRD/ROADMAP.md
+search_re "source_workspace" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "target_workspace" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.enabled" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.mappings\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.internal\.entries\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "trace_id" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "issue_id.*/microtask_id|issue_id.*microtask_id" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "gateway\.bind = loopback" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "gateway\.control_plane\.ws" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "chatCompletions" PRD/PRD-MASTER.md ARC/ARC-CORE.md

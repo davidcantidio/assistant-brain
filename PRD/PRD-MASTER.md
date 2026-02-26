@@ -282,6 +282,7 @@ Fonte da verdade operacional:
   - evento de `@mention` no Slack MUST ser normalizado para `task_event` com `idempotency_key`, `trace_id` e autor.
   - repeticao do mesmo evento (retry/webhook duplicado) MUST ser `NO_OP_DUPLICATE`.
   - thread do Slack MUST mapear para `issue_id`/`microtask_id` quando existir contexto.
+  - `thread_context` do evento normalizado, quando presente, MUST incluir `issue_id` e `microtask_id`.
 - governanca:
   - Slack nao pode aprovar gate de risco alto por texto livre.
   - fallback HITL em Slack exige assinatura valida do request + allowlist de operador + challenge de segundo fator.
@@ -298,6 +299,9 @@ O runtime MUST manter contrato de configuracao versionado com os campos minimos 
 - agent-to-agent:
   - `tools.agentToAgent.enabled`
   - `tools.agentToAgent.allow[]` (allowlist obrigatoria de delegacao)
+  - `tools.agentToAgent.maxConcurrent` (limite de concorrencia por delegacao)
+  - `tools.agentToAgent.maxCostUsd` (limite de custo por delegacao)
+  - `tools.agentToAgent.serialFallbackOnConflict` (fallback para fila serial em conflito)
 - canais:
   - `channels.telegram`
   - `channels.slack`
@@ -316,6 +320,10 @@ O runtime MUST manter contrato de configuracao versionado com os campos minimos 
   - `gateway.bind = loopback`
   - `gateway.control_plane.ws` (canonico)
   - `gateway.http.endpoints.chatCompletions.enabled` (opcional sob policy)
+
+Regras mandatarias de evento A2A/Webhook:
+- evento A2A cross-workspace MUST registrar `source_workspace`, `target_workspace`, `max_concurrency`, `max_cost_usd` e `serial_fallback_on_conflict`.
+- webhook Slack normalizado com contexto de thread MUST registrar `issue_id` + `microtask_id`.
 
 ### Contrato `routing_stack_contract`
 ```yaml
