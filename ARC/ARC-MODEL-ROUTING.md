@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.7"
+version: "1.8"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
@@ -61,6 +61,9 @@ Exclui:
 - expor API interna para o Router consultar e ranquear candidatos.
 
 ### Regras
+- contrato minimo por entrada de catalogo MUST conter:
+  - `model_id`, `provider`, `capabilities`, `limits`, `pricing`, `status`;
+  - metadata de sync: `catalog_synced_at`, `sync_source`, `sync_interval_seconds`.
 - catalogo sem timestamp atual nao pode ser usado em rota critica.
 - modelo sem metrica minima de custo/latencia/confiabilidade deve ser degradado ou bloqueado.
 - alteracao de schema do catalogo MUST abrir decision.

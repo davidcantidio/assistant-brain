@@ -6,6 +6,7 @@
   "required": [
     "schema_version",
     "model_id",
+    "provider",
     "provider_model_ref",
     "model_family",
     "model_tier",
@@ -17,6 +18,9 @@
     "limits",
     "tags",
     "status",
+    "catalog_synced_at",
+    "sync_source",
+    "sync_interval_seconds",
     "effective_from",
     "updated_at",
     "updated_by"
@@ -27,6 +31,10 @@
       "pattern": "^\\d+\\.\\d+$"
     },
     "model_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "provider": {
       "type": "string",
       "minLength": 2
     },
@@ -129,6 +137,18 @@
     "status": {
       "type": "string",
       "enum": ["active", "degraded", "disabled"]
+    },
+    "catalog_synced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sync_source": {
+      "type": "string",
+      "enum": ["models_api", "manual_override", "seed_fixture"]
+    },
+    "sync_interval_seconds": {
+      "type": "integer",
+      "minimum": 60
     },
     "effective_from": {
       "type": "string",
