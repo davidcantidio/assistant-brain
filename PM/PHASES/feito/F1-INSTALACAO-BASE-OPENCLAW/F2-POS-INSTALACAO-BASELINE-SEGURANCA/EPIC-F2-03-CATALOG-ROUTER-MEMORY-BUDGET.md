@@ -118,9 +118,9 @@ Como operador, quero delegacao e eventos externos com rastreabilidade para evita
 - status do epico nesta rodada: `done`.
 
 ## Dependencias
-- [ARC Model Routing](../../../ARC/ARC-MODEL-ROUTING.md)
-- [ARC Core](../../../ARC/ARC-CORE.md)
-- [Runtime Config Schema](../../../ARC/schemas/openclaw_runtime_config.schema.json)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
-- [Felix OpenClaw Pontos Relevantes](../../../felix-openclaw-pontos-relevantes.md)
+- [ARC Model Routing](../../../../../ARC/ARC-MODEL-ROUTING.md)
+- [ARC Core](../../../../../ARC/ARC-CORE.md)
+- [Runtime Config Schema](../../../../../ARC/schemas/openclaw_runtime_config.schema.json)
+- [Roadmap](../../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../../felixcraft.md)
+- [Felix OpenClaw Pontos Relevantes](../../../../../felix-openclaw-pontos-relevantes.md)

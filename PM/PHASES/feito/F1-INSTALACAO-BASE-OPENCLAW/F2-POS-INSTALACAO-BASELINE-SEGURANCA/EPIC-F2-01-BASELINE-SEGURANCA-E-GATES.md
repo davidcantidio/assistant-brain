@@ -85,8 +85,8 @@ Como operador, quero fila de aprovacao para acao sensivel e bloqueio de comando 
 - status do epico nesta rodada: `done`.
 
 ## Dependencias
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
-- [Felix OpenClaw Pontos Relevantes](../../../felix-openclaw-pontos-relevantes.md)
+- [Security Policy](../../../../../SEC/SEC-POLICY.md)
+- [Decision Protocol](../../../../../PM/DECISION-PROTOCOL.md)
+- [Roadmap](../../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../../felixcraft.md)
+- [Felix OpenClaw Pontos Relevantes](../../../../../felix-openclaw-pontos-relevantes.md)

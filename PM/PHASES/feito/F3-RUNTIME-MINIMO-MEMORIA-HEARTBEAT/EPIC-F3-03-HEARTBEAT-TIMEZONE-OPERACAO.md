@@ -81,11 +81,11 @@ Como operador, quero garantir que regras criticas de seguranca e aprovacao finan
 - conclusao: `EPIC-F3-03` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [ARC Heartbeat](../../../ARC/ARC-HEARTBEAT.md)
-- [Workspace Heartbeat](../../../workspaces/main/HEARTBEAT.md)
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Trading PRD](../../../VERTICALS/TRADING/TRADING-PRD.md)
-- [Trading Risk Rules](../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [ARC Heartbeat](../../../../ARC/ARC-HEARTBEAT.md)
+- [Workspace Heartbeat](../../../../workspaces/main/HEARTBEAT.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Trading PRD](../../../../VERTICALS/TRADING/TRADING-PRD.md)
+- [Trading Risk Rules](../../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)

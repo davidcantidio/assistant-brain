@@ -79,8 +79,8 @@ Como operador, quero garantir o caminho canonico de estado do workspace para evi
 - conclusao: `EPIC-F3-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [ARC Core](../../../ARC/ARC-CORE.md)
-- [Runtime Config Schema](../../../ARC/schemas/openclaw_runtime_config.schema.json)
-- [Document Hierarchy](../../../META/DOCUMENT-HIERARCHY.md)
-- [Eval Runtime Contracts Script](../../../scripts/ci/eval_runtime_contracts.sh)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [ARC Core](../../../../ARC/ARC-CORE.md)
+- [Runtime Config Schema](../../../../ARC/schemas/openclaw_runtime_config.schema.json)
+- [Document Hierarchy](../../../../META/DOCUMENT-HIERARCHY.md)
+- [Eval Runtime Contracts Script](../../../../scripts/ci/eval_runtime_contracts.sh)

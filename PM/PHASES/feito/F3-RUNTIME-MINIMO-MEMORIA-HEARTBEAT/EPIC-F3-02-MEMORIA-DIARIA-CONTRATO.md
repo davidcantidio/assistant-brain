@@ -79,8 +79,8 @@ Como operador, quero garantir conteudo minimo util por secao para evitar nota di
 - conclusao: `EPIC-F3-02` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [Workspace Memory Canonico](../../../workspaces/main/MEMORY.md)
-- [Workspace Daily Memory](../../../workspaces/main/memory/2026-02-24.md)
-- [ARC Heartbeat](../../../ARC/ARC-HEARTBEAT.md)
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [Eval Runtime Contracts Script](../../../scripts/ci/eval_runtime_contracts.sh)
+- [Workspace Memory Canonico](../../../../workspaces/main/MEMORY.md)
+- [Workspace Daily Memory](../../../../workspaces/main/memory/2026-02-24.md)
+- [ARC Heartbeat](../../../../ARC/ARC-HEARTBEAT.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [Eval Runtime Contracts Script](../../../../scripts/ci/eval_runtime_contracts.sh)

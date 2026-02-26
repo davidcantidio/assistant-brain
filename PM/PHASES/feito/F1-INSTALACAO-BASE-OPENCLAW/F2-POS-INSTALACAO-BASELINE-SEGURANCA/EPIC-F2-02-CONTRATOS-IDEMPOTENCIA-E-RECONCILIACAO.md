@@ -97,8 +97,8 @@ Como operador, quero reconciliacao controlada no degradado para evitar perda de 
 - status do epico nesta rodada: `done`.
 
 ## Dependencias
-- [Sprint Limits](../../../PM/SPRINT-LIMITS.md)
-- [ARC Observability](../../../ARC/ARC-OBSERVABILITY.md)
-- [ARC Degraded Mode](../../../ARC/ARC-DEGRADED-MODE.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
+- [Sprint Limits](../../../../../PM/SPRINT-LIMITS.md)
+- [ARC Observability](../../../../../ARC/ARC-OBSERVABILITY.md)
+- [ARC Degraded Mode](../../../../../ARC/ARC-DEGRADED-MODE.md)
+- [Roadmap](../../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../../felixcraft.md)
