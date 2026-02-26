@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-01-01 (TradingAgents + signal_intent + normalizacao/deduplicacao)
+- RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-01-01` do `EPIC-F5-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-01`, `B1-02`, `B1-22`) como fonte de verdade para reforcar:
+    - `TradingAgents` como engine primaria de sinal nos docs normativos de trading;
+    - pipeline oficial `AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway` sem drift entre `TRADING-PRD` e `TRADING-ENABLEMENT-CRITERIA`;
+    - regra anti-bypass de ordem direta validada por arquivo.
+  - endurece `scripts/ci/eval_trading.sh` com:
+    - helper `search_re_each_file` para exigir padroes obrigatorios em cada documento alvo;
+    - validacao obrigatoria de `TradingAgents.*engine primaria de sinal` nos dois docs de trading;
+    - validacao por arquivo do pipeline oficial e da regra anti-bypass do AI-Trader.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-01-issue-01-tradingagents-signal-intent.md`.
+- Migracao:
+  - executar `make eval-trading` em alteracoes que toquem `VERTICALS/TRADING/*` ou `scripts/ci/eval_trading.sh`.
+  - tratar ausencia de `TradingAgents` como engine primaria, pipeline oficial ou regra anti-bypass em qualquer doc alvo como bloqueante para promote de `F5`.
+
 ### 2026-02-26 - Execucao do EPIC-F4-03 (coerencia normativa anti-drift e gate)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
 - Impacto:

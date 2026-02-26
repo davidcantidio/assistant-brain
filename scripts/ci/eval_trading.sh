@@ -14,6 +14,18 @@ search_re() {
   fi
 }
 
+search_re_each_file() {
+  local pattern="$1"
+  shift
+  local f
+  for f in "$@"; do
+    if ! search_re "$pattern" "$f"; then
+      echo "Padrao obrigatorio ausente em $f: $pattern"
+      exit 1
+    fi
+  done
+}
+
 required_files=(
   "VERTICALS/TRADING/TRADING-PRD.md"
   "VERTICALS/TRADING/TRADING-RISK-RULES.md"
@@ -27,8 +39,9 @@ done
 search_re "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "pre_trade_validator" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
-search_re "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
-search_re "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "TradingAgents.*engine primaria de sinal" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md
 search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md
 search_re "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md
