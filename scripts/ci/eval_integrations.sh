@@ -40,6 +40,49 @@ search_absent_re() {
   fi
 }
 
+schema_assert_minimum_contract() {
+  local schema_path="$1"
+  local required_csv="$2"
+  local properties_csv="$3"
+
+  python3 - "$schema_path" "$required_csv" "$properties_csv" <<'PY'
+import json
+import sys
+
+schema_path, required_csv, properties_csv = sys.argv[1:4]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+required = schema.get("required", [])
+properties = schema.get("properties", {})
+
+if not isinstance(required, list):
+    print(f"Schema contract check failed: {schema_path}")
+    print("required MUST be a JSON array.")
+    sys.exit(1)
+
+if not isinstance(properties, dict):
+    print(f"Schema contract check failed: {schema_path}")
+    print("properties MUST be a JSON object.")
+    sys.exit(1)
+
+expected_required = [item for item in required_csv.split(",") if item]
+expected_properties = [item for item in properties_csv.split(",") if item]
+
+missing_required = [item for item in expected_required if item not in required]
+missing_properties = [item for item in expected_properties if item not in properties]
+
+if missing_required or missing_properties:
+    print(f"Schema contract check failed: {schema_path}")
+    if missing_required:
+        print("missing required[] entries: " + ", ".join(missing_required))
+    if missing_properties:
+        print("missing properties entries: " + ", ".join(missing_properties))
+    sys.exit(1)
+PY
+}
+
 required_files=(
   "INTEGRATIONS/README.md"
   "INTEGRATIONS/AI-TRADER.md"
@@ -65,6 +108,26 @@ schema_files=(
 for s in "${schema_files[@]}"; do
   python3 -m json.tool "$s" >/dev/null
 done
+
+schema_assert_minimum_contract \
+  "ARC/schemas/signal_intent.schema.json" \
+  "intent_id,source_engine,symbol,side,confidence,thesis,time_horizon,as_of,trace_id" \
+  "intent_id,source_engine,symbol,side,confidence,thesis,time_horizon,as_of,trace_id"
+
+schema_assert_minimum_contract \
+  "ARC/schemas/order_intent.schema.json" \
+  "order_intent_id,signal_intent_id,symbol,side,order_type,quantity,stage,decision_id,approved_by,approved_at" \
+  "order_intent_id,signal_intent_id,symbol,side,order_type,quantity,stage,decision_id,approved_by,approved_at"
+
+schema_assert_minimum_contract \
+  "ARC/schemas/execution_report.schema.json" \
+  "execution_report_id,order_intent_id,venue,status,filled_qty,avg_price,timestamp,gateway_trace_id" \
+  "execution_report_id,order_intent_id,venue,status,filled_qty,avg_price,timestamp,gateway_trace_id"
+
+schema_assert_minimum_contract \
+  "ARC/schemas/economic_run.schema.json" \
+  "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at" \
+  "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at"
 
 openrouter_rule="OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido."
 search_fixed "$openrouter_rule" README.md PRD/ROADMAP.md PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
