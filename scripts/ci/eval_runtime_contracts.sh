@@ -35,9 +35,29 @@ required_files=(
   "workspaces/main/.openclaw/workspace-state.json"
   "PRD/CHANGELOG.md"
 )
+
+duplicate_required_files="$(printf '%s\n' "${required_files[@]}" | sort | uniq -d || true)"
+if [[ -n "$duplicate_required_files" ]]; then
+  echo "Lista de required_files contem caminhos duplicados:"
+  while IFS= read -r duplicated; do
+    [[ -z "$duplicated" ]] && continue
+    echo " - $duplicated"
+  done <<<"$duplicate_required_files"
+  exit 1
+fi
+
+missing_required_files=()
 for f in "${required_files[@]}"; do
-  [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
+  if [[ ! -f "$f" ]]; then
+    missing_required_files+=("$f")
+  fi
 done
+if (( ${#missing_required_files[@]} > 0 )); then
+  for f in "${missing_required_files[@]}"; do
+    echo "Arquivo obrigatorio ausente: $f"
+  done
+  exit 1
+fi
 
 python3 -m json.tool ARC/schemas/openclaw_runtime_config.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/llm_run.schema.json >/dev/null
