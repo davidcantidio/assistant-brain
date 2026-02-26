@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.20"
+version: "2.21"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F4-03 (coerencia normativa anti-drift e gate)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa cenarios `Red/Green/Refactor` do `EPIC-F4-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` como fonte de verdade para:
+    - regra canonica de OpenRouter por arquivo normativo e bloqueio de frases proibidas;
+    - matriz de compatibilidade upstream e pipeline anti-bypass exigidos sem drift;
+    - consolidacao de evidencia unica de fase com decisao formal `promote|hold`.
+  - endurece `scripts/ci/eval_integrations.sh` com validacoes anti-drift por arquivo:
+    - adiciona helpers `search_re_each_file` e `search_fixed_each_file`;
+    - exige frase canonica OpenRouter em cada arquivo normativo alvo;
+    - exige pipeline oficial e regra anti-bypass em `VERTICALS/TRADING/TRADING-PRD.md` e `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f4/epic-f4-03-issue-01-openrouter-canonical-rule.md`
+    - `artifacts/phase-f4/epic-f4-03-issue-02-upstream-matrix-anti-bypass.md`
+    - `artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md`
+    - `artifacts/phase-f4/epic-f4-03-coerencia-normativa-gate.md`
+    - `artifacts/phase-f4/validation-summary.md`
+  - atualiza status do `EPIC-F4-03` para `done` em `PM/PHASES/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md`.
+- Migracao:
+  - executar `make eval-integrations` em alteracoes que toquem `INTEGRATIONS/*`, docs normativos de OpenRouter, docs de trading ou `scripts/ci/eval_integrations.sh`.
+  - tratar ausencia por arquivo de regra canonica OpenRouter, pipeline oficial ou regra anti-bypass como bloqueante de promote da fase `F4`.
 
 ### 2026-02-26 - Execucao do EPIC-F4-02 (contratos e schemas de integracao)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.

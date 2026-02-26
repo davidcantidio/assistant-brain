@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -67,6 +67,19 @@ Como operador, quero artifact unico da fase para decidir promocao sem lacunas de
   - status de `make eval-integrations`;
   - status dos epicos `EPIC-F4-01..EPIC-F4-03`;
   - decisao de fase (`promote|hold`) e justificativa.
+
+## Resultado desta Rodada
+- `make eval-integrations` final: `PASS` (`eval-integrations: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f4/epic-f4-03-issue-01-openrouter-canonical-rule.md`;
+  - `artifacts/phase-f4/epic-f4-03-issue-02-upstream-matrix-anti-bypass.md`;
+  - `artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f4/epic-f4-03-coerencia-normativa-gate.md`.
+- evidencia consolidada da fase:
+  - `artifacts/phase-f4/validation-summary.md`.
+- conclusao: `EPIC-F4-03` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [README](../../../README.md)
