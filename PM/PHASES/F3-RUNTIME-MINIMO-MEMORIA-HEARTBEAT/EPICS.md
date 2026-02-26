@@ -26,7 +26,7 @@ Criterio objetivo:
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
 | `EPIC-F3-01` | Contrato de runtime minimo | validar arquivos obrigatorios, schema e contrato canonicos do runtime | done | [EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md](./EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md) |
-| `EPIC-F3-02` | Memoria diaria com contrato minimo | validar estrutura e qualidade semantica minima das notas diarias de memoria | planned | [EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md](./EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md) |
+| `EPIC-F3-02` | Memoria diaria com contrato minimo | validar estrutura e qualidade semantica minima das notas diarias de memoria | done | [EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md](./EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md) |
 | `EPIC-F3-03` | Heartbeat, timezone e operacao | validar baseline de heartbeat, timezone canonico e coerencia de regras criticas | planned | [EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md](./EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md) |
 
 ## Escopo Desta Entrega

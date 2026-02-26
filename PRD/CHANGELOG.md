@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.16"
+version: "2.17"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,25 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F3-02 (memoria diaria com contrato minimo)
+- RFCs afetadas: RFC-001, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - executa cenarios `Red/Green/Refactor` para validar contrato minimo de memoria diaria no gate `make eval-runtime`, cobrindo:
+    - presenca canonica de `workspaces/main/MEMORY.md`;
+    - presenca de nota diaria em `workspaces/main/memory/YYYY-MM-DD.md`;
+    - header canonico `# YYYY-MM-DD`;
+    - secoes obrigatorias `Key Events`, `Decisions Made`, `Facts Extracted`;
+    - bullet minimo por secao obrigatoria.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f3/epic-f3-02-issue-01-memory-daily-files.md`
+    - `artifacts/phase-f3/epic-f3-02-issue-02-daily-header-sections.md`
+    - `artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md`
+    - `artifacts/phase-f3/epic-f3-02-memory-contract.md`
+  - atualiza status do `EPIC-F3-02` para `done` em `PM/PHASES/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md`.
+- Migracao:
+  - manter o contrato minimo atual de nota diaria (existencia de ao menos uma nota `YYYY-MM-DD.md` valida), sem endurecer para obrigatoriedade de "nota do dia".
+  - executar `make eval-runtime` em alteracoes que toquem memoria operacional, daily notes, heartbeat ou contrato de runtime.
 
 ### 2026-02-26 - Execucao do EPIC-F3-01 (contrato de runtime minimo)
 - RFCs afetadas: RFC-001, RFC-030, RFC-040, RFC-050.
