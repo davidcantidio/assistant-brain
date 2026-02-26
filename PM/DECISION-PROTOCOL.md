@@ -136,6 +136,7 @@ challenge_expires_at: "ISO-8601|null"
   - Telegram e canal primario para comandos criticos.
   - indisponibilidade de Telegram por > 2 heartbeats permite fallback em Slack com os mesmos controles de autenticacao, challenge e auditoria.
   - fallback Slack para trading live so e permitido quando operador habilitado tiver `slack_user_ids` e `slack_channel_ids` nao vazios.
+  - fallback Slack acionado MUST abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` ate restauracao do canal primario.
 
 ## Regra de Confianca de Canal
 - email e canal de informacao/triagem, nunca canal confiavel para comando.

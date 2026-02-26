@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.25"
+version: "2.26"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,27 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-05 (fallback HITL Slack seguro + restauracao Telegram)
+- RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-05` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R18`, `B1-R19`) como fonte de verdade para reforcar:
+    - fallback HITL Slack com controles equivalentes (assinatura HMAC + anti-replay + challenge);
+    - abertura obrigatoria de incidente/task `RESTORE_TELEGRAM_CHANNEL` quando fallback Slack for acionado por degradacao de Telegram.
+  - atualiza allowlist de acoes:
+    - adiciona `restore_telegram_channel` em `SEC/allowlists/ACTIONS.yaml` com policy `decision_and_hitl_required`.
+  - endurece validacoes executaveis em:
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/eval_runtime_contracts.sh`.
+  - alinha runbooks/protocolo:
+    - `PM/DECISION-PROTOCOL.md`
+    - `ARC/ARC-DEGRADED-MODE.md`
+    - `INCIDENTS/DEGRADED-MODE-PROCEDURE.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-03-issue-05-slack-fallback-hmac-restore-telegram.md`.
+- Migracao:
+  - fallback Slack sem HMAC/anti-replay/challenge MUST bloquear `ci-security`.
+  - ausencia da task `RESTORE_TELEGRAM_CHANNEL` em contingencia de canal MUST bloquear `eval-runtime`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-04 (A2A cross-workspace + Slack event normalizado)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.

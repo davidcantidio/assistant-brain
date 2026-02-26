@@ -76,6 +76,7 @@ Exclui:
     - migrar HITL critico para Slack somente com fallback validado:
       - operador habilitado com `slack_user_ids` e `slack_channel_ids` nao vazios;
       - challenge + assinatura HMAC + anti-replay obrigatorios;
+      - abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` ate retorno do canal Telegram;
     - manter trilha de `command_id` idempotente por canal;
   - criar `task` e `decision` de correcao no retorno do sistema.
 

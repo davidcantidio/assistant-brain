@@ -24,3 +24,5 @@ actions:
     policy: "decision_required"
   - action: "trading_api_key_rotate"
     policy: "decision_required"
+  - action: "restore_telegram_channel"
+    policy: "decision_and_hitl_required"

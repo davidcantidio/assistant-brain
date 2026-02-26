@@ -63,11 +63,36 @@ search_re "email.*canal nao confiavel para comando|nunca canal confiavel de coma
 search_re "UNTRUSTED_COMMAND_SOURCE" PM/DECISION-PROTOCOL.md
 search_re "MUST exigir challenge valido de uso unico" PM/DECISION-PROTOCOL.md
 search_re "comandos criticos MUST incluir challenge valido" SEC/SEC-POLICY.md
+search_re "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md SEC/SEC-POLICY.md
+search_re "RESTORE_TELEGRAM_CHANNEL" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re 'action: "restore_telegram_channel"' SEC/allowlists/ACTIONS.yaml
 search_re "approval queue para acao sensivel" PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md
 search_re "trust ladder|concessao gradual de permissoes" PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md
 search_re "email nao confiavel para comando" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "lifecycle de challenge HITL completo" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "aprovacao humana explicita em side effect financeiro" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+
+python3 - <<'PY'
+import re
+import sys
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+text = Path("SEC/allowlists/ACTIONS.yaml").read_text(encoding="utf-8")
+if not re.search(
+    r'- action:\s*"restore_telegram_channel"\s*\n\s*policy:\s*"decision_and_hitl_required"',
+    text,
+):
+    fail(
+        "ACTIONS.yaml sem politica obrigatoria para restore_telegram_channel "
+        "(esperado decision_and_hitl_required)."
+    )
+PY
 
 python3 - <<'PY'
 import re
