@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F4-EPICS.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -26,7 +26,7 @@ Criterio objetivo:
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
 | `EPIC-F4-01` | Pacote INTEGRATIONS baseline | validar pacote documental obrigatorio de integracoes e regras mandatarias por integracao | done | [EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md](./EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md) |
-| `EPIC-F4-02` | Contratos e schemas de integracao | validar contratos versionados e coerencia de campos minimos obrigatorios | planned | [EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md](./EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md) |
+| `EPIC-F4-02` | Contratos e schemas de integracao | validar contratos versionados e coerencia de campos minimos obrigatorios | done | [EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md](./EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md) |
 | `EPIC-F4-03` | Coerencia normativa e gate | validar anti-drift documental, compatibilidade upstream e pacote de evidencia da fase | planned | [EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md](./EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md) |
 
 ## Escopo Desta Entrega

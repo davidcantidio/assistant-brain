@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -67,6 +67,16 @@ Como operador, quero validar compatibilidade dual de interface no runtime e tril
   - status de presenca/validade dos schemas obrigatorios;
   - status de campos minimos dos contratos;
   - resultado final de `make eval-integrations`.
+
+## Resultado desta Rodada
+- `make eval-integrations` final: `PASS` (`eval-integrations: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f4/epic-f4-02-issue-01-schema-presence-json-valid.md`;
+  - `artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md`;
+  - `artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f4/epic-f4-02-schema-validation.md`.
+- conclusao: `EPIC-F4-02` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
 - [Signal Intent Schema](../../../ARC/schemas/signal_intent.schema.json)

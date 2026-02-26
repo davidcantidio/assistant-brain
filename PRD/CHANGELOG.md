@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.19"
+version: "2.20"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,27 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F4-02 (contratos e schemas de integracao)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa cenarios `Red/Green/Refactor` do `EPIC-F4-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` como fonte de verdade para:
+    - presenca e JSON valido dos schemas obrigatorios em `ARC/schemas/`;
+    - campos minimos obrigatorios em `signal_intent`, `order_intent`, `execution_report` e `economic_run`;
+    - contrato dual de runtime (`gateway.control_plane.ws` canonico + trilha `chatCompletions.enabled`) e shape de `provider_path`.
+  - endurece `scripts/ci/eval_integrations.sh` com validacoes estruturais de contrato:
+    - enforcement de `required[]` + `properties` minimos para os quatro contratos versionados;
+    - enforcement da estrutura dual de `openclaw_runtime_config` sem tornar `gateway.http` obrigatorio global;
+    - enforcement de `provider_path` como array nao vazio de strings nao vazias.
+  - publica evidencias por issue e consolidado:
+    - `artifacts/phase-f4/epic-f4-02-issue-01-schema-presence-json-valid.md`
+    - `artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md`
+    - `artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md`
+    - `artifacts/phase-f4/epic-f4-02-schema-validation.md`
+  - atualiza status do `EPIC-F4-02` para `done` em `PM/PHASES/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md`.
+- Migracao:
+  - executar `make eval-integrations` em alteracoes que toquem `ARC/schemas/*` de integracao, `INTEGRATIONS/*` ou `scripts/ci/eval_integrations.sh`.
+  - tratar qualquer regressao de required minimo, runtime dual ou shape de `provider_path` como bloqueante de promote na fase `F4`.
 
 ### 2026-02-26 - Execucao do EPIC-F4-01 (pacote INTEGRATIONS baseline)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
