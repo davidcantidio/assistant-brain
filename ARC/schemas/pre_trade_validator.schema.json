@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/pre_trade_validator.schema.json",
+  "title": "pre_trade_validator",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "asset_profile_version",
+    "capital_ramp_level",
+    "symbol",
+    "symbol_constraints",
+    "order_intent",
+    "market_state",
+    "validator_status",
+    "block_reasons",
+    "normalized_order",
+    "effective_risk_quote"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "asset_profile_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capital_ramp_level": {
+      "type": "string",
+      "minLength": 1
+    },
+    "symbol": {
+      "type": "string",
+      "minLength": 1
+    },
+    "symbol_constraints": {
+      "type": "object",
+      "required": ["min_notional", "lot_size", "tick_size"],
+      "properties": {
+        "min_notional": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "lot_size": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "tick_size": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "order_intent": {
+      "type": "object",
+      "required": ["symbol", "side", "order_type", "quantity"],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "side": {
+          "type": "string",
+          "enum": ["buy", "sell"]
+        },
+        "order_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "market_state": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "validator_status": {
+      "type": "string",
+      "enum": ["PASS", "BLOCK"]
+    },
+    "block_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "normalized_order": {
+      "type": "object",
+      "required": ["symbol", "quantity"],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "effective_risk_quote": {
+      "type": "object",
+      "required": ["safe_notional"],
+      "properties": {
+        "safe_notional": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

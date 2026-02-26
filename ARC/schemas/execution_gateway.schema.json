@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/execution_gateway.schema.json",
+  "title": "execution_gateway",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "order_intent_id",
+    "idempotency_key",
+    "asset_class",
+    "symbol",
+    "side",
+    "order_type",
+    "quantity",
+    "stop_price",
+    "risk_tier",
+    "decision_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "order_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "symbol": {
+      "type": "string",
+      "minLength": 1
+    },
+    "side": {
+      "type": "string",
+      "enum": ["buy", "sell"]
+    },
+    "order_type": {
+      "type": "string",
+      "enum": ["market", "limit", "stop", "stop_limit"]
+    },
+    "quantity": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "stop_price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "risk_tier": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "venue_order_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["accepted", "partially_filled", "filled", "rejected", "canceled", "failed"]
+    },
+    "filled_quantity": {
+      "type": "number",
+      "minimum": 0
+    },
+    "avg_fill_price": {
+      "type": "number",
+      "minimum": 0
+    },
+    "reject_reason": {
+      "type": ["string", "null"]
+    },
+    "position_snapshot_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

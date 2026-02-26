@@ -134,6 +134,8 @@ Exclui:
   - entrada obrigatoria:
     - `asset_profile_version`
     - `capital_ramp_level`
+    - `symbol`
+    - `symbol_constraints` (`min_notional`, `lot_size`, `tick_size`)
     - `order_intent`
     - `market_state`
   - saida obrigatoria:

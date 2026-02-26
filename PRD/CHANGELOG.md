@@ -29,6 +29,27 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-02-01 (pre_trade_validator por simbolo + contratos versionados)
+- RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-02-01` do `EPIC-F5-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-05`, `B1-10`) como fonte de verdade para reforcar:
+    - contratos versionados dedicados para `execution_gateway` e `pre_trade_validator`;
+    - validacao explicita por simbolo no contrato de pre-trade.
+  - adiciona schemas dedicados em `ARC/schemas/`:
+    - `execution_gateway.schema.json`
+    - `pre_trade_validator.schema.json`
+  - endurece `scripts/ci/eval_trading.sh` com validacoes estruturais:
+    - presenca e JSON valido dos novos schemas;
+    - enforcement de `schema_version` + `contract_version`;
+    - enforcement de campos minimos obrigatorios dos contratos;
+    - enforcement textual do contrato v1 e de `symbol_constraints` no `TRADING-PRD`.
+  - atualiza `VERTICALS/TRADING/TRADING-PRD.md` para explicitar `symbol` e `symbol_constraints` na entrada obrigatoria de `pre_trade_validator`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-02-issue-01-validator-contracts.md`.
+- Migracao:
+  - alteracoes em contratos de gateway/validator MUST preservar `schema_version=1.0` e `contract_version=v1`.
+  - qualquer regressao de campos minimos obrigatorios dos contratos MUST bloquear `make eval-trading`.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-01-04 (modo permitido explicito por integracao sem ambiguidade)
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-050, RFC-060.
 - Impacto:

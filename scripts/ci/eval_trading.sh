@@ -26,20 +26,136 @@ search_re_each_file() {
   done
 }
 
+schema_assert_minimum_contract() {
+  local schema_path="$1"
+  local required_csv="$2"
+  local properties_csv="$3"
+
+  python3 - "$schema_path" "$required_csv" "$properties_csv" <<'PY'
+import json
+import sys
+
+schema_path, required_csv, properties_csv = sys.argv[1:4]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+required = schema.get("required", [])
+properties = schema.get("properties", {})
+
+if not isinstance(required, list):
+    print(f"Schema contract check failed: {schema_path}")
+    print("required MUST be a JSON array.")
+    sys.exit(1)
+
+if not isinstance(properties, dict):
+    print(f"Schema contract check failed: {schema_path}")
+    print("properties MUST be a JSON object.")
+    sys.exit(1)
+
+expected_required = [item for item in required_csv.split(",") if item]
+expected_properties = [item for item in properties_csv.split(",") if item]
+
+missing_required = [item for item in expected_required if item not in required]
+missing_properties = [item for item in expected_properties if item not in properties]
+
+if missing_required or missing_properties:
+    print(f"Schema contract check failed: {schema_path}")
+    if missing_required:
+        print("missing required[] entries: " + ", ".join(missing_required))
+    if missing_properties:
+        print("missing properties entries: " + ", ".join(missing_properties))
+    sys.exit(1)
+PY
+}
+
+schema_assert_versioned_contract() {
+  local schema_path="$1"
+
+  python3 - "$schema_path" <<'PY'
+import json
+import sys
+
+schema_path = sys.argv[1]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+def fail(msg):
+    print(f"Schema version contract check failed: {schema_path}")
+    print(msg)
+    sys.exit(1)
+
+required = schema.get("required", [])
+if not isinstance(required, list):
+    fail("required MUST be a JSON array.")
+
+for field in ("schema_version", "contract_version"):
+    if field not in required:
+        fail(f"required MUST include '{field}'.")
+
+properties = schema.get("properties", {})
+if not isinstance(properties, dict):
+    fail("properties MUST be a JSON object.")
+
+schema_version = properties.get("schema_version")
+if not isinstance(schema_version, dict):
+    fail("properties.schema_version MUST exist.")
+if schema_version.get("type") != "string":
+    fail("properties.schema_version.type MUST be 'string'.")
+if schema_version.get("const") != "1.0":
+    fail("properties.schema_version.const MUST be '1.0'.")
+
+contract_version = properties.get("contract_version")
+if not isinstance(contract_version, dict):
+    fail("properties.contract_version MUST exist.")
+if contract_version.get("type") != "string":
+    fail("properties.contract_version.type MUST be 'string'.")
+if contract_version.get("const") != "v1":
+    fail("properties.contract_version.const MUST be 'v1'.")
+PY
+}
+
 required_files=(
   "VERTICALS/TRADING/TRADING-PRD.md"
   "VERTICALS/TRADING/TRADING-RISK-RULES.md"
   "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md"
   "SEC/allowlists/ACTIONS.yaml"
   "SEC/allowlists/DOMAINS.yaml"
+  "ARC/schemas/execution_gateway.schema.json"
+  "ARC/schemas/pre_trade_validator.schema.json"
 )
 for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
 done
 
+schema_files=(
+  "ARC/schemas/execution_gateway.schema.json"
+  "ARC/schemas/pre_trade_validator.schema.json"
+)
+for s in "${schema_files[@]}"; do
+  python3 -m json.tool "$s" >/dev/null
+done
+
+schema_assert_versioned_contract "ARC/schemas/execution_gateway.schema.json"
+schema_assert_versioned_contract "ARC/schemas/pre_trade_validator.schema.json"
+
+schema_assert_minimum_contract \
+  "ARC/schemas/execution_gateway.schema.json" \
+  "schema_version,contract_version,order_intent_id,idempotency_key,asset_class,symbol,side,order_type,quantity,stop_price,risk_tier,decision_id" \
+  "schema_version,contract_version,order_intent_id,idempotency_key,asset_class,symbol,side,order_type,quantity,price,stop_price,risk_tier,decision_id,execution_id,venue_order_id,status,filled_quantity,avg_fill_price,reject_reason,position_snapshot_ref"
+
+schema_assert_minimum_contract \
+  "ARC/schemas/pre_trade_validator.schema.json" \
+  "schema_version,contract_version,asset_profile_version,capital_ramp_level,symbol,symbol_constraints,order_intent,market_state,validator_status,block_reasons,normalized_order,effective_risk_quote" \
+  "schema_version,contract_version,asset_profile_version,capital_ramp_level,symbol,symbol_constraints,order_intent,market_state,validator_status,block_reasons,normalized_order,effective_risk_quote"
+
 search_re "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re "pre_trade_validator" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re 'execution_gateway` \(v1 minimo\)' VERTICALS/TRADING/TRADING-PRD.md
+search_re 'pre_trade_validator` \(v1 minimo\)' VERTICALS/TRADING/TRADING-PRD.md
+search_re 'symbol_constraints' VERTICALS/TRADING/TRADING-PRD.md
 search_re_each_file "TradingAgents.*engine primaria de sinal" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
