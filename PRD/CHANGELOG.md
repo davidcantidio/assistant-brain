@@ -29,6 +29,28 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-02-02 (idempotencia client_order_id + reconciliacao de falha parcial)
+- RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-02-02` do `EPIC-F5-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-06`) como fonte de verdade para reforcar:
+    - idempotencia forte de ordem via `client_order_id` + `idempotency_key`;
+    - replay tratado como `no-op` auditavel;
+    - reconciliacao de falha parcial com estado final consistente e auditavel.
+  - estende `ARC/schemas/execution_gateway.schema.json` com:
+    - `client_order_id` obrigatorio;
+    - metadados de trilha de replay/reconciliacao (`replay_disposition`, `reconciliation_status`, `reconciliation_trace_id`).
+  - endurece `scripts/ci/eval_trading.sh` para exigir:
+    - `client_order_id` como campo obrigatorio do contrato de gateway;
+    - regras explicitas de replay e reconciliacao nos docs normativos de trading.
+  - atualiza docs de trading:
+    - `VERTICALS/TRADING/TRADING-PRD.md`
+    - `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-02-issue-02-idempotency-reconciliation.md`.
+- Migracao:
+  - qualquer alteracao no contrato de execucao de ordem MUST preservar `client_order_id` e `idempotency_key` como requisitos obrigatorios.
+  - replay sem comportamento `no-op` auditavel ou reconciliacao sem estado final consistente MUST bloquear `make eval-trading`.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-02-01 (pre_trade_validator por simbolo + contratos versionados)
 - RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.
 - Impacto:

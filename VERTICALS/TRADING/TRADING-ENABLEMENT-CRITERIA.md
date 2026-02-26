@@ -78,6 +78,8 @@ Exclui:
   - kill switch;
   - stop diario e drawdown guard;
   - idempotencia de envio de ordem/replay de evento.
+  - replay de `client_order_id` + `idempotency_key` tratado como `no-op` auditavel.
+  - reconciliacao de falha parcial com estado final consistente e auditavel.
 - artifacts obrigatorios:
   - `artifacts/evals/trading/summary.json`
   - `artifacts/evals/trading/failures.jsonl`

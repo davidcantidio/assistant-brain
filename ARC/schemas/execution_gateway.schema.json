@@ -7,6 +7,7 @@
     "schema_version",
     "contract_version",
     "order_intent_id",
+    "client_order_id",
     "idempotency_key",
     "asset_class",
     "symbol",
@@ -27,6 +28,10 @@
       "const": "v1"
     },
     "order_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "client_order_id": {
       "type": "string",
       "minLength": 1
     },
@@ -92,6 +97,18 @@
     },
     "reject_reason": {
       "type": ["string", "null"]
+    },
+    "replay_disposition": {
+      "type": "string",
+      "enum": ["no_op"]
+    },
+    "reconciliation_status": {
+      "type": "string",
+      "enum": ["consistent", "requires_manual_review"]
+    },
+    "reconciliation_trace_id": {
+      "type": "string",
+      "minLength": 1
     },
     "position_snapshot_ref": {
       "type": "string",

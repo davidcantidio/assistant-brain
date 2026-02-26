@@ -142,8 +142,8 @@ schema_assert_versioned_contract "ARC/schemas/pre_trade_validator.schema.json"
 
 schema_assert_minimum_contract \
   "ARC/schemas/execution_gateway.schema.json" \
-  "schema_version,contract_version,order_intent_id,idempotency_key,asset_class,symbol,side,order_type,quantity,stop_price,risk_tier,decision_id" \
-  "schema_version,contract_version,order_intent_id,idempotency_key,asset_class,symbol,side,order_type,quantity,price,stop_price,risk_tier,decision_id,execution_id,venue_order_id,status,filled_quantity,avg_fill_price,reject_reason,position_snapshot_ref"
+  "schema_version,contract_version,order_intent_id,client_order_id,idempotency_key,asset_class,symbol,side,order_type,quantity,stop_price,risk_tier,decision_id" \
+  "schema_version,contract_version,order_intent_id,client_order_id,idempotency_key,asset_class,symbol,side,order_type,quantity,price,stop_price,risk_tier,decision_id,execution_id,venue_order_id,status,filled_quantity,avg_fill_price,reject_reason,replay_disposition,reconciliation_status,reconciliation_trace_id,position_snapshot_ref"
 
 schema_assert_minimum_contract \
   "ARC/schemas/pre_trade_validator.schema.json" \
@@ -156,6 +156,9 @@ search_re "pre_trade_validator" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADI
 search_re 'execution_gateway` \(v1 minimo\)' VERTICALS/TRADING/TRADING-PRD.md
 search_re 'pre_trade_validator` \(v1 minimo\)' VERTICALS/TRADING/TRADING-PRD.md
 search_re 'symbol_constraints' VERTICALS/TRADING/TRADING-PRD.md
+search_re_each_file "client_order_id" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "replay.*client_order_id.*idempotency_key.*no-op.*auditavel" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "falha parcial.*estado final consistente.*auditavel" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "TradingAgents.*engine primaria de sinal" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md

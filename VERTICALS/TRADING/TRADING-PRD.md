@@ -112,6 +112,7 @@ Exclui:
 - `execution_gateway` (v1 minimo):
   - entrada obrigatoria:
     - `order_intent_id`
+    - `client_order_id`
     - `idempotency_key`
     - `asset_class`
     - `symbol`
@@ -145,6 +146,8 @@ Exclui:
     - `effective_risk_quote`
 - regra:
   - alteracao de contrato MUST incrementar versao e passar em `eval-trading`.
+  - replay do mesmo `client_order_id` + `idempotency_key` MUST ser tratado como `no-op` auditavel.
+  - falha parcial de execucao MUST passar por reconciliacao com estado final consistente e auditavel.
 
 ## Auditoria Obrigatoria
 - ordem, tamanho, stop, resultado e motivo da entrada/saida.
