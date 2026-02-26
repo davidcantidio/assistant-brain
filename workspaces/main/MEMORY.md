@@ -13,6 +13,7 @@
 - Email nunca e canal de comando confiavel.
 - Toda acao com side effect financeiro exige aprovacao humana explicita.
 - Em duvida sobre risco/canal, bloquear e pedir confirmacao no canal confiavel.
+- Ciclo noturno de memoria MUST registrar `daily_note_ref` e `incident_ref` quando houver falha/atraso >24h.
 
 ## Active Priorities
 - Mission Control com OpenClaw gateway-first.

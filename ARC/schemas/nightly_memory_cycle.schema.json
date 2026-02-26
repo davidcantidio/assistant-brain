@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/nightly_memory_cycle.schema.json",
+  "title": "nightly_memory_cycle",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "job_name",
+    "scheduled_at",
+    "executed_at",
+    "timezone",
+    "daily_note_ref",
+    "status",
+    "delay_minutes",
+    "incident_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "contract_version": {
+      "type": "string",
+      "pattern": "^v\\d+$"
+    },
+    "job_name": {
+      "type": "string",
+      "const": "nightly-extraction"
+    },
+    "scheduled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timezone": {
+      "type": "string",
+      "const": "America/Sao_Paulo"
+    },
+    "daily_note_ref": {
+      "type": "string",
+      "pattern": "^workspaces/main/memory/\\d{4}-\\d{2}-\\d{2}\\.md$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "failed", "delayed", "skipped"]
+    },
+    "delay_minutes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "incident_ref": {
+      "type": ["string", "null"],
+      "minLength": 2
+    }
+  },
+  "additionalProperties": false
+}

@@ -37,6 +37,14 @@ Exclui:
 - Standup diario: 11:30 no fuso -03 (America/Sao_Paulo).
 - Nightly extraction de memoria: 23:00 no fuso -03 (America/Sao_Paulo).
 
+## Contrato Auditavel do Ciclo Noturno
+- job_name: "nightly-extraction"
+- scheduled_at: timestamp ISO-8601 da agenda da execucao.
+- executed_at: timestamp ISO-8601 do inicio efetivo da execucao.
+- daily_note_ref: arquivo diario atualizado em `workspaces/main/memory/YYYY-MM-DD.md`.
+- status: `success|failed|delayed|skipped`.
+- incident_ref: obrigatorio quando `status=failed` ou atraso maior que 24h.
+
 ## Algoritmo de Heartbeat
 1. carregar contexto minimo (`working.md`, tasks abertas, mentions pendentes).
 2. verificar prioridade/SLA e bloqueios.

@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.22"
+version: "2.23"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-02 (cron proativo e memoria noturna com trilha auditavel)
+- RFCs afetadas: RFC-001, RFC-030, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-02` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R11`, `B1-R12`) como fonte de verdade para reforcar:
+    - contrato versionado para ciclo noturno de memoria (`nightly-extraction`);
+    - trilha minima por execucao (`scheduled_at`, `executed_at`, `daily_note_ref`, `status`);
+    - exigencia de `incident_ref` quando houver falha ou atraso maior que 24h.
+  - adiciona schema dedicado:
+    - `ARC/schemas/nightly_memory_cycle.schema.json`.
+  - endurece `scripts/ci/eval_runtime_contracts.sh` para exigir:
+    - campos minimos do contrato noturno e validacoes `valid/invalid`;
+    - bloqueio para caso de falha/atraso >24h sem incidente.
+  - atualiza contratos normativos:
+    - `PRD/PRD-MASTER.md`
+    - `ARC/ARC-HEARTBEAT.md`
+    - `workspaces/main/MEMORY.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-03-issue-02-nightly-cron-memory-audit-trail.md`.
+- Migracao:
+  - qualquer alteracao no ciclo noturno MUST preservar `job_name=nightly-extraction` e timezone `America/Sao_Paulo`.
+  - falha/atraso >24h sem `incident_ref` MUST bloquear `make eval-runtime`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-01 (autonomia de jobs longos com sessao isolada e restart controlado)
 - RFCs afetadas: RFC-001, RFC-030, RFC-050.

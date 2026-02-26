@@ -434,12 +434,21 @@ nightly_extraction:
 semantic_backend:
   backend: "qmd"
   update_interval: "5m"
+nightly_cycle_audit:
+  job_name: "nightly-extraction"
+  scheduled_at: "ISO-8601"
+  executed_at: "ISO-8601"
+  timezone: "America/Sao_Paulo"
+  daily_note_ref: "workspaces/main/memory/YYYY-MM-DD.md"
+  status: "success|failed|delayed|skipped"
+  incident_ref: "INC-XXX|null"
 ```
 
 Regras mandatarias:
 - `MEMORY.md` MUST existir e registrar padroes operacionais duraveis.
 - notas diarias MUST ser atualizadas por ciclo noturno com decisoes, mudancas de status e fatos duraveis.
 - extracao noturna sem sucesso por 24h MUST abrir incident operacional.
+- cada execucao do ciclo noturno MUST registrar `scheduled_at`, `executed_at`, `daily_note_ref`, `status` e `incident_ref` quando houver falha/atraso >24h.
 
 ### Contrato `ops_autonomy_contract`
 ```yaml

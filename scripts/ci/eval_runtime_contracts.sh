@@ -20,6 +20,7 @@ required_files=(
   "ARC/ARC-CORE.md"
   "ARC/schemas/openclaw_runtime_config.schema.json"
   "ARC/schemas/ops_autonomy_contract.schema.json"
+  "ARC/schemas/nightly_memory_cycle.schema.json"
   "ARC/schemas/llm_run.schema.json"
   "ARC/schemas/router_decision.schema.json"
   "ARC/schemas/credits_snapshot.schema.json"
@@ -62,6 +63,7 @@ fi
 
 python3 -m json.tool ARC/schemas/openclaw_runtime_config.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/ops_autonomy_contract.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/nightly_memory_cycle.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/llm_run.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/router_decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/credits_snapshot.schema.json >/dev/null
@@ -314,6 +316,122 @@ expect_invalid(invalid_contract, required, "invalid_ops_autonomy_contract_stalle
 invalid_contract_missing_restart = deepcopy(valid_contract)
 invalid_contract_missing_restart.pop("restart_policy")
 expect_invalid(invalid_contract_missing_restart, required, "invalid_ops_autonomy_contract_missing_restart_policy")
+PY
+
+python3 - <<'PY'
+import datetime as dt
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def parse_iso8601(value: str, field: str) -> None:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} deve ser string ISO-8601.")
+    try:
+        dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"{field} invalido: {exc}") from exc
+
+
+def validate_contract(payload: dict, required_fields: set[str], label: str) -> None:
+    missing = sorted([f for f in required_fields if f not in payload])
+    if missing:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing}")
+
+    if payload.get("schema_version") != "1.0":
+        raise ValueError(f"{label} com schema_version invalido.")
+    if payload.get("contract_version") != "v1":
+        raise ValueError(f"{label} com contract_version invalido.")
+    if payload.get("job_name") != "nightly-extraction":
+        raise ValueError(f"{label} com job_name invalido.")
+    if payload.get("timezone") != "America/Sao_Paulo":
+        raise ValueError(f"{label} com timezone invalido.")
+
+    status = payload.get("status")
+    if status not in {"success", "failed", "delayed", "skipped"}:
+        raise ValueError(f"{label} com status invalido.")
+
+    delay_minutes = payload.get("delay_minutes")
+    if not isinstance(delay_minutes, int) or delay_minutes < 0:
+        raise ValueError(f"{label} com delay_minutes invalido.")
+
+    parse_iso8601(payload.get("scheduled_at"), f"{label}.scheduled_at")
+    parse_iso8601(payload.get("executed_at"), f"{label}.executed_at")
+
+    daily_note_ref = payload.get("daily_note_ref")
+    if not isinstance(daily_note_ref, str) or not daily_note_ref.startswith("workspaces/main/memory/"):
+        raise ValueError(f"{label} com daily_note_ref invalido.")
+    if not daily_note_ref.endswith(".md"):
+        raise ValueError(f"{label} com daily_note_ref invalido.")
+
+    incident_ref = payload.get("incident_ref")
+    if incident_ref is not None and (not isinstance(incident_ref, str) or len(incident_ref.strip()) < 2):
+        raise ValueError(f"{label} com incident_ref invalido.")
+    if status == "failed" or delay_minutes > 1440:
+        if not isinstance(incident_ref, str) or len(incident_ref.strip()) < 2:
+            raise ValueError(f"{label} sem incident_ref obrigatorio para falha/atraso >24h.")
+
+
+def expect_invalid(payload: dict, required_fields: set[str], label: str) -> None:
+    try:
+        validate_contract(payload, required_fields, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+schema = json.loads(Path("ARC/schemas/nightly_memory_cycle.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+required_contract = {
+    "schema_version",
+    "contract_version",
+    "job_name",
+    "scheduled_at",
+    "executed_at",
+    "timezone",
+    "daily_note_ref",
+    "status",
+    "delay_minutes",
+    "incident_ref",
+}
+missing_required = sorted(required_contract - required)
+if missing_required:
+    fail(f"nightly_memory_cycle.schema.json sem required obrigatorio: {missing_required}")
+
+valid_contract = {
+    "schema_version": "1.0",
+    "contract_version": "v1",
+    "job_name": "nightly-extraction",
+    "scheduled_at": "2026-02-26T23:00:00-03:00",
+    "executed_at": "2026-02-26T23:01:00-03:00",
+    "timezone": "America/Sao_Paulo",
+    "daily_note_ref": "workspaces/main/memory/2026-02-26.md",
+    "status": "success",
+    "delay_minutes": 1,
+    "incident_ref": None,
+}
+
+try:
+    validate_contract(valid_contract, required, "valid_nightly_memory_cycle_contract")
+except ValueError as exc:
+    fail(str(exc))
+
+invalid_missing_job_name = deepcopy(valid_contract)
+invalid_missing_job_name.pop("job_name")
+expect_invalid(invalid_missing_job_name, required, "invalid_nightly_memory_cycle_missing_job_name")
+
+invalid_missing_incident = deepcopy(valid_contract)
+invalid_missing_incident["status"] = "failed"
+invalid_missing_incident["delay_minutes"] = 1441
+invalid_missing_incident["incident_ref"] = None
+expect_invalid(invalid_missing_incident, required, "invalid_nightly_memory_cycle_missing_incident_ref")
 PY
 
 python3 - <<'PY'
@@ -881,6 +999,11 @@ search_re 'schedule: "0 23 \* \* \*"' PRD/PRD-MASTER.md
 search_re 'timezone: "America/Sao_Paulo"' PRD/PRD-MASTER.md
 search_re "required: true" PRD/PRD-MASTER.md
 search_re "workspaces/main/MEMORY\.md" PRD/PRD-MASTER.md META/DOCUMENT-HIERARCHY.md
+search_re 'job_name: "nightly-extraction"' PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+search_re "scheduled_at" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+search_re "executed_at" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+search_re "daily_note_ref" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md workspaces/main/MEMORY.md
+search_re "incident_ref" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md workspaces/main/MEMORY.md
 
 # Ops autonomy contract
 search_re 'Contrato `ops_autonomy_contract`' PRD/PRD-MASTER.md
