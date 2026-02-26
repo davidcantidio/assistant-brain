@@ -297,16 +297,16 @@ search_re "override deliberado de timezone.*America/Sao_Paulo" PRD/CHANGELOG.md
 search_re "gateway\\.control_plane\\.ws" PRD/PRD-MASTER.md ARC/ARC-CORE.md INTEGRATIONS/OPENCLAW-UPSTREAM.md
 search_re "chatCompletions" PRD/PRD-MASTER.md ARC/ARC-CORE.md INTEGRATIONS/OPENCLAW-UPSTREAM.md ARC/schemas/openclaw_runtime_config.schema.json
 
-search_re "Matriz de Compatibilidade" INTEGRATIONS/OPENCLAW-UPSTREAM.md
-search_re "control plane WS \\(canonico\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
-search_re "chatCompletions HTTP \\(opcional\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
+search_re_each_file "Matriz de Compatibilidade" INTEGRATIONS/OPENCLAW-UPSTREAM.md
+search_re_each_file "control plane WS \\(canonico\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
+search_re_each_file "chatCompletions HTTP \\(opcional\\)" INTEGRATIONS/OPENCLAW-UPSTREAM.md
 
 search_fixed "MUST operar somente como gerador de \`signal_intent\`." INTEGRATIONS/AI-TRADER.md
 search_fixed "MUST NOT enviar \`order_intent\` diretamente para venue/exchange." INTEGRATIONS/AI-TRADER.md
 search_fixed "qualquer payload que represente ordem direta originada do AI-Trader MUST ser bloqueado e auditado." INTEGRATIONS/AI-TRADER.md
 
-search_re "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
-search_re "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "AI-Trader -> signal_intent -> normalizacao/deduplicacao -> pre_trade_validator -> HITL -> execution_gateway" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "ordem direta originada do AI-Trader MUST ser rejeitado e auditado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 
 search_fixed "modo \`lab_isolated\` e default." INTEGRATIONS/CLAWWORK.md
 search_fixed "modo \`governed\` MUST rotear toda chamada LLM via OpenClaw Gateway." INTEGRATIONS/CLAWWORK.md
