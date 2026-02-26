@@ -95,6 +95,7 @@ Exclui:
 ### no-fallback para sensivel
 - rotas `sensitive` e/ou criticas MAY marcar `no_fallback=true`.
 - se rota falhar sob `no_fallback`, resultado MUST ser `blocked_with_incident`.
+- rotas `sensitive` MUST usar `no_fallback=true` + `pin_provider=true` + `ZDR` obrigatorio.
 
 ## Modo de Alta Confiabilidade para Tool-Calling
 - quando `tools_required=true` e risco >= medio:
@@ -117,6 +118,8 @@ Exclui:
 - `pin_provider`
 - `exacto_mode`
 - `policy_version`
+- `burn_rate_policy` (`max_usd_per_hour` + `circuit_breaker_action`)
+- `privacy_controls` (`retention_profile` + `zdr_enforced`)
 
 ### Regra
 - agente nao escolhe modelo livremente em runtime de producao.

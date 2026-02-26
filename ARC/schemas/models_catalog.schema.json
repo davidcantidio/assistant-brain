@@ -23,7 +23,8 @@
     "sync_interval_seconds",
     "effective_from",
     "updated_at",
-    "updated_by"
+    "updated_by",
+    "catalog_version"
   ],
   "properties": {
     "schema_version": {

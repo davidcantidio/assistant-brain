@@ -8,6 +8,7 @@
     "decision_id",
     "trace_id",
     "task_type",
+    "preset_id",
     "risk_class",
     "risk_tier",
     "data_sensitivity",
@@ -20,6 +21,10 @@
     "fallback_step",
     "fallback_reason",
     "decision_explain",
+    "pin_provider",
+    "no_fallback",
+    "burn_rate_policy",
+    "privacy_controls",
     "created_at"
   ],
   "properties": {
@@ -36,6 +41,10 @@
       "minLength": 2
     },
     "task_type": {
+      "type": "string",
+      "minLength": 2
+    },
+    "preset_id": {
       "type": "string",
       "minLength": 2
     },
@@ -130,8 +139,40 @@
       "type": "string",
       "minLength": 3
     },
+    "pin_provider": {
+      "type": "boolean"
+    },
     "no_fallback": {
       "type": "boolean"
+    },
+    "burn_rate_policy": {
+      "type": "object",
+      "required": ["max_usd_per_hour", "circuit_breaker_action"],
+      "properties": {
+        "max_usd_per_hour": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "circuit_breaker_action": {
+          "type": "string",
+          "enum": ["block_new_runs", "fallback_economic_preset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "privacy_controls": {
+      "type": "object",
+      "required": ["retention_profile", "zdr_enforced"],
+      "properties": {
+        "retention_profile": {
+          "type": "string",
+          "enum": ["standard", "restricted", "zdr_minimal"]
+        },
+        "zdr_enforced": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     },
     "created_at": {
       "type": "string",

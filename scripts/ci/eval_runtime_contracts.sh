@@ -502,6 +502,44 @@ def validate_router_decision(payload: dict, required_fields: set[str], label: st
         value = payload.get(field)
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"{label} com {field} invalido.")
+    preset_id = payload.get("preset_id")
+    if not isinstance(preset_id, str) or len(preset_id.strip()) < 2:
+        raise ValueError(f"{label} com preset_id invalido.")
+
+    pin_provider = payload.get("pin_provider")
+    no_fallback = payload.get("no_fallback")
+    if not isinstance(pin_provider, bool):
+        raise ValueError(f"{label} com pin_provider invalido.")
+    if not isinstance(no_fallback, bool):
+        raise ValueError(f"{label} com no_fallback invalido.")
+
+    burn_rate_policy = payload.get("burn_rate_policy")
+    if not isinstance(burn_rate_policy, dict):
+        raise ValueError(f"{label} com burn_rate_policy invalido.")
+    max_usd = burn_rate_policy.get("max_usd_per_hour")
+    if not isinstance(max_usd, (int, float)) or max_usd <= 0:
+        raise ValueError(f"{label} com burn_rate_policy.max_usd_per_hour invalido.")
+    if burn_rate_policy.get("circuit_breaker_action") not in {"block_new_runs", "fallback_economic_preset"}:
+        raise ValueError(f"{label} com burn_rate_policy.circuit_breaker_action invalido.")
+
+    privacy_controls = payload.get("privacy_controls")
+    if not isinstance(privacy_controls, dict):
+        raise ValueError(f"{label} com privacy_controls invalido.")
+    if privacy_controls.get("retention_profile") not in {"standard", "restricted", "zdr_minimal"}:
+        raise ValueError(f"{label} com privacy_controls.retention_profile invalido.")
+    zdr_enforced = privacy_controls.get("zdr_enforced")
+    if not isinstance(zdr_enforced, bool):
+        raise ValueError(f"{label} com privacy_controls.zdr_enforced invalido.")
+
+    if payload.get("data_sensitivity") == "sensitive":
+        if no_fallback is not True:
+            raise ValueError(f"{label} sensivel sem no_fallback=true.")
+        if pin_provider is not True:
+            raise ValueError(f"{label} sensivel sem pin_provider=true.")
+        if zdr_enforced is not True:
+            raise ValueError(f"{label} sensivel sem ZDR enforced.")
+        if privacy_controls.get("retention_profile") != "zdr_minimal":
+            raise ValueError(f"{label} sensivel sem retention_profile=zdr_minimal.")
 
     parse_iso8601(payload.get("created_at"), f"{label}.created_at")
 
@@ -543,7 +581,20 @@ missing_llm = sorted({"run_id", "requested_model", "effective_model", "effective
 if missing_llm:
     fail(f"llm_run.schema.json sem required obrigatorio: {missing_llm}")
 
-missing_router = sorted({"requested_model", "effective_model", "effective_provider", "decision_explain"} - router_required)
+missing_router = sorted(
+    {
+        "preset_id",
+        "requested_model",
+        "effective_model",
+        "effective_provider",
+        "decision_explain",
+        "pin_provider",
+        "no_fallback",
+        "burn_rate_policy",
+        "privacy_controls",
+    }
+    - router_required
+)
 if missing_router:
     fail(f"router_decision.schema.json sem required obrigatorio: {missing_router}")
 
@@ -588,6 +639,7 @@ valid_router_decision = {
     "decision_id": "ROUTER-001",
     "trace_id": "TRACE-001",
     "task_type": "dev_patch",
+    "preset_id": "preset.dev_patch_v1",
     "risk_class": "medio",
     "risk_tier": "R2",
     "data_sensitivity": "internal",
@@ -609,6 +661,16 @@ valid_router_decision = {
     "fallback_step": 0,
     "fallback_reason": "primary_available",
     "decision_explain": "modelo local atende policy e custo.",
+    "pin_provider": False,
+    "no_fallback": False,
+    "burn_rate_policy": {
+        "max_usd_per_hour": 5.0,
+        "circuit_breaker_action": "fallback_economic_preset",
+    },
+    "privacy_controls": {
+        "retention_profile": "restricted",
+        "zdr_enforced": False,
+    },
     "created_at": "2026-02-26T10:20:00Z"
 }
 
@@ -644,6 +706,14 @@ expect_invalid(validate_llm_run, invalid_llm_run, llm_required, "invalid_llm_run
 invalid_router_decision = deepcopy(valid_router_decision)
 invalid_router_decision.pop("requested_model")
 expect_invalid(validate_router_decision, invalid_router_decision, router_required, "invalid_router_decision")
+
+invalid_sensitive_router = deepcopy(valid_router_decision)
+invalid_sensitive_router["data_sensitivity"] = "sensitive"
+invalid_sensitive_router["pin_provider"] = True
+invalid_sensitive_router["no_fallback"] = True
+invalid_sensitive_router["privacy_controls"]["retention_profile"] = "restricted"
+invalid_sensitive_router["privacy_controls"]["zdr_enforced"] = False
+expect_invalid(validate_router_decision, invalid_sensitive_router, router_required, "invalid_sensitive_router")
 
 invalid_credits_snapshot = deepcopy(valid_credits_snapshot)
 invalid_credits_snapshot.pop("burn_rate_day")

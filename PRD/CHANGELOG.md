@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.23"
+version: "2.24"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-03 (governanca avancada de catalog/router custo e privacidade por preset)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-03` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R08`, `B1-R09`, `B1-R10`, `B1-R13`, `B1-R14`) como fonte de verdade para reforcar:
+    - `preset_id` obrigatorio no contrato `router_decision`;
+    - governanca de custo com `burn_rate_policy` + `circuit_breaker_action`;
+    - governanca de privacidade com `privacy_controls` e coerencia de rota `sensitive` (`no_fallback`, `pin_provider`, `ZDR`).
+  - endurece contratos versionados:
+    - `ARC/schemas/router_decision.schema.json` com requireds de preset/custo/privacidade;
+    - `ARC/schemas/models_catalog.schema.json` com `catalog_version` obrigatorio.
+  - endurece validacoes executaveis:
+    - `scripts/ci/eval_models.sh`;
+    - `scripts/ci/eval_runtime_contracts.sh`.
+  - alinha docs normativos:
+    - `ARC/ARC-MODEL-ROUTING.md`
+    - `SEC/SEC-POLICY.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-03-issue-03-routing-cost-privacy-preset-governance.md`.
+- Migracao:
+  - qualquer alteracao de roteamento em rota `sensitive` MUST preservar `no_fallback=true`, `pin_provider=true` e `ZDR`.
+  - ausencia de `preset_id` no contrato `router_decision` MUST bloquear `make eval-gates`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-02 (cron proativo e memoria noturna com trilha auditavel)
 - RFCs afetadas: RFC-001, RFC-030, RFC-050.

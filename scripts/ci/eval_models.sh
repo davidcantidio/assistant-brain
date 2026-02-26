@@ -80,6 +80,7 @@ def validate_catalog(payload: dict, schema_required: set[str], label: str) -> No
         "catalog_synced_at",
         "sync_source",
         "sync_interval_seconds",
+        "catalog_version",
     }
     missing_contract = sorted([field for field in required_contract if field not in payload])
     if missing_contract:
@@ -154,6 +155,7 @@ expected_required = {
     "catalog_synced_at",
     "sync_source",
     "sync_interval_seconds",
+    "catalog_version",
 }
 
 missing_schema_required = sorted(expected_required - schema_required)
@@ -264,6 +266,9 @@ def validate_router_decision(payload: dict, schema_required: set[str], label: st
     missing_audit = sorted([field for field in required_audit if field not in payload])
     if missing_audit:
         raise ValueError(f"{label} sem trilha requested/effective: {missing_audit}")
+    preset_id = payload.get("preset_id")
+    if not isinstance(preset_id, str) or len(preset_id.strip()) < 2:
+        raise ValueError(f"{label} com preset_id invalido.")
 
     if payload.get("risk_class") not in {"baixo", "medio", "alto"}:
         raise ValueError(f"{label} com risk_class invalido.")
@@ -293,6 +298,41 @@ def validate_router_decision(payload: dict, schema_required: set[str], label: st
     if not isinstance(fallback_reason, str) or not fallback_reason.strip():
         raise ValueError(f"{label} com fallback_reason invalido.")
 
+    pin_provider = payload.get("pin_provider")
+    if not isinstance(pin_provider, bool):
+        raise ValueError(f"{label} com pin_provider invalido.")
+    no_fallback = payload.get("no_fallback")
+    if not isinstance(no_fallback, bool):
+        raise ValueError(f"{label} com no_fallback invalido.")
+
+    burn_rate_policy = payload.get("burn_rate_policy")
+    if not isinstance(burn_rate_policy, dict):
+        raise ValueError(f"{label} com burn_rate_policy invalido.")
+    max_usd_per_hour = burn_rate_policy.get("max_usd_per_hour")
+    if not isinstance(max_usd_per_hour, (int, float)) or max_usd_per_hour <= 0:
+        raise ValueError(f"{label} com burn_rate_policy.max_usd_per_hour invalido.")
+    if burn_rate_policy.get("circuit_breaker_action") not in {"block_new_runs", "fallback_economic_preset"}:
+        raise ValueError(f"{label} com burn_rate_policy.circuit_breaker_action invalido.")
+
+    privacy_controls = payload.get("privacy_controls")
+    if not isinstance(privacy_controls, dict):
+        raise ValueError(f"{label} com privacy_controls invalido.")
+    if privacy_controls.get("retention_profile") not in {"standard", "restricted", "zdr_minimal"}:
+        raise ValueError(f"{label} com privacy_controls.retention_profile invalido.")
+    zdr_enforced = privacy_controls.get("zdr_enforced")
+    if not isinstance(zdr_enforced, bool):
+        raise ValueError(f"{label} com privacy_controls.zdr_enforced invalido.")
+
+    if payload.get("data_sensitivity") == "sensitive":
+        if no_fallback is not True:
+            raise ValueError(f"{label} sensivel sem no_fallback=true.")
+        if pin_provider is not True:
+            raise ValueError(f"{label} sensivel sem pin_provider=true.")
+        if zdr_enforced is not True:
+            raise ValueError(f"{label} sensivel sem ZDR enforced.")
+        if privacy_controls.get("retention_profile") != "zdr_minimal":
+            raise ValueError(f"{label} sensivel sem retention_profile=zdr_minimal.")
+
     parse_iso8601(payload.get("created_at"), f"{label}.created_at")
 
 
@@ -306,7 +346,16 @@ def expect_invalid(payload: dict, schema_required: set[str], label: str) -> None
 
 schema = json.loads(Path("ARC/schemas/router_decision.schema.json").read_text(encoding="utf-8"))
 schema_required = set(schema.get("required", []))
-expected_required = {"requested_model", "effective_model", "effective_provider"}
+expected_required = {
+    "preset_id",
+    "requested_model",
+    "effective_model",
+    "effective_provider",
+    "pin_provider",
+    "no_fallback",
+    "burn_rate_policy",
+    "privacy_controls",
+}
 missing_schema_required = sorted(expected_required - schema_required)
 if missing_schema_required:
     fail(f"router_decision.schema.json sem required obrigatorio: {missing_schema_required}")
@@ -316,6 +365,7 @@ valid_payload = {
     "decision_id": "ROUTER-DEC-001",
     "trace_id": "TRACE-ROUTER-001",
     "task_type": "dev_patch",
+    "preset_id": "preset.dev_patch_v1",
     "risk_class": "medio",
     "risk_tier": "R2",
     "data_sensitivity": "internal",
@@ -344,7 +394,16 @@ valid_payload = {
         }
     ],
     "decision_explain": "capabilities-first com melhor ajuste para task.",
+    "pin_provider": False,
     "no_fallback": False,
+    "burn_rate_policy": {
+        "max_usd_per_hour": 5.0,
+        "circuit_breaker_action": "fallback_economic_preset"
+    },
+    "privacy_controls": {
+        "retention_profile": "restricted",
+        "zdr_enforced": False
+    },
     "created_at": "2026-02-26T10:15:00Z"
 }
 
@@ -364,6 +423,14 @@ expect_invalid(invalid_missing_effective, schema_required, "invalid_missing_effe
 invalid_missing_provider = deepcopy(valid_payload)
 invalid_missing_provider.pop("effective_provider")
 expect_invalid(invalid_missing_provider, schema_required, "invalid_missing_provider")
+
+invalid_sensitive_without_zdr = deepcopy(valid_payload)
+invalid_sensitive_without_zdr["data_sensitivity"] = "sensitive"
+invalid_sensitive_without_zdr["pin_provider"] = True
+invalid_sensitive_without_zdr["no_fallback"] = True
+invalid_sensitive_without_zdr["privacy_controls"]["retention_profile"] = "restricted"
+invalid_sensitive_without_zdr["privacy_controls"]["zdr_enforced"] = False
+expect_invalid(invalid_sensitive_without_zdr, schema_required, "invalid_sensitive_without_zdr")
 PY
 
 required_patterns=(
@@ -394,6 +461,9 @@ search_re "LiteLLM MUST operar como adaptador padrao para supervisores pagos" SE
 search_re "gateway\\.supervisor_adapter.*LiteLLM" PRD/PRD-MASTER.md
 search_re "qwen2\\.5-coder:32b" PRD/PRD-MASTER.md
 search_re "deepseek-r1:32b" PRD/PRD-MASTER.md
+search_re "preset_id" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md
+search_re "burn-rate|circuit breaker" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "sensitive.*no_fallback.*pin_provider.*ZDR|no_fallback.*pin_provider.*ZDR" ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
 search_fixed "OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido." PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md PRD/ROADMAP.md README.md
 search_re 'cloud_adapter_default: "disabled"' SEC/allowlists/PROVIDERS.yaml
 search_re 'cloud_adapter_enablement: "decision_required"' SEC/allowlists/PROVIDERS.yaml

@@ -60,6 +60,7 @@ Exclui:
   - provider allowlist restrita.
   - ZDR REQUIRED quando disponivel por provider/rota.
   - `no_fallback` por default para evitar troca silenciosa de provider.
+  - rotas `sensitive` MUST usar `no_fallback=true` + `pin_provider=true` + `ZDR`.
   - prompt bruto MUST ser bloqueado por default.
 
 ## Allowlists Canonicas
