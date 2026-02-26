@@ -1,9 +1,9 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.15"
+version: "2.16"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-25"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -28,6 +28,42 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do EPIC-F2-03 (catalog/router/memory/budget + A2A/hooks)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050.
+- Impacto:
+  - reforca baseline de `Model Catalog` com metadata minima obrigatoria + sync explicito em `ARC/schemas/models_catalog.schema.json`:
+    - `model_id`, `provider`, `capabilities`, `limits`, `pricing`, `status`;
+    - `catalog_synced_at`, `sync_source`, `sync_interval_seconds`.
+  - adiciona contrato executavel de roteamento auditavel em `ARC/schemas/router_decision.schema.json` com trilha `requested/effective`, policy aplicada e fallback.
+  - adiciona contratos executaveis do memory plane:
+    - `ARC/schemas/llm_run.schema.json`;
+    - `ARC/schemas/credits_snapshot.schema.json`.
+  - adiciona contrato executavel de budget baseline em `ARC/schemas/budget_governor_policy.schema.json` com limites obrigatorios por `run/task/day` e vinculo formal com `credits_snapshots`.
+  - adiciona contratos executaveis de rastreabilidade operacional:
+    - `ARC/schemas/a2a_delegation_event.schema.json`;
+    - `ARC/schemas/webhook_ingest_event.schema.json`.
+  - endurece gates executaveis:
+    - `scripts/ci/eval_models.sh` para cenarios `valid/invalid` de catalog + router;
+    - `scripts/ci/eval_runtime_contracts.sh` para cenarios `valid/invalid` de memory/budget/A2A/hooks.
+  - atualiza contratos normativos em:
+    - `ARC/ARC-MODEL-ROUTING.md`,
+    - `ARC/ARC-CORE.md`,
+    - `PM/DECISION-PROTOCOL.md`,
+    - `CORE/FINANCIAL-GOVERNANCE.md`,
+    - `EVALS/SYSTEM-HEALTH-THRESHOLDS.md`.
+  - fecha status de `EPIC-F2-03` como `done` em `PM/PHASES/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md`.
+  - publica artifacts por issue e artifact consolidado:
+    - `artifacts/phase-f2/epic-f2-03-issue-01-model-catalog.md`
+    - `artifacts/phase-f2/epic-f2-03-issue-02-model-router.md`
+    - `artifacts/phase-f2/epic-f2-03-issue-03-memory-plane.md`
+    - `artifacts/phase-f2/epic-f2-03-issue-04-budget-governor.md`
+    - `artifacts/phase-f2/epic-f2-03-issue-05-a2a-hooks-traceability.md`
+    - `artifacts/phase-f2/epic-f2-03-catalog-router-memory-budget.md`
+- Migracao:
+  - executar `make eval-models` ao alterar catalogo/router/model-routing.
+  - executar `make eval-runtime` ao alterar contratos de memory/budget/A2A/hooks.
+  - executar `make phase-f2-gate` antes de promover alteracao de baseline de fase.
 
 ### 2026-02-25 - Execucao do EPIC-F2-02 (contratos idempotentes e reconciliacao)
 - RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-040, RFC-050.

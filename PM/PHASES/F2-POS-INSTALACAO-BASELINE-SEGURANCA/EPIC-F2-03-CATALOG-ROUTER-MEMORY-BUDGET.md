@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-050"]
 ---
 
@@ -101,6 +101,21 @@ Como operador, quero delegacao e eventos externos com rastreabilidade para evita
   - status de memory/budget;
   - status de A2A/hooks;
   - referencias `B*` cobertas.
+
+## Resultado desta Rodada
+- `make eval-models`: `PASS` (`eval-models: PASS`).
+- `make eval-runtime`: `PASS` (`eval-runtime-contracts: PASS`).
+- `make eval-gates`: `PASS` (`eval-gates: PASS`).
+- `make phase-f2-gate`: `PASS` (`phase-f2-gate: PASS`).
+- artifacts por issue publicados:
+  - `artifacts/phase-f2/epic-f2-03-issue-01-model-catalog.md`;
+  - `artifacts/phase-f2/epic-f2-03-issue-02-model-router.md`;
+  - `artifacts/phase-f2/epic-f2-03-issue-03-memory-plane.md`;
+  - `artifacts/phase-f2/epic-f2-03-issue-04-budget-governor.md`;
+  - `artifacts/phase-f2/epic-f2-03-issue-05-a2a-hooks-traceability.md`.
+- artifact consolidado do epico publicado:
+  - `artifacts/phase-f2/epic-f2-03-catalog-router-memory-budget.md`.
+- status do epico nesta rodada: `done`.
 
 ## Dependencias
 - [ARC Model Routing](../../../ARC/ARC-MODEL-ROUTING.md)

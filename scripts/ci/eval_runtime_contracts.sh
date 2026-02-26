@@ -23,6 +23,8 @@ required_files=(
   "ARC/schemas/router_decision.schema.json"
   "ARC/schemas/credits_snapshot.schema.json"
   "ARC/schemas/budget_governor_policy.schema.json"
+  "ARC/schemas/a2a_delegation_event.schema.json"
+  "ARC/schemas/webhook_ingest_event.schema.json"
   "CORE/FINANCIAL-GOVERNANCE.md"
   "EVALS/SYSTEM-HEALTH-THRESHOLDS.md"
   "SEC/SEC-POLICY.md"
@@ -42,6 +44,8 @@ python3 -m json.tool ARC/schemas/llm_run.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/router_decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/credits_snapshot.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/budget_governor_policy.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/a2a_delegation_event.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/webhook_ingest_event.schema.json >/dev/null
 
 python3 - <<'PY'
 import datetime as dt
@@ -394,6 +398,130 @@ PY
 python3 - <<'PY'
 import datetime as dt
 import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def parse_iso8601(value: str, field: str) -> None:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} deve ser string ISO-8601.")
+    try:
+        dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"{field} invalido: {exc}") from exc
+
+
+def validate_a2a(payload: dict, required_fields: set[str], label: str) -> None:
+    missing = sorted([f for f in required_fields if f not in payload])
+    if missing:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing}")
+
+    for field in ("trace_id", "requester_agent", "target_agent", "allowlist_entry"):
+        value = payload.get(field)
+        if not isinstance(value, str) or len(value.strip()) < 2:
+            raise ValueError(f"{label} com {field} invalido.")
+
+    if payload.get("allowed") is not True:
+        raise ValueError(f"{label} invalido: delegacao fora de allowlist.")
+    if payload.get("status") not in {"queued", "succeeded", "failed", "blocked"}:
+        raise ValueError(f"{label} com status invalido.")
+
+    parse_iso8601(payload.get("created_at"), f"{label}.created_at")
+
+
+def validate_webhook(payload: dict, required_fields: set[str], label: str) -> None:
+    missing = sorted([f for f in required_fields if f not in payload])
+    if missing:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing}")
+
+    for field in ("trace_id", "source_hook_id", "mapping_id", "idempotency_key"):
+        value = payload.get(field)
+        if not isinstance(value, str) or len(value.strip()) < 2:
+            raise ValueError(f"{label} com {field} invalido.")
+
+    if payload.get("status") not in {"accepted", "rejected", "blocked"}:
+        raise ValueError(f"{label} com status invalido.")
+
+    parse_iso8601(payload.get("received_at"), f"{label}.received_at")
+
+
+def expect_invalid(fn, payload: dict, required_fields: set[str], label: str) -> None:
+    try:
+        fn(payload, required_fields, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+a2a_schema = json.loads(Path("ARC/schemas/a2a_delegation_event.schema.json").read_text(encoding="utf-8"))
+webhook_schema = json.loads(Path("ARC/schemas/webhook_ingest_event.schema.json").read_text(encoding="utf-8"))
+
+a2a_required = set(a2a_schema.get("required", []))
+webhook_required = set(webhook_schema.get("required", []))
+
+missing_a2a = sorted({"trace_id", "allowlist_entry", "allowed"} - a2a_required)
+if missing_a2a:
+    fail(f"a2a_delegation_event.schema.json sem required obrigatorio: {missing_a2a}")
+
+missing_webhook = sorted({"trace_id", "mapping_id", "idempotency_key"} - webhook_required)
+if missing_webhook:
+    fail(f"webhook_ingest_event.schema.json sem required obrigatorio: {missing_webhook}")
+
+valid_a2a = {
+    "schema_version": "1.0",
+    "delegation_id": "A2A-001",
+    "trace_id": "TRACE-A2A-001",
+    "requester_agent": "orchestrator",
+    "target_agent": "dev-worker",
+    "allowlist_entry": "orchestrator->dev-worker",
+    "allowed": True,
+    "status": "queued",
+    "created_at": "2026-02-26T10:40:00Z"
+}
+
+valid_webhook = {
+    "schema_version": "1.0",
+    "hook_event_id": "HOOK-001",
+    "trace_id": "TRACE-HOOK-001",
+    "source_hook_id": "slack-mention",
+    "mapping_id": "hooks.mappings.mention",
+    "idempotency_key": "HOOK-IDEMP-001",
+    "event_type": "task_event",
+    "status": "accepted",
+    "received_at": "2026-02-26T10:40:05Z"
+}
+
+for validator, payload, required, label in (
+    (validate_a2a, valid_a2a, a2a_required, "valid_a2a"),
+    (validate_webhook, valid_webhook, webhook_required, "valid_webhook"),
+):
+    try:
+        validator(payload, required, label)
+    except ValueError as exc:
+        fail(str(exc))
+
+invalid_a2a = deepcopy(valid_a2a)
+invalid_a2a["allowed"] = False
+expect_invalid(validate_a2a, invalid_a2a, a2a_required, "invalid_a2a_outside_allowlist")
+
+invalid_webhook = deepcopy(valid_webhook)
+invalid_webhook.pop("mapping_id")
+expect_invalid(validate_webhook, invalid_webhook, webhook_required, "invalid_webhook_missing_mapping")
+
+invalid_webhook_trace = deepcopy(valid_webhook)
+invalid_webhook_trace.pop("trace_id")
+expect_invalid(validate_webhook, invalid_webhook_trace, webhook_required, "invalid_webhook_missing_trace_id")
+PY
+
+python3 - <<'PY'
+import datetime as dt
+import json
 import pathlib
 import re
 import sys
@@ -436,6 +564,7 @@ search_re "tools\.agentToAgent\.allow\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.enabled" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.mappings\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "hooks\.internal\.entries\[\]" PRD/PRD-MASTER.md ARC/ARC-CORE.md
+search_re "trace_id" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "gateway\.bind = loopback" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "gateway\.control_plane\.ws" PRD/PRD-MASTER.md ARC/ARC-CORE.md
 search_re "chatCompletions" PRD/PRD-MASTER.md ARC/ARC-CORE.md

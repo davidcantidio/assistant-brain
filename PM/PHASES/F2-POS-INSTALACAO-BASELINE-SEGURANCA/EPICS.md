@@ -1,9 +1,9 @@
 ---
 doc_id: "PHASE-F2-EPICS.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-25"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -30,7 +30,7 @@ Criterio objetivo:
 |---|---|---|---|---|
 | `EPIC-F2-01` | Baseline de seguranca e gates | fechar baseline de policy/allowlists/approval queue com CI obrigatorio | done | [EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md](./EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md) |
 | `EPIC-F2-02` | Contratos idempotentes e reconciliacao | cobrir `work_order/decision/task_event`, override idempotente e degraded mode | done | [EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md](./EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md) |
-| `EPIC-F2-03` | Catalog, router, memory e budget baseline | formalizar baseline tecnico de roteamento, memoria e custo com contratos executaveis | planned | [EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md](./EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md) |
+| `EPIC-F2-03` | Catalog, router, memory e budget baseline | formalizar baseline tecnico de roteamento, memoria e custo com contratos executaveis | done | [EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md](./EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md) |
 
 ## Escopo Desta Entrega
 - fase `F2` adicionada para remover lacuna entre `F1` e `F3` do overlay de fases usaveis.

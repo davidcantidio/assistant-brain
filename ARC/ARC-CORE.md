@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "2.0"
+version: "2.1"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-26"
@@ -99,12 +99,14 @@ Exclui:
 - agente solicitante MUST registrar `trace_id`, `delegation_id`, `requester_agent`, `target_agent`.
 - resposta A2A MUST registrar estado final (`succeeded|failed|blocked`) e evidence refs.
 - delegacao fora de allowlist MUST falhar com bloqueio + evento de seguranca.
+- contrato executavel: `ARC/schemas/a2a_delegation_event.schema.json`.
 
 ## Hooks e Webhooks
 - webhook externo MUST entrar por mapping explicito em `hooks.mappings[]`.
 - mapping MUST transformar payload externo em evento interno tipado antes de entrar no Orchestrator.
 - hooks internos MUST carregar contexto (`boot-md`), trilha de comando (`command-logger`) e memoria de sessao (`session-memory`).
 - hooks sem assinatura/validacao de origem exigida por policy MUST ser bloqueados.
+- contrato executavel: `ARC/schemas/webhook_ingest_event.schema.json`.
 
 ## Hardening do Gateway
 - processo local MUST operar com `bind=loopback`.
