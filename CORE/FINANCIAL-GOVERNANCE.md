@@ -1,9 +1,9 @@
 ---
 doc_id: "FINANCIAL-GOVERNANCE.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-20"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-030", "RFC-050"]
 ---
 
@@ -58,6 +58,8 @@ Exclui:
 - workers de inferencia usam somente `OPENROUTER_API_KEY`.
 
 ## Regras de Budget
+- limites por run/tarefa/dia sao obrigatorios para baseline de budget governor.
+- sem limite por run/tarefa/dia MUST bloquear tarefa nao critica e abrir decision de budget.
 - teto por run: definido por preset/policy.
 - teto por tarefa: definido no Work Order.
 - teto diario por escritorio: definido por decision.

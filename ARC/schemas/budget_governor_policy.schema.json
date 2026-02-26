@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/budget_governor_policy.schema.json",
+  "title": "budget_governor_policy",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "policy_id",
+    "scope",
+    "currency",
+    "limits",
+    "snapshot_contract",
+    "enforcement",
+    "updated_at",
+    "updated_by"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "policy_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["global", "office", "workspace"]
+    },
+    "currency": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "limits": {
+      "type": "object",
+      "required": ["run_usd", "task_usd", "day_usd"],
+      "properties": {
+        "run_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "task_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "day_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "snapshot_contract": {
+      "type": "object",
+      "required": [
+        "entity",
+        "schema_ref",
+        "freshness_minutes_max",
+        "required_fields"
+      ],
+      "properties": {
+        "entity": {
+          "type": "string",
+          "const": "credits_snapshots"
+        },
+        "schema_ref": {
+          "type": "string",
+          "const": "ARC/schemas/credits_snapshot.schema.json"
+        },
+        "freshness_minutes_max": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "required_fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "snapshot_at",
+              "period_limit",
+              "period_usage",
+              "balance",
+              "burn_rate_hour",
+              "burn_rate_day"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "enforcement": {
+      "type": "object",
+      "required": [
+        "block_without_limits",
+        "block_with_stale_snapshot",
+        "violation_actions"
+      ],
+      "properties": {
+        "block_without_limits": {
+          "type": "boolean"
+        },
+        "block_with_stale_snapshot": {
+          "type": "boolean"
+        },
+        "violation_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "block_non_critical",
+              "reduce_load",
+              "fallback_economic_preset",
+              "open_budget_decision"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_by": {
+      "type": "string",
+      "minLength": 2
+    }
+  },
+  "additionalProperties": false
+}

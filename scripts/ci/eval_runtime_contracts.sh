@@ -22,6 +22,9 @@ required_files=(
   "ARC/schemas/llm_run.schema.json"
   "ARC/schemas/router_decision.schema.json"
   "ARC/schemas/credits_snapshot.schema.json"
+  "ARC/schemas/budget_governor_policy.schema.json"
+  "CORE/FINANCIAL-GOVERNANCE.md"
+  "EVALS/SYSTEM-HEALTH-THRESHOLDS.md"
   "SEC/SEC-POLICY.md"
   "PM/DECISION-PROTOCOL.md"
   "ARC/ARC-HEARTBEAT.md"
@@ -38,6 +41,7 @@ python3 -m json.tool ARC/schemas/openclaw_runtime_config.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/llm_run.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/router_decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/credits_snapshot.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/budget_governor_policy.schema.json >/dev/null
 
 python3 - <<'PY'
 import datetime as dt
@@ -258,6 +262,138 @@ PY
 python3 - <<'PY'
 import datetime as dt
 import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def parse_iso8601(value: str, field: str) -> None:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} deve ser string ISO-8601.")
+    try:
+        dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"{field} invalido: {exc}") from exc
+
+
+def validate_budget_policy(payload: dict, required_fields: set[str], label: str) -> None:
+    missing = sorted([f for f in required_fields if f not in payload])
+    if missing:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing}")
+
+    limits = payload.get("limits")
+    if not isinstance(limits, dict):
+        raise ValueError(f"{label} sem limits valido.")
+    for field in ("run_usd", "task_usd", "day_usd"):
+        value = limits.get(field)
+        if not isinstance(value, (int, float)) or value < 0:
+            raise ValueError(f"{label} com limits.{field} invalido.")
+
+    snapshot_contract = payload.get("snapshot_contract")
+    if not isinstance(snapshot_contract, dict):
+        raise ValueError(f"{label} sem snapshot_contract valido.")
+    if snapshot_contract.get("entity") != "credits_snapshots":
+        raise ValueError(f"{label} com snapshot_contract.entity invalido.")
+    if snapshot_contract.get("schema_ref") != "ARC/schemas/credits_snapshot.schema.json":
+        raise ValueError(f"{label} com snapshot_contract.schema_ref invalido.")
+    freshness = snapshot_contract.get("freshness_minutes_max")
+    if not isinstance(freshness, int) or freshness < 1:
+        raise ValueError(f"{label} com snapshot_contract.freshness_minutes_max invalido.")
+    required_fields_snapshot = snapshot_contract.get("required_fields")
+    if not isinstance(required_fields_snapshot, list) or len(required_fields_snapshot) == 0:
+        raise ValueError(f"{label} com snapshot_contract.required_fields invalido.")
+
+    enforcement = payload.get("enforcement")
+    if not isinstance(enforcement, dict):
+        raise ValueError(f"{label} sem enforcement valido.")
+    for field in ("block_without_limits", "block_with_stale_snapshot"):
+        value = enforcement.get(field)
+        if not isinstance(value, bool):
+            raise ValueError(f"{label} com enforcement.{field} invalido.")
+    actions = enforcement.get("violation_actions")
+    if not isinstance(actions, list) or len(actions) == 0:
+        raise ValueError(f"{label} com enforcement.violation_actions invalido.")
+
+    parse_iso8601(payload.get("updated_at"), f"{label}.updated_at")
+
+
+def expect_invalid(payload: dict, required_fields: set[str], label: str) -> None:
+    try:
+        validate_budget_policy(payload, required_fields, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+schema = json.loads(Path("ARC/schemas/budget_governor_policy.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+
+missing_required = sorted({"limits", "snapshot_contract", "enforcement"} - required)
+if missing_required:
+    fail(f"budget_governor_policy.schema.json sem required obrigatorio: {missing_required}")
+
+valid_policy = {
+    "schema_version": "1.0",
+    "policy_id": "budget-f2-baseline",
+    "scope": "global",
+    "currency": "USD",
+    "limits": {
+        "run_usd": 2.5,
+        "task_usd": 8.0,
+        "day_usd": 220.0
+    },
+    "snapshot_contract": {
+        "entity": "credits_snapshots",
+        "schema_ref": "ARC/schemas/credits_snapshot.schema.json",
+        "freshness_minutes_max": 10,
+        "required_fields": [
+            "snapshot_at",
+            "period_limit",
+            "period_usage",
+            "balance",
+            "burn_rate_hour",
+            "burn_rate_day"
+        ]
+    },
+    "enforcement": {
+        "block_without_limits": True,
+        "block_with_stale_snapshot": True,
+        "violation_actions": [
+            "block_non_critical",
+            "fallback_economic_preset",
+            "open_budget_decision"
+        ]
+    },
+    "updated_at": "2026-02-26T10:30:00Z",
+    "updated_by": "budget-governor"
+}
+
+try:
+    validate_budget_policy(valid_policy, required, "valid_policy")
+except ValueError as exc:
+    fail(str(exc))
+
+invalid_missing_limits = deepcopy(valid_policy)
+invalid_missing_limits.pop("limits")
+expect_invalid(invalid_missing_limits, required, "invalid_missing_limits")
+
+invalid_missing_day_limit = deepcopy(valid_policy)
+invalid_missing_day_limit["limits"].pop("day_usd")
+expect_invalid(invalid_missing_day_limit, required, "invalid_missing_day_limit")
+
+invalid_missing_snapshot = deepcopy(valid_policy)
+invalid_missing_snapshot["snapshot_contract"].pop("required_fields")
+expect_invalid(invalid_missing_snapshot, required, "invalid_missing_snapshot")
+PY
+
+python3 - <<'PY'
+import datetime as dt
+import json
 import pathlib
 import re
 import sys
@@ -311,6 +447,13 @@ search_re '### 5\) `credits_snapshots`' ARC/ARC-CORE.md
 search_re "requested_model" ARC/ARC-CORE.md PRD/PRD-MASTER.md
 search_re "effective_model" ARC/ARC-CORE.md PRD/PRD-MASTER.md
 search_re "effective_provider" ARC/ARC-CORE.md PRD/PRD-MASTER.md
+
+# Budget governor baseline (run/task/day + credits snapshots)
+search_re "limites por run/tarefa/dia" CORE/FINANCIAL-GOVERNANCE.md
+search_re "sem limite por run/tarefa/dia MUST bloquear" CORE/FINANCIAL-GOVERNANCE.md
+search_re "credits_snapshots" CORE/FINANCIAL-GOVERNANCE.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "snapshot de custo desatualizado > 10 min" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "run/task/day" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 # Memory lifecycle contract
 search_re 'Contrato `memory_contract`' PRD/PRD-MASTER.md

@@ -1,9 +1,9 @@
 ---
 doc_id: "SYSTEM-HEALTH-THRESHOLDS.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-030", "RFC-050"]
 ---
 
@@ -106,6 +106,7 @@ status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
 ## Regra de Release
 - qualquer claim central sem gate definido/executado => release bloqueada.
 - excecao apenas por decision explicita de risco, com prazo de correcao.
+- budget governor baseline MUST manter limites run/task/day e `credits_snapshots` atualizados; sem isso, release bloqueada.
 
 ## Links Relacionados
 - [ARC Observability](../ARC/ARC-OBSERVABILITY.md)
