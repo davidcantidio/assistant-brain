@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.21"
+version: "2.22"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-26"
@@ -28,6 +28,27 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-26 - Execucao do ISSUE-F5-03-01 (autonomia de jobs longos com sessao isolada e restart controlado)
+- RFCs afetadas: RFC-001, RFC-030, RFC-050.
+- Impacto:
+  - executa `ISSUE-F5-03-01` do `EPIC-F5-03` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R12`) como fonte de verdade para reforcar:
+    - contrato versionado de autonomia operacional para jobs longos com sessao isolada;
+    - deteccao de `stalled` em 2 checks consecutivos e restart controlado com `trace_id`;
+    - abertura de incidente em `stalled` e preservacao de contexto (`issue_id` + estado do DAG).
+  - adiciona schema dedicado:
+    - `ARC/schemas/ops_autonomy_contract.schema.json`.
+  - endurece `scripts/ci/eval_runtime_contracts.sh` para exigir:
+    - campos minimos do contrato (`isolation_mode`, `healthcheck_interval_minutes`, `stalled_threshold_checks`, `restart_policy`, `incident_on_stalled`, `preserve_issue_context`);
+    - cenarios executaveis valid/invalid para o contrato.
+  - atualiza contratos normativos:
+    - `PRD/PRD-MASTER.md`
+    - `ARC/ARC-HEARTBEAT.md`
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-03-issue-01-ops-autonomy-jobs-heartbeat.md`.
+- Migracao:
+  - qualquer alteracao no contrato de autonomia de jobs longos MUST preservar `stalled_threshold_checks=2` e `incident_on_stalled=true`.
+  - ausencia de restart controlado com trilha `trace_id` MUST bloquear `make eval-runtime`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-02-05 (runbook de degradacao com posicao aberta + fechamento do EPIC-F5-02)
 - RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.

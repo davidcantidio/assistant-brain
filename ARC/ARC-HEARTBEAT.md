@@ -57,6 +57,13 @@ Exclui:
 - loop de wake-up sem progresso MUST abrir task de diagnostico.
 - processos longos em tmux/loop MUST ser checados a cada heartbeat e relancados quando `stalled`.
 
+## Contrato Operacional para Jobs Longos
+- baseline de autonomia para sessao isolada (`tmux` ou equivalente):
+  - `stalled_threshold_checks: 2`
+  - `incident_on_stalled: true`
+- health-check periodico MUST registrar `trace_id` em cada restart controlado.
+- restart MUST preservar referencia da Issue e estado do DAG antes de retomar execucao.
+
 ## Links Relacionados
 - [ARC Core](./ARC-CORE.md)
 - [ARC Observability](./ARC-OBSERVABILITY.md)

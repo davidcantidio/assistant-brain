@@ -19,6 +19,7 @@ required_files=(
   "PRD/PRD-MASTER.md"
   "ARC/ARC-CORE.md"
   "ARC/schemas/openclaw_runtime_config.schema.json"
+  "ARC/schemas/ops_autonomy_contract.schema.json"
   "ARC/schemas/llm_run.schema.json"
   "ARC/schemas/router_decision.schema.json"
   "ARC/schemas/credits_snapshot.schema.json"
@@ -60,6 +61,7 @@ if (( ${#missing_required_files[@]} > 0 )); then
 fi
 
 python3 -m json.tool ARC/schemas/openclaw_runtime_config.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/ops_autonomy_contract.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/llm_run.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/router_decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/credits_snapshot.schema.json >/dev/null
@@ -192,6 +194,126 @@ expect_invalid(invalid_ws_required, "invalid_ws_required")
 invalid_chat_required = deepcopy(runtime_schema)
 invalid_chat_required["properties"]["gateway"]["properties"]["http"]["properties"]["endpoints"]["properties"]["chatCompletions"]["required"].remove("enabled")
 expect_invalid(invalid_chat_required, "invalid_chat_required")
+PY
+
+python3 - <<'PY'
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def validate_contract(payload: dict, required_fields: set[str], label: str) -> None:
+    missing = sorted([f for f in required_fields if f not in payload])
+    if missing:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing}")
+
+    if payload.get("schema_version") != "1.0":
+        raise ValueError(f"{label} com schema_version invalido.")
+    if payload.get("contract_version") != "v1":
+        raise ValueError(f"{label} com contract_version invalido.")
+    if payload.get("isolation_mode") not in {"tmux", "equivalent_isolated_session"}:
+        raise ValueError(f"{label} com isolation_mode invalido.")
+
+    interval = payload.get("healthcheck_interval_minutes")
+    if not isinstance(interval, int) or interval < 1:
+        raise ValueError(f"{label} com healthcheck_interval_minutes invalido.")
+
+    if payload.get("stalled_threshold_checks") != 2:
+        raise ValueError(f"{label} com stalled_threshold_checks invalido (esperado 2).")
+
+    restart = payload.get("restart_policy")
+    if not isinstance(restart, dict):
+        raise ValueError(f"{label} com restart_policy invalido.")
+    restart_required = {"mode", "max_restarts", "restart_backoff_seconds", "requires_trace_id_log"}
+    missing_restart = sorted([f for f in restart_required if f not in restart])
+    if missing_restart:
+        raise ValueError(f"{label} sem restart_policy minimo: {missing_restart}")
+    if restart.get("mode") != "controlled_restart":
+        raise ValueError(f"{label} com restart_policy.mode invalido.")
+    if not isinstance(restart.get("max_restarts"), int) or restart["max_restarts"] < 1:
+        raise ValueError(f"{label} com restart_policy.max_restarts invalido.")
+    if not isinstance(restart.get("restart_backoff_seconds"), int) or restart["restart_backoff_seconds"] < 1:
+        raise ValueError(f"{label} com restart_policy.restart_backoff_seconds invalido.")
+    if restart.get("requires_trace_id_log") is not True:
+        raise ValueError(f"{label} com restart_policy.requires_trace_id_log invalido.")
+
+    if payload.get("incident_on_stalled") is not True:
+        raise ValueError(f"{label} com incident_on_stalled invalido.")
+    if payload.get("preserve_issue_context") is not True:
+        raise ValueError(f"{label} com preserve_issue_context invalido.")
+
+    fields = payload.get("required_runtime_fields")
+    if not isinstance(fields, list) or len(fields) < 3:
+        raise ValueError(f"{label} com required_runtime_fields invalido.")
+    required_field_set = {"issue_id", "dag_state_ref", "trace_id"}
+    if not required_field_set.issubset(set(fields)):
+        raise ValueError(f"{label} sem required_runtime_fields minimos: {sorted(required_field_set - set(fields))}")
+
+
+def expect_invalid(payload: dict, required_fields: set[str], label: str) -> None:
+    try:
+        validate_contract(payload, required_fields, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+schema = json.loads(Path("ARC/schemas/ops_autonomy_contract.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+required_contract = {
+    "schema_version",
+    "contract_version",
+    "isolation_mode",
+    "healthcheck_interval_minutes",
+    "stalled_threshold_checks",
+    "restart_policy",
+    "incident_on_stalled",
+    "preserve_issue_context",
+    "required_runtime_fields",
+}
+missing_required = sorted(required_contract - required)
+if missing_required:
+    fail(f"ops_autonomy_contract.schema.json sem required obrigatorio: {missing_required}")
+
+props = schema.get("properties", {})
+if props.get("stalled_threshold_checks", {}).get("const") != 2:
+    fail("ops_autonomy_contract.schema.json invalido: stalled_threshold_checks deve ter const=2.")
+
+valid_contract = {
+    "schema_version": "1.0",
+    "contract_version": "v1",
+    "isolation_mode": "tmux",
+    "healthcheck_interval_minutes": 15,
+    "stalled_threshold_checks": 2,
+    "restart_policy": {
+        "mode": "controlled_restart",
+        "max_restarts": 3,
+        "restart_backoff_seconds": 30,
+        "requires_trace_id_log": True,
+    },
+    "incident_on_stalled": True,
+    "preserve_issue_context": True,
+    "required_runtime_fields": ["issue_id", "dag_state_ref", "trace_id"],
+}
+
+try:
+    validate_contract(valid_contract, required, "valid_ops_autonomy_contract")
+except ValueError as exc:
+    fail(str(exc))
+
+invalid_contract = deepcopy(valid_contract)
+invalid_contract["stalled_threshold_checks"] = 3
+expect_invalid(invalid_contract, required, "invalid_ops_autonomy_contract_stalled_threshold")
+
+invalid_contract_missing_restart = deepcopy(valid_contract)
+invalid_contract_missing_restart.pop("restart_policy")
+expect_invalid(invalid_contract_missing_restart, required, "invalid_ops_autonomy_contract_missing_restart_policy")
 PY
 
 python3 - <<'PY'
@@ -759,6 +881,16 @@ search_re 'schedule: "0 23 \* \* \*"' PRD/PRD-MASTER.md
 search_re 'timezone: "America/Sao_Paulo"' PRD/PRD-MASTER.md
 search_re "required: true" PRD/PRD-MASTER.md
 search_re "workspaces/main/MEMORY\.md" PRD/PRD-MASTER.md META/DOCUMENT-HIERARCHY.md
+
+# Ops autonomy contract
+search_re 'Contrato `ops_autonomy_contract`' PRD/PRD-MASTER.md
+search_re "isolation_mode" PRD/PRD-MASTER.md
+search_re "stalled_threshold_checks: 2" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+search_re "restart_policy" PRD/PRD-MASTER.md
+search_re "incident_on_stalled: true" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+search_re "preserve_issue_context: true" PRD/PRD-MASTER.md
+search_re "trace_id" PRD/PRD-MASTER.md ARC/ARC-HEARTBEAT.md
+
 if ! ls workspaces/main/memory/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].md >/dev/null 2>&1; then
   echo "Nenhuma nota diaria encontrada em workspaces/main/memory/YYYY-MM-DD.md"
   exit 1

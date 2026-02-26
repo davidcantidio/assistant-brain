@@ -442,15 +442,31 @@ Regras mandatarias:
 - extracao noturna sem sucesso por 24h MUST abrir incident operacional.
 
 ### Contrato `ops_autonomy_contract`
-- execucoes longas de agentes (`ralph`/loops equivalentes) SHOULD rodar em sessao isolada (`tmux` ou equivalente) com:
-  - health-check periodico,
-  - deteccao de estagnacao,
-  - kill/restart controlado,
-  - log de reinicio com `trace_id`.
-- regras minimas:
-  - se sessao cair, relancar e registrar evento.
-  - se output ficar estagnado por 2 checks consecutivos, marcar `stalled`, matar sessao e relancar.
-  - toda relargada MUST preservar referencia da Issue e estado do DAG.
+```yaml
+schema_version: "1.0"
+contract_version: "v1"
+isolation_mode: "tmux"
+healthcheck_interval_minutes: 15
+stalled_threshold_checks: 2
+restart_policy:
+  mode: "controlled_restart"
+  max_restarts: 3
+  restart_backoff_seconds: 30
+  requires_trace_id_log: true
+incident_on_stalled: true
+preserve_issue_context: true
+required_runtime_fields:
+  - "issue_id"
+  - "dag_state_ref"
+  - "trace_id"
+```
+
+Regras mandatarias:
+- execucoes longas de agentes (`ralph`/loops equivalentes) SHOULD rodar em sessao isolada (`tmux` ou equivalente).
+- se sessao cair, relancar e registrar evento com `trace_id`.
+- se output ficar estagnado por 2 checks consecutivos, marcar `stalled`, matar sessao e relancar.
+- evento `stalled` MUST abrir incidente operacional e bloquear promocao ate reconciliacao.
+- toda relargada MUST preservar referencia da Issue e estado do DAG.
 
 ## Visao Executiva
 - O sistema opera como edificio com escritorios por empresa e servicos compartilhados.

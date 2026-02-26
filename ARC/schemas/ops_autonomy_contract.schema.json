@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/ops_autonomy_contract.schema.json",
+  "title": "ops_autonomy_contract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "isolation_mode",
+    "healthcheck_interval_minutes",
+    "stalled_threshold_checks",
+    "restart_policy",
+    "incident_on_stalled",
+    "preserve_issue_context",
+    "required_runtime_fields"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "contract_version": {
+      "type": "string",
+      "pattern": "^v\\d+$"
+    },
+    "isolation_mode": {
+      "type": "string",
+      "enum": ["tmux", "equivalent_isolated_session"]
+    },
+    "healthcheck_interval_minutes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "stalled_threshold_checks": {
+      "type": "integer",
+      "const": 2
+    },
+    "restart_policy": {
+      "type": "object",
+      "required": ["mode", "max_restarts", "restart_backoff_seconds", "requires_trace_id_log"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["controlled_restart"]
+        },
+        "max_restarts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "restart_backoff_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requires_trace_id_log": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "incident_on_stalled": {
+      "type": "boolean",
+      "const": true
+    },
+    "preserve_issue_context": {
+      "type": "boolean",
+      "const": true
+    },
+    "required_runtime_fields": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}
