@@ -68,6 +68,133 @@ python3 -m json.tool ARC/schemas/a2a_delegation_event.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/webhook_ingest_event.schema.json >/dev/null
 
 python3 - <<'PY'
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def get_path(payload: dict, path: list[str], label: str):
+    current = payload
+    for key in path:
+        if not isinstance(current, dict) or key not in current:
+            raise ValueError(f"{label} sem caminho obrigatorio: {'/'.join(path)}")
+        current = current[key]
+    return current
+
+
+def ensure_required(payload: dict, path: list[str], expected: set[str], label: str) -> None:
+    value = get_path(payload, path, label)
+    if not isinstance(value, list):
+        raise ValueError(f"{label} com {'/'.join(path)} invalido (esperado lista).")
+    missing = sorted(expected - set(value))
+    if missing:
+        raise ValueError(f"{label} sem required obrigatorio em {'/'.join(path)}: {missing}")
+
+
+def validate_openclaw_runtime_schema(schema: dict, label: str) -> None:
+    ensure_required(schema, ["required"], {"agents", "tools", "channels", "hooks", "memory", "gateway"}, label)
+
+    ensure_required(
+        schema,
+        ["properties", "tools", "properties", "agentToAgent", "required"],
+        {"enabled", "allow"},
+        label,
+    )
+
+    ensure_required(
+        schema,
+        ["properties", "hooks", "required"],
+        {"enabled", "mappings", "internal"},
+        label,
+    )
+
+    ensure_required(
+        schema,
+        ["properties", "hooks", "properties", "internal", "properties", "entries", "required"],
+        {"boot-md", "command-logger", "session-memory"},
+        label,
+    )
+
+    bind_const = get_path(schema, ["properties", "gateway", "properties", "bind", "const"], label)
+    if bind_const != "loopback":
+        raise ValueError(f"{label} com gateway.bind.const invalido (esperado 'loopback').")
+
+    ensure_required(
+        schema,
+        ["properties", "gateway", "properties", "control_plane", "properties", "ws", "required"],
+        {"enabled", "url"},
+        label,
+    )
+
+    ensure_required(
+        schema,
+        [
+            "properties",
+            "gateway",
+            "properties",
+            "http",
+            "properties",
+            "endpoints",
+            "properties",
+            "chatCompletions",
+            "required",
+        ],
+        {"enabled"},
+        label,
+    )
+
+
+def expect_invalid(schema: dict, label: str) -> None:
+    try:
+        validate_openclaw_runtime_schema(schema, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+runtime_schema = json.loads(Path("ARC/schemas/openclaw_runtime_config.schema.json").read_text(encoding="utf-8"))
+
+try:
+    validate_openclaw_runtime_schema(runtime_schema, "openclaw_runtime_config.schema.json")
+except ValueError as exc:
+    fail(str(exc))
+
+invalid_missing_top_required = deepcopy(runtime_schema)
+invalid_missing_top_required["required"].remove("hooks")
+expect_invalid(invalid_missing_top_required, "invalid_missing_top_required")
+
+invalid_missing_a2a_required = deepcopy(runtime_schema)
+invalid_missing_a2a_required["properties"]["tools"]["properties"]["agentToAgent"]["required"].remove("allow")
+expect_invalid(invalid_missing_a2a_required, "invalid_missing_a2a_required")
+
+invalid_missing_hooks_required = deepcopy(runtime_schema)
+invalid_missing_hooks_required["properties"]["hooks"]["required"].remove("internal")
+expect_invalid(invalid_missing_hooks_required, "invalid_missing_hooks_required")
+
+invalid_missing_hook_internal_entry = deepcopy(runtime_schema)
+invalid_missing_hook_internal_entry["properties"]["hooks"]["properties"]["internal"]["properties"]["entries"]["required"].remove("session-memory")
+expect_invalid(invalid_missing_hook_internal_entry, "invalid_missing_hook_internal_entry")
+
+invalid_gateway_bind = deepcopy(runtime_schema)
+invalid_gateway_bind["properties"]["gateway"]["properties"]["bind"]["const"] = "public"
+expect_invalid(invalid_gateway_bind, "invalid_gateway_bind")
+
+invalid_ws_required = deepcopy(runtime_schema)
+invalid_ws_required["properties"]["gateway"]["properties"]["control_plane"]["properties"]["ws"]["required"].remove("url")
+expect_invalid(invalid_ws_required, "invalid_ws_required")
+
+invalid_chat_required = deepcopy(runtime_schema)
+invalid_chat_required["properties"]["gateway"]["properties"]["http"]["properties"]["endpoints"]["properties"]["chatCompletions"]["required"].remove("enabled")
+expect_invalid(invalid_chat_required, "invalid_chat_required")
+PY
+
+python3 - <<'PY'
 import datetime as dt
 import json
 import sys
