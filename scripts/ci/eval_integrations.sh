@@ -40,6 +40,30 @@ search_absent_re() {
   fi
 }
 
+search_re_each_file() {
+  local pattern="$1"
+  shift
+  local f
+  for f in "$@"; do
+    if ! search_re "$pattern" "$f"; then
+      echo "Padrao obrigatorio ausente em $f: $pattern"
+      exit 1
+    fi
+  done
+}
+
+search_fixed_each_file() {
+  local pattern="$1"
+  shift
+  local f
+  for f in "$@"; do
+    if ! search_fixed "$pattern" "$f"; then
+      echo "Texto obrigatorio ausente em $f: $pattern"
+      exit 1
+    fi
+  done
+}
+
 schema_assert_minimum_contract() {
   local schema_path="$1"
   local required_csv="$2"
@@ -256,7 +280,7 @@ schema_assert_runtime_dual_contract "ARC/schemas/openclaw_runtime_config.schema.
 schema_assert_provider_path_shape "ARC/schemas/economic_run.schema.json"
 
 openrouter_rule="OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido."
-search_fixed "$openrouter_rule" README.md PRD/ROADMAP.md PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
+search_fixed_each_file "$openrouter_rule" README.md PRD/ROADMAP.md PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
 
 search_re 'cloud_adapter_default: "disabled"' SEC/allowlists/PROVIDERS.yaml
 search_re 'cloud_adapter_enablement: "decision_required"' SEC/allowlists/PROVIDERS.yaml
