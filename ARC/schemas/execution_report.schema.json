@@ -4,6 +4,7 @@
   "title": "execution_report",
   "type": "object",
   "required": [
+    "schema_version",
     "execution_report_id",
     "order_intent_id",
     "venue",
@@ -14,6 +15,10 @@
     "gateway_trace_id"
   ],
   "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
     "execution_report_id": {
       "type": "string",
       "minLength": 1

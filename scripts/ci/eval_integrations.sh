@@ -107,6 +107,51 @@ if missing_required or missing_properties:
 PY
 }
 
+schema_assert_version_metadata() {
+  local schema_path="$1"
+
+  python3 - "$schema_path" <<'PY'
+import json
+import sys
+
+schema_path = sys.argv[1]
+
+with open(schema_path, "r", encoding="utf-8") as fh:
+    schema = json.load(fh)
+
+def fail(msg):
+    print(f"Schema version metadata check failed: {schema_path}")
+    print(msg)
+    sys.exit(1)
+
+schema_uri = schema.get("$schema")
+if not isinstance(schema_uri, str) or not schema_uri.strip():
+    fail("top-level $schema MUST exist as a non-empty string.")
+
+schema_id = schema.get("$id")
+if not isinstance(schema_id, str) or not schema_id.strip():
+    fail("top-level $id MUST exist as a non-empty string.")
+
+required = schema.get("required", [])
+if not isinstance(required, list) or "schema_version" not in required:
+    fail("required MUST include schema_version.")
+
+properties = schema.get("properties", {})
+if not isinstance(properties, dict):
+    fail("properties MUST be a JSON object.")
+
+schema_version = properties.get("schema_version")
+if not isinstance(schema_version, dict):
+    fail("properties.schema_version MUST exist as a JSON object.")
+
+if schema_version.get("type") != "string":
+    fail("properties.schema_version.type MUST be 'string'.")
+
+if schema_version.get("const") != "1.0":
+    fail("properties.schema_version.const MUST be '1.0'.")
+PY
+}
+
 schema_assert_runtime_dual_contract() {
   local schema_path="$1"
 
@@ -275,6 +320,11 @@ schema_assert_minimum_contract \
   "ARC/schemas/economic_run.schema.json" \
   "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at" \
   "run_id,benchmark,scenario,success,quality_score,total_cost_usd,provider_path,started_at,ended_at"
+
+schema_assert_version_metadata "ARC/schemas/signal_intent.schema.json"
+schema_assert_version_metadata "ARC/schemas/order_intent.schema.json"
+schema_assert_version_metadata "ARC/schemas/execution_report.schema.json"
+schema_assert_version_metadata "ARC/schemas/economic_run.schema.json"
 
 schema_assert_runtime_dual_contract "ARC/schemas/openclaw_runtime_config.schema.json"
 schema_assert_provider_path_shape "ARC/schemas/economic_run.schema.json"

@@ -4,6 +4,7 @@
   "title": "signal_intent",
   "type": "object",
   "required": [
+    "schema_version",
     "intent_id",
     "source_engine",
     "symbol",
@@ -15,6 +16,10 @@
     "trace_id"
   ],
   "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
     "intent_id": {
       "type": "string",
       "minLength": 1

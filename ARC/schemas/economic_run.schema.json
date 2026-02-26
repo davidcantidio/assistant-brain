@@ -4,6 +4,7 @@
   "title": "economic_run",
   "type": "object",
   "required": [
+    "schema_version",
     "run_id",
     "benchmark",
     "scenario",
@@ -15,6 +16,10 @@
     "ended_at"
   ],
   "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
     "run_id": {
       "type": "string",
       "minLength": 1

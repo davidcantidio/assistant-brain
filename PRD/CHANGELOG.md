@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-01-03 (contratos versionados + compatibilidade dual runtime)
+- RFCs afetadas: RFC-001, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-01-03` do `EPIC-F5-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-21`, `B1-24`) como fonte de verdade para reforcar:
+    - metadado minimo de versionamento nos contratos `signal_intent`, `order_intent`, `execution_report` e `economic_run`;
+    - continuidade da validacao dual de runtime (`gateway.control_plane.ws` canonico + `chatCompletions` opcional sob policy).
+  - atualiza schemas de integracao em `ARC/schemas/` para incluir:
+    - `schema_version` obrigatorio em `required[]`;
+    - `properties.schema_version` com `type=string` e `const=\"1.0\"`.
+  - endurece `scripts/ci/eval_integrations.sh` com nova validacao executavel:
+    - `schema_assert_version_metadata` para exigir `$schema`, `$id`, `required.schema_version` e `properties.schema_version.const`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-01-issue-03-versioned-contracts-runtime-dual.md`.
+- Migracao:
+  - qualquer alteracao nos schemas de integracao MUST preservar `schema_version` com metadata de versao valida.
+  - manter `make eval-integrations` como gate obrigatorio para contratos versionados e compatibilidade dual do runtime.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-01-02 (bloqueio de ordem direta externa + allowlist de venue)
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-050, RFC-060.
 - Impacto:
