@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/router_decision.schema.json",
+  "title": "router_decision",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "decision_id",
+    "trace_id",
+    "task_type",
+    "risk_class",
+    "risk_tier",
+    "data_sensitivity",
+    "policy_filters",
+    "ranking_strategy",
+    "requested_model",
+    "effective_model",
+    "effective_provider",
+    "provider_routing_applied",
+    "fallback_step",
+    "fallback_reason",
+    "decision_explain",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "task_type": {
+      "type": "string",
+      "minLength": 2
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": ["baixo", "medio", "alto"]
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": ["R0", "R1", "R2", "R3"]
+    },
+    "data_sensitivity": {
+      "type": "string",
+      "enum": ["public", "internal", "sensitive"]
+    },
+    "policy_filters": {
+      "type": "object",
+      "required": ["risk", "sensitivity", "allowlist"],
+      "properties": {
+        "risk": { "type": "string", "minLength": 1 },
+        "sensitivity": { "type": "string", "minLength": 1 },
+        "allowlist": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": true
+    },
+    "ranking_strategy": {
+      "type": "string",
+      "enum": ["capabilities-first", "cost-per-success", "balanced"]
+    },
+    "requested_model": {
+      "type": "string",
+      "minLength": 2
+    },
+    "effective_model": {
+      "type": "string",
+      "minLength": 2
+    },
+    "effective_provider": {
+      "type": "string",
+      "minLength": 2
+    },
+    "provider_routing_applied": {
+      "type": "object",
+      "required": ["include", "exclude", "order", "require"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "order": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "require": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": true
+    },
+    "fallback_step": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fallback_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidates_considered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["model", "provider", "score"],
+        "properties": {
+          "model": { "type": "string", "minLength": 2 },
+          "provider": { "type": "string", "minLength": 2 },
+          "score": { "type": "number" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "decision_explain": {
+      "type": "string",
+      "minLength": 3
+    },
+    "no_fallback": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

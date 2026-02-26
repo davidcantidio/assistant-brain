@@ -1,6 +1,6 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.8"
+version: "1.9"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-02-26"
@@ -199,9 +199,11 @@ Exclui:
   - constraints de entrada,
   - candidatos avaliados,
   - ranking final,
-  - decisao,
+  - decisao (`requested_model`, `effective_model`, `effective_provider`),
+  - politica aplicada (`provider_routing_applied`, `risk_class`, `risk_tier`, `data_sensitivity`),
   - fallback aplicado,
   - justificativa curta.
+- contrato executavel canonico: `ARC/schemas/router_decision.schema.json`.
 
 ## Integrações Externas (pacote normativo)
 - integracoes externas MUST seguir contrato normativo em `INTEGRATIONS/`.

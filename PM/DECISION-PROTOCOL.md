@@ -1,9 +1,9 @@
 ---
 doc_id: "DECISION-PROTOCOL.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-26"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -74,6 +74,7 @@ risk_tier: "R0|R1|R2|R3"
 execution_pattern: "single_agent|subagent_pod_codex|subagent_pod_claude|cross_review_codex_claude"
 preset_id: "preset://...|null"
 requested_model: "string|null"
+requested_provider: "string|null"
 effective_model: "string|null"
 effective_provider: "string|null"
 data_sensitivity: "public|internal|sensitive"

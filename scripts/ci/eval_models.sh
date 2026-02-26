@@ -41,6 +41,7 @@ search_absent_re() {
 }
 
 python3 -m json.tool ARC/schemas/models_catalog.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/router_decision.schema.json >/dev/null
 
 python3 - <<'PY'
 import datetime as dt
@@ -230,6 +231,139 @@ expect_invalid(invalid_missing_sync_metadata, schema_required, "invalid_missing_
 invalid_missing_model_id = deepcopy(valid_payload)
 invalid_missing_model_id.pop("model_id")
 expect_invalid(invalid_missing_model_id, schema_required, "invalid_missing_model_id")
+PY
+
+python3 - <<'PY'
+import datetime as dt
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+def parse_iso8601(value: str, field: str) -> None:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} deve ser string ISO-8601.")
+    try:
+        dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"{field} invalido: {exc}") from exc
+
+
+def validate_router_decision(payload: dict, schema_required: set[str], label: str) -> None:
+    missing_required = sorted([field for field in schema_required if field not in payload])
+    if missing_required:
+        raise ValueError(f"{label} sem campos obrigatorios: {missing_required}")
+
+    required_audit = {"requested_model", "effective_model", "effective_provider"}
+    missing_audit = sorted([field for field in required_audit if field not in payload])
+    if missing_audit:
+        raise ValueError(f"{label} sem trilha requested/effective: {missing_audit}")
+
+    if payload.get("risk_class") not in {"baixo", "medio", "alto"}:
+        raise ValueError(f"{label} com risk_class invalido.")
+    if payload.get("risk_tier") not in {"R0", "R1", "R2", "R3"}:
+        raise ValueError(f"{label} com risk_tier invalido.")
+    if payload.get("data_sensitivity") not in {"public", "internal", "sensitive"}:
+        raise ValueError(f"{label} com data_sensitivity invalido.")
+
+    ranking = payload.get("ranking_strategy")
+    if ranking not in {"capabilities-first", "cost-per-success", "balanced"}:
+        raise ValueError(f"{label} com ranking_strategy invalido.")
+
+    routing = payload.get("provider_routing_applied")
+    if not isinstance(routing, dict):
+        raise ValueError(f"{label} com provider_routing_applied invalido.")
+    for field in ("include", "exclude", "order", "require"):
+        value = routing.get(field)
+        if not isinstance(value, list):
+            raise ValueError(f"{label} com provider_routing_applied.{field} invalido.")
+    if len(routing.get("order", [])) == 0:
+        raise ValueError(f"{label} com provider_routing_applied.order vazio.")
+
+    fallback_step = payload.get("fallback_step")
+    if not isinstance(fallback_step, int) or fallback_step < 0:
+        raise ValueError(f"{label} com fallback_step invalido.")
+    fallback_reason = payload.get("fallback_reason")
+    if not isinstance(fallback_reason, str) or not fallback_reason.strip():
+        raise ValueError(f"{label} com fallback_reason invalido.")
+
+    parse_iso8601(payload.get("created_at"), f"{label}.created_at")
+
+
+def expect_invalid(payload: dict, schema_required: set[str], label: str) -> None:
+    try:
+        validate_router_decision(payload, schema_required, label)
+    except ValueError:
+        return
+    fail(f"{label} deveria falhar, mas passou.")
+
+
+schema = json.loads(Path("ARC/schemas/router_decision.schema.json").read_text(encoding="utf-8"))
+schema_required = set(schema.get("required", []))
+expected_required = {"requested_model", "effective_model", "effective_provider"}
+missing_schema_required = sorted(expected_required - schema_required)
+if missing_schema_required:
+    fail(f"router_decision.schema.json sem required obrigatorio: {missing_schema_required}")
+
+valid_payload = {
+    "schema_version": "1.0",
+    "decision_id": "ROUTER-DEC-001",
+    "trace_id": "TRACE-ROUTER-001",
+    "task_type": "dev_patch",
+    "risk_class": "medio",
+    "risk_tier": "R2",
+    "data_sensitivity": "internal",
+    "policy_filters": {
+        "risk": "R2",
+        "sensitivity": "internal",
+        "allowlist": ["litellm", "ollama"]
+    },
+    "ranking_strategy": "capabilities-first",
+    "requested_model": "local/code-worker",
+    "effective_model": "local/code-worker",
+    "effective_provider": "ollama",
+    "provider_routing_applied": {
+        "include": ["ollama", "litellm"],
+        "exclude": [],
+        "order": ["ollama", "litellm"],
+        "require": []
+    },
+    "fallback_step": 0,
+    "fallback_reason": "primary_available",
+    "candidates_considered": [
+        {
+            "model": "local/code-worker",
+            "provider": "ollama",
+            "score": 0.94
+        }
+    ],
+    "decision_explain": "capabilities-first com melhor ajuste para task.",
+    "no_fallback": False,
+    "created_at": "2026-02-26T10:15:00Z"
+}
+
+try:
+    validate_router_decision(valid_payload, schema_required, "valid_router_decision")
+except ValueError as exc:
+    fail(str(exc))
+
+invalid_missing_requested = deepcopy(valid_payload)
+invalid_missing_requested.pop("requested_model")
+expect_invalid(invalid_missing_requested, schema_required, "invalid_missing_requested")
+
+invalid_missing_effective = deepcopy(valid_payload)
+invalid_missing_effective.pop("effective_model")
+expect_invalid(invalid_missing_effective, schema_required, "invalid_missing_effective")
+
+invalid_missing_provider = deepcopy(valid_payload)
+invalid_missing_provider.pop("effective_provider")
+expect_invalid(invalid_missing_provider, schema_required, "invalid_missing_provider")
 PY
 
 required_patterns=(
