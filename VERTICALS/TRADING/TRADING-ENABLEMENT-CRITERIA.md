@@ -116,7 +116,7 @@ Regra de bloqueio:
 - auditoria de logs sem anomalia.
 - aprovacao em decision registrada.
 - evidencia de degradacao segura:
-  - `single_engine_mode` para falha de engine secundaria/auxiliar;
+  - `single_engine_mode` para falha de engine secundaria/auxiliar com engine primaria saudavel;
   - `fail_closed` para falha de engine primaria.
 - para classe nova: evidencia de `shadow_mode` + suite da classe verde antes de reabilitar live.
 

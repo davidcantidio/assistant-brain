@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-26 - Execucao do ISSUE-F5-02-03 (fail_closed primaria + single_engine_mode secundaria)
+- RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F5-02-03` do `EPIC-F5-02` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-07`, `B2-R04`) como fonte de verdade para reforcar:
+    - `fail_closed` obrigatorio em falha de engine primaria;
+    - `single_engine_mode` restrito a falha de engine secundaria/auxiliar com primaria saudavel.
+  - endurece `scripts/ci/eval_trading.sh` para exigir, sem drift entre docs de trading:
+    - regra de `fail_closed` vinculada a falha primaria;
+    - regra de `single_engine_mode` vinculada a falha secundaria;
+    - condicao de primaria saudavel para ativacao de `single_engine_mode`.
+  - atualiza `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md` para explicitar a condicao de primaria saudavel.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f5/epic-f5-02-issue-03-fail-closed-single-engine.md`.
+- Migracao:
+  - qualquer alteracao nas regras de degradacao de trading MUST preservar separacao explicita entre falha primaria (`fail_closed`) e secundaria (`single_engine_mode`).
+  - ausencia de condicao de primaria saudavel no `single_engine_mode` MUST bloquear `make eval-trading`.
+
 ### 2026-02-26 - Execucao do ISSUE-F5-02-02 (idempotencia client_order_id + reconciliacao de falha parcial)
 - RFCs afetadas: RFC-001, RFC-035, RFC-050, RFC-060.
 - Impacto:
