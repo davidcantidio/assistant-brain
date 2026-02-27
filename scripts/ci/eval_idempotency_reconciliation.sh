@@ -166,6 +166,7 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
         {"NOT_REQUIRED", "PENDING", "VALIDATED", "EXPIRED", "INVALIDATED"},
         ctx,
     )
+    assert_nullable_string(payload, "last_command_id", ctx)
     assert_nullable_string(payload, "challenge_id", ctx)
     parse_iso8601(payload.get("created_at"), f"{ctx}.created_at")
     parse_iso8601(payload.get("timeout_at"), f"{ctx}.timeout_at")
@@ -400,6 +401,7 @@ expected_required_in_schema(
         "status",
         "created_at",
         "timeout_at",
+        "last_command_id",
         "challenge_id",
         "challenge_status",
         "challenge_expires_at",
@@ -447,6 +449,7 @@ valid_decision = {
     "status": "PENDING",
     "created_at": "2026-02-25T18:00:00Z",
     "timeout_at": "2026-02-25T19:00:00Z",
+    "last_command_id": None,
     "challenge_id": "CHL-20260225-001",
     "challenge_status": "PENDING",
     "challenge_expires_at": "2026-02-25T18:05:00Z",
@@ -477,6 +480,9 @@ invalid_decision_missing_challenge_expiry["challenge_expires_at"] = None
 invalid_decision_not_required_with_challenge = dict(valid_decision)
 invalid_decision_not_required_with_challenge["challenge_status"] = "NOT_REQUIRED"
 invalid_decision_not_required_with_challenge["challenge_id"] = "CHL-20260225-001"
+
+invalid_decision_empty_last_command_id = dict(valid_decision)
+invalid_decision_empty_last_command_id["last_command_id"] = ""
 
 invalid_task_event = dict(valid_task_event)
 invalid_task_event["attempt"] = 0
@@ -546,7 +552,40 @@ expect_invalid(
     decision_schema,
     "decision.invalid_not_required_with_challenge",
 )
+expect_invalid(
+    validate_decision,
+    invalid_decision_empty_last_command_id,
+    decision_schema,
+    "decision.invalid_empty_last_command_id",
+)
 expect_invalid(validate_task_event, invalid_task_event, task_event_schema, "task_event.invalid")
+
+
+def apply_hitl_command(state: dict, command_id: str) -> str:
+    if command_id in state["seen_command_ids"]:
+        state["replay_audit"].append({"command_id": command_id, "event": "NO_OP_DUPLICATE_AUDITED"})
+        return "NO_OP_DUPLICATE_AUDITED"
+    state["seen_command_ids"].add(command_id)
+    state["state_transition_count"] += 1
+    return "APPLIED"
+
+
+hitl_command_state = {"seen_command_ids": set(), "state_transition_count": 0, "replay_audit": []}
+first_command = apply_hitl_command(hitl_command_state, "CMD-20260227-001")
+if first_command != "APPLIED":
+    fail("hitl_command.first_apply deveria retornar APPLIED.")
+if hitl_command_state["state_transition_count"] != 1:
+    fail("hitl_command.first_apply deveria gerar exatamente 1 transicao de estado.")
+
+duplicate_command = apply_hitl_command(hitl_command_state, "CMD-20260227-001")
+if duplicate_command != "NO_OP_DUPLICATE_AUDITED":
+    fail("hitl_command.duplicate_apply deveria retornar NO_OP_DUPLICATE_AUDITED.")
+if hitl_command_state["state_transition_count"] != 1:
+    fail("hitl_command.duplicate_apply nao pode gerar nova transicao de estado.")
+if hitl_command_state["replay_audit"] != [
+    {"command_id": "CMD-20260227-001", "event": "NO_OP_DUPLICATE_AUDITED"}
+]:
+    fail("hitl_command.duplicate_apply deveria registrar auditoria explicita de replay.")
 
 sprint_state = {"applied_by_key": set()}
 first_apply = apply_sprint_override(sprint_state, valid_sprint_override, "sprint_override.first_apply")

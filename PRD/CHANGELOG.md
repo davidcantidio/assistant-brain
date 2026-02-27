@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-27 - Execucao do ISSUE-F6-02-02 (idempotencia de command_id e replay auditado)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-02-02` do `EPIC-F6-02` com `PRD/PRD-MASTER.md`, `PM/DECISION-PROTOCOL.md` e `PRD/ROADMAP.md` (`B0-03`) como fonte de verdade para reforcar:
+    - idempotencia de comando HITL por `command_id` unico;
+    - replay tratado como `NO_OP_DUPLICATE_AUDITED`, sem nova transicao de estado;
+    - rastreabilidade do ultimo comando processado no payload de decision.
+  - endurece contratos e gates em:
+    - `ARC/schemas/decision.schema.json`;
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/eval_idempotency_reconciliation.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-02-issue-02-command-id-idempotency-replay-audit.md`.
+- Migracao:
+  - payload `decision` MUST incluir `last_command_id`.
+  - duplicidade de `command_id` MUST manter contador de transicao inalterado e registrar evento de replay auditado.
+
 ### 2026-02-27 - Execucao do ISSUE-F6-02-01 (lifecycle de challenge com TTL e uso unico)
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050.
 - Impacto:

@@ -15,6 +15,7 @@
     "status",
     "created_at",
     "timeout_at",
+    "last_command_id",
     "challenge_id",
     "challenge_status",
     "challenge_expires_at"
@@ -63,6 +64,10 @@
     "timeout_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "last_command_id": {
+      "type": ["string", "null"],
+      "minLength": 1
     },
     "challenge_id": {
       "type": ["string", "null"],

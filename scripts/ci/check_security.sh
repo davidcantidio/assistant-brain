@@ -88,6 +88,9 @@ search_re "ttl_padrao = 5 minutos" PM/DECISION-PROTOCOL.md SEC/SEC-SECRETS.md
 search_re "maximo 3 tentativas por challenge" SEC/SEC-SECRETS.md
 search_re 'sucesso, expiracao TTL, 3 falhas, rotacao de chave ou revogacao manual => `INVALIDATED`' PM/DECISION-PROTOCOL.md
 search_re 'registrar `challenge_id`, status final, tentativas e motivo de invalidacao' PM/DECISION-PROTOCOL.md
+search_re 'cada comando HITL \(Telegram ou Slack\) MUST gerar `command_id` unico' PM/DECISION-PROTOCOL.md
+search_re 'reenvio do mesmo comando MUST ser no-op \(sem transicao adicional de estado\)' PM/DECISION-PROTOCOL.md
+search_re 'comando com `command_id` repetido MUST ser auditado como replay' PM/DECISION-PROTOCOL.md
 search_re "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md SEC/SEC-POLICY.md
 search_re "RESTORE_TELEGRAM_CHANNEL" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re 'action: "restore_telegram_channel"' SEC/allowlists/ACTIONS.yaml
@@ -235,6 +238,52 @@ decision_single_use = evaluate_challenge(
 )
 if decision_single_use != ("BLOCK", "single_use_replay"):
     fail("challenge.lifecycle.single_use deveria bloquear replay do mesmo command_id.")
+PY
+
+python3 - <<'PY'
+import json
+import sys
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+if "last_command_id" not in required:
+    fail("decision.schema.json sem required obrigatorio: last_command_id.")
+
+last_command_meta = schema.get("properties", {}).get("last_command_id", {})
+if sorted(last_command_meta.get("type", [])) != ["null", "string"]:
+    fail("decision.schema.json com tipo invalido para last_command_id (esperado string|null).")
+
+
+def apply_hitl_command(state: dict, command_id: str) -> str:
+    if command_id in state["seen_command_ids"]:
+        state["audit_events"].append({"command_id": command_id, "event": "NO_OP_DUPLICATE_AUDITED"})
+        return "NO_OP_DUPLICATE_AUDITED"
+    state["seen_command_ids"].add(command_id)
+    state["transition_count"] += 1
+    return "APPLIED"
+
+
+state = {"seen_command_ids": set(), "transition_count": 0, "audit_events": []}
+first_apply = apply_hitl_command(state, "CMD-1001")
+if first_apply != "APPLIED":
+    fail("command_id.first_apply deveria retornar APPLIED.")
+if state["transition_count"] != 1:
+    fail("command_id.first_apply deveria gerar exatamente 1 transicao.")
+
+duplicate_apply = apply_hitl_command(state, "CMD-1001")
+if duplicate_apply != "NO_OP_DUPLICATE_AUDITED":
+    fail("command_id.duplicate_apply deveria retornar NO_OP_DUPLICATE_AUDITED.")
+if state["transition_count"] != 1:
+    fail("command_id.duplicate_apply nao pode gerar nova transicao.")
+if state["audit_events"] != [{"command_id": "CMD-1001", "event": "NO_OP_DUPLICATE_AUDITED"}]:
+    fail("command_id.duplicate_apply deveria registrar evento explicito de replay auditado.")
 PY
 
 python3 - <<'PY'
