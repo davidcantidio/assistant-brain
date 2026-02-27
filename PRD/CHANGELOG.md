@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.29"
+version: "2.30"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-27"
@@ -28,6 +28,26 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-27 - Execucao do ISSUE-F6-01-03 (fallback Slack com IDs/canal autorizados) + fechamento do EPIC-F6-01
+- RFCs afetadas: RFC-001, RFC-015, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-01-03` do `EPIC-F6-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B1-R19`) como fonte de verdade para reforcar:
+    - fallback Slack bloqueado por default sem `slack_user_ids` e `slack_channel_ids` validos;
+    - bloqueio de `slack_ready=true` sem IDs/canal preenchidos;
+    - regra explicita de `channel_id` autorizado por `slack_channel_ids`.
+  - endurece validacao executavel em:
+    - `scripts/ci/check_security.sh`.
+  - publica evidencias:
+    - `artifacts/phase-f6/epic-f6-01-issue-03-slack-fallback-ids-and-authorized-channel.md`;
+    - `artifacts/phase-f6/epic-f6-01-identity-channel.md`.
+  - fecha o `EPIC-F6-01`:
+    - atualiza `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPICS.md` para status `done`;
+    - move `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md` para `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md`;
+    - ajusta links relativos da epic movida para manter `ci-quality`.
+- Migracao:
+  - fallback Slack com `slack_ready=true` MUST exigir `slack_user_ids` e `slack_channel_ids` nao vazios e sem colisao entre operadores habilitados.
+  - conclusao de epic MUST mover o documento concluido para `PM/PHASES/feito/...`.
 
 ### 2026-02-27 - Execucao do ISSUE-F6-01-02 (Telegram primario e email nao confiavel)
 - RFCs afetadas: RFC-001, RFC-015, RFC-050.

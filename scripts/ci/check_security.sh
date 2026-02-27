@@ -79,6 +79,8 @@ search_re "email.*canal nao confiavel para comando|nunca canal confiavel de coma
 search_re_each_file "Telegram.*primario|primario.*Telegram" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
 search_re_each_file "Slack.*fallback|fallback.*Slack" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
 search_re_each_file "email.*canal nao confiavel para comando|email.*nunca.*canal (de comando )?confiavel|nunca.*canal (de comando )?confiavel.*email" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
+search_re "channel_id.*slack_channel_ids|slack_channel_ids.*channel_id" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md
+search_re "slack_user_ids.*slack_channel_ids.*nao vazios|slack_channel_ids.*slack_user_ids.*nao vazios" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
 search_re "UNTRUSTED_COMMAND_SOURCE" PM/DECISION-PROTOCOL.md
 search_re "MUST exigir challenge valido de uso unico" PM/DECISION-PROTOCOL.md
 search_re "comandos criticos MUST incluir challenge valido" SEC/SEC-POLICY.md
@@ -314,6 +316,8 @@ for raw in lines:
             "enabled": None,
             "telegram_user_id": None,
             "telegram_chat_ids": [],
+            "slack_user_ids": [],
+            "slack_channel_ids": [],
             "permissions": [],
             "slack_ready": None,
         }
@@ -329,6 +333,12 @@ for raw in lines:
     if stripped.startswith("telegram_chat_ids:"):
         section = "telegram_chat_ids"
         continue
+    if stripped.startswith("slack_user_ids:"):
+        section = "slack_user_ids"
+        continue
+    if stripped.startswith("slack_channel_ids:"):
+        section = "slack_channel_ids"
+        continue
 
     if stripped.startswith("- "):
         item = stripped[2:].strip().strip('"')
@@ -336,6 +346,10 @@ for raw in lines:
             current["permissions"].append(item)
         elif section == "telegram_chat_ids":
             current["telegram_chat_ids"].append(item)
+        elif section == "slack_user_ids":
+            current["slack_user_ids"].append(item)
+        elif section == "slack_channel_ids":
+            current["slack_channel_ids"].append(item)
         continue
 
     section = None
@@ -382,6 +396,8 @@ if not enabled_ops:
 required_permissions = {"approve", "reject", "kill"}
 enabled_user_ids = set()
 enabled_chat_id_owner = {}
+slack_user_id_owner = {}
+slack_channel_id_owner = {}
 for op in enabled_ops:
     op_id = op.get("operator_id") or "<sem_operator_id>"
     display_name = (op.get("display_name") or "").strip()
@@ -414,6 +430,38 @@ for op in enabled_ops:
         fail(f"Operador habilitado sem vinculo user/chat para identidade Telegram: {op_id}")
     if op.get("slack_ready") is None:
         fail(f"Operador habilitado sem campo slack_ready: {op_id}")
+    slack_ready = op.get("slack_ready") is True
+    slack_user_ids = [str(item).strip() for item in (op.get("slack_user_ids") or [])]
+    slack_channel_ids = [str(item).strip() for item in (op.get("slack_channel_ids") or [])]
+    if slack_ready:
+        if not slack_user_ids:
+            fail(f"Operador habilitado com slack_ready=true sem slack_user_ids: {op_id}")
+        if not slack_channel_ids:
+            fail(f"Operador habilitado com slack_ready=true sem slack_channel_ids: {op_id}")
+        if any(not item for item in slack_user_ids):
+            fail(f"Operador habilitado com slack_user_ids vazio: {op_id}")
+        if any(not item for item in slack_channel_ids):
+            fail(f"Operador habilitado com slack_channel_ids vazio: {op_id}")
+        if len(slack_user_ids) != len(set(slack_user_ids)):
+            fail(f"Operador habilitado com slack_user_ids duplicado: {op_id}")
+        if len(slack_channel_ids) != len(set(slack_channel_ids)):
+            fail(f"Operador habilitado com slack_channel_ids duplicado: {op_id}")
+        for slack_user_id in slack_user_ids:
+            owner = slack_user_id_owner.get(slack_user_id)
+            if owner and owner != op_id:
+                fail(
+                    "slack_user_id compartilhado entre operadores habilitados: "
+                    f"{slack_user_id} ({owner}, {op_id})"
+                )
+            slack_user_id_owner[slack_user_id] = op_id
+        for slack_channel_id in slack_channel_ids:
+            owner = slack_channel_id_owner.get(slack_channel_id)
+            if owner and owner != op_id:
+                fail(
+                    "slack_channel_id compartilhado entre operadores habilitados: "
+                    f"{slack_channel_id} ({owner}, {op_id})"
+                )
+            slack_channel_id_owner[slack_channel_id] = op_id
     permissions = set(op.get("permissions", []))
     missing = sorted(required_permissions - permissions)
     if missing:

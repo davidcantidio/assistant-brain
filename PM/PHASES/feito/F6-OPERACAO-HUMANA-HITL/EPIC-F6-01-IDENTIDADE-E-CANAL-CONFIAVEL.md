@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-27"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -68,8 +68,19 @@ Como operador, quero fallback Slack bloqueado por default ate validacao completa
   - status do canal primario e fallback;
   - resultado de `make ci-security`.
 
+## Resultado desta Rodada
+- `make ci-security` final: `PASS` (`security-check: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f6/epic-f6-01-issue-01-operators-source-of-truth.md`;
+  - `artifacts/phase-f6/epic-f6-01-issue-02-trusted-channel-telegram-primary-email-untrusted.md`;
+  - `artifacts/phase-f6/epic-f6-01-issue-03-slack-fallback-ids-and-authorized-channel.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f6/epic-f6-01-identity-channel.md`.
+- conclusao: `EPIC-F6-01` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [Operators Allowlist](../../../SEC/allowlists/OPERATORS.yaml)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [CI Security Check](../../../scripts/ci/check_security.sh)
+- [Operators Allowlist](../../../../SEC/allowlists/OPERATORS.yaml)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [CI Security Check](../../../../scripts/ci/check_security.sh)
