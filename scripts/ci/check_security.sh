@@ -77,6 +77,7 @@ search_re "lifecycle de challenge HITL completo" EVALS/SYSTEM-HEALTH-THRESHOLDS.
 search_re "aprovacao humana explicita em side effect financeiro" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 python3 - <<'PY'
+from collections import Counter
 import re
 import sys
 from pathlib import Path
@@ -99,6 +100,7 @@ if not re.search(
 PY
 
 python3 - <<'PY'
+from collections import Counter
 import re
 import sys
 from pathlib import Path
@@ -196,6 +198,7 @@ for profile, flags in expected_flags.items():
 PY
 
 python3 - <<'PY'
+from collections import Counter
 import re
 import sys
 from pathlib import Path
@@ -261,6 +264,7 @@ for raw in lines:
             operators.append(current)
         current = {
             "operator_id": stripped.split(":", 1)[1].strip().strip('"'),
+            "display_name": None,
             "enabled": None,
             "telegram_user_id": None,
             "telegram_chat_ids": [],
@@ -299,6 +303,8 @@ for raw in lines:
         if value not in ("true", "false"):
             fail(f"OPERATORS.yaml invalido: enabled nao booleano para operador {current['operator_id']}.")
         current["enabled"] = value == "true"
+    elif key == "display_name":
+        current["display_name"] = value
     elif key == "telegram_user_id":
         current["telegram_user_id"] = value
     elif key == "slack_ready":
@@ -312,20 +318,54 @@ if current:
 if not operators:
     fail("OPERATORS.yaml sem bloco de operators.")
 
+operator_ids = []
+for op in operators:
+    op_id = (op.get("operator_id") or "").strip()
+    if not op_id:
+        fail("OPERATORS.yaml com operador sem operator_id.")
+    operator_ids.append(op_id)
+
+duplicate_operator_ids = sorted([op_id for op_id, count in Counter(operator_ids).items() if count > 1])
+if duplicate_operator_ids:
+    fail(f"OPERATORS.yaml com operator_id duplicado: {', '.join(duplicate_operator_ids)}")
+
 enabled_ops = [op for op in operators if op.get("enabled") is True]
 if not enabled_ops:
     fail("OPERATORS.yaml sem operador habilitado (enabled: true).")
 
 required_permissions = {"approve", "reject", "kill"}
+enabled_user_ids = set()
+enabled_chat_id_owner = {}
 for op in enabled_ops:
     op_id = op.get("operator_id") or "<sem_operator_id>"
+    display_name = (op.get("display_name") or "").strip()
+    if not display_name:
+        fail(f"Operador habilitado sem display_name: {op_id}")
     user_id = op.get("telegram_user_id")
     if not user_id:
         fail(f"Operador habilitado sem telegram_user_id: {op_id}")
     if not re.fullmatch(r"\d+", user_id):
         fail(f"telegram_user_id invalido para operador {op_id}: {user_id}")
-    if not op.get("telegram_chat_ids"):
+    if user_id in enabled_user_ids:
+        fail(f"telegram_user_id duplicado entre operadores habilitados: {user_id}")
+    enabled_user_ids.add(user_id)
+    chat_ids = op.get("telegram_chat_ids") or []
+    if not chat_ids:
         fail(f"Operador habilitado sem telegram_chat_ids: {op_id}")
+    if len(chat_ids) != len(set(chat_ids)):
+        fail(f"Operador habilitado com telegram_chat_ids duplicado: {op_id}")
+    for chat_id in chat_ids:
+        if not re.fullmatch(r"\d+", str(chat_id)):
+            fail(f"telegram_chat_id invalido para operador {op_id}: {chat_id}")
+        owner = enabled_chat_id_owner.get(str(chat_id))
+        if owner and owner != op_id:
+            fail(
+                "telegram_chat_id compartilhado entre operadores habilitados: "
+                f"{chat_id} ({owner}, {op_id})"
+            )
+        enabled_chat_id_owner[str(chat_id)] = op_id
+    if str(user_id) not in {str(chat_id) for chat_id in chat_ids}:
+        fail(f"Operador habilitado sem vinculo user/chat para identidade Telegram: {op_id}")
     if op.get("slack_ready") is None:
         fail(f"Operador habilitado sem campo slack_ready: {op_id}")
     permissions = set(op.get("permissions", []))

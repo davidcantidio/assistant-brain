@@ -1,9 +1,9 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.27"
+version: "2.28"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-26"
+last_updated: "2026-02-27"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -28,6 +28,21 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-27 - Execucao do ISSUE-F6-01-01 (OPERATORS.yaml como fonte de verdade HITL)
+- RFCs afetadas: RFC-001, RFC-015, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-01-01` do `EPIC-F6-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B0-02`, `B0-19`) como fonte de verdade para reforcar:
+    - `OPERATORS.yaml` como fonte unica de identidade para aprovadores HITL;
+    - unicidade de `operator_id`, `telegram_user_id` e `telegram_chat_ids` entre operadores habilitados;
+    - integridade minima de identidade (`display_name`, `telegram_user_id` numerico, `telegram_chat_ids` numericos e vinculo `user/chat`).
+  - endurece validacao executavel em:
+    - `scripts/ci/check_security.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-01-issue-01-operators-source-of-truth.md`.
+- Migracao:
+  - qualquer alteracao em `SEC/allowlists/OPERATORS.yaml` MUST preservar unicidade de identidade e vinculo Telegram por operador habilitado.
+  - ausencia de identificador obrigatorio ou colisao de identidade MUST bloquear `make ci-security`.
 
 ### 2026-02-26 - Execucao do ISSUE-F5-03-06 (segregacao de contas/credenciais) + fechamento do EPIC-F5-03
 - RFCs afetadas: RFC-001, RFC-015, RFC-050.
