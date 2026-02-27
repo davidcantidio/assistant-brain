@@ -84,6 +84,10 @@ search_re "slack_user_ids.*slack_channel_ids.*nao vazios|slack_channel_ids.*slac
 search_re "UNTRUSTED_COMMAND_SOURCE" PM/DECISION-PROTOCOL.md
 search_re "MUST exigir challenge valido de uso unico" PM/DECISION-PROTOCOL.md
 search_re "comandos criticos MUST incluir challenge valido" SEC/SEC-POLICY.md
+search_re "ttl_padrao = 5 minutos" PM/DECISION-PROTOCOL.md SEC/SEC-SECRETS.md
+search_re "maximo 3 tentativas por challenge" SEC/SEC-SECRETS.md
+search_re 'sucesso, expiracao TTL, 3 falhas, rotacao de chave ou revogacao manual => `INVALIDATED`' PM/DECISION-PROTOCOL.md
+search_re 'registrar `challenge_id`, status final, tentativas e motivo de invalidacao' PM/DECISION-PROTOCOL.md
 search_re "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md SEC/SEC-POLICY.md
 search_re "RESTORE_TELEGRAM_CHANNEL" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re 'action: "restore_telegram_channel"' SEC/allowlists/ACTIONS.yaml
@@ -92,6 +96,146 @@ search_re "trust ladder|concessao gradual de permissoes" PM/TRACEABILITY/FELIX-A
 search_re "email nao confiavel para comando" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "lifecycle de challenge HITL completo" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "aprovacao humana explicita em side effect financeiro" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+
+python3 - <<'PY'
+from datetime import datetime, timedelta, timezone
+import json
+import sys
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+missing_required = sorted({"challenge_id", "challenge_status", "challenge_expires_at"} - required)
+if missing_required:
+    fail(f"decision.schema.json sem campos obrigatorios de challenge: {missing_required}")
+
+challenge_status = (
+    schema.get("properties", {})
+    .get("challenge_status", {})
+    .get("enum", [])
+)
+expected_status = {"NOT_REQUIRED", "PENDING", "VALIDATED", "EXPIRED", "INVALIDATED"}
+if set(challenge_status) != expected_status:
+    fail("decision.schema.json com enum invalido para challenge_status.")
+
+challenge_expires_meta = schema.get("properties", {}).get("challenge_expires_at", {})
+expires_type = challenge_expires_meta.get("type")
+if sorted(expires_type) != ["null", "string"]:
+    fail("decision.schema.json com tipo invalido para challenge_expires_at (esperado string|null).")
+if challenge_expires_meta.get("format") != "date-time":
+    fail("decision.schema.json com formato invalido para challenge_expires_at (esperado date-time).")
+
+
+def parse_iso8601(value: str) -> datetime:
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def evaluate_challenge(
+    *,
+    challenge_status: str,
+    challenge_expires_at: str,
+    attempt_count: int,
+    command_id: str,
+    last_validated_command_id: str | None,
+    invalidation_reason: str | None = None,
+    now: datetime,
+) -> tuple[str, str | None]:
+    if challenge_status != "PENDING":
+        return "BLOCK", "challenge_not_pending"
+
+    if invalidation_reason in {"key_rotated", "manual_revoked"}:
+        return "BLOCK", invalidation_reason
+
+    expires_at = parse_iso8601(challenge_expires_at)
+    if now > expires_at:
+        return "BLOCK", "ttl_expired"
+
+    if attempt_count >= 3:
+        return "BLOCK", "max_attempts_reached"
+
+    if last_validated_command_id == command_id:
+        return "BLOCK", "single_use_replay"
+
+    return "ALLOW", None
+
+
+issued_at = datetime(2026, 2, 27, 12, 0, 0, tzinfo=timezone.utc)
+expires_at = issued_at + timedelta(minutes=5)
+
+decision_allow = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=0,
+    command_id="CMD-001",
+    last_validated_command_id=None,
+    now=issued_at + timedelta(minutes=3),
+)
+if decision_allow != ("ALLOW", None):
+    fail("challenge.lifecycle.valid deveria permitir challenge valido dentro do TTL.")
+
+decision_expired = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=0,
+    command_id="CMD-002",
+    last_validated_command_id=None,
+    now=issued_at + timedelta(minutes=6),
+)
+if decision_expired != ("BLOCK", "ttl_expired"):
+    fail("challenge.lifecycle.expired deveria bloquear challenge expirado.")
+
+decision_three_fails = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=3,
+    command_id="CMD-003",
+    last_validated_command_id=None,
+    now=issued_at + timedelta(minutes=2),
+)
+if decision_three_fails != ("BLOCK", "max_attempts_reached"):
+    fail("challenge.lifecycle.max_attempts deveria invalidar apos 3 falhas.")
+
+decision_key_rotated = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=0,
+    command_id="CMD-004",
+    last_validated_command_id=None,
+    invalidation_reason="key_rotated",
+    now=issued_at + timedelta(minutes=1),
+)
+if decision_key_rotated != ("BLOCK", "key_rotated"):
+    fail("challenge.lifecycle.key_rotated deveria bloquear por rotacao de chave.")
+
+decision_manual_revoked = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=0,
+    command_id="CMD-005",
+    last_validated_command_id=None,
+    invalidation_reason="manual_revoked",
+    now=issued_at + timedelta(minutes=1),
+)
+if decision_manual_revoked != ("BLOCK", "manual_revoked"):
+    fail("challenge.lifecycle.manual_revoked deveria bloquear por revogacao manual.")
+
+decision_single_use = evaluate_challenge(
+    challenge_status="PENDING",
+    challenge_expires_at=expires_at.isoformat().replace("+00:00", "Z"),
+    attempt_count=0,
+    command_id="CMD-006",
+    last_validated_command_id="CMD-006",
+    now=issued_at + timedelta(minutes=1),
+)
+if decision_single_use != ("BLOCK", "single_use_replay"):
+    fail("challenge.lifecycle.single_use deveria bloquear replay do mesmo command_id.")
+PY
 
 python3 - <<'PY'
 import re

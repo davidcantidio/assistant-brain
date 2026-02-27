@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-27 - Execucao do ISSUE-F6-02-01 (lifecycle de challenge com TTL e uso unico)
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-02-01` do `EPIC-F6-02` com `PRD/PRD-MASTER.md`, `PM/DECISION-PROTOCOL.md` e `PRD/ROADMAP.md` (`B0-03`) como fonte de verdade para reforcar:
+    - lifecycle de challenge HITL com TTL de 5 minutos e uso unico;
+    - invalidacao executavel para expiração, 3 falhas, rotacao de chave e revogacao manual;
+    - bloqueio de replay do mesmo `command_id` apos validacao.
+  - endurece contratos e gates em:
+    - `ARC/schemas/decision.schema.json`;
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/eval_idempotency_reconciliation.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-02-issue-01-challenge-lifecycle-ttl-single-use.md`.
+- Migracao:
+  - payload `decision` MUST incluir `challenge_id`, `challenge_status` e `challenge_expires_at`.
+  - challenge fora de TTL, com 3 falhas, por rotacao/revogacao ou por replay MUST ser bloqueado em gate executavel.
+
 ### 2026-02-27 - Execucao do ISSUE-F6-01-03 (fallback Slack com IDs/canal autorizados) + fechamento do EPIC-F6-01
 - RFCs afetadas: RFC-001, RFC-015, RFC-050.
 - Impacto:

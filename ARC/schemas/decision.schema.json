@@ -14,7 +14,10 @@
     "data_sensitivity",
     "status",
     "created_at",
-    "timeout_at"
+    "timeout_at",
+    "challenge_id",
+    "challenge_status",
+    "challenge_expires_at"
   ],
   "properties": {
     "schema_version": {
@@ -59,6 +62,18 @@
     },
     "timeout_at": {
       "type": "string",
+      "format": "date-time"
+    },
+    "challenge_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "challenge_status": {
+      "type": "string",
+      "enum": ["NOT_REQUIRED", "PENDING", "VALIDATED", "EXPIRED", "INVALIDATED"]
+    },
+    "challenge_expires_at": {
+      "type": ["string", "null"],
       "format": "date-time"
     }
   },

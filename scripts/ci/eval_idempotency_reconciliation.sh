@@ -92,10 +92,24 @@ def parse_iso8601(value: str, field: str) -> None:
         fail(f"{field} invalido: timestamp ISO-8601 esperado.")
 
 
+def parse_optional_iso8601(value, field: str) -> None:
+    if value is None:
+        return
+    parse_iso8601(value, field)
+
+
 def assert_string(payload: dict, field: str, ctx: str) -> None:
     value = payload.get(field)
     if not isinstance(value, str) or not value.strip():
         fail(f"{ctx} invalido: campo '{field}' deve ser string nao vazia.")
+
+
+def assert_nullable_string(payload: dict, field: str, ctx: str) -> None:
+    value = payload.get(field)
+    if value is None:
+        return
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{ctx} invalido: campo '{field}' deve ser string nao vazia ou null.")
 
 
 def assert_enum(payload: dict, field: str, allowed: set[str], ctx: str) -> None:
@@ -146,8 +160,39 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
     assert_enum(payload, "risk_tier", {"R0", "R1", "R2", "R3"}, ctx)
     assert_enum(payload, "data_sensitivity", {"public", "internal", "sensitive"}, ctx)
     assert_enum(payload, "status", {"PENDING", "APPROVED", "REJECTED", "KILLED", "EXPIRED"}, ctx)
+    assert_enum(
+        payload,
+        "challenge_status",
+        {"NOT_REQUIRED", "PENDING", "VALIDATED", "EXPIRED", "INVALIDATED"},
+        ctx,
+    )
+    assert_nullable_string(payload, "challenge_id", ctx)
     parse_iso8601(payload.get("created_at"), f"{ctx}.created_at")
     parse_iso8601(payload.get("timeout_at"), f"{ctx}.timeout_at")
+    parse_optional_iso8601(payload.get("challenge_expires_at"), f"{ctx}.challenge_expires_at")
+
+    challenge_status = payload.get("challenge_status")
+    challenge_id = payload.get("challenge_id")
+    challenge_expires_at = payload.get("challenge_expires_at")
+    if challenge_status == "NOT_REQUIRED":
+        if challenge_id is not None:
+            fail(f"{ctx} invalido: challenge_id deve ser null quando challenge_status=NOT_REQUIRED.")
+        if challenge_expires_at is not None:
+            fail(
+                f"{ctx} invalido: challenge_expires_at deve ser null quando challenge_status=NOT_REQUIRED."
+            )
+        return
+
+    if challenge_id is None:
+        fail(
+            f"{ctx} invalido: challenge_id obrigatorio para challenge_status "
+            "PENDING/VALIDATED/EXPIRED/INVALIDATED."
+        )
+    if challenge_expires_at is None:
+        fail(
+            f"{ctx} invalido: challenge_expires_at obrigatorio para challenge_status "
+            "PENDING/VALIDATED/EXPIRED/INVALIDATED."
+        )
 
 
 def validate_task_event(payload: dict, schema: dict, ctx: str) -> None:
@@ -355,6 +400,9 @@ expected_required_in_schema(
         "status",
         "created_at",
         "timeout_at",
+        "challenge_id",
+        "challenge_status",
+        "challenge_expires_at",
     },
     "decision.schema.json",
 )
@@ -399,6 +447,9 @@ valid_decision = {
     "status": "PENDING",
     "created_at": "2026-02-25T18:00:00Z",
     "timeout_at": "2026-02-25T19:00:00Z",
+    "challenge_id": "CHL-20260225-001",
+    "challenge_status": "PENDING",
+    "challenge_expires_at": "2026-02-25T18:05:00Z",
 }
 
 valid_task_event = {
@@ -419,6 +470,13 @@ invalid_work_order.pop("idempotency_key", None)
 
 invalid_decision = dict(valid_decision)
 invalid_decision["risk_tier"] = "R4"
+
+invalid_decision_missing_challenge_expiry = dict(valid_decision)
+invalid_decision_missing_challenge_expiry["challenge_expires_at"] = None
+
+invalid_decision_not_required_with_challenge = dict(valid_decision)
+invalid_decision_not_required_with_challenge["challenge_status"] = "NOT_REQUIRED"
+invalid_decision_not_required_with_challenge["challenge_id"] = "CHL-20260225-001"
 
 invalid_task_event = dict(valid_task_event)
 invalid_task_event["attempt"] = 0
@@ -476,6 +534,18 @@ validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
 
 expect_invalid(validate_work_order, invalid_work_order, work_order_schema, "work_order.invalid")
 expect_invalid(validate_decision, invalid_decision, decision_schema, "decision.invalid")
+expect_invalid(
+    validate_decision,
+    invalid_decision_missing_challenge_expiry,
+    decision_schema,
+    "decision.invalid_missing_challenge_expiry",
+)
+expect_invalid(
+    validate_decision,
+    invalid_decision_not_required_with_challenge,
+    decision_schema,
+    "decision.invalid_not_required_with_challenge",
+)
 expect_invalid(validate_task_event, invalid_task_event, task_event_schema, "task_event.invalid")
 
 sprint_state = {"applied_by_key": set()}
