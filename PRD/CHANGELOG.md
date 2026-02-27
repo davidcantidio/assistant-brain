@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.28"
+version: "2.29"
 status: "active"
 owner: "PM"
 last_updated: "2026-02-27"
@@ -28,6 +28,22 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-02-27 - Execucao do ISSUE-F6-01-02 (Telegram primario e email nao confiavel)
+- RFCs afetadas: RFC-001, RFC-015, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-01-02` do `EPIC-F6-01` com `PRD/PRD-MASTER.md` e `PRD/ROADMAP.md` (`B0-21`) como fonte de verdade para reforcar:
+    - Telegram como canal primario de comando HITL;
+    - Slack apenas como fallback controlado;
+    - email explicitamente nao confiavel para comando operacional.
+  - endurece validacao executavel em:
+    - `scripts/ci/check_security.sh` para exigir a regra de canal por arquivo normativo (`PM/DECISION-PROTOCOL.md`, `SEC/SEC-POLICY.md`, `PRD/PRD-MASTER.md`);
+    - bloqueio de linguagem ambigua que trate email como canal confiavel de comando.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-01-issue-02-trusted-channel-telegram-primary-email-untrusted.md`.
+- Migracao:
+  - qualquer alteracao nos documentos de canal HITL MUST preservar Telegram como primario e email como nao confiavel para comando.
+  - linguagem ambigua de confianca de email MUST bloquear `make ci-security`.
 
 ### 2026-02-27 - Execucao do ISSUE-F6-01-01 (OPERATORS.yaml como fonte de verdade HITL)
 - RFCs afetadas: RFC-001, RFC-015, RFC-050.

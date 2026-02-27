@@ -14,6 +14,18 @@ search_re() {
   fi
 }
 
+search_re_each_file() {
+  local pattern="$1"
+  shift
+  local f
+  for f in "$@"; do
+    if ! search_re "$pattern" "$f"; then
+      echo "Padrao obrigatorio ausente em $f: $pattern"
+      exit 1
+    fi
+  done
+}
+
 required_files=(
   "SEC/allowlists/DOMAINS.yaml"
   "SEC/allowlists/TOOLS.yaml"
@@ -64,6 +76,9 @@ search_re "financial_side_effect_requires_explicit_human_approval: true" PRD/PRD
 search_re "email_command_channel_trusted: false" PRD/PRD-MASTER.md
 
 search_re "email.*canal nao confiavel para comando|nunca canal confiavel de comando" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
+search_re_each_file "Telegram.*primario|primario.*Telegram" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
+search_re_each_file "Slack.*fallback|fallback.*Slack" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
+search_re_each_file "email.*canal nao confiavel para comando|email.*nunca.*canal (de comando )?confiavel|nunca.*canal (de comando )?confiavel.*email" PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md PRD/PRD-MASTER.md
 search_re "UNTRUSTED_COMMAND_SOURCE" PM/DECISION-PROTOCOL.md
 search_re "MUST exigir challenge valido de uso unico" PM/DECISION-PROTOCOL.md
 search_re "comandos criticos MUST incluir challenge valido" SEC/SEC-POLICY.md
@@ -77,7 +92,6 @@ search_re "lifecycle de challenge HITL completo" EVALS/SYSTEM-HEALTH-THRESHOLDS.
 search_re "aprovacao humana explicita em side effect financeiro" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 python3 - <<'PY'
-from collections import Counter
 import re
 import sys
 from pathlib import Path
@@ -100,7 +114,6 @@ if not re.search(
 PY
 
 python3 - <<'PY'
-from collections import Counter
 import re
 import sys
 from pathlib import Path
@@ -195,6 +208,39 @@ for profile, flags in expected_flags.items():
                 f"PROVIDERS.yaml com valor invalido em {profile}.{key} "
                 f"(esperado: {str(expected_value).lower()})."
             )
+PY
+
+python3 - <<'PY'
+import sys
+from pathlib import Path
+
+files = [
+    "PM/DECISION-PROTOCOL.md",
+    "SEC/SEC-POLICY.md",
+    "PRD/PRD-MASTER.md",
+]
+ambiguous_lines = []
+
+for path in files:
+    lines = Path(path).read_text(encoding="utf-8").splitlines()
+    for lineno, raw in enumerate(lines, start=1):
+        line = raw.strip()
+        low = line.lower()
+        if "email" not in low:
+            continue
+        if "canal confiavel" not in low and "comando confiavel" not in low:
+            continue
+        if "confirma" in low and "canal confiavel" in low:
+            continue
+        if any(token in low for token in ("nao", "nunca", "false", "untrusted")):
+            continue
+        ambiguous_lines.append(f"{path}:{lineno}:{line}")
+
+if ambiguous_lines:
+    print("Linguagem ambigua detectada para confianca de email:")
+    for item in ambiguous_lines:
+        print(item)
+    sys.exit(1)
 PY
 
 python3 - <<'PY'
