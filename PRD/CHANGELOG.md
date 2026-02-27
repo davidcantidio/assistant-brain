@@ -29,6 +29,22 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-27 - Fechamento do EPIC-F6-02 (challenge, idempotencia e auditoria)
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050.
+- Impacto:
+  - conclui o `EPIC-F6-02` com evidencias de challenge/idempotencia/auditoria:
+    - `artifacts/phase-f6/epic-f6-02-issue-01-challenge-lifecycle-ttl-single-use.md`;
+    - `artifacts/phase-f6/epic-f6-02-issue-02-command-id-idempotency-replay-audit.md`;
+    - `artifacts/phase-f6/epic-f6-02-issue-03-auth-channel-block-security-incident.md`;
+    - `artifacts/phase-f6/epic-f6-02-challenge-audit.md`.
+  - fecha planejamento da fase para este epic:
+    - atualiza `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPICS.md` para status `done` no `EPIC-F6-02`;
+    - move `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md` para `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md`;
+    - ajusta links relativos da epic movida para manter `ci-quality`.
+- Migracao:
+  - promocao interna de epic para `done` MUST manter evidencia consolidada e documento movido para `PM/PHASES/feito/...`.
+  - `EPIC-F6-03` permanece `planned`, sem alteracao funcional nesta rodada.
+
 ### 2026-02-27 - Execucao do ISSUE-F6-02-03 (bloqueio por autenticacao/canal invalido + incidente)
 - RFCs afetadas: RFC-001, RFC-015, RFC-050.
 - Impacto:

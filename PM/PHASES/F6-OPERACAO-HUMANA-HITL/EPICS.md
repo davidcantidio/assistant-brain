@@ -27,7 +27,7 @@ Criterio objetivo:
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
 | `EPIC-F6-01` | Identidade e canal confiavel | validar operadores autorizados e contrato de canal HITL confiavel | done | [EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md](../feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md) |
-| `EPIC-F6-02` | Challenge, idempotencia e auditoria | formalizar seguranca dos comandos criticos HITL com trilha auditavel | planned | [EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md](./EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md) |
+| `EPIC-F6-02` | Challenge, idempotencia e auditoria | formalizar seguranca dos comandos criticos HITL com trilha auditavel | done | [EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md](../feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md) |
 | `EPIC-F6-03` | Fallback, contingencia e promocao | fechar fase com checklist humano e decisao formal `promote|hold` | planned | [EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md](./EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md) |
 
 ## Escopo Desta Entrega

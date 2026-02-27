@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-02-27"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -68,8 +68,20 @@ Como operador, quero que falhas de autenticacao/canal disparem bloqueio e incide
   - status de idempotencia por `command_id`;
   - bloqueios/incidentes registrados.
 
+## Resultado desta Rodada
+- `make ci-security` final: `PASS` (`security-check: PASS`).
+- `make eval-idempotency` final: `PASS` (`eval-idempotency: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f6/epic-f6-02-issue-01-challenge-lifecycle-ttl-single-use.md`;
+  - `artifacts/phase-f6/epic-f6-02-issue-02-command-id-idempotency-replay-audit.md`;
+  - `artifacts/phase-f6/epic-f6-02-issue-03-auth-channel-block-security-incident.md`.
+- evidencia consolidada do epico:
+  - `artifacts/phase-f6/epic-f6-02-challenge-audit.md`.
+- conclusao: `EPIC-F6-02` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Security Secrets](../../../SEC/SEC-SECRETS.md)
-- [Incident Response](../../../SEC/SEC-INCIDENT-RESPONSE.md)
-- [CI Security Check](../../../scripts/ci/check_security.sh)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Security Secrets](../../../../SEC/SEC-SECRETS.md)
+- [Incident Response](../../../../SEC/SEC-INCIDENT-RESPONSE.md)
+- [CI Security Check](../../../../scripts/ci/check_security.sh)
