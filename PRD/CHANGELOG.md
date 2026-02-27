@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-02-27 - Execucao do ISSUE-F6-02-03 (bloqueio por autenticacao/canal invalido + incidente)
+- RFCs afetadas: RFC-001, RFC-015, RFC-050.
+- Impacto:
+  - executa `ISSUE-F6-02-03` do `EPIC-F6-02` com `PRD/PRD-MASTER.md`, `PM/DECISION-PROTOCOL.md`, `SEC/SEC-POLICY.md` e `PRD/ROADMAP.md` (`B0-03`) como fonte de verdade para reforcar:
+    - bloqueio obrigatorio de comando HITL com autenticacao/canal invalidos;
+    - abertura obrigatoria de incidente `SECURITY_VIOLATION_REVIEW`;
+    - registro de hash do payload quando o bloqueio de seguranca ocorrer.
+  - endurece contratos e gates em:
+    - `ARC/schemas/decision.schema.json`;
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/eval_idempotency_reconciliation.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-02-issue-03-auth-channel-block-security-incident.md`.
+- Migracao:
+  - payload `decision` MUST incluir trilha de autenticacao/canal (`auth_method`, `approver_*`).
+  - falha de autenticacao/canal MUST gerar bloqueio + `SECURITY_VIOLATION_REVIEW` + hash do payload.
+
 ### 2026-02-27 - Execucao do ISSUE-F6-02-02 (idempotencia de command_id e replay auditado)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050.
 - Impacto:

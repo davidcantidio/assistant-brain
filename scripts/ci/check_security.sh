@@ -91,6 +91,10 @@ search_re 'registrar `challenge_id`, status final, tentativas e motivo de invali
 search_re 'cada comando HITL \(Telegram ou Slack\) MUST gerar `command_id` unico' PM/DECISION-PROTOCOL.md
 search_re 'reenvio do mesmo comando MUST ser no-op \(sem transicao adicional de estado\)' PM/DECISION-PROTOCOL.md
 search_re 'comando com `command_id` repetido MUST ser auditado como replay' PM/DECISION-PROTOCOL.md
+search_re "qualquer falha de autenticacao MUST" PM/DECISION-PROTOCOL.md
+search_re "bloquear comando" PM/DECISION-PROTOCOL.md
+search_re 'abrir `SECURITY_VIOLATION_REVIEW`' PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md
+search_re "registrar hash do payload do update" PM/DECISION-PROTOCOL.md
 search_re "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md SEC/SEC-POLICY.md
 search_re "RESTORE_TELEGRAM_CHANNEL" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re 'action: "restore_telegram_channel"' SEC/allowlists/ACTIONS.yaml
@@ -284,6 +288,80 @@ if state["transition_count"] != 1:
     fail("command_id.duplicate_apply nao pode gerar nova transicao.")
 if state["audit_events"] != [{"command_id": "CMD-1001", "event": "NO_OP_DUPLICATE_AUDITED"}]:
     fail("command_id.duplicate_apply deveria registrar evento explicito de replay auditado.")
+PY
+
+python3 - <<'PY'
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+required_auth_fields = {
+    "approver_operator_id",
+    "approver_channel",
+    "approver_telegram_user_id",
+    "approver_telegram_chat_id",
+    "approver_slack_user_id",
+    "approver_slack_channel_id",
+    "auth_method",
+}
+missing = sorted(required_auth_fields - required)
+if missing:
+    fail(f"decision.schema.json sem campos obrigatorios de auth/canal: {missing}")
+
+
+def process_hitl_command(payload: dict) -> tuple[str, dict]:
+    if payload.get("auth_valid") is True and payload.get("channel_valid") is True:
+        return "ALLOW", {"incident_ref": None, "payload_hash": None}
+    payload_hash = hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return (
+        "BLOCK",
+        {
+            "incident_ref": "SECURITY_VIOLATION_REVIEW",
+            "payload_hash": payload_hash,
+            "reason": "invalid_auth_or_channel",
+        },
+    )
+
+
+allow_status, allow_evidence = process_hitl_command(
+    {"auth_valid": True, "channel_valid": True, "command_id": "CMD-2001"}
+)
+if allow_status != "ALLOW":
+    fail("auth_channel.valid deveria permitir comando com auth/canal validos.")
+if allow_evidence.get("incident_ref") is not None:
+    fail("auth_channel.valid nao deve abrir incidente.")
+
+invalid_auth_payload = {"auth_valid": False, "channel_valid": True, "command_id": "CMD-2002"}
+block_status, block_evidence = process_hitl_command(invalid_auth_payload)
+if block_status != "BLOCK":
+    fail("auth_channel.invalid_auth deveria bloquear comando invalido.")
+if block_evidence.get("incident_ref") != "SECURITY_VIOLATION_REVIEW":
+    fail("auth_channel.invalid_auth deveria abrir SECURITY_VIOLATION_REVIEW.")
+expected_hash = hashlib.sha256(
+    json.dumps(invalid_auth_payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+).hexdigest()
+if block_evidence.get("payload_hash") != expected_hash:
+    fail("auth_channel.invalid_auth deveria registrar hash do payload.")
+
+invalid_channel_payload = {"auth_valid": True, "channel_valid": False, "command_id": "CMD-2003"}
+block_channel_status, block_channel_evidence = process_hitl_command(invalid_channel_payload)
+if block_channel_status != "BLOCK":
+    fail("auth_channel.invalid_channel deveria bloquear comando invalido.")
+if block_channel_evidence.get("incident_ref") != "SECURITY_VIOLATION_REVIEW":
+    fail("auth_channel.invalid_channel deveria abrir SECURITY_VIOLATION_REVIEW.")
+if not block_channel_evidence.get("payload_hash"):
+    fail("auth_channel.invalid_channel deveria registrar hash de payload.")
 PY
 
 python3 - <<'PY'

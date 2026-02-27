@@ -160,6 +160,23 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
     assert_enum(payload, "risk_tier", {"R0", "R1", "R2", "R3"}, ctx)
     assert_enum(payload, "data_sensitivity", {"public", "internal", "sensitive"}, ctx)
     assert_enum(payload, "status", {"PENDING", "APPROVED", "REJECTED", "KILLED", "EXPIRED"}, ctx)
+    assert_nullable_string(payload, "approver_operator_id", ctx)
+    assert_nullable_string(payload, "approver_telegram_user_id", ctx)
+    assert_nullable_string(payload, "approver_telegram_chat_id", ctx)
+    assert_nullable_string(payload, "approver_slack_user_id", ctx)
+    assert_nullable_string(payload, "approver_slack_channel_id", ctx)
+    approver_channel = payload.get("approver_channel")
+    if approver_channel not in {"telegram", "slack", None}:
+        fail(f"{ctx} invalido: approver_channel fora do enum permitido.")
+    auth_method = payload.get("auth_method")
+    if auth_method not in {
+        "telegram_allowlist",
+        "slack_allowlist",
+        "challenge_secret",
+        "personal_domain_confirmation",
+        None,
+    }:
+        fail(f"{ctx} invalido: auth_method fora do enum permitido.")
     assert_enum(
         payload,
         "challenge_status",
@@ -194,6 +211,38 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
             f"{ctx} invalido: challenge_expires_at obrigatorio para challenge_status "
             "PENDING/VALIDATED/EXPIRED/INVALIDATED."
         )
+
+    if approver_channel == "telegram":
+        if payload.get("approver_telegram_user_id") is None or payload.get("approver_telegram_chat_id") is None:
+            fail(
+                f"{ctx} invalido: canal telegram exige approver_telegram_user_id e "
+                "approver_telegram_chat_id."
+            )
+        if payload.get("approver_slack_user_id") is not None or payload.get("approver_slack_channel_id") is not None:
+            fail(f"{ctx} invalido: canal telegram nao pode carregar campos slack preenchidos.")
+        if auth_method not in {"telegram_allowlist", "challenge_secret"}:
+            fail(f"{ctx} invalido: canal telegram exige auth_method compativel.")
+    elif approver_channel == "slack":
+        if payload.get("approver_slack_user_id") is None or payload.get("approver_slack_channel_id") is None:
+            fail(
+                f"{ctx} invalido: canal slack exige approver_slack_user_id e "
+                "approver_slack_channel_id."
+            )
+        if payload.get("approver_telegram_user_id") is not None or payload.get("approver_telegram_chat_id") is not None:
+            fail(f"{ctx} invalido: canal slack nao pode carregar campos telegram preenchidos.")
+        if auth_method not in {"slack_allowlist", "challenge_secret"}:
+            fail(f"{ctx} invalido: canal slack exige auth_method compativel.")
+    else:
+        if any(
+            payload.get(field) is not None
+            for field in (
+                "approver_telegram_user_id",
+                "approver_telegram_chat_id",
+                "approver_slack_user_id",
+                "approver_slack_channel_id",
+            )
+        ):
+            fail(f"{ctx} invalido: approver_channel=null exige ids de canal null.")
 
 
 def validate_task_event(payload: dict, schema: dict, ctx: str) -> None:
@@ -401,6 +450,13 @@ expected_required_in_schema(
         "status",
         "created_at",
         "timeout_at",
+        "approver_operator_id",
+        "approver_channel",
+        "approver_telegram_user_id",
+        "approver_telegram_chat_id",
+        "approver_slack_user_id",
+        "approver_slack_channel_id",
+        "auth_method",
         "last_command_id",
         "challenge_id",
         "challenge_status",
@@ -449,6 +505,13 @@ valid_decision = {
     "status": "PENDING",
     "created_at": "2026-02-25T18:00:00Z",
     "timeout_at": "2026-02-25T19:00:00Z",
+    "approver_operator_id": "primary-01",
+    "approver_channel": "telegram",
+    "approver_telegram_user_id": "7165399698",
+    "approver_telegram_chat_id": "7165399698",
+    "approver_slack_user_id": None,
+    "approver_slack_channel_id": None,
+    "auth_method": "telegram_allowlist",
     "last_command_id": None,
     "challenge_id": "CHL-20260225-001",
     "challenge_status": "PENDING",
@@ -483,6 +546,17 @@ invalid_decision_not_required_with_challenge["challenge_id"] = "CHL-20260225-001
 
 invalid_decision_empty_last_command_id = dict(valid_decision)
 invalid_decision_empty_last_command_id["last_command_id"] = ""
+
+invalid_decision_telegram_missing_identity = dict(valid_decision)
+invalid_decision_telegram_missing_identity["approver_telegram_user_id"] = None
+
+invalid_decision_slack_auth_mismatch = dict(valid_decision)
+invalid_decision_slack_auth_mismatch["approver_channel"] = "slack"
+invalid_decision_slack_auth_mismatch["approver_telegram_user_id"] = None
+invalid_decision_slack_auth_mismatch["approver_telegram_chat_id"] = None
+invalid_decision_slack_auth_mismatch["approver_slack_user_id"] = "U12345"
+invalid_decision_slack_auth_mismatch["approver_slack_channel_id"] = "C12345"
+invalid_decision_slack_auth_mismatch["auth_method"] = "telegram_allowlist"
 
 invalid_task_event = dict(valid_task_event)
 invalid_task_event["attempt"] = 0
@@ -558,6 +632,18 @@ expect_invalid(
     decision_schema,
     "decision.invalid_empty_last_command_id",
 )
+expect_invalid(
+    validate_decision,
+    invalid_decision_telegram_missing_identity,
+    decision_schema,
+    "decision.invalid_telegram_missing_identity",
+)
+expect_invalid(
+    validate_decision,
+    invalid_decision_slack_auth_mismatch,
+    decision_schema,
+    "decision.invalid_slack_auth_mismatch",
+)
 expect_invalid(validate_task_event, invalid_task_event, task_event_schema, "task_event.invalid")
 
 
@@ -586,6 +672,40 @@ if hitl_command_state["replay_audit"] != [
     {"command_id": "CMD-20260227-001", "event": "NO_OP_DUPLICATE_AUDITED"}
 ]:
     fail("hitl_command.duplicate_apply deveria registrar auditoria explicita de replay.")
+
+
+def evaluate_auth_channel(payload: dict) -> tuple[str, dict]:
+    auth_valid = payload.get("auth_valid") is True
+    channel_valid = payload.get("channel_valid") is True
+    if auth_valid and channel_valid:
+        return "ALLOW", {"incident_ref": None}
+    return (
+        "BLOCK",
+        {
+            "incident_ref": "SECURITY_VIOLATION_REVIEW",
+            "reason": "invalid_auth_or_channel",
+            "payload_hash_recorded": True,
+        },
+    )
+
+
+allow_auth_channel, allow_incident = evaluate_auth_channel({"auth_valid": True, "channel_valid": True})
+if allow_auth_channel != "ALLOW" or allow_incident != {"incident_ref": None}:
+    fail("auth_channel.valid deveria permitir comando com autenticacao/canal validos.")
+
+block_auth_channel, block_incident = evaluate_auth_channel({"auth_valid": False, "channel_valid": True})
+if block_auth_channel != "BLOCK":
+    fail("auth_channel.invalid_auth deveria bloquear comando invalido.")
+if block_incident.get("incident_ref") != "SECURITY_VIOLATION_REVIEW":
+    fail("auth_channel.invalid_auth deveria abrir SECURITY_VIOLATION_REVIEW.")
+if block_incident.get("payload_hash_recorded") is not True:
+    fail("auth_channel.invalid_auth deveria registrar hash de payload.")
+
+block_channel, block_channel_incident = evaluate_auth_channel({"auth_valid": True, "channel_valid": False})
+if block_channel != "BLOCK":
+    fail("auth_channel.invalid_channel deveria bloquear comando invalido.")
+if block_channel_incident.get("incident_ref") != "SECURITY_VIOLATION_REVIEW":
+    fail("auth_channel.invalid_channel deveria abrir SECURITY_VIOLATION_REVIEW.")
 
 sprint_state = {"applied_by_key": set()}
 first_apply = apply_sprint_override(sprint_state, valid_sprint_override, "sprint_override.first_apply")

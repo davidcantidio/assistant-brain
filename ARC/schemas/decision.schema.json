@@ -15,6 +15,13 @@
     "status",
     "created_at",
     "timeout_at",
+    "approver_operator_id",
+    "approver_channel",
+    "approver_telegram_user_id",
+    "approver_telegram_chat_id",
+    "approver_slack_user_id",
+    "approver_slack_channel_id",
+    "auth_method",
     "last_command_id",
     "challenge_id",
     "challenge_status",
@@ -64,6 +71,40 @@
     "timeout_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "approver_operator_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "approver_channel": {
+      "type": ["string", "null"],
+      "enum": ["telegram", "slack", null]
+    },
+    "approver_telegram_user_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "approver_telegram_chat_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "approver_slack_user_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "approver_slack_channel_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "auth_method": {
+      "type": ["string", "null"],
+      "enum": [
+        "telegram_allowlist",
+        "slack_allowlist",
+        "challenge_secret",
+        "personal_domain_confirmation",
+        null
+      ]
     },
     "last_command_id": {
       "type": ["string", "null"],
