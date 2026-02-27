@@ -103,8 +103,8 @@ Como operador, quero regras explicitas de modo permitido para AI-Trader e ClawWo
 - conclusao: `EPIC-F5-01` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [Integrations Readme](../../../INTEGRATIONS/README.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
-- [Felix OpenClaw Pontos Relevantes](../../../felix-openclaw-pontos-relevantes.md)
+- [Integrations Readme](../../../../INTEGRATIONS/README.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [Roadmap](../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../felixcraft.md)
+- [Felix OpenClaw Pontos Relevantes](../../../../felix-openclaw-pontos-relevantes.md)

@@ -133,10 +133,10 @@ Como operador, quero separar contas/ativos/credenciais do agente das contas pess
 - conclusao: `EPIC-F5-03` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [ARC Heartbeat](../../../ARC/ARC-HEARTBEAT.md)
-- [ARC Core](../../../ARC/ARC-CORE.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
-- [Felix OpenClaw Pontos Relevantes](../../../felix-openclaw-pontos-relevantes.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [ARC Heartbeat](../../../../ARC/ARC-HEARTBEAT.md)
+- [ARC Core](../../../../ARC/ARC-CORE.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [Roadmap](../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../felixcraft.md)
+- [Felix OpenClaw Pontos Relevantes](../../../../felix-openclaw-pontos-relevantes.md)

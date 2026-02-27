@@ -118,8 +118,8 @@ Como operador, quero runbook seguro para posicao aberta em degradacao sem perda 
 - conclusao: `EPIC-F5-02` concluido no escopo documental/tdd desta rodada.
 
 ## Dependencias
-- [Trading PRD](../../../VERTICALS/TRADING/TRADING-PRD.md)
-- [Trading Risk Rules](../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Felixcraft Architecture](../../../felixcraft.md)
+- [Trading PRD](../../../../VERTICALS/TRADING/TRADING-PRD.md)
+- [Trading Risk Rules](../../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Roadmap](../../../../PRD/ROADMAP.md)
+- [Felixcraft Architecture](../../../../felixcraft.md)
