@@ -120,7 +120,13 @@ def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], di
       return values, log_contents
 
 
-def write_contract_review(path: Path, *, source_of_truth: str = "PRD/PRD-MASTER.md") -> None:
+def write_contract_review(
+    path: Path,
+    *,
+    source_of_truth: str = "PRD/PRD-MASTER.md",
+    critical_drifts_open: int = 0,
+    drift_backlog: str = "[]",
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         """# F8 Contract Review 2026-W09
@@ -133,7 +139,7 @@ def write_contract_review(path: Path, *, source_of_truth: str = "PRD/PRD-MASTER.
   "source_of_truth": "%s",
   "previous_week_id": "none",
   "contract_review_status": "PASS",
-  "critical_drifts_open": 0
+  "critical_drifts_open": %s
 }
 ```
 
@@ -181,7 +187,7 @@ def write_contract_review(path: Path, *, source_of_truth: str = "PRD/PRD-MASTER.
 
 ## Drift Backlog
 ```json
-[]
+%s
 ```
 
 ## Previous Week Closure
@@ -196,7 +202,7 @@ def write_contract_review(path: Path, *, source_of_truth: str = "PRD/PRD-MASTER.
 }
 ```
 """
-        % source_of_truth,
+        % (source_of_truth, critical_drifts_open, drift_backlog),
         encoding="utf-8",
     )
 
@@ -274,6 +280,50 @@ finally:
             path.rmdir()
     if artifact_pass_dir.exists():
         artifact_pass_dir.rmdir()
+
+artifact_open_dir = Path(tempfile.mkdtemp(prefix="f8-contract-review-open-"))
+try:
+    write_contract_review(
+        artifact_open_dir / "2026-W09.md",
+        critical_drifts_open=1,
+        drift_backlog="""[
+  {
+    "drift_id": "DRIFT-F8-2026-W09-01",
+    "domain": "trading",
+    "severity": "critical",
+    "summary": "critical drift mock",
+    "status": "open",
+    "owner": "Sr. Geldmacher",
+    "due_date": "2026-03-08",
+    "source_refs": ["PRD/PRD-MASTER.md"],
+    "evidence_ref": "artifacts/mock.md",
+    "risk_exception_ref": null
+  }
+]""",
+    )
+    artifact_open_values, _ = run_mock(
+        "artifact-open",
+        {
+            "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
+            "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
+            "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
+            "CONTRACT_REVIEW_DIR": str(artifact_open_dir),
+        },
+    )
+    if artifact_open_values["contract_review_status"] != "PASS":
+        fail("mock artifact-open deveria manter contract_review_status=PASS com artifact valido.")
+    if artifact_open_values["critical_drifts_open"] != "1":
+        fail("mock artifact-open deveria propagar critical_drifts_open=1.")
+    if artifact_open_values["decision"] != "hold":
+        fail("mock artifact-open deveria resultar em decision=hold.")
+finally:
+    for path in sorted(artifact_open_dir.rglob("*"), reverse=True):
+        if path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            path.rmdir()
+    if artifact_open_dir.exists():
+        artifact_open_dir.rmdir()
 
 review_fail_values, _ = run_mock(
     "review-fail",

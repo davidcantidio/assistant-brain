@@ -29,6 +29,21 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-02-02 (backlog de remediacao com owner e prazo)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-02-02` do `EPIC-F8-02` para endurecer o backlog canonico de drift em `artifacts/phase-f8/contract-review/<week_id>.md`:
+    - `owner` passa a ser obrigatorio por drift;
+    - `due_date` passa a ser obrigatorio por drift;
+    - `risk_exception_ref` passa a ser obrigatorio quando `status=risk_accepted`.
+  - integra `scripts/ci/check_phase_f8_contract_review.sh` ao `make ci-quality`.
+  - completa o backlog real da semana `2026-W09` com owner e prazo para `DRIFT-F8-2026-W09-01`.
+  - adiciona mock explicito em `scripts/ci/check_phase_f8_weekly_governance.sh` para garantir `hold` com `critical_drifts_open>0` mesmo quando o artifact de review estiver valido.
+- Migracao:
+  - drift sem `owner` ou `due_date` MUST tornar o artifact de `contract-review` invalido.
+  - `status=risk_accepted` MUST exigir `risk_exception_ref` antes de a revisao semanal ser considerada valida.
+  - `make ci-quality` passa a bloquear quando o artifact de `contract-review` estiver ausente ou incompleto.
+
 ### 2026-03-01 - Execucao do ISSUE-F8-02-01 (revisao contratual semanal canonica)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
 - Impacto:

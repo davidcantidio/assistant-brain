@@ -142,6 +142,19 @@ def validate_timestamp(value: str, label: str) -> None:
     raise ContractReviewError(f"{label} com timestamp invalido: {value}")
 
 
+def validate_date(value: str, label: str) -> None:
+    try:
+        dt.datetime.strptime(value, "%Y-%m-%d")
+    except ValueError as exc:
+        raise ContractReviewError(f"{label} com data invalida: {value}") from exc
+
+
+def expect_optional_string(value: object, label: str) -> str | None:
+    if value is None:
+        return None
+    return expect_non_empty_string(value, label)
+
+
 def validate_contracts_reviewed(contracts: object) -> None:
     items = expect_list(contracts, "Contracts Reviewed")
     seen_domains: set[str] = set()
@@ -187,8 +200,18 @@ def validate_drift_backlog(backlog: object) -> int:
         status = expect_non_empty_string(drift.get("status"), f"Drift Backlog[{index}].status")
         if status not in ALLOWED_DRIFT_STATUS:
             raise ContractReviewError(f"Drift Backlog[{index}].status invalido: {status}")
+        expect_non_empty_string(drift.get("owner"), f"Drift Backlog[{index}].owner")
+        due_date = expect_non_empty_string(drift.get("due_date"), f"Drift Backlog[{index}].due_date")
+        validate_date(due_date, f"Drift Backlog[{index}].due_date")
         expect_string_list(drift.get("source_refs"), f"Drift Backlog[{index}].source_refs")
         expect_non_empty_string(drift.get("evidence_ref"), f"Drift Backlog[{index}].evidence_ref")
+        risk_exception_ref = expect_optional_string(
+            drift.get("risk_exception_ref"), f"Drift Backlog[{index}].risk_exception_ref"
+        )
+        if status == "risk_accepted" and risk_exception_ref is None:
+            raise ContractReviewError(
+                f"Drift Backlog[{index}] com status=risk_accepted exige risk_exception_ref."
+            )
         if severity == "critical" and status == "open":
             critical_open += 1
     return critical_open
@@ -280,7 +303,10 @@ def build_sample_review(
     week_id: str,
     source_of_truth: str = SOURCE_OF_TRUTH,
     critical_drifts_open: int = 0,
+    drift_backlog: list[dict[str, object]] | None = None,
 ) -> None:
+    if drift_backlog is None:
+        drift_backlog = []
     review = f"""# F8 Contract Review {week_id}
 
 ## Metadata
@@ -339,7 +365,7 @@ def build_sample_review(
 
 ## Drift Backlog
 ```json
-[]
+{json.dumps(drift_backlog, ensure_ascii=True, indent=2)}
 ```
 
 ## Previous Week Closure
@@ -375,6 +401,82 @@ def run_self_checks() -> None:
         _, critical_open = validate_review(review_dir, week_id)
         if critical_open != 0:
             raise ContractReviewError("mock valido deveria retornar critical_drifts_open=0.")
+
+        owner_missing_path = review_path(review_dir, "2026-W11")
+        build_sample_review(
+            owner_missing_path,
+            week_id="2026-W11",
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W11-01",
+                    "domain": "trading",
+                    "severity": "high",
+                    "summary": "owner ausente",
+                    "status": "open",
+                    "due_date": "2026-03-15",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+        try:
+            validate_review(review_dir, "2026-W11")
+        except ContractReviewError:
+            pass
+        else:
+            raise ContractReviewError("mock sem owner deveria falhar.")
+
+        due_date_missing_path = review_path(review_dir, "2026-W12")
+        build_sample_review(
+            due_date_missing_path,
+            week_id="2026-W12",
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W12-01",
+                    "domain": "trading",
+                    "severity": "high",
+                    "summary": "due_date ausente",
+                    "status": "open",
+                    "owner": "Sr. Geldmacher",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+        try:
+            validate_review(review_dir, "2026-W12")
+        except ContractReviewError:
+            pass
+        else:
+            raise ContractReviewError("mock sem due_date deveria falhar.")
+
+        risk_ref_missing_path = review_path(review_dir, "2026-W13")
+        build_sample_review(
+            risk_ref_missing_path,
+            week_id="2026-W13",
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W13-01",
+                    "domain": "security",
+                    "severity": "high",
+                    "summary": "risk acceptance sem referencia",
+                    "status": "risk_accepted",
+                    "owner": "Bas Rutten",
+                    "due_date": "2026-03-22",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+        try:
+            validate_review(review_dir, "2026-W13")
+        except ContractReviewError:
+            pass
+        else:
+            raise ContractReviewError("mock risk_accepted sem risk_exception_ref deveria falhar.")
 
         invalid_path = review_path(review_dir, "2026-W10")
         build_sample_review(
