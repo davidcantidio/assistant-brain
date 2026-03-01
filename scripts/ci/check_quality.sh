@@ -72,5 +72,6 @@ bash scripts/ci/check_phase_f8_contract_review.sh
 bash scripts/ci/check_phase_f8_weekly_governance.sh
 bash scripts/ci/check_phase_f8_multiasset_contracts.sh
 bash scripts/ci/check_phase_f8_multiasset_enablement.sh
+bash scripts/ci/check_phase_f9_litellm_keygen.sh
 
 echo "quality-check: PASS"
