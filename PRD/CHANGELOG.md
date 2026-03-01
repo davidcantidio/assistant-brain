@@ -29,6 +29,25 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-03-03 + fechamento do EPIC-F8-03 em `feito`
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-03-03` do `EPIC-F8-03` para consolidar um sumario executivo semanal derivado do artifact canonico:
+    - amplia `scripts/ci/phase_f8_release_governance.py` para gerar e validar `artifacts/phase-f8/validation-summary-<week_id>.md`;
+    - adiciona `summary_artifact` ao relatorio semanal autoritativo;
+    - faz o checker validar coerencia bidirecional entre `weekly-governance/<week_id>.md`, `validation-summary-<week_id>.md` e `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md`.
+  - publica artifacts finais do epic em:
+    - `artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md`;
+    - `artifacts/phase-f8/epic-f8-03-governanca-evolucao-release.md`;
+    - `artifacts/phase-f8/validation-summary-2026-W09.md`.
+  - atualiza `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` para registrar `EPIC-F8-03=done`.
+  - move o documento do epic para:
+    - `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md`.
+- Migracao:
+  - `validation-summary-<week_id>.md` passa a ser companion obrigatorio do artifact semanal da `F8`.
+  - ausencia ou divergencia entre summary e relatorio canonicamente semanal MUST falhar em `make ci-quality`.
+  - `EPIC-F8-03` fica concluido, mas a decisao semanal da `F8` permanece `hold` enquanto a transicao `F7 -> F8` estiver bloqueada.
+
 ### 2026-03-01 - Execucao do ISSUE-F8-03-02 (risco residual rollback e continuidade)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:

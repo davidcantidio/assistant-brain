@@ -36,6 +36,7 @@ FIELD_ORDER = [
     "release_justification",
     "residual_risk_summary",
     "rollback_plan",
+    "summary_artifact",
     "risk_notes",
     "next_actions",
 ]
@@ -79,6 +80,42 @@ def parse_report(path: Path) -> tuple[dict[str, str], dict[str, str], str]:
     return values, logs, text
 
 
+def parse_summary(path: Path) -> dict[str, object]:
+    proc = subprocess.run(
+        [
+            "python3",
+            str(ROOT / "scripts/ci/phase_f8_release_governance.py"),
+            "parse-validation-summary",
+            "--summary-path",
+            str(path),
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        fail(proc.stderr.strip() or proc.stdout.strip() or f"falha ao interpretar {path}")
+    return json.loads(proc.stdout)
+
+
+def read_epic_statuses(path: Path) -> dict[str, str]:
+    proc = subprocess.run(
+        [
+            "python3",
+            str(ROOT / "scripts/ci/phase_f8_release_governance.py"),
+            "read-epic-statuses",
+            "--epics-path",
+            str(path),
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        fail(proc.stderr.strip() or proc.stdout.strip() or f"falha ao ler {path}")
+    return json.loads(proc.stdout)
+
+
 def expected_decision(values: dict[str, str]) -> str:
     if (
         values["prior_phase_decision"] == "promote"
@@ -113,7 +150,7 @@ for report in reports:
       fail(f"{report} deveria usar blocking_reason=none quando a transicao estiver ready.")
     if values["release_review_status"] not in {"PASS", "FAIL"}:
       fail(f"{report} com release_review_status invalido: {values['release_review_status']}")
-    for key in ("release_justification", "residual_risk_summary", "rollback_plan", "next_actions"):
+    for key in ("release_justification", "residual_risk_summary", "rollback_plan", "summary_artifact", "next_actions"):
       if not values[key].strip():
         fail(f"{report} com {key} vazio.")
     if values["decision"] == "promote" and values["release_review_status"] != "PASS":
@@ -124,17 +161,54 @@ for report in reports:
       log_path = ROOT / rel_path
       if not log_path.exists():
         fail(f"{report} referencia log ausente para {key}: {rel_path}")
+    summary_path = ROOT / values["summary_artifact"]
+    if not summary_path.exists():
+      fail(f"{report} referencia validation summary ausente: {values['summary_artifact']}")
+    summary = parse_summary(summary_path)
+    summary_values = summary["values"]
+    if summary_values["week_id"] != values["week_id"]:
+      fail(f"{summary_path} com week_id inconsistente.")
+    if summary_values["weekly_report"] != str(report.relative_to(ROOT)):
+      fail(f"{summary_path} com weekly_report inconsistente.")
+    for key in (
+        "decision",
+        "release_review_status",
+        "release_justification",
+        "phase_transition_status",
+        "blocking_reason",
+        "residual_risk_summary",
+        "rollback_plan",
+        "next_actions",
+        "contract_review_status",
+        "critical_drifts_open",
+    ):
+      if summary_values[key] != values[key]:
+        fail(f"{summary_path} divergente do weekly report no campo {key}.")
+    for key in ("eval_gates_status", "ci_quality_status", "ci_security_status"):
+      if summary["gate_statuses"][key] != values[key]:
+        fail(f"{summary_path} divergente do weekly report no gate {key}.")
+    expected_epics = read_epic_statuses(ROOT / "PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")
+    if summary["epic_statuses"] != expected_epics:
+      fail(f"{summary_path} com Epic Status divergente de PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md.")
+    report_ref = str(report.relative_to(ROOT))
+    contract_review_ref = f"artifacts/phase-f8/contract-review/{values['week_id']}.md"
+    if report_ref not in summary["evidence_refs"]:
+      fail(f"{summary_path} sem referencia ao weekly report autoritativo.")
+    if contract_review_ref not in summary["evidence_refs"]:
+      fail(f"{summary_path} sem referencia ao contract review da semana.")
 
 
-def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], dict[str, str]]:
+def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], dict[str, str], dict[str, object]]:
     with tempfile.TemporaryDirectory(prefix=f"f8-weekly-{name}-") as tmpdir:
       artifact_dir = Path(tmpdir) / "weekly-governance"
       contract_review_dir = Path(tmpdir) / "contract-review"
+      summary_artifact = Path(tmpdir) / "validation-summary-2026-W09.md"
       env = os.environ.copy()
       env.update(
           {
               "ARTIFACT_DIR": str(artifact_dir),
               "CONTRACT_REVIEW_DIR": str(contract_review_dir),
+              "SUMMARY_ARTIFACT": str(summary_artifact),
               "WEEK_ID": "2026-W09",
               "EXECUTED_AT": "2026-03-01T00:00:00-0300",
           }
@@ -147,7 +221,8 @@ def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], di
           key: Path(log_path).read_text(encoding="utf-8")
           for key, log_path in logs.items()
       }
-      return values, log_contents
+      summary = parse_summary(summary_artifact)
+      return values, log_contents, summary
 
 
 def write_contract_review(
@@ -238,7 +313,7 @@ def write_contract_review(
     )
 
 
-pass_values, _ = run_mock(
+pass_values, _, pass_summary = run_mock(
     "promote",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
@@ -255,8 +330,10 @@ if pass_values["decision"] != "promote":
     fail("mock promote deveria resultar em decision=promote.")
 if pass_values["release_review_status"] != "PASS":
     fail("mock promote deveria manter release_review_status=PASS.")
+if pass_summary["values"]["decision"] != "promote":
+    fail("mock promote deveria gerar validation summary coerente.")
 
-eval_fail_values, eval_fail_logs = run_mock(
+eval_fail_values, eval_fail_logs, _ = run_mock(
     "eval-fail",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: FAIL\\n'; exit 1",
@@ -278,7 +355,7 @@ if "SKIPPED" not in eval_fail_logs["ci-quality"]:
 if "SKIPPED" not in eval_fail_logs["ci-security"]:
     fail("mock eval-fail deveria registrar skip de ci-security.")
 
-quality_fail_values, quality_fail_logs = run_mock(
+quality_fail_values, quality_fail_logs, _ = run_mock(
     "quality-fail",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
@@ -303,7 +380,7 @@ if "release bloqueado por ci-quality=FAIL" not in quality_fail_values["release_j
 artifact_pass_dir = Path(tempfile.mkdtemp(prefix="f8-contract-review-pass-"))
 try:
     write_contract_review(artifact_pass_dir / "2026-W09.md")
-    artifact_pass_values, _ = run_mock(
+    artifact_pass_values, _, artifact_pass_summary = run_mock(
         "artifact-pass",
         {
             "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
@@ -319,6 +396,8 @@ try:
         fail("mock artifact-pass deveria usar contract_review_status=PASS a partir do artifact.")
     if artifact_pass_values["decision"] != "promote":
         fail("mock artifact-pass deveria resultar em decision=promote.")
+    if artifact_pass_summary["epic_statuses"]["EPIC-F8-03"] != read_epic_statuses(ROOT / "PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")["EPIC-F8-03"]:
+        fail("mock artifact-pass deveria refletir o status atual de EPIC-F8-03 no EPICS.md.")
 finally:
     for path in sorted(artifact_pass_dir.rglob("*"), reverse=True):
         if path.is_file():
@@ -348,7 +427,7 @@ try:
   }
 ]""",
     )
-    artifact_open_values, _ = run_mock(
+    artifact_open_values, _, artifact_open_summary = run_mock(
         "artifact-open",
         {
             "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
@@ -368,6 +447,8 @@ try:
         fail("mock artifact-open deveria resultar em decision=hold.")
     if "critical_drifts_open=1" not in artifact_open_values["residual_risk_summary"]:
         fail("mock artifact-open deveria refletir drift critico no residual_risk_summary.")
+    if artifact_open_summary["values"]["critical_drifts_open"] != "1":
+        fail("mock artifact-open deveria propagar critical_drifts_open para o validation summary.")
 finally:
     for path in sorted(artifact_open_dir.rglob("*"), reverse=True):
         if path.is_file():
@@ -377,7 +458,7 @@ finally:
     if artifact_open_dir.exists():
         artifact_open_dir.rmdir()
 
-review_fail_values, _ = run_mock(
+review_fail_values, _, _ = run_mock(
     "review-fail",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
@@ -390,7 +471,7 @@ if review_fail_values["contract_review_status"] != "FAIL":
 if review_fail_values["decision"] != "hold":
     fail("mock review-fail deveria resultar em decision=hold.")
 
-prior_phase_hold_values, _ = run_mock(
+prior_phase_hold_values, _, _ = run_mock(
     "prior-phase-hold",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",

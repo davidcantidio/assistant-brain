@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -75,9 +75,29 @@ Como operador, quero um sumario executivo semanal para auditoria rapida e handof
   - decisao `promote|hold` e justificativa;
   - risco residual, rollback e `next_actions`.
 
+## Resultado desta Rodada
+- `make eval-gates` final: `PASS`.
+- `make phase-f8-weekly-governance` final: `hold`.
+- `make ci-quality` final: `PASS`.
+- `make ci-security` final: `PASS`.
+- evidencias por issue publicadas:
+  - `artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md`;
+  - `artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md`;
+  - `artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f8/weekly-governance/2026-W09.md`;
+  - `artifacts/phase-f8/validation-summary-2026-W09.md`;
+  - `artifacts/phase-f8/epic-f8-03-governanca-evolucao-release.md`.
+- decisao semanal atual: `hold`.
+- justificativa:
+  - `critical_drifts_open=1`;
+  - `prior_phase_decision=hold`;
+  - `phase_transition_status=blocked`.
+- conclusao: `EPIC-F8-03` concluido no escopo documental/tdd desta rodada, sem promover automaticamente a fase `F8`.
+
 ## Dependencias
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
-- [System Health Thresholds](../../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Roadmap](../../../../PRD/ROADMAP.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [System Health Thresholds](../../../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)

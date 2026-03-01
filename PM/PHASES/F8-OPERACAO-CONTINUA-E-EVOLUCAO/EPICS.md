@@ -30,13 +30,15 @@ Criterio objetivo:
 |---|---|---|---|---|
 | `EPIC-F8-01` | Cadencia semanal de gates | formalizar rotina semanal de execucao e evidencia dos gates obrigatorios | done | [EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md](../feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md) |
 | `EPIC-F8-02` | Revisao periodica de contratos e drift | identificar e tratar drift normativo/contratual de forma recorrente | done | [EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md](../feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md) |
-| `EPIC-F8-03` | Governanca de evolucao e release | consolidar decisao semanal `promote|hold` com trilha de release/auditoria | planned | [EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md](./EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md) |
+| `EPIC-F8-03` | Governanca de evolucao e release | consolidar decisao semanal `promote|hold` com trilha de release/auditoria | done | [EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md](../feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md) |
 | `EPIC-F8-04` | Expansao multiativos por enablement | fechar backlog multiativos (`B2-*`) com gate por classe e decisao formal | planned | [EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md](./EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md) |
 
 ## Escopo Desta Entrega
 - `EPIC-F8-01` e `EPIC-F8-02` concluidos no escopo documental/tdd desta rodada.
-- `EPIC-F8-03` e `EPIC-F8-04` permanecem planejados.
+- `EPIC-F8-03` concluido no escopo documental/tdd desta rodada.
+- `EPIC-F8-04` permanece planejado.
 - decisao semanal atual da `F8`: `hold`.
 - `hold` permanece obrigatorio enquanto `critical_drifts_open > 0` no artifact canonico de `contract-review`.
 - a ativacao prematura da `F8` foi recuada ao contrato de promocao entre fases.
 - enquanto `artifacts/phase-f7/validation-summary.md` mantiver `F7 -> F8: hold`, o artifact semanal da `F8` MUST registrar `phase_transition_status=blocked`.
+- o fechamento do `EPIC-F8-03` NAO promove a fase automaticamente; a rodada semanal permanece `hold` ate que `F7 -> F8` possa virar `promote`.

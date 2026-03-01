@@ -12,10 +12,12 @@ CI_QUALITY_CMD="${CI_QUALITY_CMD:-make ci-quality}"
 CI_SECURITY_CMD="${CI_SECURITY_CMD:-make ci-security}"
 CONTRACT_REVIEW_DIR="${CONTRACT_REVIEW_DIR:-artifacts/phase-f8/contract-review}"
 F7_SUMMARY_PATH="${F7_SUMMARY_PATH:-artifacts/phase-f7/validation-summary.md}"
+EPICS_PATH="${EPICS_PATH:-PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md}"
 
 ARTIFACT_DIR="${ARTIFACT_DIR:-artifacts/phase-f8/weekly-governance}"
 LOG_DIR="${ARTIFACT_DIR}/logs/${WEEK_ID}"
 REPORT_PATH="${ARTIFACT_DIR}/${WEEK_ID}.md"
+SUMMARY_ARTIFACT="${SUMMARY_ARTIFACT:-artifacts/phase-f8/validation-summary-${WEEK_ID}.md}"
 STAMP="$(date '+%Y%m%dT%H%M%S')"
 
 mkdir -p "$LOG_DIR"
@@ -198,11 +200,17 @@ python3 scripts/ci/phase_f8_release_governance.py render-weekly-report \
   --release-justification "$RELEASE_JUSTIFICATION" \
   --residual-risk-summary "$RESIDUAL_RISK_SUMMARY" \
   --rollback-plan "$ROLLBACK_PLAN" \
+  --summary-artifact "$SUMMARY_ARTIFACT" \
   --risk-notes "$RISK_NOTES" \
   --next-actions "$NEXT_ACTIONS" \
   --eval-log-path "$EVAL_LOG_PATH" \
   --quality-log-path "$QUALITY_LOG_PATH" \
   --security-log-path "$SECURITY_LOG_PATH"
+
+python3 scripts/ci/phase_f8_release_governance.py render-validation-summary \
+  --summary-path "$SUMMARY_ARTIFACT" \
+  --weekly-report-path "$REPORT_PATH" \
+  --epics-path "$EPICS_PATH"
 
 echo "phase-f8-weekly-governance: REPORT=${REPORT_PATH}"
 echo "phase-f8-weekly-governance: decision=${DECISION}"
