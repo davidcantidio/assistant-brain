@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.33"
+version: "2.34"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,20 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F7-01-01 (S0 paper-only com bloqueio de tentativa live)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-01-01` do `EPIC-F7-01` com `VERTICALS/TRADING/TRADING-PRD.md`, `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md` e `scripts/ci/eval_trading.sh` como fonte de verdade para reforcar:
+    - tentativa de ordem live em `S0` MUST manter `TRADING_BLOCKED`;
+    - bloqueio de tentativa live em `S0` MUST permanecer auditavel.
+  - endurece validacao executavel em:
+    - `scripts/ci/eval_trading.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f7/epic-f7-01-issue-01-s0-paper-only-trading-blocked.md`.
+- Migracao:
+  - textos normativos de `S0` MUST manter bloqueio explicito para tentativa live.
+  - ausencia da regra de bloqueio em `S0` MUST bloquear `make eval-trading`.
 
 ### 2026-03-01 - Execucao do ISSUE-F6-03-03 + fechamento do EPIC/Fase F6 com decisao `hold`
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.

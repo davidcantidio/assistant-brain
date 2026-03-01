@@ -55,6 +55,7 @@ Exclui:
 ## Estagios de Enablement (obrigatorio)
 - `S0 - Paper/Sandbox`:
   - sem ordem real.
+  - tentativa de ordem live em `S0` MUST manter `TRADING_BLOCKED`.
   - aprovacao humana por ordem de entrada.
   - janela minima: 4 semanas.
   - sem incidente `SEV-1/SEV-2` na janela.

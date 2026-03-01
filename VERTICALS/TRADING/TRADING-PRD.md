@@ -39,6 +39,7 @@ Exclui:
 2. Paper/Sandbox (obrigatorio):
   - operar somente em ambiente sem dinheiro real.
   - ordem real MUST permanecer bloqueada (`TRADING_BLOCKED`) neste estagio.
+  - tentativa de ordem live em `S0` MUST manter estado `TRADING_BLOCKED` com bloqueio auditavel.
   - execucao em modo assistido: aprovacao humana obrigatoria por ordem de entrada.
   - janela minima recomendada: 4 semanas com estabilidade operacional.
 3. Micro-live (capital minimo):
