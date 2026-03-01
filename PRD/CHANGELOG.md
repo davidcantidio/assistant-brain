@@ -90,6 +90,19 @@ Exclui:
   - a governanca semanal da `F8` passa a ter entrypoint oficial em `make phase-f8-weekly-governance`.
   - sem revisao contratual semanal publicada, o artifact de `F8` MUST permanecer em `hold` mesmo com o trio de gates em `PASS`.
 
+### 2026-03-01 - Execucao do ISSUE-F8-01-02 (fail-fast e bloqueio formal de promocao)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-01-02` do `EPIC-F8-01` para endurecer a rodada semanal com regra fail-fast:
+    - falha em `eval-gates` bloqueia `ci-quality` e `ci-security`;
+    - falha em `ci-quality` bloqueia `ci-security`;
+    - gates nao executados passam a ser registrados como `FAIL` com log de skip por fail-fast.
+  - regrava o artifact autoritativo da semana `2026-W09` com `risk_notes` e `next_actions` alinhados ao contrato final.
+  - mantem resultado atual como `hold`, porque `contract_review_status` segue `FAIL`.
+- Migracao:
+  - a formula de decisao semanal `promote|hold` passa a ser aplicada pelo runner, e qualquer desvio do conjunto `PASS/PASS/PASS + PASS + 0` MUST resultar em `hold`.
+  - reruns da mesma semana MUST preservar logs antigos e atualizar apenas o markdown autoritativo da semana.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:

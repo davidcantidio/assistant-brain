@@ -32,11 +32,40 @@ run_and_capture() {
   fi
 }
 
-EVAL_RESULT="$(run_and_capture "eval-gates" "$EVAL_GATES_CMD")"
-QUALITY_RESULT="$(run_and_capture "ci-quality" "$CI_QUALITY_CMD")"
-SECURITY_RESULT="$(run_and_capture "ci-security" "$CI_SECURITY_CMD")"
+write_skip_log() {
+  local label="$1"
+  local reason="$2"
+  local log_path="${LOG_DIR}/${STAMP}-${label}.log"
 
+  {
+    echo ">>> SKIPPED"
+    echo "$reason"
+  } >"$log_path"
+
+  printf '%s|FAIL|%s\n' "$label" "$log_path"
+}
+
+FAILED_GATE=""
+
+EVAL_RESULT="$(run_and_capture "eval-gates" "$EVAL_GATES_CMD")"
 IFS='|' read -r _ EVAL_GATES_STATUS EVAL_LOG_PATH <<<"$EVAL_RESULT"
+
+if [[ "$EVAL_GATES_STATUS" == "FAIL" ]]; then
+  FAILED_GATE="eval-gates"
+  QUALITY_RESULT="$(write_skip_log "ci-quality" "fail-fast: ci-quality nao executado porque eval-gates falhou.")"
+  SECURITY_RESULT="$(write_skip_log "ci-security" "fail-fast: ci-security nao executado porque eval-gates falhou.")"
+else
+  QUALITY_RESULT="$(run_and_capture "ci-quality" "$CI_QUALITY_CMD")"
+  IFS='|' read -r _ CI_QUALITY_STATUS QUALITY_LOG_PATH <<<"$QUALITY_RESULT"
+
+  if [[ "$CI_QUALITY_STATUS" == "FAIL" ]]; then
+    FAILED_GATE="ci-quality"
+    SECURITY_RESULT="$(write_skip_log "ci-security" "fail-fast: ci-security nao executado porque ci-quality falhou.")"
+  else
+    SECURITY_RESULT="$(run_and_capture "ci-security" "$CI_SECURITY_CMD")"
+  fi
+fi
+
 IFS='|' read -r _ CI_QUALITY_STATUS QUALITY_LOG_PATH <<<"$QUALITY_RESULT"
 IFS='|' read -r _ CI_SECURITY_STATUS SECURITY_LOG_PATH <<<"$SECURITY_RESULT"
 
@@ -45,8 +74,30 @@ if [[ "$EVAL_GATES_STATUS" == "PASS" && "$CI_QUALITY_STATUS" == "PASS" && "$CI_S
   DECISION="promote"
 fi
 
-RISK_NOTES="contract review default=${CONTRACT_REVIEW_STATUS}; verificar F8-02 para revisao contratual recorrente."
-NEXT_ACTIONS="rerun semanal com trio de gates; publicar contract review da semana; revisar drifts criticos antes de promote."
+risk_notes_parts=()
+next_actions_parts=()
+
+if [[ -n "$FAILED_GATE" ]]; then
+  risk_notes_parts+=("fail-fast disparado por ${FAILED_GATE}")
+  next_actions_parts+=("corrigir ${FAILED_GATE} antes de rerodar a semana")
+fi
+
+if [[ "$CONTRACT_REVIEW_STATUS" != "PASS" ]]; then
+  risk_notes_parts+=("contract review default=${CONTRACT_REVIEW_STATUS}")
+  next_actions_parts+=("publicar contract review da semana via F8-02")
+fi
+
+if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
+  risk_notes_parts+=("critical_drifts_open=${CRITICAL_DRIFTS_OPEN}")
+  next_actions_parts+=("fechar ou aceitar formalmente os drifts criticos")
+fi
+
+if [[ ${#next_actions_parts[@]} -eq 0 ]]; then
+  next_actions_parts+=("manter cadencia semanal do trio de gates")
+fi
+
+RISK_NOTES="$(IFS='; '; echo "${risk_notes_parts[*]}")"
+NEXT_ACTIONS="$(IFS='; '; echo "${next_actions_parts[*]}")"
 
 cat >"$REPORT_PATH" <<EOF
 # F8 Weekly Governance ${WEEK_ID}
