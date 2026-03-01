@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "shadow_review_id": "SHADOW-F8-04-FII-BR-PASS-01",
+  "asset_class": "fii_br",
+  "asset_profile_ref": "VERTICALS/TRADING/asset_profiles/fii_br.json",
+  "validator_profile_ref": "VERTICALS/TRADING/validator_profiles/fii_br.json",
+  "eval_suite_ref": "make eval-trading-fii_br",
+  "status": "completed",
+  "stability_window": {
+    "window_label": "10_sessions",
+    "required_sessions": 10,
+    "completed_sessions": 10
+  },
+  "stability_checks": [
+    {
+      "check_id": "suite_green",
+      "status": "pass",
+      "notes": "suite verde"
+    },
+    {
+      "check_id": "shadow_history_minimum",
+      "status": "pass",
+      "notes": "janela minima concluida"
+    },
+    {
+      "check_id": "decision_r3",
+      "status": "pass",
+      "notes": "decision aprovada"
+    }
+  ],
+  "decision_id": "DEC-20260301-302",
+  "decision_status": "APPROVED",
+  "risk_tier": "R3",
+  "promote_readiness": "pass",
+  "notes": "fixture sintetica para o cenario de promote positivo"
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "shadow_review_id": "SHADOW-F8-04-FIXED-INCOME-BR-20260301-01",
+  "asset_class": "fixed_income_br",
+  "asset_profile_ref": "VERTICALS/TRADING/asset_profiles/fixed_income_br.json",
+  "validator_profile_ref": "VERTICALS/TRADING/validator_profiles/fixed_income_br.json",
+  "eval_suite_ref": "make eval-trading-fixed_income_br",
+  "status": "pending_shadow",
+  "stability_window": {
+    "window_label": "10_sessions",
+    "required_sessions": 10,
+    "completed_sessions": 0
+  },
+  "stability_checks": [
+    {
+      "check_id": "suite_green",
+      "status": "pass",
+      "notes": "suite da classe publicada e validada na issue 02"
+    },
+    {
+      "check_id": "shadow_history_minimum",
+      "status": "pending",
+      "notes": "janela de shadow ainda nao iniciada"
+    },
+    {
+      "check_id": "decision_r3",
+      "status": "pending",
+      "notes": "decision de promote ainda nao emitida"
+    }
+  ],
+  "decision_id": "not-issued",
+  "decision_status": "NOT_REQUIRED_YET",
+  "promote_readiness": "hold",
+  "notes": "classe pronta em contratos e suites, mas sem shadow_mode concluido e sem decision R3"
+}

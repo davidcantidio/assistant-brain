@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -76,8 +76,30 @@ Como operador, quero fase de shadow e decisao `R3` por classe para evitar promoc
   - status de shadow_mode e decisao `R3`;
   - referencias `B*` cobertas.
 
+## Resultado desta Rodada
+- `make phase-f8-multiasset-contracts` final: `PASS`.
+- `make eval-trading-multiasset` final: `PASS`.
+- `make phase-f8-multiasset-enablement` final: `PASS`.
+- evidencias por issue publicadas:
+  - `artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md`;
+  - `artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md`;
+  - `artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f8/epic-f8-04-multiasset-enablement.md`;
+  - `artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json`;
+  - `artifacts/trading/shadow_mode/SHADOW-F8-04-FII-BR-20260301-01.json`;
+  - `artifacts/trading/shadow_mode/SHADOW-F8-04-FIXED-INCOME-BR-20260301-01.json`.
+- promote readiness por classe:
+  - `equities_br`: `hold`
+  - `fii_br`: `hold`
+  - `fixed_income_br`: `hold`
+- conclusao:
+  - `EPIC-F8-04` concluido no escopo documental/tdd desta rodada.
+  - nenhuma classe multiativos foi promovida para live.
+  - `shadow_mode` e decision `R3` permanecem obrigatorios antes de qualquer promote.
+
 ## Dependencias
-- [Roadmap](../../../PRD/ROADMAP.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
-- [Trading Risk Rules](../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
+- [Roadmap](../../../../PRD/ROADMAP.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [Trading Risk Rules](../../../../VERTICALS/TRADING/TRADING-RISK-RULES.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)

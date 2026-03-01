@@ -24,7 +24,7 @@
 - EPIC-F8-01: `done`
 - EPIC-F8-02: `done`
 - EPIC-F8-03: `done`
-- EPIC-F8-04: `planned`
+- EPIC-F8-04: `done`
 
 ## Evidence Refs
 
@@ -34,3 +34,7 @@
 - `artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md`
 - `artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md`
 - `artifacts/phase-f8/epic-f8-03-governanca-evolucao-release.md`
+- `artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md`
+- `artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md`
+- `artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md`
+- `artifacts/phase-f8/epic-f8-04-multiasset-enablement.md`

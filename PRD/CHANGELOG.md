@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.39"
+version: "2.40"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,29 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F8-04-03 + fechamento do EPIC-F8-04 em `feito`
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-04-03` do `EPIC-F8-04` para formalizar `shadow_mode` e `hold|pass` por classe:
+    - cria `ARC/schemas/shadow_mode_review.schema.json`;
+    - publica artifacts canonicos em `artifacts/trading/shadow_mode/` para `equities_br`, `fii_br` e `fixed_income_br`;
+    - publica fixtures sinteticas positivas em `scripts/ci/fixtures/trading/multiasset/shadow/`;
+    - adiciona `scripts/ci/phase_f8_multiasset_enablement.py`, `scripts/ci/run_phase_f8_multiasset_enablement.sh` e `scripts/ci/check_phase_f8_multiasset_enablement.sh`;
+    - adiciona `make phase-f8-multiasset-enablement` e integra o checker ao `make ci-quality`.
+  - move os documentos finais da fase para:
+    - `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md`;
+    - `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md`.
+  - atualiza `scripts/ci/phase_f8_release_governance.py`, `scripts/ci/run_phase_f8_weekly_governance.sh` e `scripts/ci/check_phase_f8_weekly_governance.sh` para resolver `EPICS.md` da F8 com fallback para `PM/PHASES/feito/...`.
+  - atualiza `PRD/PHASE-USABILITY-GUIDE.md` para apontar `F8` para a fase arquivada em `feito`.
+  - reroda `make phase-f8-weekly-governance` para a semana `2026-W09`, preservando:
+    - `EPIC-F8-04=done`;
+    - `decision=hold`;
+    - `phase_transition_status=blocked`.
+- Migracao:
+  - conclusao do `EPIC-F8-04` MUST manter `equities_br`, `fii_br` e `fixed_income_br` em `promote_readiness=hold` ate `shadow_mode` concluido e decision `R3`.
+  - a fonte canonica da fase `F8` passa a ser `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md`.
+  - os runners semanais da `F8` MUST aceitar `EPICS.md` em `PM/PHASES/F8-...` ou `PM/PHASES/feito/F8-...`, nesta ordem.
 
 ### 2026-03-01 - Execucao do ISSUE-F8-04-02 (validator por classe + suites multiasset)
 - RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.

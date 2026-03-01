@@ -64,7 +64,7 @@ Exclui:
 - `F5`: [EPICS da fase](../PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md)
 - `F6`: [EPICS da fase](../PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md)
 - `F7`: [EPICS da fase](../PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md)
-- `F8`: [EPICS da fase](../PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md)
+- `F8`: [EPICS da fase](../PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md)
 
 ## Links Relacionados
 - [Roadmap](./ROADMAP.md)

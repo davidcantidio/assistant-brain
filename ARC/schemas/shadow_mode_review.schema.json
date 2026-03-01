@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/shadow_mode_review.schema.json",
+  "title": "shadow_mode_review",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "shadow_review_id",
+    "asset_class",
+    "asset_profile_ref",
+    "validator_profile_ref",
+    "eval_suite_ref",
+    "status",
+    "stability_window",
+    "stability_checks",
+    "decision_id",
+    "decision_status",
+    "promote_readiness",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "shadow_review_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_class": {
+      "type": "string",
+      "enum": ["equities_br", "fii_br", "fixed_income_br"]
+    },
+    "asset_profile_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validator_profile_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eval_suite_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending_shadow", "completed"]
+    },
+    "stability_window": {
+      "type": "object",
+      "required": ["window_label", "required_sessions", "completed_sessions"],
+      "properties": {
+        "window_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_sessions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completed_sessions": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "stability_checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["check_id", "status", "notes"],
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "fail", "pending"]
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_status": {
+      "type": "string",
+      "enum": ["NOT_REQUIRED_YET", "PENDING", "APPROVED", "REJECTED"]
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": ["R0", "R1", "R2", "R3"]
+    },
+    "promote_readiness": {
+      "type": "string",
+      "enum": ["hold", "pass"]
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

@@ -18,6 +18,8 @@ from pathlib import Path
 ROOT = Path(".")
 RUNNER = ROOT / "scripts/ci/run_phase_f8_weekly_governance.sh"
 REPORT_DIR = ROOT / "artifacts/phase-f8/weekly-governance"
+PRIMARY_EPICS_PATH = ROOT / "PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md"
+FALLBACK_EPICS_PATH = ROOT / "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md"
 
 FIELD_ORDER = [
     "week_id",
@@ -116,6 +118,14 @@ def read_epic_statuses(path: Path) -> dict[str, str]:
     return json.loads(proc.stdout)
 
 
+def resolve_epics_path() -> Path:
+    if PRIMARY_EPICS_PATH.exists():
+        return PRIMARY_EPICS_PATH
+    if FALLBACK_EPICS_PATH.exists():
+        return FALLBACK_EPICS_PATH
+    return PRIMARY_EPICS_PATH
+
+
 def expected_decision(values: dict[str, str]) -> str:
     if (
         values["prior_phase_decision"] == "promote"
@@ -187,9 +197,10 @@ for report in reports:
     for key in ("eval_gates_status", "ci_quality_status", "ci_security_status"):
       if summary["gate_statuses"][key] != values[key]:
         fail(f"{summary_path} divergente do weekly report no gate {key}.")
-    expected_epics = read_epic_statuses(ROOT / "PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")
+    expected_epics_path = resolve_epics_path()
+    expected_epics = read_epic_statuses(expected_epics_path)
     if summary["epic_statuses"] != expected_epics:
-      fail(f"{summary_path} com Epic Status divergente de PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md.")
+      fail(f"{summary_path} com Epic Status divergente de {expected_epics_path}.")
     report_ref = str(report.relative_to(ROOT))
     contract_review_ref = f"artifacts/phase-f8/contract-review/{values['week_id']}.md"
     if report_ref not in summary["evidence_refs"]:
@@ -396,7 +407,7 @@ try:
         fail("mock artifact-pass deveria usar contract_review_status=PASS a partir do artifact.")
     if artifact_pass_values["decision"] != "promote":
         fail("mock artifact-pass deveria resultar em decision=promote.")
-    if artifact_pass_summary["epic_statuses"]["EPIC-F8-03"] != read_epic_statuses(ROOT / "PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")["EPIC-F8-03"]:
+    if artifact_pass_summary["epic_statuses"]["EPIC-F8-03"] != read_epic_statuses(resolve_epics_path())["EPIC-F8-03"]:
         fail("mock artifact-pass deveria refletir o status atual de EPIC-F8-03 no EPICS.md.")
 finally:
     for path in sorted(artifact_pass_dir.rglob("*"), reverse=True):

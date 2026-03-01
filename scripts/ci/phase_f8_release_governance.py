@@ -50,6 +50,8 @@ SUMMARY_GATE_KEYS = [
     "ci_quality_status",
     "ci_security_status",
 ]
+PRIMARY_F8_EPICS_PATH = Path("PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")
+FALLBACK_F8_EPICS_PATH = Path("PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md")
 
 
 def strip_ticks(value: str) -> str:
@@ -57,6 +59,14 @@ def strip_ticks(value: str) -> str:
     if value.startswith("`") and value.endswith("`"):
         return value[1:-1]
     return value
+
+
+def resolve_f8_epics_path(path: Path) -> Path:
+    if path.exists():
+        return path
+    if path == PRIMARY_F8_EPICS_PATH and FALLBACK_F8_EPICS_PATH.exists():
+        return FALLBACK_F8_EPICS_PATH
+    return path
 
 
 def read_prior_phase_status(summary_path: Path) -> dict[str, str]:
@@ -126,6 +136,7 @@ def parse_weekly_report(report_path: Path) -> dict[str, object]:
 
 
 def parse_epic_statuses(epics_path: Path) -> dict[str, str]:
+    epics_path = resolve_f8_epics_path(epics_path)
     statuses: dict[str, str] = {}
     pattern = re.compile(
         r"^\|\s*`(EPIC-F8-\d{2})`\s*\|.*\|\s*([a-z]+)\s*\|\s*\[.+\]\(.+\)\s*\|$",
@@ -147,6 +158,10 @@ def collect_evidence_refs(week_id: str, weekly_report_path: Path) -> list[str]:
         "artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md",
         "artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md",
         "artifacts/phase-f8/epic-f8-03-governanca-evolucao-release.md",
+        "artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md",
+        "artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md",
+        "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md",
+        "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md",
     ]
     return [ref for ref in refs if Path(ref).exists()]
 
