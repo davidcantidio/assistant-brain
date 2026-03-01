@@ -3,7 +3,7 @@ doc_id: "PRD-MASTER.md"
 version: "1.14"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -544,9 +544,25 @@ Definicao objetiva de side effect:
 ## Contrato Minimo de `pre_live_checklist`
 - `pre_live_checklist` e o gate tecnico obrigatorio antes de qualquer `live-run` com side effect.
 - campos minimos:
-  - `checklist_id`, `decision_id`, `risk_tier`, `approved_at`, `operator_id`, `items[]`.
+  - `checklist_id`
+  - `decision_id`
+  - `risk_tier`
+  - `asset_class`
+  - `capital_ramp_level`
+  - `approved_at`
+  - `operator_id`
+  - `items[]`.
 - regra de validacao:
-  - `items[]` MUST incluir evidencia objetiva (`evidence_ref`) e status `pass|fail`.
+  - `items[]` MUST incluir `item_id`, evidencia objetiva (`evidence_ref`) e status `pass|fail`.
+  - `items[]` MUST incluir no minimo:
+    - `eval_trading_green`
+    - `execution_gateway_only`
+    - `pre_trade_validator_active`
+    - `credentials_live_no_withdraw`
+    - `hitl_channel_ready`
+    - `degraded_mode_runbook_ok`
+    - `backup_operator_enabled`
+    - `explicit_order_approval_active`
   - qualquer item `fail` MUST bloquear `live-run`.
 - para vertical Trading:
   - usar checklist detalhado em `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.

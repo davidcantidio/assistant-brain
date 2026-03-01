@@ -116,6 +116,88 @@ if contract_version.get("const") != "v1":
 PY
 }
 
+pre_live_checklist_assert_contract() {
+  local checklist_path="$1"
+
+  python3 - "$checklist_path" <<'PY'
+import json
+import sys
+
+checklist_path = sys.argv[1]
+
+with open(checklist_path, "r", encoding="utf-8") as fh:
+    checklist = json.load(fh)
+
+def fail(msg):
+    print(f"pre_live_checklist contract check failed: {checklist_path}")
+    print(msg)
+    sys.exit(1)
+
+if not isinstance(checklist, dict):
+    fail("root MUST be a JSON object.")
+
+required_fields = (
+    "checklist_id",
+    "decision_id",
+    "risk_tier",
+    "asset_class",
+    "capital_ramp_level",
+    "operator_id",
+    "approved_at",
+    "items",
+)
+for field in required_fields:
+    if field not in checklist:
+        fail(f"missing required field: {field}")
+
+for field in required_fields[:-1]:
+    value = checklist.get(field)
+    if not isinstance(value, str) or not value.strip():
+        fail(f"field '{field}' MUST be a non-empty string.")
+
+items = checklist.get("items")
+if not isinstance(items, list) or not items:
+    fail("field 'items' MUST be a non-empty array.")
+
+required_item_ids = {
+    "eval_trading_green",
+    "execution_gateway_only",
+    "pre_trade_validator_active",
+    "credentials_live_no_withdraw",
+    "hitl_channel_ready",
+    "degraded_mode_runbook_ok",
+    "backup_operator_enabled",
+    "explicit_order_approval_active",
+}
+
+seen_item_ids = set()
+for idx, item in enumerate(items):
+    if not isinstance(item, dict):
+        fail(f"items[{idx}] MUST be an object.")
+    for key in ("item_id", "status", "evidence_ref"):
+        if key not in item:
+            fail(f"items[{idx}] missing required key: {key}")
+        value = item[key]
+        if not isinstance(value, str) or not value.strip():
+            fail(f"items[{idx}].{key} MUST be a non-empty string.")
+
+    status = item["status"]
+    if status not in {"pass", "fail"}:
+        fail(f"items[{idx}].status MUST be 'pass' or 'fail'.")
+
+    item_id = item["item_id"]
+    if item_id in seen_item_ids:
+        fail(f"duplicate item_id detected: {item_id}")
+    seen_item_ids.add(item_id)
+
+missing_item_ids = sorted(required_item_ids - seen_item_ids)
+if missing_item_ids:
+    fail("missing required item_ids: " + ", ".join(missing_item_ids))
+PY
+}
+
+PRE_LIVE_CHECKLIST_PATH="artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json"
+
 required_files=(
   "VERTICALS/TRADING/TRADING-PRD.md"
   "VERTICALS/TRADING/TRADING-RISK-RULES.md"
@@ -127,6 +209,7 @@ required_files=(
   ".github/workflows/ci-trading.yml"
   "ARC/schemas/execution_gateway.schema.json"
   "ARC/schemas/pre_trade_validator.schema.json"
+  "$PRE_LIVE_CHECKLIST_PATH"
 )
 for f in "${required_files[@]}"; do
   [[ -f "$f" ]] || { echo "Arquivo obrigatorio ausente: $f"; exit 1; }
@@ -152,6 +235,8 @@ schema_assert_minimum_contract \
   "ARC/schemas/pre_trade_validator.schema.json" \
   "schema_version,contract_version,asset_profile_version,capital_ramp_level,symbol,symbol_constraints,order_intent,market_state,validator_status,block_reasons,normalized_order,effective_risk_quote" \
   "schema_version,contract_version,asset_profile_version,capital_ramp_level,symbol,symbol_constraints,order_intent,market_state,validator_status,block_reasons,normalized_order,effective_risk_quote"
+
+pre_live_checklist_assert_contract "$PRE_LIVE_CHECKLIST_PATH"
 
 search_re "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "tentativa de ordem live em .*S0.*TRADING_BLOCKED|TRADING_BLOCKED.*tentativa de ordem live em .*S0" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
@@ -183,7 +268,7 @@ search_re_each_file "reconcili" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE
 search_re_each_file "UNMANAGED_EXPOSURE" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "posicoes e ordens reconciliadas" INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "Definicao de .*safe_notional" VERTICALS/TRADING/TRADING-RISK-RULES.md
-search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md
+search_re "pre_live_checklist" VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PRD/PRD-MASTER.md VERTICALS/TRADING/TRADING-PRD.md
 search_re "make eval-trading" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md DEV/DEV-CI-RULES.md
 search_re "trading_phase1_binance" SEC/allowlists/DOMAINS.yaml
 search_re "api\\.binance\\.com" SEC/allowlists/DOMAINS.yaml

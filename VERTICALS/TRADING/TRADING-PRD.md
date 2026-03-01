@@ -3,7 +3,7 @@ doc_id: "TRADING-PRD.md"
 version: "1.9"
 status: "active"
 owner: "Frederisk"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-050", "RFC-060"]
 ---
 
@@ -160,6 +160,32 @@ Exclui:
 - comando: `make eval-trading`.
 - release de regra critica para live sem resultado verde MUST ser bloqueada.
 - ausencia do comando no repositorio MUST manter `TRADING_BLOCKED`.
+
+## Contrato de `pre_live_checklist` (obrigatorio)
+- `pre_live_checklist` e gate obrigatorio para iniciar `S1 - Micro-live` com side effect financeiro.
+- campos obrigatorios:
+  - `checklist_id`
+  - `decision_id`
+  - `risk_tier`
+  - `asset_class`
+  - `capital_ramp_level`
+  - `operator_id`
+  - `approved_at`
+  - `items[]` com `item_id`, `status(pass|fail)`, `evidence_ref`
+- itens minimos obrigatorios:
+  - `eval_trading_green`
+  - `execution_gateway_only`
+  - `pre_trade_validator_active`
+  - `credentials_live_no_withdraw`
+  - `hitl_channel_ready`
+  - `degraded_mode_runbook_ok`
+  - `backup_operator_enabled`
+  - `explicit_order_approval_active`
+- regra de bloqueio:
+  - qualquer item `fail` MUST manter `TRADING_BLOCKED`.
+  - remocao de `TRADING_BLOCKED` por prontidao HITL MUST ocorrer somente por decisao formal registrada.
+- artifact obrigatorio:
+  - `artifacts/trading/pre_live_checklist/<checklist_id>.json`
 
 ## Gate de Prontidao para Capital Real
 - entrada de capital real so e permitida quando todos os itens abaixo estiverem verdes:

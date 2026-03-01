@@ -29,6 +29,21 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-02-01` do `EPIC-F7-02` para formalizar contrato minimo executavel de `pre_live_checklist` em:
+    - `VERTICALS/TRADING/TRADING-PRD.md`;
+    - `PRD/PRD-MASTER.md`;
+    - `scripts/ci/eval_trading.sh`.
+  - publica artifact inicial do checklist em:
+    - `artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f7/epic-f7-02-issue-01-pre-live-checklist-contract.md`.
+- Migracao:
+  - qualquer readiness review de `S1` MUST usar checklist JSON com campos obrigatorios e itens minimos completos.
+  - ausencia do checklist versionado ou contrato incompleto MUST bloquear `make eval-trading`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-01-03 + fechamento do EPIC-F7-01 em `feito`
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:

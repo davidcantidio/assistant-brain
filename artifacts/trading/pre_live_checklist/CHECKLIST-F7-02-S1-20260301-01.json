@@ -1,0 +1,51 @@
+{
+  "checklist_id": "CHECKLIST-F7-02-S1-20260301-01",
+  "decision_id": "DEC-F7-02-S1-20260301-01",
+  "risk_tier": "R3",
+  "asset_class": "crypto_spot",
+  "capital_ramp_level": "L0",
+  "operator_id": "primary-01",
+  "approved_at": "2026-03-01T00:00:00-03:00",
+  "items": [
+    {
+      "item_id": "eval_trading_green",
+      "status": "pass",
+      "evidence_ref": "make eval-trading"
+    },
+    {
+      "item_id": "execution_gateway_only",
+      "status": "fail",
+      "evidence_ref": "SEC/allowlists/ACTIONS.yaml"
+    },
+    {
+      "item_id": "pre_trade_validator_active",
+      "status": "fail",
+      "evidence_ref": "ARC/schemas/pre_trade_validator.schema.json"
+    },
+    {
+      "item_id": "credentials_live_no_withdraw",
+      "status": "fail",
+      "evidence_ref": "SEC/allowlists/ACTIONS.yaml#trading_withdraw_funds"
+    },
+    {
+      "item_id": "hitl_channel_ready",
+      "status": "fail",
+      "evidence_ref": "SEC/allowlists/OPERATORS.yaml"
+    },
+    {
+      "item_id": "degraded_mode_runbook_ok",
+      "status": "pass",
+      "evidence_ref": "INCIDENTS/DEGRADED-MODE-PROCEDURE.md"
+    },
+    {
+      "item_id": "backup_operator_enabled",
+      "status": "fail",
+      "evidence_ref": "SEC/allowlists/OPERATORS.yaml#backup-breakglass-01"
+    },
+    {
+      "item_id": "explicit_order_approval_active",
+      "status": "fail",
+      "evidence_ref": "PM/DECISION-PROTOCOL.md"
+    }
+  ]
+}
