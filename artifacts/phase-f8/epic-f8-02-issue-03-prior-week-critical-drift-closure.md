@@ -38,13 +38,17 @@
   - `resolution=closed` exige evidencia de fechamento;
   - `resolution=risk_accepted` exige `risk_exception_ref`.
 - rodada final da semana `2026-W09`:
-  - `contract_review_status=PASS`
+  - `review_validity_status=PASS`
+  - `operational_conformance_status=FAIL`
+  - `failed_domains=trading`
   - `critical_drifts_open=1`
   - `decision=hold`
 - logs finais da rodada:
   - `artifacts/phase-f8/weekly-governance/logs/2026-W09/20260301T085801-eval-gates.log`
   - `artifacts/phase-f8/weekly-governance/logs/2026-W09/20260301T085801-ci-quality.log`
   - `artifacts/phase-f8/weekly-governance/logs/2026-W09/20260301T085801-ci-security.log`
+- fechamento de auditoria:
+  - esta issue so fecha operacionalmente apos a rodada real `2026-W10` com `previous_week_id=2026-W09` e classificacao de carry-over publicada.
 
 ## Alteracoes da issue
 - `scripts/ci/phase_f8_contract_review.py`

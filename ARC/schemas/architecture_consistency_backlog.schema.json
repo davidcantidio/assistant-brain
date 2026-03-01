@@ -1,0 +1,508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/architecture_consistency_backlog.schema.json",
+  "title": "architecture_consistency_backlog",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "doc_id",
+    "generated_at",
+    "baseline",
+    "source_audit",
+    "conflict_matrix_rows",
+    "drift_rows",
+    "failure_mode_checks",
+    "remediation_issues"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "doc_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "baseline": {
+      "type": "string",
+      "const": "head_main_vs_working_tree"
+    },
+    "source_audit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conflict_matrix_rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/conflict_matrix_row"
+      }
+    },
+    "drift_rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/drift_row"
+      }
+    },
+    "failure_mode_checks": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "$ref": "#/$defs/failure_mode_check"
+      }
+    },
+    "remediation_issues": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/remediation_issue"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "source_baseline": {
+      "type": "string",
+      "enum": [
+        "pr_main",
+        "pr_working_tree",
+        "implementation",
+        "felixcraft",
+        "felix_relevant",
+        "supporting_context"
+      ]
+    },
+    "conflict_type": {
+      "type": "string",
+      "enum": [
+        "Estrutural",
+        "Governanca",
+        "Responsabilidade",
+        "Fluxo operacional",
+        "Seguranca",
+        "CI/CD",
+        "Autoridade decisoria",
+        "Drift conceitual",
+        "Drift tecnico",
+        "Sobreposicao de arquitetura",
+        "Incompatibilidade filosofica"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "Baixa",
+        "Media",
+        "Alta",
+        "Critica"
+      ]
+    },
+    "drift_class": {
+      "type": "string",
+      "enum": [
+        "Leve",
+        "Moderado",
+        "Alto",
+        "Critico"
+      ]
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": [
+        "implementado",
+        "simulado_por_contrato",
+        "declarado_sem_execucao"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    },
+    "remediation_priority": {
+      "type": "string",
+      "enum": [
+        "P0",
+        "P1",
+        "P2"
+      ]
+    },
+    "remediation_status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "in_progress",
+        "done",
+        "blocked"
+      ]
+    },
+    "drift_block": {
+      "type": "string",
+      "enum": [
+        "drift_do_estado_commitado",
+        "drift_introduzido_pelo_working_tree",
+        "felix_como_terceira_direcao"
+      ]
+    },
+    "failure_mode_status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "encontrado",
+        "parcialmente_contido",
+        "risco_aberto"
+      ]
+    },
+    "path_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "micro_issue": {
+      "type": "object",
+      "required": [
+        "microtask_id",
+        "title",
+        "owner",
+        "estimate",
+        "scope_files",
+        "risk_level",
+        "implementation_status",
+        "rollback_hint",
+        "acceptance_checks",
+        "evidence_targets",
+        "depends_on"
+      ],
+      "properties": {
+        "microtask_id": {
+          "type": "string",
+          "pattern": "^MT-F8-[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "estimate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope_files": {
+          "$ref": "#/$defs/path_refs"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/risk_level"
+        },
+        "implementation_status": {
+          "$ref": "#/$defs/implementation_status"
+        },
+        "rollback_hint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acceptance_checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidence_targets": {
+          "$ref": "#/$defs/path_refs"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "conflict_matrix_row": {
+      "type": "object",
+      "required": [
+        "conflict_id",
+        "origem",
+        "source_baselines",
+        "elemento",
+        "tipo_de_conflito",
+        "descricao",
+        "severidade",
+        "risco_sistemico",
+        "opcoes_de_resolucao",
+        "recomendacao",
+        "evidence_refs",
+        "linked_issue_id"
+      ],
+      "properties": {
+        "conflict_id": {
+          "type": "string",
+          "pattern": "^C-[0-9]{2}$"
+        },
+        "origem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_baselines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_baseline"
+          }
+        },
+        "elemento": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo_de_conflito": {
+          "$ref": "#/$defs/conflict_type"
+        },
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severidade": {
+          "$ref": "#/$defs/severity"
+        },
+        "risco_sistemico": {
+          "type": "string",
+          "minLength": 1
+        },
+        "opcoes_de_resolucao": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "recomendacao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/path_refs"
+        },
+        "linked_issue_id": {
+          "type": "string",
+          "pattern": "^ISSUE-F8-[0-9]{2}-[0-9]{2}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "drift_row": {
+      "type": "object",
+      "required": [
+        "drift_id",
+        "bloco",
+        "source_baselines",
+        "topico",
+        "prd_main",
+        "prd_working_tree",
+        "implementacao",
+        "felix",
+        "classe",
+        "justificativa",
+        "evidence_refs",
+        "linked_issue_id"
+      ],
+      "properties": {
+        "drift_id": {
+          "type": "string",
+          "pattern": "^D-[A-Z-0-9]+$"
+        },
+        "bloco": {
+          "$ref": "#/$defs/drift_block"
+        },
+        "source_baselines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_baseline"
+          }
+        },
+        "topico": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prd_main": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prd_working_tree": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementacao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "felix": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classe": {
+          "$ref": "#/$defs/drift_class"
+        },
+        "justificativa": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/path_refs"
+        },
+        "linked_issue_id": {
+          "type": "string",
+          "pattern": "^ISSUE-F8-[0-9]{2}-[0-9]{2}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "failure_mode_check": {
+      "type": "object",
+      "required": [
+        "failure_mode_id",
+        "failure_mode",
+        "source_baselines",
+        "status",
+        "evidencia",
+        "impacto",
+        "observacao",
+        "linked_issue_id"
+      ],
+      "properties": {
+        "failure_mode_id": {
+          "type": "string",
+          "pattern": "^FM-[0-9]{2}$"
+        },
+        "failure_mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_baselines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_baseline"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/failure_mode_status"
+        },
+        "evidencia": {
+          "$ref": "#/$defs/path_refs"
+        },
+        "impacto": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observacao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "linked_issue_id": {
+          "type": "string",
+          "pattern": "^ISSUE-F8-[0-9]{2}-[0-9]{2}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "remediation_issue": {
+      "type": "object",
+      "required": [
+        "issue_id",
+        "title",
+        "priority",
+        "owner",
+        "due_date",
+        "status",
+        "source_baselines",
+        "linked_conflicts",
+        "linked_drifts",
+        "linked_failure_modes",
+        "micro_issues"
+      ],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "pattern": "^ISSUE-F8-[0-9]{2}-[0-9]{2}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "$ref": "#/$defs/remediation_priority"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "due_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "$ref": "#/$defs/remediation_status"
+        },
+        "source_baselines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_baseline"
+          }
+        },
+        "linked_conflicts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^C-[0-9]{2}$"
+          }
+        },
+        "linked_drifts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^D-[A-Z-0-9]+$"
+          }
+        },
+        "linked_failure_modes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^FM-[0-9]{2}$"
+          }
+        },
+        "micro_issues": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/micro_issue"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

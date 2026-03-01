@@ -1,16 +1,16 @@
 ---
 doc_id: "SCRUM-GOV.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-18"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-040", "RFC-050"]
 ---
 
 # Scrum Governance
 
 ## Objetivo
-Definir a cadeia PRD -> epicos -> sprints -> tasks com disciplina de escopo, DoD e evidencia.
+Definir a cadeia canonica `PRD -> Fases -> Epicos -> Issues -> Microtasks`, com sprint operando como janela de capacidade e priorizacao.
 
 ## Escopo
 Inclui:
@@ -29,18 +29,23 @@ Exclui:
 
 ## Fluxo de Planejamento
 1. PRD aprovado (cloud + humano).
-2. decompor em epicos com objetivo e metrica.
-3. decompor epicos em sprint com capacidade real.
-4. decompor sprint em tasks pequenas e verificaveis.
+2. decompor em fases com gates e criterios objetivos.
+3. decompor fases em epicos com objetivo e metrica.
+4. decompor epicos em issues auditaveis.
+5. decompor issues em microtasks atomicas e verificaveis.
+6. planejar sprint como recorte de capacidade, sem substituir a cadeia estrutural.
 
 ## Definition of Done
 - PRD: escopo, risco, KPI e links normativos.
+- Fase: gate de saida e evidencia minima definidos.
 - Epico: resultado de negocio mensuravel + criterios de aceite.
-- Sprint: compromisso de entrega dentro de limite.
-- Task: artifact auditavel + validacao deterministica.
+- Issue: entrega unitaria auditavel com risco e criterios verificaveis.
+- Microtask: output tipado, validacao deterministica e trilha de execucao.
+- Sprint: compromisso de capacidade, sem redefinir hierarquia de planejamento.
 
 ## No Jira Inflation
 - sem tarefa gigante sem quebra.
+- sem usar sprint como camada estrutural entre epico e issue.
 - sem datas inventadas para "caber no plano".
 - sem capacidade ficticia para aumentar output.
 - sem epico sem DoD e owner.

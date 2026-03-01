@@ -1,0 +1,707 @@
+{
+  "pr_summary": "A F9 converte a auditoria arquitetural de 2026-03-01 em backlog executavel de governanca. O foco imediato desta rodada e: higienizar o pacote PM, fechar links quebrados de F7, publicar cadeia canonica de planejamento e formalizar trilhas para microtasks e overrides Felix sem reescrever historico antigo do changelog.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Canonizar paths de fases concluidas em `PM/PHASES/feito/*` e remover referencias quebradas de F7 em auditorias PM.",
+      "objective": "Eliminar ambiguidade de path e reduzir falhas de rastreabilidade documental.",
+      "acceptance_criteria": [
+        "Zero ocorrencias de `PM/PHASES/F7-TRADING-POR-ESTAGIOS` em `PM/audit/*`.",
+        "Referencias de F7 em auditorias apontam para `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/*`.",
+        "Arquivos de auditoria alterados continuam parseaveis."
+      ],
+      "dependencies": [
+        "PM/audit/F7-TRADING-POR-ESTAGIOS-EPICS-ISSUES-AUDIT.json",
+        "PM/audit/fase-f1-epicos-issues-audit.json",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md"
+      ],
+      "success_metrics": [
+        "refs_quebradas_f7_em_pm_audit = 0",
+        "paths_canonicos_f7_feito = 100%"
+      ],
+      "regulatory_constraints": [
+        "RFC-050: rastreabilidade e evidencia auditavel.",
+        "RFC-040: fase nao fecha com lacuna estrutural de governanca."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-01-01"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/audit/F7-TRADING-POR-ESTAGIOS-EPICS-ISSUES-AUDIT.json",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/audit/fase-f1-epicos-issues-audit.json",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:31"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "Converter conflito de autoridade em precedencia normativa explicita e unica.",
+      "objective": "Evitar governanca paralela entre PRD/SEC/ARC e fontes conceituais externas.",
+      "acceptance_criteria": [
+        "Regra de autoridade unica publicada no backlog F9.",
+        "Felix classificado como referencia conceitual rastreavel.",
+        "Conflito de precedencia tratado como item bloqueante da auditoria."
+      ],
+      "dependencies": [
+        "PRD/PRD-MASTER.md",
+        "META/DOCUMENT-HIERARCHY.md",
+        "PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-01-HIGIENE-PM-E-AUTORIDADE-NORMATIVA.md"
+      ],
+      "success_metrics": [
+        "authority_conflicts_open tende a 0",
+        "precedencia_normativa_documentada = true"
+      ],
+      "regulatory_constraints": [
+        "RFC-001: consistencia de governanca documental.",
+        "RFC-050: trilha de impacto e owner por mudanca."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-01-02"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:31",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:140"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "Manter secao permanente de auditoria arquitetural com criterio de encerramento e metrica de convergencia.",
+      "objective": "Tornar auditoria recorrente, mensuravel e comparavel entre ciclos.",
+      "acceptance_criteria": [
+        "Criterio de encerramento com indicadores explicitos publicado.",
+        "Metrica de convergencia documentada com thresholds.",
+        "Owners de remediacao definidos por dominio."
+      ],
+      "dependencies": [
+        "PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md",
+        "artifacts/architecture/2026-03-01-architectural-consistency-audit.md"
+      ],
+      "success_metrics": [
+        "architecture_convergence_score mensuravel em cada ciclo",
+        "critical_conflicts acompanhados por issue"
+      ],
+      "regulatory_constraints": [
+        "RFC-050: evidencia e ownership por pendencia.",
+        "RFC-040: sem fechamento de fase com conflito critico aberto."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-01-03"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:168",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "Alinhar cadeia canonica para `PRD -> Fases -> Epicos -> Issues -> Microtasks`, mantendo sprint apenas como capacidade.",
+      "objective": "Reduzir fragmentacao estrutural de planejamento.",
+      "acceptance_criteria": [
+        "Cadeia canonica documentada sem conflitos internos.",
+        "Sprint explicitamente tratado como janela de capacidade.",
+        "Terminologia issue/microtask consistente no pacote PM/PRD."
+      ],
+      "dependencies": [
+        "PRD/ROADMAP.md",
+        "PRD/PRD-MASTER.md",
+        "PM/SCRUM-GOV.md"
+      ],
+      "success_metrics": [
+        "structural_chain_conflicts = 0",
+        "terminologia_canonica_adotada = true"
+      ],
+      "regulatory_constraints": [
+        "RFC-040: disciplina de planejamento e limites.",
+        "RFC-001: sem cadeia concorrente implicita."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-02-01"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:34",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:90"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "Rebaixar o pipeline `M30 -> M14-Code -> Codex 5` para proposta ate harmonizacao em ARC/DEV/PM/CI.",
+      "objective": "Evitar norma parcial sem contratos transversais sincronizados.",
+      "acceptance_criteria": [
+        "Pipeline classificado como proposta condicionada.",
+        "Condicoes de promocao para norma publicadas.",
+        "Dependencias contratuais listadas no mesmo item."
+      ],
+      "dependencies": [
+        "PRD/PRD-MASTER.md",
+        "PRD/CHANGELOG.md",
+        "ARC/ARC-MODEL-ROUTING.md",
+        "DEV/DEV-TECH-LEAD-SPEC.md"
+      ],
+      "success_metrics": [
+        "pipeline_status = proposta_controlada",
+        "harmonization_dependencies_listed = true"
+      ],
+      "regulatory_constraints": [
+        "RFC-001: coerencia normativa.",
+        "RFC-050: trilha de impacto da mudanca arquitetural."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-02-02"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:53"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "Formalizar contrato explicito para governanca de PR/branch/ownership.",
+      "objective": "Remover dependencia de regras implicitas sem enforceabilidade clara.",
+      "acceptance_criteria": [
+        "Policy de branch documentada com criterio de excecao.",
+        "Ownership de revisao explicitado como contrato.",
+        "Regra de merge vinculada a gates obrigatorios."
+      ],
+      "dependencies": [
+        ".github/CODEOWNERS",
+        "DEV/DEV-CI-RULES.md",
+        ".github/workflows/"
+      ],
+      "success_metrics": [
+        "branch_policy_defined = true",
+        "code_ownership_defined = true"
+      ],
+      "regulatory_constraints": [
+        "RFC-040: gate e limite com regras explicitas.",
+        "RFC-050: rastreabilidade de excepcao."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-02-03"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:40",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:60"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "Definir trilha minima auditavel para microtask com path canonico `runs/<issue_id>/<microtask_id>/`.",
+      "objective": "Fechar gap entre contrato de microtask e evidencia materializada.",
+      "acceptance_criteria": [
+        "Path canonico documentado para microtasks.",
+        "Artefatos minimos definidos por microtask.",
+        "Fechamento de issue de codigo sem evidencia minima e bloqueado."
+      ],
+      "dependencies": [
+        "PRD/PRD-MASTER.md",
+        "PM/WORK-ORDER-SPEC.md",
+        "scripts/ci/"
+      ],
+      "success_metrics": [
+        "microtask_evidence_path_defined = true",
+        "missing_microtask_evidence tende a 0"
+      ],
+      "regulatory_constraints": [
+        "RFC-050: evidencias por unidade de execucao.",
+        "RFC-040: bloqueio em ausencia de contrato minimo."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-03-01"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:36",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:105"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "Governar superficies externas: formalizar em `INTEGRATIONS/` ou declarar fora de escopo do OpenClaw atual.",
+      "objective": "Reduzir dependencia implicita de integracoes nao governadas.",
+      "acceptance_criteria": [
+        "Lista de superficies externas com classificacao por item.",
+        "Itens governados com contrato e owner definidos.",
+        "Itens fora de escopo com risco explicitado e revisao periodica."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/README.md",
+        "config/openclaw.env.example",
+        "felixcraft.md",
+        "felix-openclaw-pontos-relevantes.md"
+      ],
+      "success_metrics": [
+        "external_surfaces_governed_or_out_of_scope = 100%",
+        "ungated_external_surfaces = 0"
+      ],
+      "regulatory_constraints": [
+        "RFC-015: controle de superficie sensivel.",
+        "RFC-050: evidencia de classificacao e owner."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-03-02"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:40",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:115"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "Endurecer override Felix para exigir `issue + changelog + traceability`.",
+      "objective": "Evitar override arquitetural sem trilha normativa completa.",
+      "acceptance_criteria": [
+        "Novo override sem issue deve ser bloqueado.",
+        "Override sem changelog no ciclo deve ser bloqueado.",
+        "Override sem update de traceability deve ser bloqueado."
+      ],
+      "dependencies": [
+        "PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md",
+        "PRD/CHANGELOG.md",
+        "PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md"
+      ],
+      "success_metrics": [
+        "felix_overrides_with_full_trace = 100%",
+        "override_without_trace = 0"
+      ],
+      "regulatory_constraints": [
+        "RFC-001: mudanca normativa deve ter trilha.",
+        "RFC-050: impacto e owner por alteracao."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F9-03-03"
+      ],
+      "coverage_status": "covered_new",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:124",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:148"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISSUE-F9-01-01",
+      "title": "Canonizar paths PM concluidos e corrigir links quebrados em PM/audits",
+      "mapped_requirements": [
+        "R1"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "referencias antigas de F7 fora de `feito` persistiam em arquivos de auditoria"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "traceability",
+        "governance"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-01-HIGIENE-PM-E-AUTORIDADE-NORMATIVA.md"
+      ],
+      "recommended_fix": "Aplicar troca de paths quebrados para `PM/PHASES/feito/F7-...` e validar ausencia de ocorrencias em `PM/audit/*`.",
+      "suggested_labels": [
+        "prio:p0",
+        "area:f9",
+        "traceability",
+        "governance"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-01-02",
+      "title": "Converter conflito de autoridade em regra explicita de governanca",
+      "mapped_requirements": [
+        "R2"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "autoridade paralela entre documentos normativos e referencia externa"
+      ],
+      "risk_level": "critical",
+      "risk_categories": [
+        "architecture_governance",
+        "policy"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-01-HIGIENE-PM-E-AUTORIDADE-NORMATIVA.md"
+      ],
+      "recommended_fix": "Publicar regra de precedencia unica e exigir trilha de override em issue/changelog/traceability.",
+      "suggested_labels": [
+        "prio:p0",
+        "area:f9",
+        "risk:critical",
+        "architecture"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-01-03",
+      "title": "Criar secao permanente de auditoria arquitetural com criterio de encerramento",
+      "mapped_requirements": [
+        "R3"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "auditoria arquitetural sem trilha permanente de convergencia"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "traceability",
+        "operational_governance"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md"
+      ],
+      "recommended_fix": "Consolidar criterio de encerramento e score de convergencia como contrato recorrente da F9.",
+      "suggested_labels": [
+        "prio:p1",
+        "area:f9",
+        "audit",
+        "traceability"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-02-01",
+      "title": "Alinhar cadeia canonica PRD -> Fases -> Epicos -> Issues -> Microtasks",
+      "mapped_requirements": [
+        "R4"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "cadeias estruturais concorrentes entre PM e PRD"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "planning_model",
+        "governance"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md"
+      ],
+      "recommended_fix": "Normalizar cadeia em PM/PRD e limitar sprint a capacidade operacional.",
+      "suggested_labels": [
+        "prio:p0",
+        "area:f9",
+        "planning",
+        "governance"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-02-02",
+      "title": "Rebaixar pipeline multi-modelo para proposta ate harmonizacao transversal",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "pipeline normativo sem sincronizacao total com contratos adjacentes"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "architecture",
+        "change_management"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md"
+      ],
+      "recommended_fix": "Manter pipeline como proposta com condicoes objetivas de promocao para norma.",
+      "suggested_labels": [
+        "prio:p0",
+        "area:f9",
+        "architecture",
+        "pipeline"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-02-03",
+      "title": "Formalizar governanca de PR/branch/ownership como contrato explicito",
+      "mapped_requirements": [
+        "R6"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "policy de branch/ownership ainda heterogenea entre docs e workflows"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "dev_governance",
+        "compliance"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md"
+      ],
+      "recommended_fix": "Consolidar policy de PR/branch/ownership com criterio de excecao por decision.",
+      "suggested_labels": [
+        "prio:p1",
+        "area:f9",
+        "dev-governance",
+        "policy"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-03-01",
+      "title": "Definir trilha minima auditavel para microtask",
+      "mapped_requirements": [
+        "R7"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "contrato de microtask sem trilha materializada minima"
+      ],
+      "risk_level": "critical",
+      "risk_categories": [
+        "traceability",
+        "execution_model"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md"
+      ],
+      "recommended_fix": "Publicar path/artefatos minimos e bloquear fechamento de issue sem evidencia de microtask.",
+      "suggested_labels": [
+        "prio:p0",
+        "area:f9",
+        "risk:critical",
+        "microtask"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-03-02",
+      "title": "Governar superficies externas por classificacao formal",
+      "mapped_requirements": [
+        "R8"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "superficies externas com governanca parcial ou implicita"
+      ],
+      "risk_level": "medium",
+      "risk_categories": [
+        "integrations",
+        "security",
+        "scope_management"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md"
+      ],
+      "recommended_fix": "Classificar cada superficie como governada ou fora de escopo atual com trilha de decisao.",
+      "suggested_labels": [
+        "prio:p1",
+        "area:f9",
+        "integrations",
+        "security"
+      ]
+    },
+    {
+      "id": "ISSUE-F9-03-03",
+      "title": "Endurecer workflow de override Felix com issue + changelog + traceability",
+      "mapped_requirements": [
+        "R9"
+      ],
+      "conformance_status": "Planned",
+      "problems": [
+        "override conceitual sem trilha normativa completa em todos os casos"
+      ],
+      "risk_level": "high",
+      "risk_categories": [
+        "governance",
+        "change_management",
+        "traceability"
+      ],
+      "quality_checklist": {
+        "objective_clear": true,
+        "testable_acceptance_criteria": true,
+        "estimate_present": true,
+        "dependencies_listed": true,
+        "qa_steps_or_repro": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md"
+      ],
+      "recommended_fix": "Bloquear override sem trilha completa e padronizar fluxo de excecao arquitetural.",
+      "suggested_labels": [
+        "prio:p1",
+        "area:f9",
+        "governance",
+        "traceability"
+      ]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 9,
+    "requirements_covered": 9,
+    "coverage_percent": 100.0,
+    "total_issues_audited": 9,
+    "issues_planned": 9,
+    "issues_in_progress": 0,
+    "issues_done": 0,
+    "critical_issues_count": 2,
+    "high_issues_count": 5,
+    "medium_issues_count": 1,
+    "low_issues_count": 0,
+    "top_5_risks": [
+      {
+        "title": "Autoridade normativa ambigua",
+        "severity": "critical",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:31"
+        ]
+      },
+      {
+        "title": "Contrato de microtask sem materializacao minima",
+        "severity": "critical",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:36"
+        ]
+      },
+      {
+        "title": "Cadeia estrutural concorrente",
+        "severity": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:34"
+        ]
+      },
+      {
+        "title": "Governanca de PR/branch/ownership parcialmente explicita",
+        "severity": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:40"
+        ]
+      },
+      {
+        "title": "Superficies externas fora do pacote normativo",
+        "severity": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:41"
+        ]
+      }
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "urgency_index": 100,
+      "description": "Finalizar higiene de paths F7 em auditorias PM e impedir regressao com validacao deterministica de referencias quebradas.",
+      "owner": "pm",
+      "due_days": 1,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/audit/F7-TRADING-POR-ESTAGIOS-EPICS-ISSUES-AUDIT.json"
+      ]
+    },
+    {
+      "priority": "P0",
+      "urgency_index": 95,
+      "description": "Publicar regra explicita de autoridade normativa e bloquear overrides sem trilha completa.",
+      "owner": "pm + architecture",
+      "due_days": 3,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md"
+      ]
+    },
+    {
+      "priority": "P0",
+      "urgency_index": 95,
+      "description": "Definir contrato minimo de microtask e criterios de bloqueio para issue de codigo sem evidencia por microtask.",
+      "owner": "architecture + pm",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 80,
+      "description": "Convergir cadeia de planejamento para modelo unico no pacote PRD/PM.",
+      "owner": "pm",
+      "due_days": 7,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 75,
+      "description": "Classificar 100% das superficies externas como governadas ou fora de escopo atual com owner definido.",
+      "owner": "security + pm",
+      "due_days": 10,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/INTEGRATIONS/README.md"
+      ]
+    }
+  ]
+}

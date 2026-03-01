@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-TECH-LEAD-SPEC.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-18"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050"]
 ---
 
@@ -33,6 +33,11 @@ Exclui:
 - revisar PRs e aprovar/rejeitar com criterio explicito.
 - garantir aderencia a seguranca, observabilidade e rollback.
 - decidir quando script vira ferramenta oficial reutilizavel.
+
+## Compatibilidade com Gate Codex 5
+- feedback do `Codex 5` MUST ser tratado como evidencia tecnica previa de gate, nao como aprovacao soberana.
+- em risco medio/alto, conflito arquitetural, seguranca/compliance ou side effect governado, a decisao final permanece no fluxo humano/Tech Lead conforme politica vigente.
+- quando houver obrigatoriedade de governanca humana, `Codex 5` atua apenas como pre-gate tecnico.
 
 ## Merge Policy
 - merge automatico so para baixo risco + todos os gates verdes.

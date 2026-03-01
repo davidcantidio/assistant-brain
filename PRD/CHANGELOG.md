@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.40"
+version: "2.42"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,77 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Conversao da auditoria arquitetural em fase F9 (PM)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria a fase dedicada `F9` em:
+    - `PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPICS.md`;
+    - `PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-01-HIGIENE-PM-E-AUTORIDADE-NORMATIVA.md`;
+    - `PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md`;
+    - `PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md`.
+  - cria pacote de auditoria/rastreabilidade da fase:
+    - `PM/audit/F9-NORMALIZACAO-ARQUITETURAL-EPICS-ISSUES-AUDIT.json`;
+    - `PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md`.
+  - corrige referencias quebradas de `F7` para path canonico `feito` em:
+    - `PM/audit/F7-TRADING-POR-ESTAGIOS-EPICS-ISSUES-AUDIT.json`;
+    - `PM/audit/fase-f1-epicos-issues-audit.json`;
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md`.
+- Migracao:
+  - esta entrega converte o relatorio `artifacts/architecture/2026-03-01-architectural-consistency-audit.md` em backlog executavel `F9` (3 epics, 9 issues).
+  - historico antigo do changelog e preservado sem normalizacao retroativa de entradas anteriores.
+  - a regra de leitura desta rodada e: organizacao PM primeiro, sem alterar automaticamente contratos de runtime fora do escopo documental da fase.
+
+### 2026-03-01 - Pacote 2 de normalizacao arquitetural (docs + enforcement)
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - redefine a precedencia documental para `SEC/PRD/ARC` como nucleo normativo, removendo `felixcraft.md` da posicao de autoridade suprema;
+  - atualiza `README.md` e `workspaces/main/AGENTS.md` para refletir fonte canonica normativa e tratar Felix como referencia conceitual de traceability;
+  - ajusta `PM/SCRUM-GOV.md` para cadeia canonica `PRD -> Fases -> Epicos -> Issues -> Microtasks`, com sprint como janela de capacidade;
+  - harmoniza contratos em `ARC/ARC-CORE.md` e `ARC/ARC-MODEL-ROUTING.md` para explicitar o pipeline especializado de mudancas com codigo sem substituir contratos globais de roteamento;
+  - harmoniza papeis em `DEV/DEV-TECH-LEAD-SPEC.md`, `DEV/DEV-JUNIOR-SPEC.md` e `PM/DECISION-PROTOCOL.md` para manter `Codex 5` como pre-gate tecnico quando governanca humana for obrigatoria;
+  - adiciona enforcement minimo de governanca de PR:
+    - cria `.github/CODEOWNERS` com cobertura inicial `* @davidcantidio`;
+    - cria `scripts/ci/check_pr_governance.sh`;
+    - integra o novo check ao `make ci-quality` via `scripts/ci/check_quality.sh`;
+    - formaliza em `DEV/DEV-CI-RULES.md` a policy de `main protegida`, `PR obrigatorio`, `checks verdes` e `excecao por decision`.
+- Migracao:
+  - referencias Felix passam a ser tratadas como import conceitual com normalizacao obrigatoria em `PRD/CHANGELOG.md`.
+  - branch protection em GitHub permanece configuracao operacional externa, enquanto o repositorio passa a carregar policy e check de coerencia.
+  - ownership de revisao passa a ter fonte versionada em `.github/CODEOWNERS` nesta versao inicial.
+
+### 2026-03-01 - Integracao do Pipeline Multi-Modelo para Mudancas com Codigo
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - adiciona em `PRD/PRD-MASTER.md` a secao normativa `Pipeline Multi-Modelo para Mudancas com Codigo`;
+  - formaliza o mapeamento funcional:
+    - `M30` como gerador inicial equivalente funcional ao `Worker LLM Local` para primeira proposta;
+    - `M14-Code` como executor tecnico principal e unico autorizado a commitar, dar push, abrir PR e atualizar PR;
+    - `Codex 5` como `Gatekeeper/Reviewer` especifico do pipeline de codigo, proibido de escrever codigo, commitar, abrir PR ou fazer merge;
+    - humano preservado como autoridade de governanca onde `Review/Gate`, `Decision`, HITL, risco, policy, seguranca ou trading ja exigirem aprovacao.
+  - fixa `MAX_ITERATIONS=3` ciclos totais de gate `Codex 5` e `MAX_CI_REPAIR_ATTEMPTS=2` por ciclo antes de escalar.
+  - fecha a regra de ordenacao:
+    - CI obrigatorio MUST ocorrer antes do gate `Codex 5`;
+    - governanca humana obrigatoria continua como pre-gate quando aplicavel.
+  - explicita compatibilidade estrutural da hierarquia `PRD -> Epicos -> Fases -> Issues -> Micro-issues executaveis`, com equivalencia terminologica `Micro-issue executavel = Microtask`.
+  - cria o artifact analitico `artifacts/architecture/2026-03-01-multi-model-pipeline-impact.md` contendo:
+    - matriz de conflitos normativos;
+    - failure modes e salvaguardas;
+    - contrato formal de feedback do gate `Codex 5`;
+    - impacto arquitetural sistemico;
+    - sugestoes estruturais separadas e dependentes de aprovacao.
+  - registra conflitos normativos pontuais sem alteracao automatica em `ARC/*`, `DEV/*`, `PM/*`, `.github/*` ou policy de ownership:
+    - contratos atuais de roteamento/supervisao;
+    - papel do `Tech Lead`;
+    - papel do `Gatekeeper/Reviewer`;
+    - lacuna de precedencia documental para `PRD/`;
+    - ausencia de `CODEOWNERS` como fonte de verdade no repo.
+- Migracao:
+  - o pipeline multi-modelo MUST operar abaixo da `Issue`, no nivel de `Microtask` e `PR`, sem criar nova camada de planejamento.
+  - `doc_change` puro MAY permanecer no fluxo atual; qualquer mudanca com codigo, teste, script, config de build/runtime ou automacao operacional MUST usar o pipeline novo.
+  - `Codex 5` MUST produzir saida maquina-consumivel em `runs/<issue_id>/<microtask_id>/reviews/codex5-iteration-<n>.json`.
+  - `Codex 5` MUST ser tratado como pre-gate quando houver aprovacao humana obrigatoria por governanca.
+  - `CODEOWNERS_POLICY` permanece placeholder ausente; qualquer formalizacao de ownership/branch protection fica como follow-up dependente de aprovacao explicita.
 
 ### 2026-03-01 - Execucao do ISSUE-F8-04-03 + fechamento do EPIC-F8-04 em `feito`
 - RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.

@@ -1,0 +1,26 @@
+model_list:
+  # 🧠 Generalista (chat)
+  - model_name: qwen3-general
+    litellm_params:
+      model: ollama_chat/qwen3:30b-a3b-instruct-2507-q8_0
+      api_base: http://localhost:11434
+      num_ctx: 65536
+
+  # 💻 Código (chat)
+  - model_name: qwen3-coder
+    litellm_params:
+      model: ollama_chat/qwen3-coder:30b-a3b-q8_0
+      api_base: http://localhost:11434
+      num_ctx: 65536
+
+  # 📚 Embeddings (RAG)
+  - model_name: qwen3-embed
+    litellm_params:
+      model: ollama/qwen3-embedding:8b
+      api_base: http://localhost:11434
+
+  # 🎯 Reranker (RAG) - via vLLM (recomendado)
+  - model_name: bge-reranker
+    litellm_params:
+      model: hosted_vllm/BAAI/bge-reranker-v2-m3
+      api_base: http://localhost:8000

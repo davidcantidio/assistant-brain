@@ -4,16 +4,16 @@
 Padrao operacional do workspace `main`, alinhado a governanca oficial do repositorio.
 
 ## Ordem de autoridade
-0. `felixcraft.md`
 1. `SEC/*`
-2. `CORE/*`
+2. `PRD/*`
 3. `ARC/*`
-4. `RAG/*`
-5. `PM/*`
-6. `DEV/*`
-7. `VERTICALS/*`
-8. `EVALS/*`, `INCIDENTS/*`, `META/*`
-9. `README.md` e guias auxiliares
+4. `CORE/*`
+5. `RAG/*`
+6. `PM/*`
+7. `DEV/*`
+8. `VERTICALS/*`
+9. `EVALS/*`, `INCIDENTS/*`, `META/*`
+10. `README.md` e guias auxiliares
 
 Em contradicao, a hierarquia acima prevalece.
 

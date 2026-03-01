@@ -55,14 +55,23 @@ write_skip_log() {
 
 FAILED_GATE=""
 
-if [[ -n "${CONTRACT_REVIEW_STATUS+x}" ]]; then
-  CONTRACT_REVIEW_STATUS="${CONTRACT_REVIEW_STATUS}"
+if [[ -n "${REVIEW_VALIDITY_STATUS+x}" ]]; then
+  REVIEW_VALIDITY_STATUS="${REVIEW_VALIDITY_STATUS}"
+  OPERATIONAL_CONFORMANCE_STATUS="${OPERATIONAL_CONFORMANCE_STATUS:-FAIL}"
+  FAILED_DOMAINS="${FAILED_DOMAINS:-none}"
+  CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
+elif [[ -n "${CONTRACT_REVIEW_STATUS+x}" ]]; then
+  REVIEW_VALIDITY_STATUS="${CONTRACT_REVIEW_STATUS}"
+  OPERATIONAL_CONFORMANCE_STATUS="${OPERATIONAL_CONFORMANCE_STATUS:-$CONTRACT_REVIEW_STATUS}"
+  FAILED_DOMAINS="${FAILED_DOMAINS:-none}"
   CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
 else
   if REVIEW_ENV="$(WEEK_ID="$WEEK_ID" CONTRACT_REVIEW_DIR="$CONTRACT_REVIEW_DIR" bash scripts/ci/read_phase_f8_contract_review.sh 2>/dev/null)"; then
     eval "$REVIEW_ENV"
   else
-    CONTRACT_REVIEW_STATUS="FAIL"
+    REVIEW_VALIDITY_STATUS="FAIL"
+    OPERATIONAL_CONFORMANCE_STATUS="FAIL"
+    FAILED_DOMAINS="none"
     CRITICAL_DRIFTS_OPEN="0"
   fi
 fi
@@ -102,8 +111,15 @@ IFS='|' read -r _ CI_QUALITY_STATUS QUALITY_LOG_PATH <<<"$QUALITY_RESULT"
 IFS='|' read -r _ CI_SECURITY_STATUS SECURITY_LOG_PATH <<<"$SECURITY_RESULT"
 
 DECISION="hold"
-if [[ "$EVAL_GATES_STATUS" == "PASS" && "$CI_QUALITY_STATUS" == "PASS" && "$CI_SECURITY_STATUS" == "PASS" && "$CONTRACT_REVIEW_STATUS" == "PASS" && "$CRITICAL_DRIFTS_OPEN" == "0" && "$PRIOR_PHASE_DECISION" == "promote" ]]; then
+if [[ "$EVAL_GATES_STATUS" == "PASS" && "$CI_QUALITY_STATUS" == "PASS" && "$CI_SECURITY_STATUS" == "PASS" && "$REVIEW_VALIDITY_STATUS" == "PASS" && "$OPERATIONAL_CONFORMANCE_STATUS" == "PASS" && "$CRITICAL_DRIFTS_OPEN" == "0" && "$PRIOR_PHASE_DECISION" == "promote" && "$PHASE_TRANSITION_STATUS" == "ready" ]]; then
   DECISION="promote"
+fi
+
+OPERATIONAL_READINESS="hold"
+if [[ "$DECISION" == "promote" ]]; then
+  OPERATIONAL_READINESS="ready"
+elif [[ "$PHASE_TRANSITION_STATUS" == "blocked" || "$OPERATIONAL_CONFORMANCE_STATUS" != "PASS" || "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
+  OPERATIONAL_READINESS="blocked"
 fi
 
 risk_notes_parts=()
@@ -114,9 +130,15 @@ if [[ -n "$FAILED_GATE" ]]; then
   next_actions_parts+=("corrigir ${FAILED_GATE} antes de rerodar a semana")
 fi
 
-if [[ "$CONTRACT_REVIEW_STATUS" != "PASS" ]]; then
-  risk_notes_parts+=("contract review default=${CONTRACT_REVIEW_STATUS}")
+if [[ "$REVIEW_VALIDITY_STATUS" != "PASS" ]]; then
+  risk_notes_parts+=("review_validity_status=${REVIEW_VALIDITY_STATUS}")
   next_actions_parts+=("publicar contract review da semana via F8-02")
+fi
+
+if [[ "$OPERATIONAL_CONFORMANCE_STATUS" != "PASS" ]]; then
+  risk_notes_parts+=("operational_conformance_status=${OPERATIONAL_CONFORMANCE_STATUS}")
+  risk_notes_parts+=("failed_domains=${FAILED_DOMAINS}")
+  next_actions_parts+=("remediar dominios operacionais em FAIL: ${FAILED_DOMAINS}")
 fi
 
 if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
@@ -145,7 +167,8 @@ residual_risk_parts=()
 
 if [[ "$DECISION" == "promote" ]]; then
   release_justification_parts+=("trio de gates em PASS")
-  release_justification_parts+=("contract_review_status=PASS")
+  release_justification_parts+=("review_validity_status=PASS")
+  release_justification_parts+=("operational_conformance_status=PASS")
   release_justification_parts+=("critical_drifts_open=0")
   release_justification_parts+=("prior_phase_decision=promote")
   residual_risk_parts+=("none")
@@ -155,9 +178,16 @@ else
     release_justification_parts+=("release bloqueado por ${FAILED_GATE}=FAIL")
     residual_risk_parts+=("falha de gate semanal em ${FAILED_GATE}")
   fi
-  if [[ "$CONTRACT_REVIEW_STATUS" != "PASS" ]]; then
-    release_justification_parts+=("release bloqueado por contract_review_status=${CONTRACT_REVIEW_STATUS}")
-    residual_risk_parts+=("contract_review_status=${CONTRACT_REVIEW_STATUS}")
+  if [[ "$REVIEW_VALIDITY_STATUS" != "PASS" ]]; then
+    release_justification_parts+=("release bloqueado por review_validity_status=${REVIEW_VALIDITY_STATUS}")
+    residual_risk_parts+=("review_validity_status=${REVIEW_VALIDITY_STATUS}")
+  fi
+  if [[ "$OPERATIONAL_CONFORMANCE_STATUS" != "PASS" ]]; then
+    release_justification_parts+=("release bloqueado por operational_conformance_status=${OPERATIONAL_CONFORMANCE_STATUS}")
+    residual_risk_parts+=("operational_conformance_status=${OPERATIONAL_CONFORMANCE_STATUS}")
+    if [[ "$FAILED_DOMAINS" != "none" ]]; then
+      residual_risk_parts+=("failed_domains=${FAILED_DOMAINS}")
+    fi
   fi
   if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
     release_justification_parts+=("release bloqueado por critical_drifts_open=${CRITICAL_DRIFTS_OPEN}")
@@ -195,10 +225,13 @@ python3 scripts/ci/phase_f8_release_governance.py render-weekly-report \
   --prior-phase-decision "$PRIOR_PHASE_DECISION" \
   --phase-transition-status "$PHASE_TRANSITION_STATUS" \
   --blocking-reason "$BLOCKING_REASON" \
+  --operational-readiness "$OPERATIONAL_READINESS" \
+  --review-validity-status "$REVIEW_VALIDITY_STATUS" \
+  --operational-conformance-status "$OPERATIONAL_CONFORMANCE_STATUS" \
+  --failed-domains "$FAILED_DOMAINS" \
   --eval-gates-status "$EVAL_GATES_STATUS" \
   --ci-quality-status "$CI_QUALITY_STATUS" \
   --ci-security-status "$CI_SECURITY_STATUS" \
-  --contract-review-status "$CONTRACT_REVIEW_STATUS" \
   --critical-drifts-open "$CRITICAL_DRIFTS_OPEN" \
   --decision "$DECISION" \
   --release-review-status "$RELEASE_REVIEW_STATUS" \

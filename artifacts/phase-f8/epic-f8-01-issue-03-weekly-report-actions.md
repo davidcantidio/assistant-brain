@@ -14,7 +14,7 @@
 ## Green
 - acao:
   - adicionar validador `scripts/ci/check_phase_f8_weekly_governance.sh` em `make ci-quality`;
-  - validar cenarios mockados de `promote`, `eval-gates FAIL`, `ci-quality FAIL` e `contract_review_status` default `FAIL`;
+  - validar cenarios mockados de `promote`, `eval-gates FAIL`, `ci-quality FAIL` e review default fail-closed;
   - consolidar summary do epic e mover o documento `EPIC-F8-01` para `feito`.
 - comandos:
   1. `make ci-quality`
@@ -33,9 +33,9 @@
   - presenca e ordem dos campos obrigatorios do relatorio semanal;
   - coerencia da formula `promote|hold`;
   - existencia dos logs referenciados;
-  - cenario `promote` mockado com trio `PASS` + `contract_review_status=PASS` + `critical_drifts_open=0`;
+  - cenario `promote` mockado com trio `PASS` + `review_validity_status=PASS` + `operational_conformance_status=PASS` + `critical_drifts_open=0`;
   - cenarios fail-fast mockados para `eval-gates` e `ci-quality`;
-  - cenario fail-closed de `contract_review_status` ausente.
+  - cenario fail-closed de artifact de contract review ausente.
 - artifacts finais publicados:
   - `artifacts/phase-f8/epic-f8-01-weekly-governance.md`
   - `artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md`

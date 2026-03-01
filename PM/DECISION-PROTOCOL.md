@@ -1,9 +1,9 @@
 ---
 doc_id: "DECISION-PROTOCOL.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-26"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -39,6 +39,7 @@ Exclui:
 - [RFC-060] MUST operar Trading live em `fail-closed` quando canal HITL critico estiver indisponivel sem fallback validado.
 - [RFC-015] MUST tratar email como canal nao confiavel para comando.
 - [RFC-060] MUST exigir aprovacao humana explicita para toda acao financeira com side effect.
+- [RFC-040] MUST tratar `Codex 5` como pre-gate tecnico quando governanca humana for obrigatoria; gate AI isolado nao conclui aprovacao final.
 
 ## Taxonomia de Risco Canonica (compatibilidade)
 - taxonomia canonica para gates tecnicos:

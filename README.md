@@ -8,12 +8,13 @@ Repositorio de governanca e arquitetura do OpenClaw Agent OS.
 - regra: MVP documental pode estar completo mesmo sem MVP operacional.
 
 ## Fonte Canonica
-- referencia arquitetural suprema: `felixcraft.md`
+- fonte canonica normativa: `SEC/`, `PRD/` e `ARC/`
 - hierarquia e precedencia: `META/DOCUMENT-HIERARCHY.md`
 - visao executiva do produto: `PRD/PRD-MASTER.md`
 - fases e backlog de implementacao: `PRD/ROADMAP.md`
 - fases usaveis com teste humano por etapa: `PRD/PHASE-USABILITY-GUIDE.md`
 - historico normativo: `PRD/CHANGELOG.md`
+- referencia conceitual para traceability: `felixcraft.md` e `felix-openclaw-pontos-relevantes.md`
 
 ## Estrutura
 - `PRD/`: produto, fases e changelog

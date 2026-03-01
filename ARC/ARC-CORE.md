@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "2.1"
+version: "2.2"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-26"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050", "RFC-060"]
 ---
 
@@ -71,6 +71,16 @@ Exclui:
 - `fallback_contract`:
   - ordem default: `local_worker -> claude-review -> codex-main`
   - logging obrigatorio: `requested_model`, `effective_model`, `fallback_step`, `reason`.
+
+## Compatibilidade com Pipeline de Mudancas com Codigo
+- o fluxo `M30 -> M14-Code -> Codex 5` MUST ser tratado como especializacao de execucao para `Microtask` de codigo.
+- essa especializacao atua abaixo da `Issue` (camada de execucao/review) e MUST NOT criar nova camada de planejamento.
+- para task types sem mudanca de codigo, os contratos globais (`supervisor_contract`, `local_worker_contract`, `fallback_contract`) permanecem inalterados.
+- para mudancas com codigo:
+  - `M30` gera proposta inicial;
+  - `M14-Code` executa ajuste tecnico e e o unico autorizado a commitar/atualizar PR;
+  - `Codex 5` executa gate tecnico apos CI verde.
+- `Codex 5` MUST ser pre-gate tecnico quando houver governanca humana obrigatoria; nunca substitui gates humanos de risco/policy/trading.
 
 ## Contrato Minimo de Runtime (`openclaw_runtime_config`)
 - concorrencia:

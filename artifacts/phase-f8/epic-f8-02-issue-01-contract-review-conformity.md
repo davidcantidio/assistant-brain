@@ -14,7 +14,7 @@
 ## Green
 - acao:
   - adicionar target `make phase-f8-contract-review`;
-  - criar parser/validator canonico de `contract-review` para ler `contract_review_status` e `critical_drifts_open`;
+  - criar parser/validator canonico de `contract-review` para ler `review_validity_status`, `operational_conformance_status`, `failed_domains` e `critical_drifts_open`;
   - ligar o runner semanal ao artifact `artifacts/phase-f8/contract-review/2026-W09.md`;
   - publicar a primeira revisao real da semana `2026-W09` cobrindo `runtime`, `integrations`, `trading` e `security`.
 - comandos:
@@ -44,7 +44,9 @@
   - motivo: `F8` ativa apesar de `F7 -> F8` seguir em `hold` com itens criticos de `S1` ainda em `fail`
 - relatorio semanal regravado:
   - `artifacts/phase-f8/weekly-governance/2026-W09.md`
-  - `contract_review_status=PASS`
+  - `review_validity_status=PASS`
+  - `operational_conformance_status=FAIL`
+  - `failed_domains=trading`
   - `critical_drifts_open=1`
   - `decision=hold`
 - logs adicionais da rodada:

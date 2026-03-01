@@ -30,6 +30,8 @@
   ],
   "decision_id": "not-issued",
   "decision_status": "NOT_REQUIRED_YET",
+  "decision_ref": null,
+  "shadow_evidence_refs": [],
   "promote_readiness": "hold",
   "notes": "classe pronta em contratos e suites, mas sem shadow_mode concluido e sem decision R3"
 }

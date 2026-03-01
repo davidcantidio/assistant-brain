@@ -28,10 +28,13 @@ FIELD_ORDER = [
     "prior_phase_decision",
     "phase_transition_status",
     "blocking_reason",
+    "operational_readiness",
+    "review_validity_status",
+    "operational_conformance_status",
+    "failed_domains",
     "eval_gates_status",
     "ci_quality_status",
     "ci_security_status",
-    "contract_review_status",
     "critical_drifts_open",
     "decision",
     "release_review_status",
@@ -131,14 +134,27 @@ def expected_decision(values: dict[str, str]) -> str:
         values["prior_phase_decision"] == "promote"
         and values["phase_transition_status"] == "ready"
         and values["blocking_reason"] == "none"
+        and values["review_validity_status"] == "PASS"
+        and values["operational_conformance_status"] == "PASS"
         and values["eval_gates_status"] == "PASS"
         and values["ci_quality_status"] == "PASS"
         and values["ci_security_status"] == "PASS"
-        and values["contract_review_status"] == "PASS"
         and values["critical_drifts_open"] == "0"
         and values["release_review_status"] == "PASS"
     ):
       return "promote"
+    return "hold"
+
+
+def expected_operational_readiness(values: dict[str, str]) -> str:
+    if values["decision"] == "promote":
+        return "ready"
+    if (
+        values["phase_transition_status"] == "blocked"
+        or values["operational_conformance_status"] == "FAIL"
+        or values["critical_drifts_open"] != "0"
+    ):
+        return "blocked"
     return "hold"
 
 
@@ -158,6 +174,16 @@ for report in reports:
       fail(f"{report} com blocking_reason vazio para transicao bloqueada.")
     if values["phase_transition_status"] == "ready" and values["blocking_reason"] != "none":
       fail(f"{report} deveria usar blocking_reason=none quando a transicao estiver ready.")
+    if values["operational_readiness"] not in {"blocked", "hold", "ready"}:
+      fail(f"{report} com operational_readiness invalido: {values['operational_readiness']}")
+    if values["review_validity_status"] not in {"PASS", "FAIL"}:
+      fail(f"{report} com review_validity_status invalido: {values['review_validity_status']}")
+    if values["operational_conformance_status"] not in {"PASS", "FAIL"}:
+      fail(
+          f"{report} com operational_conformance_status invalido: {values['operational_conformance_status']}"
+      )
+    if values["failed_domains"] == "":
+      fail(f"{report} com failed_domains vazio.")
     if values["release_review_status"] not in {"PASS", "FAIL"}:
       fail(f"{report} com release_review_status invalido: {values['release_review_status']}")
     for key in ("release_justification", "residual_risk_summary", "rollback_plan", "summary_artifact", "next_actions"):
@@ -167,6 +193,8 @@ for report in reports:
       fail(f"{report} nao pode promover release com release_review_status!=PASS.")
     if values["decision"] != expected_decision(values):
       fail(f"{report} com decision inconsistente com a formula semanal.")
+    if values["operational_readiness"] != expected_operational_readiness(values):
+      fail(f"{report} com operational_readiness inconsistente com a formula semanal.")
     for key, rel_path in logs.items():
       log_path = ROOT / rel_path
       if not log_path.exists():
@@ -186,10 +214,13 @@ for report in reports:
         "release_justification",
         "phase_transition_status",
         "blocking_reason",
+        "operational_readiness",
+        "review_validity_status",
+        "operational_conformance_status",
+        "failed_domains",
         "residual_risk_summary",
         "rollback_plan",
         "next_actions",
-        "contract_review_status",
         "critical_drifts_open",
     ):
       if summary_values[key] != values[key]:
@@ -241,6 +272,9 @@ def write_contract_review(
     *,
     source_of_truth: str = "PRD/PRD-MASTER.md",
     critical_drifts_open: int = 0,
+    failed_domains: str = "[]",
+    operational_conformance_status: str = "PASS",
+    trading_status: str = "PASS",
     drift_backlog: str = "[]",
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -254,7 +288,9 @@ def write_contract_review(
   "reviewed_at": "2026-03-01T00:00:00-0300",
   "source_of_truth": "%s",
   "previous_week_id": "none",
-  "contract_review_status": "PASS",
+  "review_validity_status": "PASS",
+  "operational_conformance_status": "%s",
+  "failed_domains": %s,
   "critical_drifts_open": %s
 }
 ```
@@ -283,7 +319,7 @@ def write_contract_review(
   {
     "domain": "trading",
     "owner": "Sr. Geldmacher",
-    "status": "PASS",
+    "status": "%s",
     "canonical_refs": ["PRD/PRD-MASTER.md", "VERTICALS/TRADING/TRADING-PRD.md"],
     "gate_refs": ["make eval-trading"],
     "evidence_refs": ["scripts/ci/eval_trading.sh"],
@@ -319,7 +355,14 @@ def write_contract_review(
 }
 ```
 """
-        % (source_of_truth, critical_drifts_open, drift_backlog),
+        % (
+            source_of_truth,
+            operational_conformance_status,
+            failed_domains,
+            critical_drifts_open,
+            trading_status,
+            drift_backlog,
+        ),
         encoding="utf-8",
     )
 
@@ -330,7 +373,9 @@ pass_values, _, pass_summary = run_mock(
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
         "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
-        "CONTRACT_REVIEW_STATUS": "PASS",
+        "REVIEW_VALIDITY_STATUS": "PASS",
+        "OPERATIONAL_CONFORMANCE_STATUS": "PASS",
+        "FAILED_DOMAINS": "none",
         "CRITICAL_DRIFTS_OPEN": "0",
         "PRIOR_PHASE_DECISION": "promote",
         "PHASE_TRANSITION_STATUS": "ready",
@@ -350,7 +395,9 @@ eval_fail_values, eval_fail_logs, _ = run_mock(
         "EVAL_GATES_CMD": "printf 'eval-gates: FAIL\\n'; exit 1",
         "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
-        "CONTRACT_REVIEW_STATUS": "PASS",
+        "REVIEW_VALIDITY_STATUS": "PASS",
+        "OPERATIONAL_CONFORMANCE_STATUS": "PASS",
+        "FAILED_DOMAINS": "none",
         "CRITICAL_DRIFTS_OPEN": "0",
         "PRIOR_PHASE_DECISION": "promote",
         "PHASE_TRANSITION_STATUS": "ready",
@@ -372,7 +419,9 @@ quality_fail_values, quality_fail_logs, _ = run_mock(
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
         "CI_QUALITY_CMD": "printf 'quality-check: FAIL\\n'; exit 1",
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
-        "CONTRACT_REVIEW_STATUS": "PASS",
+        "REVIEW_VALIDITY_STATUS": "PASS",
+        "OPERATIONAL_CONFORMANCE_STATUS": "PASS",
+        "FAILED_DOMAINS": "none",
         "CRITICAL_DRIFTS_OPEN": "0",
         "PRIOR_PHASE_DECISION": "promote",
         "PHASE_TRANSITION_STATUS": "ready",
@@ -403,8 +452,10 @@ try:
             "BLOCKING_REASON": "none",
         },
     )
-    if artifact_pass_values["contract_review_status"] != "PASS":
-        fail("mock artifact-pass deveria usar contract_review_status=PASS a partir do artifact.")
+    if artifact_pass_values["review_validity_status"] != "PASS":
+        fail("mock artifact-pass deveria usar review_validity_status=PASS a partir do artifact.")
+    if artifact_pass_values["operational_conformance_status"] != "PASS":
+        fail("mock artifact-pass deveria usar operational_conformance_status=PASS.")
     if artifact_pass_values["decision"] != "promote":
         fail("mock artifact-pass deveria resultar em decision=promote.")
     if artifact_pass_summary["epic_statuses"]["EPIC-F8-03"] != read_epic_statuses(resolve_epics_path())["EPIC-F8-03"]:
@@ -423,6 +474,9 @@ try:
     write_contract_review(
         artifact_open_dir / "2026-W09.md",
         critical_drifts_open=1,
+        failed_domains='["trading"]',
+        operational_conformance_status="FAIL",
+        trading_status="FAIL",
         drift_backlog="""[
   {
     "drift_id": "DRIFT-F8-2026-W09-01",
@@ -450,12 +504,18 @@ try:
             "BLOCKING_REASON": "none",
         },
     )
-    if artifact_open_values["contract_review_status"] != "PASS":
-        fail("mock artifact-open deveria manter contract_review_status=PASS com artifact valido.")
+    if artifact_open_values["review_validity_status"] != "PASS":
+        fail("mock artifact-open deveria manter review_validity_status=PASS com artifact valido.")
+    if artifact_open_values["operational_conformance_status"] != "FAIL":
+        fail("mock artifact-open deveria refletir dominio operacional em FAIL.")
+    if artifact_open_values["failed_domains"] != "trading":
+        fail("mock artifact-open deveria propagar failed_domains=trading.")
     if artifact_open_values["critical_drifts_open"] != "1":
         fail("mock artifact-open deveria propagar critical_drifts_open=1.")
     if artifact_open_values["decision"] != "hold":
         fail("mock artifact-open deveria resultar em decision=hold.")
+    if artifact_open_values["operational_readiness"] != "blocked":
+        fail("mock artifact-open deveria resultar em operational_readiness=blocked.")
     if "critical_drifts_open=1" not in artifact_open_values["residual_risk_summary"]:
         fail("mock artifact-open deveria refletir drift critico no residual_risk_summary.")
     if artifact_open_summary["values"]["critical_drifts_open"] != "1":
@@ -477,8 +537,10 @@ review_fail_values, _, _ = run_mock(
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
     },
 )
-if review_fail_values["contract_review_status"] != "FAIL":
-    fail("mock review-fail deveria usar contract_review_status=FAIL quando o artifact estiver ausente.")
+if review_fail_values["review_validity_status"] != "FAIL":
+    fail("mock review-fail deveria usar review_validity_status=FAIL quando o artifact estiver ausente.")
+if review_fail_values["operational_conformance_status"] != "FAIL":
+    fail("mock review-fail deveria usar operational_conformance_status=FAIL quando o artifact estiver ausente.")
 if review_fail_values["decision"] != "hold":
     fail("mock review-fail deveria resultar em decision=hold.")
 
@@ -488,7 +550,9 @@ prior_phase_hold_values, _, _ = run_mock(
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
         "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
-        "CONTRACT_REVIEW_STATUS": "PASS",
+        "REVIEW_VALIDITY_STATUS": "PASS",
+        "OPERATIONAL_CONFORMANCE_STATUS": "PASS",
+        "FAILED_DOMAINS": "none",
         "CRITICAL_DRIFTS_OPEN": "0",
         "PRIOR_PHASE_DECISION": "hold",
         "PHASE_TRANSITION_STATUS": "blocked",
@@ -499,6 +563,8 @@ if prior_phase_hold_values["decision"] != "hold":
     fail("mock prior-phase-hold deveria resultar em decision=hold.")
 if prior_phase_hold_values["phase_transition_status"] != "blocked":
     fail("mock prior-phase-hold deveria marcar phase_transition_status=blocked.")
+if prior_phase_hold_values["operational_readiness"] != "blocked":
+    fail("mock prior-phase-hold deveria resultar em operational_readiness=blocked.")
 if "manter a baseline vigente de F7/F8-02" not in prior_phase_hold_values["rollback_plan"]:
     fail("mock prior-phase-hold deveria usar o rollback canonico de hold.")
 

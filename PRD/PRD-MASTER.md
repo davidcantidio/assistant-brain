@@ -1,6 +1,6 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.14"
+version: "1.15"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-03-01"
@@ -693,13 +693,203 @@ Definicao objetiva de side effect:
   - `DoD (Microtask)` MUST conter: saida tipada valida, gates obrigatorios por risco (`R0..R3`) em `pass`, trilha de execucao com `idempotency_key` e estado terminal registrado.
   - `DoD (Issue)` MUST conter: todas as microtasks em estado terminal valido, `Verify` em `pass`, `Review/Gate` concluido para `R2`/`R3` ou side effect, e evidencia auditavel consolidada.
 
+## Pipeline Multi-Modelo para Mudancas com Codigo
+
+### Objetivo
+- definir um pipeline especifico para microtasks que alteram codigo, sem quebrar a hierarquia oficial `PRD -> Epicos -> Fases -> Issues -> Micro-issues executaveis`.
+- aumentar qualidade, auditabilidade e clareza de autoridade em mudancas com codigo, mantendo CI obrigatorio, gates de risco e governanca humana onde ja forem exigidos.
+- formalizar a sequencia `M30 -> M14-Code -> Codex 5` como camada de execucao de microtask com codigo, nunca como nova camada de planejamento.
+
+### Quando aplica
+- este pipeline MUST aplicar a qualquer `Microtask` que produza mudanca em:
+  - codigo versionado;
+  - testes;
+  - scripts executaveis;
+  - build config;
+  - runtime config;
+  - automacao com efeito operacional.
+- `doc_change` puro MAY permanecer no fluxo documental ja existente, sem obrigar este pipeline.
+- mudanca mista (`doc_change` + codigo/config/script) MUST usar este pipeline por causa do componente executavel.
+
+### Compatibilidade com a hierarquia oficial
+- o pipeline atua abaixo da `Issue`, no nivel de execucao da `Microtask` e do `PR`.
+- o pipeline NAO cria camada nova entre `Fase`, `Issue` e `Microtask`.
+- a hierarquia oficial permanece:
+  - `PRD -> Epicos -> Fases -> Issues -> Micro-issues executaveis`.
+- veredito estrutural canonico para este pipeline:
+  - `Sem conflito estrutural na hierarquia PRD -> Epicos -> Fases -> Issues -> Micro-issues executaveis; conflitos normativos pontuais detectados em autoridade, roteamento e precedencia documental.`
+
+### Compatibilidade terminologica
+- `Micro-issue executavel` e alias operacional de `Microtask` para este contexto.
+- `Micro-issue executavel = Microtask` MUST ser tratado como equivalencia 1:1.
+- este pipeline NAO cria:
+  - novo schema de planejamento;
+  - novo ID canonico paralelo;
+  - nova maquina de estados paralela para `Issue` ou `Microtask`.
+- os estados canonicos continuam os ja definidos nesta especificacao, incluindo o loop `Review/Gate -> InProgress(micro)` quando houver rejeicao.
+
+### Papeis
+- `M30`:
+  - gerador inicial da implementacao;
+  - equivalente funcional ao `Worker LLM Local` para a primeira proposta de mudanca;
+  - NAO pode commitar, dar push, abrir PR ou alterar branch.
+- `M14-Code`:
+  - executor tecnico principal da mudanca com codigo;
+  - revisa, corrige, refatora, completa testes, ajusta estilo e aplica padroes de arquitetura;
+  - e o unico autorizado a commitar, dar push, abrir PR e atualizar PR neste pipeline.
+- `Codex 5`:
+  - `Gatekeeper/Reviewer` especifico do pipeline de codigo;
+  - NAO escreve codigo;
+  - NAO commita;
+  - NAO abre PR;
+  - NAO faz merge.
+- `Humano`:
+  - preserva autoridade final onde a governanca vigente ja exigir `Review/Gate`, `Decision`, HITL, aprovacao de risco, seguranca, policy, trading ou side effect.
+- este mapeamento MUST ser tratado como camada sobre papeis existentes, nao como substituicao total de `Worker`, `Verifier`, `Gatekeeper`, `Tech Lead` ou aprovador humano.
+
+### Fluxo end-to-end
+- sequencia obrigatoria:
+  1. `Issue` aprovada e decomposta em `Microtasks`.
+  2. `M30` gera a implementacao inicial da `Microtask`.
+  3. `M14-Code` revisa, refaz, corrige, refatora e testa a mudanca.
+  4. `M14-Code` cria ou atualiza commit/PR.
+  5. CI obrigatorio roda.
+  6. `Codex 5` executa gate final somente apos CI verde.
+  7. se `Codex 5` rejeitar, o feedback estruturado volta para `M14-Code`.
+  8. `M14-Code` faz novo commit.
+  9. CI roda novamente.
+  10. `Codex 5` reavalia.
+- se governanca humana for obrigatoria, este pipeline MUST terminar como `pre-gate`; aprovacao humana continua obrigatoria antes de merge, promote ou qualquer side effect governado.
+
+### Fluxo de PR
+- `M30` nunca altera branch, nunca commita e nunca abre PR.
+- `M14-Code` e o unico autor tecnico de commits e PRs do pipeline.
+- `Codex 5` nunca faz merge.
+- merge MUST continuar subordinado a governanca ja vigente no repositorio.
+- quando houver exigencia de revisao humana, `Codex 5` MUST ser tratado como evidencia previa e nao como substituto da revisao humana.
+- todo PR deste pipeline MUST carregar referencia a:
+  - `issue_id`;
+  - `microtask_id`;
+  - `iteration_index`;
+  - `ci_run_ref`;
+  - `gate_decision_ref`.
+
+### Integracao com CI
+- `Codex 5` so pode executar depois que todos os checks obrigatorios para os paths afetados estiverem em `PASS`.
+- baseline atual do repositorio para este pipeline:
+  - `make ci-quality`;
+  - `make ci-security`;
+  - `make eval-gates`;
+  - `make eval-models`.
+- mudancas em `PRD/**`, `SEC/**`, `PM/**`, `ARC/**`, `DEV/**` e `VERTICALS/TRADING/**` SHOULD considerar tambem `make eval-trading`, porque o workflow de trading ja dispara nesses caminhos.
+- esta rodada NAO cria workflow novo; a regra normativa fechada e:
+  - CI obrigatorio MUST ocorrer antes do gate `Codex 5`.
+
+### Definition of Done
+- uma mudanca com codigo so fica `Done` quando:
+  - a `Microtask` mantem contrato tipado valido;
+  - `M14-Code` e o autor do commit/PR;
+  - todos os checks CI obrigatorios estao verdes;
+  - `Codex 5` retorna `APPROVED`;
+  - `Review/Gate` humano ocorre quando exigido por risco ou governanca;
+  - a trilha auditavel e suficiente para replay e reconciliacao.
+
+### Criterios de rejeicao
+- `Codex 5` MUST rejeitar apenas por criterio verificavel.
+- categorias canonicas de rejeicao:
+  - `Bug`;
+  - `Seguranca`;
+  - `Arquitetura`;
+  - `Estilo`;
+  - `Testes`;
+  - `Performance`;
+  - `Observabilidade`.
+- rejeicao sem `criterio violado`, `correcao esperada` e `como validar` MUST ser tratada como invalida.
+
+### Observabilidade
+- cada ciclo deste pipeline MUST registrar no minimo:
+  - `issue_id`;
+  - `microtask_id`;
+  - `generator_model`;
+  - `executor_model`;
+  - `gate_model`;
+  - `iteration_index`;
+  - `ci_status`;
+  - `ci_run_refs`;
+  - `gate_decision`;
+  - `gate_rejection_count`;
+  - `fallback_reason`;
+  - `escalation_reason`;
+  - `commit_sha`;
+  - `pr_ref`.
+- a saida maquina-consumivel do gate `Codex 5` MUST seguir contrato estruturado e ficar em:
+  - `runs/<issue_id>/<microtask_id>/reviews/codex5-iteration-<n>.json`.
+
+### Seguranca
+- este pipeline NAO relaxa nenhum baseline existente de seguranca, policy ou governanca.
+- continuam obrigatorios:
+  - gateway-only para inferencia programatica;
+  - secret scan;
+  - bloqueio de direct provider call fora do gateway OpenClaw;
+  - sem bypass de HITL quando HITL for exigido;
+  - sem reducao de exigencia para seguranca, policy ou correcao so porque o modelo anterior e menos capaz.
+- risco `R2`/`R3`, side effect, trading, policy global e seguranca critica MUST continuar sujeitos aos gates ja definidos nesta especificacao.
+
+### Controles de qualidade
+- o ajuste proporcional ao modelo anterior MAY mudar apenas:
+  - granularidade do feedback;
+  - nivel de didatica;
+  - estrategia de reducao de escopo.
+- o ajuste proporcional ao modelo anterior MUST NOT reduzir:
+  - minimos de correcao;
+  - minimos de seguranca;
+  - minimos de policy;
+  - minimos de cobertura;
+  - minimos de auditabilidade.
+- o gate final `Codex 5` MUST produzir saida maquina-consumivel com:
+  - decisao;
+  - resumo;
+  - itens de feedback estruturados por categoria;
+  - metodo de validacao por item.
+
+### Limites operacionais
+- `MAX_ITERATIONS = 3` ciclos totais de gate `Codex 5`.
+- `MAX_CI_REPAIR_ATTEMPTS = 2` por ciclo antes de escalar.
+- `Codex 5` NAO pode reabrir escopo nem pedir refactor nao relacionado ao criterio violado.
+- se o mesmo criterio de rejeicao reaparecer em 2 ciclos, a proxima acao obrigatoria MUST ser:
+  - `escalate_human`; ou
+  - `split_issue`.
+
+### Fallback humano
+- os gatilhos obrigatorios de fallback humano sao:
+  - esgotou `MAX_ITERATIONS`;
+  - rejeicao recorrente pelo mesmo criterio;
+  - PR excede escopo atomico da `Microtask`;
+  - ambiguidade estrutural persiste;
+  - risco `R2`/`R3`;
+  - seguranca, policy ou trading;
+  - incapacidade recorrente do modelo anterior.
+- quando um gatilho acima ocorrer, o pipeline MUST:
+  - `escalate_human`; ou
+  - `split_issue`; ou
+  - `abort` com trilha formal, conforme risco e estado da execucao.
+
+### Comportamento adaptativo para modelos locais menos capazes
+- `Codex 5` MUST receber e registrar metadados de capacidade do modelo anterior.
+- `Codex 5` SHOULD responder com feedback mais didatico e escopo reduzido quando o modelo anterior for menos capaz.
+- `Codex 5` MUST fornecer criterios verificaveis e sem contexto implicito.
+- a barra de aceite permanece a mesma, independentemente da capacidade do modelo anterior.
+- incapacidade recorrente do modelo anterior MUST resultar em:
+  - escalada para humano; ou
+  - reducao formal do escopo da `Issue`/`Microtask`.
+
 ## Regra de Testabilidade de Claims Centrais
 - claim central sem eval gate MUST bloquear release de fase.
 - automacao com efeito colateral sem idempotencia/rollback MUST ser stop-ship.
 - decisao de roteamento sem rastro (`requested/effective`) MUST ser falha de compliance.
 
 ## Mudancas Aplicadas (2026-02-24)
-- `felixcraft.md` adotado como referencia arquitetural suprema.
+- `felixcraft.md` mantido como referencia conceitual importada via traceability e changelog normativo.
 - arquitetura realinhada para OpenClaw gateway-first com providers plugaveis.
 - contratos canonicos adicionados: `openclaw_runtime_config`, `approval_policy`, `memory_contract`, `ops_autonomy_contract`.
 - A2A, hooks/webhooks, `bind=loopback` e endpoint `chatCompletions` formalizados como contrato de runtime.

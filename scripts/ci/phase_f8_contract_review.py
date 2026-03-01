@@ -171,9 +171,10 @@ def expected_previous_week_id(week_id: str) -> str:
     return f"{previous_iso.year}-W{previous_iso.week:02d}"
 
 
-def validate_contracts_reviewed(contracts: object) -> None:
+def validate_contracts_reviewed(contracts: object) -> list[str]:
     items = expect_list(contracts, "Contracts Reviewed")
     seen_domains: set[str] = set()
+    failed_domains: list[str] = []
     for index, item in enumerate(items):
         contract = expect_dict(item, f"Contracts Reviewed[{index}]")
         domain = expect_non_empty_string(contract.get("domain"), f"Contracts Reviewed[{index}].domain")
@@ -186,6 +187,8 @@ def validate_contracts_reviewed(contracts: object) -> None:
             raise ContractReviewError(
                 f"Contracts Reviewed[{index}].status invalido: {status}"
             )
+        if status == "FAIL":
+            failed_domains.append(domain)
         expect_string_list(contract.get("canonical_refs"), f"Contracts Reviewed[{index}].canonical_refs")
         expect_string_list(contract.get("gate_refs"), f"Contracts Reviewed[{index}].gate_refs")
         expect_string_list(contract.get("evidence_refs"), f"Contracts Reviewed[{index}].evidence_refs")
@@ -196,6 +199,7 @@ def validate_contracts_reviewed(contracts: object) -> None:
         raise ContractReviewError(
             "Contracts Reviewed sem dominios obrigatorios: " + ", ".join(missing)
         )
+    return sorted(failed_domains)
 
 
 def validate_drift_backlog(backlog: object) -> tuple[list[dict[str, object]], int]:
@@ -466,15 +470,60 @@ def validate_review(review_dir: Path, week_id: str) -> dict[str, object]:
     previous_week_id = expect_non_empty_string(
         metadata.get("previous_week_id"), "Metadata.previous_week_id"
     )
-    metadata_status = expect_non_empty_string(
-        metadata.get("contract_review_status"), "Metadata.contract_review_status"
-    )
-    if metadata_status != "PASS":
+    legacy_review_validity = metadata.get("contract_review_status")
+    review_validity_raw = metadata.get("review_validity_status")
+    if review_validity_raw is None:
+        if legacy_review_validity is None:
+            raise ContractReviewError(
+                f"{display_path(path)} sem review_validity_status nem contract_review_status legado."
+            )
+        review_validity_status = expect_non_empty_string(
+            legacy_review_validity,
+            "Metadata.contract_review_status",
+        )
+    else:
+        review_validity_status = expect_non_empty_string(
+            review_validity_raw,
+            "Metadata.review_validity_status",
+        )
+    if review_validity_status != "PASS":
         raise ContractReviewError(
-            f"{display_path(path)} deve publicar contract_review_status=PASS quando valido."
+            f"{display_path(path)} deve publicar review_validity_status=PASS quando valido."
         )
 
-    validate_contracts_reviewed(load_json_section(sections, "Contracts Reviewed", path))
+    failed_domains = validate_contracts_reviewed(load_json_section(sections, "Contracts Reviewed", path))
+    expected_operational_conformance = "PASS" if not failed_domains else "FAIL"
+    operational_conformance_raw = metadata.get("operational_conformance_status")
+    if operational_conformance_raw is None:
+        operational_conformance_status = expected_operational_conformance
+    else:
+        operational_conformance_status = expect_non_empty_string(
+            operational_conformance_raw,
+            "Metadata.operational_conformance_status",
+        )
+    if operational_conformance_status != expected_operational_conformance:
+        raise ContractReviewError(
+            f"{display_path(path)} com operational_conformance_status divergente de Contracts Reviewed."
+        )
+
+    failed_domains_raw = metadata.get("failed_domains")
+    if failed_domains_raw is None:
+        metadata_failed_domains = failed_domains
+    else:
+        metadata_failed_domains = expect_string_list(
+            failed_domains_raw,
+            "Metadata.failed_domains",
+        )
+        invalid_domains = sorted(set(metadata_failed_domains) - set(REQUIRED_DOMAINS))
+        if invalid_domains:
+            raise ContractReviewError(
+                f"{display_path(path)} com failed_domains invalidos: {', '.join(invalid_domains)}"
+            )
+        if sorted(metadata_failed_domains) != failed_domains:
+            raise ContractReviewError(
+                f"{display_path(path)} com failed_domains divergente de Contracts Reviewed."
+            )
+
     drift_backlog, critical_open = validate_drift_backlog(load_json_section(sections, "Drift Backlog", path))
     previous_week_closure = validate_previous_week_closure(
         load_json_section(sections, "Previous Week Closure", path)
@@ -500,6 +549,9 @@ def validate_review(review_dir: Path, week_id: str) -> dict[str, object]:
 
     return {
         "path": path,
+        "review_validity_status": review_validity_status,
+        "operational_conformance_status": operational_conformance_status,
+        "failed_domains": metadata_failed_domains,
         "critical_open": critical_open,
         "drift_backlog": drift_backlog,
         "previous_week_closure": previous_week_closure,
@@ -537,7 +589,9 @@ def build_sample_review(
   "reviewed_at": "2026-03-01T00:00:00-0300",
   "source_of_truth": "{source_of_truth}",
   "previous_week_id": "{previous_week_id}",
-  "contract_review_status": "PASS",
+  "review_validity_status": "PASS",
+  "operational_conformance_status": "PASS",
+  "failed_domains": [],
   "critical_drifts_open": {critical_drifts_open}
 }}
 ```
@@ -902,7 +956,13 @@ def run_self_checks() -> None:
 
 def command_read(week_id: str, review_dir: Path) -> int:
     review = validate_review(review_dir, week_id)
-    print("CONTRACT_REVIEW_STATUS=PASS")
+    failed_domains = ",".join(review["failed_domains"]) if review["failed_domains"] else "none"
+    print(f"REVIEW_VALIDITY_STATUS={json.dumps(review['review_validity_status'], ensure_ascii=True)}")
+    print(
+        "OPERATIONAL_CONFORMANCE_STATUS="
+        + json.dumps(review["operational_conformance_status"], ensure_ascii=True)
+    )
+    print(f"FAILED_DOMAINS={json.dumps(failed_domains, ensure_ascii=True)}")
     print(f"CRITICAL_DRIFTS_OPEN={review['critical_open']}")
     return 0
 

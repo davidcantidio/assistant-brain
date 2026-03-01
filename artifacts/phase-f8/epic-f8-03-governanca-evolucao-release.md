@@ -30,7 +30,9 @@
 - `eval_gates_status`: `PASS`
 - `ci_quality_status`: `PASS`
 - `ci_security_status`: `PASS`
-- `contract_review_status`: `PASS`
+- `review_validity_status`: `PASS`
+- `operational_conformance_status`: `FAIL`
+- `failed_domains`: `trading`
 - `critical_drifts_open`: `1`
 - `decision`: `hold`
 - justificativa:

@@ -93,7 +93,7 @@ Como operador, quero artifact unico da fase para justificar claramente a decisao
   2. validar existencia de `assistant-brain/artifacts/phase-f7/validation-summary.md`;
   3. validar referencia ao checklist `CHECKLIST-F7-02-S1-20260301-01` no resumo unico da fase;
   4. validar decisao final `F7 -> F8: hold` com justificativa explicita.
-- **Evidence refs**: `assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:12-37`, `assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39-57`
+- **Evidence refs**: `assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:12-37`, `assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39-57`
 
 **Plano TDD**
 1. `Red`: manter evidencias dispersas sem decisao final explicita.

@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -33,6 +33,19 @@ Fechar cada ciclo semanal com decisao formal `promote|hold`, trilha de risco res
 **User story**  
 Como operador, quero criterios objetivos de decisao semanal para evitar promocao por percepcao subjetiva.
 
+**Metadata da issue**
+- **Owner**: `product-owner + tech-lead-trading`
+- **Estimativa**: `0.5d`
+- **Dependencias**: `artifacts/phase-f7/validation-summary.md`, `scripts/ci/phase_f8_release_governance.py`, `scripts/ci/run_phase_f8_weekly_governance.sh`, `artifacts/phase-f8/weekly-governance/2026-W09.md`, `artifacts/phase-f8/validation-summary-2026-W09.md`
+- **Mapped requirements**: `R7`, `R6`
+- **Prioridade**: `P0`
+- **Checklist QA/Repro**:
+  1. validar leitura de `prior_phase_decision` a partir do summary da F7;
+  2. validar formula de `decision` com gates, drifts e fase anterior;
+  3. validar bloqueio explícito com `phase_transition_status=blocked` enquanto `F7 -> F8` estiver `hold`;
+  4. rodar `make phase-f8-weekly-governance` e conferir resultado `hold`.
+- **Evidence refs**: `artifacts/phase-f7/validation-summary.md`, `scripts/ci/phase_f8_release_governance.py`, `artifacts/phase-f8/weekly-governance/2026-W09.md`
+
 **Plano TDD**
 1. `Red`: considerar promocao sem validar gates, drifts e a decisao `F7 -> F8`.
 2. `Green`: decidir `promote|hold` com base no trio de gates, status de drifts criticos e `prior_phase_decision`.
@@ -46,6 +59,19 @@ Como operador, quero criterios objetivos de decisao semanal para evitar promocao
 **User story**  
 Como operador, quero registrar risco residual e rollback para manter continuidade segura entre ciclos semanais.
 
+**Metadata da issue**
+- **Owner**: `pm`
+- **Estimativa**: `0.5d`
+- **Dependencias**: `artifacts/phase-f7/validation-summary.md`, `scripts/ci/phase_f8_release_governance.py`, `scripts/ci/run_phase_f8_weekly_governance.sh`, `artifacts/phase-f8/weekly-governance/2026-W09.md`, `artifacts/phase-f8/validation-summary-2026-W09.md`
+- **Mapped requirements**: `R8`
+- **Prioridade**: `P1`
+- **Checklist QA/Repro**:
+  1. validar presença de `release_justification`, `residual_risk_summary`, `rollback_plan`, `next_actions`;
+  2. validar consistência desses campos entre weekly report e validation summary;
+  3. validar que o pacote permanece não vazio para `decision=hold`;
+  4. rodar `bash scripts/ci/check_phase_f8_weekly_governance.sh`.
+- **Evidence refs**: `artifacts/phase-f8/weekly-governance/2026-W09.md`, `artifacts/phase-f8/validation-summary-2026-W09.md`, `artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md`
+
 **Plano TDD**
 1. `Red`: registrar decisao semanal sem risco residual/rollback.
 2. `Green`: incluir risco residual, estrategia de rollback e acoes da semana seguinte.
@@ -58,6 +84,19 @@ Como operador, quero registrar risco residual e rollback para manter continuidad
 ### ISSUE-F8-03-03 - Consolidar sumario executivo semanal para auditoria e continuidade operacional
 **User story**  
 Como operador, quero um sumario executivo semanal para auditoria rapida e handoff sem lacunas.
+
+**Metadata da issue**
+- **Owner**: `pm + tech-lead-trading`
+- **Estimativa**: `0.5d`
+- **Dependencias**: `artifacts/phase-f7/validation-summary.md`, `scripts/ci/phase_f8_release_governance.py`, `scripts/ci/run_phase_f8_weekly_governance.sh`, `artifacts/phase-f8/weekly-governance/2026-W09.md`, `artifacts/phase-f8/validation-summary-2026-W09.md`
+- **Mapped requirements**: `R9`, `R8`
+- **Prioridade**: `P1`
+- **Checklist QA/Repro**:
+  1. validar ordem dos campos executivos no topo do summary (`operational_readiness`, `decision`, `phase_transition_status`, `failed_domains`, `critical_drifts_open`);
+  2. validar coerência total entre weekly report e validation summary;
+  3. validar status dos EPICs `F8-01..04` no summary;
+  4. rodar `make ci-quality` e confirmar verificação integrada.
+- **Evidence refs**: `artifacts/phase-f8/validation-summary-2026-W09.md`, `artifacts/phase-f8/weekly-governance/2026-W09.md`, `artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md`
 
 **Plano TDD**
 1. `Red`: manter evidencias semanais dispersas em multiplos locais.

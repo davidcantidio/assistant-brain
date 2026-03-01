@@ -1,9 +1,9 @@
 ---
 doc_id: "DOCUMENT-HIERARCHY.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -31,24 +31,28 @@ Exclui:
 - [RFC-001] MUST tratar README e guias auxiliares de workspace como documentacao de apoio, nunca como fonte normativa primaria.
 
 ## Ordem de Precedencia
-0. `felixcraft.md` (fonte arquitetural suprema; prevalece em conflito explicito)
 1. SEC/
-2. CORE/
+2. PRD/
 3. ARC/
-4. RAG/
-5. PM/
-6. DEV/
-7. VERTICALS/
-8. EVALS/, INCIDENTS/, META/
-9. README.md e guias auxiliares de workspace
+4. CORE/
+5. RAG/
+6. PM/
+7. DEV/
+8. VERTICALS/
+9. EVALS/, INCIDENTS/, META/
+10. README.md e guias auxiliares de workspace
 
 ## Regra de Resolucao de Conflitos
 - identificar o conflito e os docs envolvidos.
 - aplicar precedencia da lista acima.
-- se `felixcraft.md` contiver regra explicita para o tema, essa regra prevalece.
 - se conflito continuar, abrir decision com evidencias e impacto.
 - atualizar documento de menor precedencia para eliminar contradicao futura.
 - registrar no changelog normativo.
+
+## Regra para Referencias Conceituais Externas
+- `felixcraft.md` e referencia conceitual importada para traceability, nao fonte normativa primaria.
+- principio importado de referencia externa MUST ser normalizado em `PRD/`, com impacto registrado em `PRD/CHANGELOG.md`, antes de virar regra executavel.
+- contradicao entre referencia externa e documento normativo MUST ser resolvida pela precedencia oficial desta hierarquia.
 
 ## Regra para Documentacao Auxiliar
 - README e docs operacionais auxiliares MUST refletir os documentos canonicos.

@@ -30,7 +30,11 @@
   ],
   "decision_id": "DEC-20260301-302",
   "decision_status": "APPROVED",
+  "decision_ref": "artifacts/trading/decisions/DEC-20260301-302.json",
   "risk_tier": "R3",
+  "shadow_evidence_refs": [
+    "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md"
+  ],
   "promote_readiness": "pass",
   "notes": "fixture sintetica para o cenario de promote positivo"
 }

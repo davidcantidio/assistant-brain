@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.9"
+version: "1.10"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-26"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
@@ -153,6 +153,15 @@ Exclui:
 - algoritmo de escolha:
   - com historico suficiente: rank por `cost_per_success` + confiabilidade + latencia.
   - sem historico suficiente: capabilities-first + heuristica de custo/latencia.
+
+## Code-Change Route Policy
+- para `task_type` de mudanca com codigo (`code_change`, `test_change` e `config_change` com impacto executavel), o runtime MUST aplicar pipeline especializado:
+  - `M30` para proposta inicial;
+  - `M14-Code` para execucao tecnica e autoria de commit/PR;
+  - `Codex 5` como gate tecnico final.
+- o gate `Codex 5` MUST ocorrer somente apos CI obrigatorio em `PASS`.
+- `Codex 5` MUST NOT substituir gates humanos obrigatorios de risco, policy, seguranca ou trading.
+- para task types sem mudanca com codigo, as regras gerais de routing/presets/fallback deste documento permanecem canonicamente validas.
 
 ## Router Inputs e Outputs
 ### Inputs obrigatorios

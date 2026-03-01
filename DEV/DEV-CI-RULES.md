@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-CI-RULES.md"
-version: "1.6"
+version: "1.7"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-25"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -68,6 +68,13 @@ Exclui:
 - sem violacao de policy de seguranca/privacidade.
 - sem regressao em claims centrais.
 - excecao apenas por decision registrada.
+
+## Governanca de Branch e Ownership
+- `main` MUST operar como branch protegida por policy.
+- merge em `main` MUST ocorrer via `PR obrigatorio`.
+- merge MUST exigir `checks verdes` nos workflows obrigatorios.
+- `CODEOWNERS` MUST existir como fonte versionada de ownership de revisao.
+- merge direto fora de policy SHOULD ser bloqueado; quando houver necessidade excepcional, MUST existir `excecao por decision`.
 
 ## Links Relacionados
 - [Security Policy](../SEC/SEC-POLICY.md)

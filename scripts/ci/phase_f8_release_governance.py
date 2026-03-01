@@ -15,10 +15,13 @@ WEEKLY_FIELD_ORDER = [
     "prior_phase_decision",
     "phase_transition_status",
     "blocking_reason",
+    "operational_readiness",
+    "review_validity_status",
+    "operational_conformance_status",
+    "failed_domains",
     "eval_gates_status",
     "ci_quality_status",
     "ci_security_status",
-    "contract_review_status",
     "critical_drifts_open",
     "decision",
     "release_review_status",
@@ -34,15 +37,18 @@ LOG_KEYS = ["eval-gates", "ci-quality", "ci-security"]
 SUMMARY_FIELD_ORDER = [
     "week_id",
     "weekly_report",
+    "operational_readiness",
     "decision",
     "release_review_status",
     "release_justification",
     "phase_transition_status",
     "blocking_reason",
+    "review_validity_status",
+    "operational_conformance_status",
+    "failed_domains",
     "residual_risk_summary",
     "rollback_plan",
     "next_actions",
-    "contract_review_status",
     "critical_drifts_open",
 ]
 SUMMARY_GATE_KEYS = [
@@ -224,10 +230,13 @@ def render_weekly_report(args: argparse.Namespace) -> None:
         f"- prior_phase_decision: `{args.prior_phase_decision}`",
         f"- phase_transition_status: `{args.phase_transition_status}`",
         f"- blocking_reason: {args.blocking_reason}",
+        f"- operational_readiness: `{args.operational_readiness}`",
+        f"- review_validity_status: `{args.review_validity_status}`",
+        f"- operational_conformance_status: `{args.operational_conformance_status}`",
+        f"- failed_domains: `{args.failed_domains}`",
         f"- eval_gates_status: `{args.eval_gates_status}`",
         f"- ci_quality_status: `{args.ci_quality_status}`",
         f"- ci_security_status: `{args.ci_security_status}`",
-        f"- contract_review_status: `{args.contract_review_status}`",
         f"- critical_drifts_open: `{args.critical_drifts_open}`",
         f"- decision: `{args.decision}`",
         f"- release_review_status: `{args.release_review_status}`",
@@ -261,15 +270,18 @@ def render_validation_summary(args: argparse.Namespace) -> None:
         "",
         f"- week_id: `{values['week_id']}`",
         f"- weekly_report: `{args.weekly_report_path}`",
+        f"- operational_readiness: `{values['operational_readiness']}`",
         f"- decision: `{values['decision']}`",
         f"- release_review_status: `{values['release_review_status']}`",
         f"- release_justification: {values['release_justification']}",
         f"- phase_transition_status: `{values['phase_transition_status']}`",
         f"- blocking_reason: {values['blocking_reason']}",
+        f"- review_validity_status: `{values['review_validity_status']}`",
+        f"- operational_conformance_status: `{values['operational_conformance_status']}`",
+        f"- failed_domains: `{values['failed_domains']}`",
         f"- residual_risk_summary: {values['residual_risk_summary']}",
         f"- rollback_plan: {values['rollback_plan']}",
         f"- next_actions: {values['next_actions']}",
-        f"- contract_review_status: `{values['contract_review_status']}`",
         f"- critical_drifts_open: `{values['critical_drifts_open']}`",
         "",
         "## Gate Status",
@@ -316,10 +328,13 @@ def build_parser() -> argparse.ArgumentParser:
     render_parser.add_argument("--prior-phase-decision", required=True)
     render_parser.add_argument("--phase-transition-status", required=True)
     render_parser.add_argument("--blocking-reason", required=True)
+    render_parser.add_argument("--operational-readiness", required=True)
+    render_parser.add_argument("--review-validity-status", required=True)
+    render_parser.add_argument("--operational-conformance-status", required=True)
+    render_parser.add_argument("--failed-domains", required=True)
     render_parser.add_argument("--eval-gates-status", required=True)
     render_parser.add_argument("--ci-quality-status", required=True)
     render_parser.add_argument("--ci-security-status", required=True)
-    render_parser.add_argument("--contract-review-status", required=True)
     render_parser.add_argument("--critical-drifts-open", required=True)
     render_parser.add_argument("--decision", required=True)
     render_parser.add_argument("--release-review-status", required=True)

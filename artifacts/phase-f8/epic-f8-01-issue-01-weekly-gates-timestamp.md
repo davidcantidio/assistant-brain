@@ -25,7 +25,7 @@
   - relatorio semanal publicado em `artifacts/phase-f8/weekly-governance/2026-W09.md`
 
 ## Refactor
-- manter `contract_review_status=FAIL` por default ate a execucao de `F8-02`, para evitar `promote` sem revisao contratual semanal.
+- manter `review_validity_status=FAIL` e `operational_conformance_status=FAIL` por default ate a execucao de `F8-02`, para evitar `promote` sem revisao contratual semanal.
 - preservar logs brutos em `artifacts/phase-f8/weekly-governance/logs/2026-W09/` para reruns futuros da mesma semana.
 
 ## Evidencia objetiva
@@ -35,7 +35,9 @@
   - `eval_gates_status=PASS`
   - `ci_quality_status=PASS`
   - `ci_security_status=PASS`
-  - `contract_review_status=FAIL`
+  - `review_validity_status=FAIL`
+  - `operational_conformance_status=FAIL`
+  - `failed_domains=none`
   - `critical_drifts_open=0`
   - `decision=hold`
 - arquivos publicados:

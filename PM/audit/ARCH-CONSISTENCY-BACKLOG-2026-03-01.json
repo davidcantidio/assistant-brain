@@ -1,0 +1,1099 @@
+{
+  "schema_version": "1.0",
+  "doc_id": "ARCH-CONSISTENCY-BACKLOG-2026-03-01",
+  "generated_at": "2026-03-01T16:30:00-03:00",
+  "baseline": "head_main_vs_working_tree",
+  "source_audit": "artifacts/architecture/2026-03-01-architectural-consistency-audit.md",
+  "conflict_matrix_rows": [
+    {
+      "conflict_id": "C-01",
+      "origem": "PRD(main) + Implementacao + Felix",
+      "source_baselines": [
+        "pr_main",
+        "implementation",
+        "felixcraft",
+        "felix_relevant"
+      ],
+      "elemento": "Hierarquia documental e fonte de autoridade",
+      "tipo_de_conflito": "Autoridade decisoria",
+      "descricao": "A hierarquia oficial permite precedencia operacional de Felix sobre PRD/ARC/SEC, criando dupla autoridade para decisao arquitetural.",
+      "severidade": "Critica",
+      "risco_sistemico": "Quebra de fonte de autoridade e abertura de arquitetura paralela sem normalizacao formal.",
+      "opcoes_de_resolucao": [
+        "Rebaixar Felix para referencia conceitual com traceabilidade obrigatoria no PRD",
+        "Manter Felix no topo e sincronizar toda mudanca no mesmo ciclo em PRD/ARC/SEC/PM/DEV"
+      ],
+      "recomendacao": "Rebaixar Felix para referencia conceitual e manter PRD/SEC/ARC como autoridade normativa.",
+      "evidence_refs": [
+        "META/DOCUMENT-HIERARCHY.md:33-50",
+        "README.md:10-16",
+        "workspaces/main/AGENTS.md:6-18",
+        "PRD/PRD-MASTER.md:701-707"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-04"
+    },
+    {
+      "conflict_id": "C-02",
+      "origem": "PRD(main) vs Implementacao(PM)",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "elemento": "Cadeia estrutural de planejamento",
+      "tipo_de_conflito": "Estrutural",
+      "descricao": "PRD define cadeia com Issues/Microtasks, enquanto governanca operacional ainda usa epicos/sprints/tasks sem fechamento estrutural unico.",
+      "severidade": "Alta",
+      "risco_sistemico": "Ambiguidade de decomposicao, perda de rastreabilidade e sobreposicao semantica de task vs issue.",
+      "opcoes_de_resolucao": [
+        "Canonizar cadeia PRD -> Fases -> Epicos -> Issues -> Microtasks",
+        "Rebaixar formalmente microtasks e manter governanca por sprint/task"
+      ],
+      "recomendacao": "Canonizar cadeia com microtasks e alinhar SCRUM-GOV e ROADMAP.",
+      "evidence_refs": [
+        "PRD/ROADMAP.md:17-20",
+        "PRD/PRD-MASTER.md:133-174",
+        "PM/SCRUM-GOV.md:30-40"
+      ],
+      "linked_issue_id": "ISSUE-F8-02-04"
+    },
+    {
+      "conflict_id": "C-03",
+      "origem": "PRD(main) vs Implementacao",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "elemento": "Micro-issues executaveis e trilha por microtask",
+      "tipo_de_conflito": "Drift tecnico",
+      "descricao": "Contrato exige trilha em runs por microtask, mas implementacao ainda esta majoritariamente issue-level em artifacts de fase.",
+      "severidade": "Alta",
+      "risco_sistemico": "Atomicidade e replay por microtask nao materializados na pratica.",
+      "opcoes_de_resolucao": [
+        "Implementar trilha minima em runs/<issue_id>/<microtask_id>",
+        "Reclassificar contrato como arquitetura alvo ate haver implementacao"
+      ],
+      "recomendacao": "Implementar trilha minima e manter classificacao explicita de status de implementacao.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:260",
+        "PRD/PRD-MASTER.md:825-826",
+        "artifacts/architecture/2026-03-01-architectural-consistency-audit.md:37"
+      ],
+      "linked_issue_id": "ISSUE-F8-01-04"
+    },
+    {
+      "conflict_id": "C-04",
+      "origem": "PRD(working tree) vs ARC/DEV/PM",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation"
+      ],
+      "elemento": "Pipeline M30 -> M14-Code -> Codex 5",
+      "tipo_de_conflito": "Sobreposicao de arquitetura",
+      "descricao": "Pipeline novo foi declarado no PRD working tree sem harmonizacao integral dos contratos de roteamento, papeis e decisao.",
+      "severidade": "Alta",
+      "risco_sistemico": "Dupla governanca tecnica e gate paralelo sem enforce unico.",
+      "opcoes_de_resolucao": [
+        "Rebaixar secao para proposta ate alinhamento completo",
+        "Promover para norma e atualizar ARC/DEV/PM/.github no mesmo ciclo"
+      ],
+      "recomendacao": "Manter como proposta ate harmonizacao de contratos e checks.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:696-858",
+        "PRD/CHANGELOG.md:32-63",
+        "ARC/ARC-MODEL-ROUTING.md:106-126",
+        "PM/DECISION-PROTOCOL.md:26-55"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "conflict_id": "C-05",
+      "origem": "PRD(working tree) vs Implementacao(.github)",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation"
+      ],
+      "elemento": "PR governance, branch policy e ownership",
+      "tipo_de_conflito": "Governanca",
+      "descricao": "Regras de ownership e branch model foram ampliadas no discurso, mas precisam permanecer explicitamente enforceadas por policy e checks.",
+      "severidade": "Alta",
+      "risco_sistemico": "Ambiguidade de merge policy e risco de bypass em release governado.",
+      "opcoes_de_resolucao": [
+        "Formalizar CODEOWNERS e policy de branch com enforcement",
+        "Remover do PRD qualquer dependencia normativa nao implementada"
+      ],
+      "recomendacao": "Manter enforcement por CODEOWNERS e policy de branch com checker dedicado.",
+      "evidence_refs": [
+        ".github/CODEOWNERS",
+        "DEV/DEV-CI-RULES.md",
+        "scripts/ci/check_pr_governance.sh",
+        "PRD/PRD-MASTER.md:764-786"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-05"
+    },
+    {
+      "conflict_id": "C-06",
+      "origem": "Felix vs Implementacao normativa",
+      "source_baselines": [
+        "felixcraft",
+        "felix_relevant",
+        "implementation"
+      ],
+      "elemento": "Superficies externas nao formalizadas",
+      "tipo_de_conflito": "Drift conceitual",
+      "descricao": "Felix e env example mencionam superficies alem do pacote de integracoes normativas, exigindo classificacao governada.",
+      "severidade": "Media",
+      "risco_sistemico": "Dependencias externas implicitas e aumento de superficie sem ownership contratual claro.",
+      "opcoes_de_resolucao": [
+        "Formalizar integracoes ativas em INTEGRATIONS",
+        "Declarar superficies como fora de escopo normativo do OpenClaw atual"
+      ],
+      "recomendacao": "Classificar superficies como governadas ou fora de escopo por contrato.",
+      "evidence_refs": [
+        "felix-openclaw-pontos-relevantes.md:196-240",
+        "config/openclaw.env.example:58-163",
+        "INTEGRATIONS/README.md:12-20"
+      ],
+      "linked_issue_id": "ISSUE-F8-02-05"
+    }
+  ],
+  "drift_rows": [
+    {
+      "drift_id": "D-MAIN-01",
+      "bloco": "drift_do_estado_commitado",
+      "source_baselines": [
+        "pr_main",
+        "implementation",
+        "felixcraft"
+      ],
+      "topico": "Fonte de autoridade",
+      "prd_main": "PRD registra precedencia alta de Felix em pontos de governanca.",
+      "prd_working_tree": "Mantem precedencia e adiciona secao de pipeline multi-modelo.",
+      "implementacao": "META, README e AGENTS ainda apresentam Felix como referencia superior.",
+      "felix": "Felix continua abrangente e operacional, sem limitação normativa explicita.",
+      "classe": "Critico",
+      "justificativa": "Modelo de autoridade fica ambigup e pode permitir override fora de fluxo formal.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:701-707",
+        "META/DOCUMENT-HIERARCHY.md:33-50",
+        "README.md:10-16"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-04"
+    },
+    {
+      "drift_id": "D-MAIN-02",
+      "bloco": "drift_do_estado_commitado",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "topico": "Cadeia de planejamento",
+      "prd_main": "PRD reforca Issue -> Microtask e alias micro-issue.",
+      "prd_working_tree": "Refina alias Micro-issue executavel = Microtask.",
+      "implementacao": "SCRUM-GOV e operacao diaria ainda preservam termos sprint/task.",
+      "felix": "Felix opera por loops e checklists sem cadeia estrutural equivalente.",
+      "classe": "Alto",
+      "justificativa": "Tres dialetos de planejamento coexistem e elevam custo de manutencao.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:133-174",
+        "PM/SCRUM-GOV.md:30-40",
+        "artifacts/architecture/2026-03-01-architectural-consistency-audit.md:49"
+      ],
+      "linked_issue_id": "ISSUE-F8-02-04"
+    },
+    {
+      "drift_id": "D-MAIN-03",
+      "bloco": "drift_do_estado_commitado",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "topico": "Microtask evidence path",
+      "prd_main": "Contrato explicita trilha de runs por microtask.",
+      "prd_working_tree": "Manteve requirement de runs e reviews por microtask.",
+      "implementacao": "Nao existe trilha canonica runs materializada no repositorio.",
+      "felix": "Modelo conceitual foca operacao, nao define trilha local de runs no repo.",
+      "classe": "Alto",
+      "justificativa": "Contrato declarado sem trilha minima executavel.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:260",
+        "PRD/PRD-MASTER.md:826",
+        "artifacts/architecture/2026-03-01-architectural-consistency-audit.md:37"
+      ],
+      "linked_issue_id": "ISSUE-F8-01-04"
+    },
+    {
+      "drift_id": "D-MAIN-04",
+      "bloco": "drift_do_estado_commitado",
+      "source_baselines": [
+        "pr_main",
+        "implementation",
+        "felix_relevant"
+      ],
+      "topico": "Integracoes externas",
+      "prd_main": "Pacote normativo de integracoes e limitado.",
+      "prd_working_tree": "Nao expande formalmente o pacote de integracoes.",
+      "implementacao": "Template de env inclui superficie externa ampla.",
+      "felix": "Exemplos operacionais incluem provedores extras.",
+      "classe": "Moderado",
+      "justificativa": "Capacidade tecnica excede escopo governado.",
+      "evidence_refs": [
+        "INTEGRATIONS/README.md:12-20",
+        "config/openclaw.env.example:58-163",
+        "felix-openclaw-pontos-relevantes.md:196-240"
+      ],
+      "linked_issue_id": "ISSUE-F8-02-05"
+    },
+    {
+      "drift_id": "D-WT-01",
+      "bloco": "drift_introduzido_pelo_working_tree",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation"
+      ],
+      "topico": "Pipeline multi-modelo de codigo",
+      "prd_main": "Pipeline novo ainda nao era norma integrada.",
+      "prd_working_tree": "Declara M30 -> M14-Code -> Codex 5 com papeis e gates.",
+      "implementacao": "Checks e contratos ainda em processo de harmonizacao transversal.",
+      "felix": "Apoia delegacao, mas nao define esse pipeline completo.",
+      "classe": "Alto",
+      "justificativa": "Direcao nova sem convergencia integral de contratos.",
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md:696-858",
+        "PRD/CHANGELOG.md:32-63",
+        "artifacts/architecture/2026-03-01-multi-model-pipeline-impact.md:23-34"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "drift_id": "D-WT-02",
+      "bloco": "drift_introduzido_pelo_working_tree",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation"
+      ],
+      "topico": "Ownership de PR e branch model",
+      "prd_main": "Governanca de PR era menos detalhada.",
+      "prd_working_tree": "Aumenta exigencia de ownership e criterio de pre-gate.",
+      "implementacao": "Governanca documentada e checkada por CODEOWNERS e policy CI.",
+      "felix": "Sugere staging/worktree e auto-merge em contextos especificos.",
+      "classe": "Moderado",
+      "justificativa": "Precisa manter alinhamento continuo entre policy, PRD e checks.",
+      "evidence_refs": [
+        ".github/CODEOWNERS",
+        "DEV/DEV-CI-RULES.md",
+        "scripts/ci/check_pr_governance.sh"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-05"
+    },
+    {
+      "drift_id": "D-FELIX-01",
+      "bloco": "felix_como_terceira_direcao",
+      "source_baselines": [
+        "felixcraft",
+        "pr_main",
+        "implementation"
+      ],
+      "topico": "Heartbeat e monitoramento operacional",
+      "prd_main": "Heartbeat possui contrato normativo local.",
+      "prd_working_tree": "Sem alteracao estrutural no heartbeat.",
+      "implementacao": "Workspace heartbeat canonico versionado.",
+      "felix": "Propaga loops operacionais e monitoracao continua.",
+      "classe": "Leve",
+      "justificativa": "Override documentado com alinhamento materializado em matriz de rastreabilidade.",
+      "evidence_refs": [
+        "ARC/ARC-HEARTBEAT.md:32-46",
+        "workspaces/main/HEARTBEAT.md:3-10",
+        "PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md:35-38"
+      ],
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "drift_id": "D-FELIX-02",
+      "bloco": "felix_como_terceira_direcao",
+      "source_baselines": [
+        "felixcraft",
+        "felix_relevant",
+        "implementation"
+      ],
+      "topico": "Superficies externas e canais",
+      "prd_main": "Pacote de integracoes e restrito e governado por contrato.",
+      "prd_working_tree": "Sem formalizacao completa das superficies adicionais.",
+      "implementacao": "env example lista provedores extras como capacidade opcional.",
+      "felix": "Expande superficie operacional para provedores externos adicionais.",
+      "classe": "Moderado",
+      "justificativa": "Necessario classificar cada superficie como governada ou fora de escopo.",
+      "evidence_refs": [
+        "INTEGRATIONS/README.md:36-58",
+        "config/openclaw.env.example:58-163",
+        "felix-openclaw-pontos-relevantes.md:196-240"
+      ],
+      "linked_issue_id": "ISSUE-F8-02-05"
+    }
+  ],
+  "failure_mode_checks": [
+    {
+      "failure_mode_id": "FM-01",
+      "failure_mode": "autoridade_dupla_entre_modelos",
+      "source_baselines": [
+        "pr_main",
+        "implementation",
+        "felixcraft"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "META/DOCUMENT-HIERARCHY.md:33-50",
+        "PRD/PRD-MASTER.md:701-707"
+      ],
+      "impacto": "alto",
+      "observacao": "Conflito de precedencia entre documento normativo e referencia conceitual.",
+      "linked_issue_id": "ISSUE-F8-03-04"
+    },
+    {
+      "failure_mode_id": "FM-02",
+      "failure_mode": "implementacao_bypassando_prd",
+      "source_baselines": [
+        "implementation",
+        "pr_main"
+      ],
+      "status": "parcialmente_contido",
+      "evidencia": [
+        "README.md:5-8",
+        "scripts/ci/check_quality.sh",
+        "scripts/ci/check_pr_governance.sh"
+      ],
+      "impacto": "medio",
+      "observacao": "Gates contem bypass direto, mas dependencia de coerencia contratual ainda existe.",
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "failure_mode_id": "FM-03",
+      "failure_mode": "prd_desatualizado",
+      "source_baselines": [
+        "pr_main",
+        "pr_working_tree"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "PM/SCRUM-GOV.md:30-40",
+        "PRD/PRD-MASTER.md:133-174",
+        "PRD/CHANGELOG.md:32-63"
+      ],
+      "impacto": "alto",
+      "observacao": "Cadeias concorrentes de planejamento ainda coexistem.",
+      "linked_issue_id": "ISSUE-F8-02-04"
+    },
+    {
+      "failure_mode_id": "FM-04",
+      "failure_mode": "felix_propondo_arquitetura_nao_formalizada",
+      "source_baselines": [
+        "felixcraft",
+        "felix_relevant",
+        "pr_main"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "felixcraft.md:595-633",
+        "felix-openclaw-pontos-relevantes.md:196-240",
+        "INTEGRATIONS/README.md:12-20"
+      ],
+      "impacto": "medio",
+      "observacao": "Propostas de operacao externa precisam de contrato local explicito.",
+      "linked_issue_id": "ISSUE-F8-03-04"
+    },
+    {
+      "failure_mode_id": "FM-05",
+      "failure_mode": "ci_nao_refletindo_criterios_do_prd",
+      "source_baselines": [
+        "implementation",
+        "pr_working_tree"
+      ],
+      "status": "parcialmente_contido",
+      "evidencia": [
+        "scripts/ci/check_quality.sh",
+        "scripts/ci/check_pr_governance.sh",
+        "PRD/PRD-MASTER.md:696-858"
+      ],
+      "impacto": "medio",
+      "observacao": "Cobertura CI aumentou, mas precisa manter convergencia com contratos novos.",
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "failure_mode_id": "FM-06",
+      "failure_mode": "seguranca_nao_alinhada_com_principios_felix",
+      "source_baselines": [
+        "implementation",
+        "felixcraft"
+      ],
+      "status": "ok",
+      "evidencia": [
+        "SEC/SEC-POLICY.md:89-116",
+        "PM/DECISION-PROTOCOL.md:33-41"
+      ],
+      "impacto": "baixo",
+      "observacao": "Nao ha conflito aberto de seguranca nesta rodada.",
+      "linked_issue_id": "ISSUE-F8-02-05"
+    },
+    {
+      "failure_mode_id": "FM-07",
+      "failure_mode": "pipeline_multi_modelo_nao_documentado",
+      "source_baselines": [
+        "pr_working_tree",
+        "pr_main",
+        "implementation"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "PRD/PRD-MASTER.md:696-858",
+        "PRD/CHANGELOG.md:32-63",
+        "artifacts/architecture/2026-03-01-multi-model-pipeline-impact.md"
+      ],
+      "impacto": "alto",
+      "observacao": "Documentacao existe mas harmonizacao sistemica ainda e parcial.",
+      "linked_issue_id": "ISSUE-F8-03-06"
+    },
+    {
+      "failure_mode_id": "FM-08",
+      "failure_mode": "micro_issues_violando_atomicidade",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "status": "risco_aberto",
+      "evidencia": [
+        "PRD/PRD-MASTER.md:156-174",
+        "PRD/PRD-MASTER.md:260",
+        "artifacts/architecture/2026-03-01-architectural-consistency-audit.md:210"
+      ],
+      "impacto": "alto",
+      "observacao": "Falta trilha de runs por microtask para validar atomicidade no repositorio.",
+      "linked_issue_id": "ISSUE-F8-01-04"
+    },
+    {
+      "failure_mode_id": "FM-09",
+      "failure_mode": "drift_entre_roadmap_e_codigo",
+      "source_baselines": [
+        "pr_main",
+        "implementation"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "PRD/ROADMAP.md:46-50",
+        "README.md:5-8",
+        "ARC/ARC-CORE.md:34-56"
+      ],
+      "impacto": "medio",
+      "observacao": "Diferenca entre arquitetura alvo e estado atual e conhecida e precisa trilho de convergencia.",
+      "linked_issue_id": "ISSUE-F8-02-04"
+    },
+    {
+      "failure_mode_id": "FM-10",
+      "failure_mode": "regras_de_branch_nao_documentadas",
+      "source_baselines": [
+        "implementation",
+        "pr_working_tree"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        ".github/CODEOWNERS",
+        "DEV/DEV-CI-RULES.md",
+        "scripts/ci/check_pr_governance.sh"
+      ],
+      "impacto": "alto",
+      "observacao": "Deve permanecer como policy enforceavel para evitar regressao de governanca.",
+      "linked_issue_id": "ISSUE-F8-03-05"
+    },
+    {
+      "failure_mode_id": "FM-11",
+      "failure_mode": "dependencias_externas_nao_mapeadas",
+      "source_baselines": [
+        "implementation",
+        "felix_relevant"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "config/openclaw.env.example:58-163",
+        "INTEGRATIONS/README.md:12-20",
+        "felix-openclaw-pontos-relevantes.md:196-240"
+      ],
+      "impacto": "medio",
+      "observacao": "Mapeamento de superficie externa precisa ficar binario: governada ou fora de escopo.",
+      "linked_issue_id": "ISSUE-F8-02-05"
+    },
+    {
+      "failure_mode_id": "FM-12",
+      "failure_mode": "decisoes_arquiteturais_hardcoded",
+      "source_baselines": [
+        "implementation",
+        "pr_main"
+      ],
+      "status": "encontrado",
+      "evidencia": [
+        "config/openclaw.env.example:27-43",
+        "ARC/ARC-HEARTBEAT.md:32-46",
+        "workspaces/main/HEARTBEAT.md:3-10"
+      ],
+      "impacto": "medio",
+      "observacao": "Hardcodes aceitaveis no baseline atual precisam de classificacao explicita por risco.",
+      "linked_issue_id": "ISSUE-F8-01-04"
+    }
+  ],
+  "remediation_issues": [
+    {
+      "issue_id": "ISSUE-F8-03-04",
+      "title": "Normalizar fonte de autoridade (PRD > Felix normativo)",
+      "priority": "P0",
+      "owner": "pm + architecture-owner",
+      "due_date": "2026-03-08",
+      "status": "planned",
+      "source_baselines": [
+        "pr_main",
+        "pr_working_tree",
+        "implementation",
+        "felixcraft",
+        "felix_relevant"
+      ],
+      "linked_conflicts": [
+        "C-01"
+      ],
+      "linked_drifts": [
+        "D-MAIN-01"
+      ],
+      "linked_failure_modes": [
+        "FM-01",
+        "FM-04"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-03-04-01",
+          "title": "Ajustar hierarquia documental e fonte normativa",
+          "owner": "pm",
+          "estimate": "0.5d",
+          "scope_files": [
+            "META/DOCUMENT-HIERARCHY.md",
+            "PRD/PRD-MASTER.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Reverter secao de precedencia e manter snapshot do changelog anterior.",
+          "acceptance_checks": [
+            "Texto normativo deixa explicito PRD/SEC/ARC como fonte de verdade.",
+            "Felix passa a ser referencia conceitual com trilha de override."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-04-authority-source-normalization.md",
+            "artifacts/architecture/2026-03-01-architectural-consistency-audit-backlog.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-03-04-02",
+          "title": "Alinhar README e AGENTS ao novo modelo de autoridade",
+          "owner": "architecture-owner",
+          "estimate": "0.25d",
+          "scope_files": [
+            "README.md",
+            "workspaces/main/AGENTS.md"
+          ],
+          "risk_level": "R1",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Restaurar texto anterior e manter nota de excecao documentada.",
+          "acceptance_checks": [
+            "README e AGENTS nao introduzem precedencia paralela sobre PRD.",
+            "Mensagem de autoridade e identica entre documentos de onboarding."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-04-authority-source-normalization.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-04-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-03-04-03",
+          "title": "Registrar trilha de decisao no PRD/CHANGELOG",
+          "owner": "pm",
+          "estimate": "0.25d",
+          "scope_files": [
+            "PRD/CHANGELOG.md",
+            "artifacts/architecture/2026-03-01-architectural-consistency-audit-backlog.md"
+          ],
+          "risk_level": "R1",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Remover entrada de changelog e restabelecer versao anterior.",
+          "acceptance_checks": [
+            "Changelog referencia conflito C-01 e issue de remediacao.",
+            "Backlog de auditoria aponta para mesma decisao."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-04-authority-source-normalization.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-04-01"
+          ]
+        }
+      ]
+    },
+    {
+      "issue_id": "ISSUE-F8-03-05",
+      "title": "Formalizar branch governance e ownership",
+      "priority": "P0",
+      "owner": "tech-lead",
+      "due_date": "2026-03-08",
+      "status": "planned",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation"
+      ],
+      "linked_conflicts": [
+        "C-05"
+      ],
+      "linked_drifts": [
+        "D-WT-02"
+      ],
+      "linked_failure_modes": [
+        "FM-10"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-03-05-01",
+          "title": "Consolidar CODEOWNERS no escopo arquitetural",
+          "owner": "tech-lead",
+          "estimate": "0.25d",
+          "scope_files": [
+            ".github/CODEOWNERS"
+          ],
+          "risk_level": "R1",
+          "implementation_status": "implementado",
+          "rollback_hint": "Restaurar CODEOWNERS anterior em caso de conflito com ownership vigente.",
+          "acceptance_checks": [
+            "Arquivo CODEOWNERS existe com regra global valida.",
+            "Cobertura minima para docs normativos e scripts de CI."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-05-branch-governance-codeowners-enforcement.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-03-05-02",
+          "title": "Harmonizar policy de branch e criterios de merge",
+          "owner": "tech-lead",
+          "estimate": "0.5d",
+          "scope_files": [
+            "DEV/DEV-CI-RULES.md",
+            "PRD/PRD-MASTER.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Reverter secao de policy e manter regra baseline em changelog.",
+          "acceptance_checks": [
+            "Policy documenta PR obrigatorio, checks verdes e excecao por decision.",
+            "Sem contradicao entre PRD e DEV para branch model."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-05-branch-governance-codeowners-enforcement.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-05-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-03-05-03",
+          "title": "Garantir enforcement CI de governanca de PR",
+          "owner": "tech-lead",
+          "estimate": "0.25d",
+          "scope_files": [
+            "scripts/ci/check_pr_governance.sh",
+            "scripts/ci/check_quality.sh"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "implementado",
+          "rollback_hint": "Desacoplar checker de CI em caso de falso positivo bloqueante.",
+          "acceptance_checks": [
+            "check_pr_governance entra no pipeline de qualidade.",
+            "Falhas de policy bloqueiam quality-check."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-05-branch-governance-codeowners-enforcement.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-05-02"
+          ]
+        }
+      ]
+    },
+    {
+      "issue_id": "ISSUE-F8-03-06",
+      "title": "Harmonizar pipeline M30 -> M14-Code -> Codex 5 com ARC/DEV/PM",
+      "priority": "P1",
+      "owner": "architecture-owner + tech-lead",
+      "due_date": "2026-03-15",
+      "status": "planned",
+      "source_baselines": [
+        "pr_working_tree",
+        "implementation",
+        "felixcraft"
+      ],
+      "linked_conflicts": [
+        "C-04"
+      ],
+      "linked_drifts": [
+        "D-WT-01",
+        "D-FELIX-01"
+      ],
+      "linked_failure_modes": [
+        "FM-02",
+        "FM-05",
+        "FM-07"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-03-06-01",
+          "title": "Fixar status proposta vs norma do pipeline multi-modelo",
+          "owner": "architecture-owner",
+          "estimate": "0.5d",
+          "scope_files": [
+            "PRD/PRD-MASTER.md",
+            "PRD/CHANGELOG.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Retornar secao do pipeline ao baseline anterior em caso de conflito de escopo.",
+          "acceptance_checks": [
+            "Secao explicita se pipeline e proposta ou norma integrada.",
+            "Status e consistente no changelog."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-06-multi-model-pipeline-contract-harmonization.md",
+            "artifacts/architecture/2026-03-01-multi-model-pipeline-impact.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-03-06-02",
+          "title": "Alinhar contratos de ARC/DEV/PM ao pipeline",
+          "owner": "tech-lead",
+          "estimate": "0.75d",
+          "scope_files": [
+            "ARC/ARC-MODEL-ROUTING.md",
+            "DEV/DEV-TECH-LEAD-SPEC.md",
+            "DEV/DEV-JUNIOR-SPEC.md",
+            "PM/DECISION-PROTOCOL.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Reverter contratos tocados e manter pipeline como proposta.",
+          "acceptance_checks": [
+            "Sem contradicao de papeis entre ARC/DEV/PM.",
+            "Decisao final preserva hierarquia estrutural sem camada paralela."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-06-multi-model-pipeline-contract-harmonization.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-06-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-03-06-03",
+          "title": "Acoplar gate de coerencia arquitetural ao ci-quality",
+          "owner": "tech-lead",
+          "estimate": "0.5d",
+          "scope_files": [
+            "scripts/ci/check_architecture_consistency_backlog.sh",
+            "scripts/ci/check_quality.sh",
+            "Makefile"
+          ],
+          "risk_level": "R3",
+          "implementation_status": "implementado",
+          "rollback_hint": "Retirar checker do pipeline em caso de falso bloqueio critico.",
+          "acceptance_checks": [
+            "Checker detecta falta de cobertura de failure mode.",
+            "ci-quality falha em inconsistencias entre backlog e contratos."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-03-issue-06-multi-model-pipeline-contract-harmonization.md"
+          ],
+          "depends_on": [
+            "MT-F8-03-06-02"
+          ]
+        }
+      ]
+    },
+    {
+      "issue_id": "ISSUE-F8-02-04",
+      "title": "Normalizar cadeia PRD -> Fases -> Epicos -> Issues -> Microtasks",
+      "priority": "P0",
+      "owner": "pm",
+      "due_date": "2026-03-08",
+      "status": "planned",
+      "source_baselines": [
+        "pr_main",
+        "pr_working_tree",
+        "implementation"
+      ],
+      "linked_conflicts": [
+        "C-02"
+      ],
+      "linked_drifts": [
+        "D-MAIN-02"
+      ],
+      "linked_failure_modes": [
+        "FM-03",
+        "FM-09"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-02-04-01",
+          "title": "Alinhar SCRUM-GOV ao modelo estrutural canonico",
+          "owner": "pm",
+          "estimate": "0.5d",
+          "scope_files": [
+            "PM/SCRUM-GOV.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Restaurar cadeia anterior com nota de transicao pendente.",
+          "acceptance_checks": [
+            "SCRUM-GOV usa cadeia PRD -> Fases -> Epicos -> Issues -> Microtasks.",
+            "Sprint fica explicitamente como janela de capacidade."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-04-planning-chain-normalization.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-02-04-02",
+          "title": "Sincronizar ROADMAP e PRD-MASTER com a mesma cadeia",
+          "owner": "pm",
+          "estimate": "0.5d",
+          "scope_files": [
+            "PRD/ROADMAP.md",
+            "PRD/PRD-MASTER.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Reverter secao de cadeia e manter alias micro-issue como nota provisoria.",
+          "acceptance_checks": [
+            "ROADMAP e PRD-MASTER sem terminologia conflitante.",
+            "task generico nao substitui issue/microtask em contrato."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-04-planning-chain-normalization.md"
+          ],
+          "depends_on": [
+            "MT-F8-02-04-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-02-04-03",
+          "title": "Publicar glossario anti-ambiguidade de termos",
+          "owner": "pm",
+          "estimate": "0.25d",
+          "scope_files": [
+            "PM/WORK-ORDER-SPEC.md",
+            "artifacts/architecture/2026-03-01-architectural-consistency-audit-backlog.md"
+          ],
+          "risk_level": "R1",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Remover glossario novo mantendo referencias antigas.",
+          "acceptance_checks": [
+            "Glossario explicita diferenca entre task generico e microtask contratual.",
+            "Sem termos paralelos sem definicao."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-04-planning-chain-normalization.md"
+          ],
+          "depends_on": [
+            "MT-F8-02-04-02"
+          ]
+        }
+      ]
+    },
+    {
+      "issue_id": "ISSUE-F8-02-05",
+      "title": "Mapear dependencias externas (governadas vs fora de escopo)",
+      "priority": "P1",
+      "owner": "security-owner + pm",
+      "due_date": "2026-03-15",
+      "status": "planned",
+      "source_baselines": [
+        "implementation",
+        "felix_relevant",
+        "felixcraft"
+      ],
+      "linked_conflicts": [
+        "C-06"
+      ],
+      "linked_drifts": [
+        "D-MAIN-04",
+        "D-FELIX-02"
+      ],
+      "linked_failure_modes": [
+        "FM-06",
+        "FM-11"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-02-05-01",
+          "title": "Publicar mapa de integracoes governadas vs opcionais",
+          "owner": "security-owner",
+          "estimate": "0.5d",
+          "scope_files": [
+            "INTEGRATIONS/README.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Voltar classificacao anterior mantendo apenas integracoes basicas.",
+          "acceptance_checks": [
+            "Cada superficie externa aparece como governada ou fora de escopo.",
+            "Owner e risco por superficie registrados."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-05-external-dependencies-governance-map.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-02-05-02",
+          "title": "Classificar variaveis do env por status de governanca",
+          "owner": "security-owner",
+          "estimate": "0.5d",
+          "scope_files": [
+            "config/openclaw.env.example"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Restaurar env baseline se classificacao gerar incompatibilidade de setup.",
+          "acceptance_checks": [
+            "Variaveis externas sinalizam se sao governadas ou opcionais nao governadas.",
+            "Nao ha dependencia implicita sem status."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-05-external-dependencies-governance-map.md"
+          ],
+          "depends_on": [
+            "MT-F8-02-05-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-02-05-03",
+          "title": "Alinhar SEC policy aos limites de superficies externas",
+          "owner": "pm",
+          "estimate": "0.25d",
+          "scope_files": [
+            "SEC/SEC-POLICY.md",
+            "SEC/SEC-PROMPT-INJECTION.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "simulado_por_contrato",
+          "rollback_hint": "Reverter secao nova e restaurar policy anterior em caso de conflito.",
+          "acceptance_checks": [
+            "SEC define limite explicito para integracoes nao governadas.",
+            "Regra de canal confiavel preservada."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-02-issue-05-external-dependencies-governance-map.md"
+          ],
+          "depends_on": [
+            "MT-F8-02-05-01"
+          ]
+        }
+      ]
+    },
+    {
+      "issue_id": "ISSUE-F8-01-04",
+      "title": "Materializar trilha minima de microtask em runs e check de coerencia",
+      "priority": "P0",
+      "owner": "tech-lead",
+      "due_date": "2026-03-08",
+      "status": "planned",
+      "source_baselines": [
+        "pr_main",
+        "pr_working_tree",
+        "implementation"
+      ],
+      "linked_conflicts": [
+        "C-03"
+      ],
+      "linked_drifts": [
+        "D-MAIN-03"
+      ],
+      "linked_failure_modes": [
+        "FM-08",
+        "FM-12"
+      ],
+      "micro_issues": [
+        {
+          "microtask_id": "MT-F8-01-04-01",
+          "title": "Criar template canonico de runs por microtask",
+          "owner": "tech-lead",
+          "estimate": "0.5d",
+          "scope_files": [
+            "runs/.gitkeep",
+            "PRD/PRD-MASTER.md"
+          ],
+          "risk_level": "R2",
+          "implementation_status": "declarado_sem_execucao",
+          "rollback_hint": "Remover trilha de runs e reclassificar como arquitetura alvo.",
+          "acceptance_checks": [
+            "Diretorio runs existe no repositorio com orientacao de uso.",
+            "Path canonico de microtask fica explicito."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-01-issue-04-microtask-run-ledger-coherence-check.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "microtask_id": "MT-F8-01-04-02",
+          "title": "Criar schema minimo para review de microtask",
+          "owner": "tech-lead",
+          "estimate": "0.5d",
+          "scope_files": [
+            "ARC/schemas/architecture_consistency_backlog.schema.json",
+            "PM/audit/ARCH-CONSISTENCY-BACKLOG-2026-03-01.json"
+          ],
+          "risk_level": "R3",
+          "implementation_status": "implementado",
+          "rollback_hint": "Remover schema novo e voltar validacao manual.",
+          "acceptance_checks": [
+            "Schema valida micro_issues com owner, estimate e evidence_targets.",
+            "JSON de backlog passa na validacao estrutural."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-01-issue-04-microtask-run-ledger-coherence-check.md"
+          ],
+          "depends_on": [
+            "MT-F8-01-04-01"
+          ]
+        },
+        {
+          "microtask_id": "MT-F8-01-04-03",
+          "title": "Plugar checker do backlog no ci-quality",
+          "owner": "tech-lead",
+          "estimate": "0.5d",
+          "scope_files": [
+            "scripts/ci/check_architecture_consistency_backlog.sh",
+            "scripts/ci/check_quality.sh",
+            "Makefile"
+          ],
+          "risk_level": "R3",
+          "implementation_status": "implementado",
+          "rollback_hint": "Retirar checker do pipeline e manter validacao manual temporaria.",
+          "acceptance_checks": [
+            "bash scripts/ci/check_architecture_consistency_backlog.sh retorna PASS.",
+            "make ci-quality continua PASS com checker acoplado."
+          ],
+          "evidence_targets": [
+            "artifacts/phase-f8/epic-f8-01-issue-04-microtask-run-ledger-coherence-check.md"
+          ],
+          "depends_on": [
+            "MT-F8-01-04-02"
+          ]
+        }
+      ]
+    }
+  ]
+}

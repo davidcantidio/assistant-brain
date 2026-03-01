@@ -8,7 +8,7 @@
 ## Red
 - cenario A: executar os gates seguintes mesmo quando um gate anterior falhar.
 - resultado esperado: `hold`.
-- cenario B: considerar `promote` apenas porque o trio tecnico passou, sem olhar `contract_review_status` e `critical_drifts_open`.
+- cenario B: considerar `promote` apenas porque o trio tecnico passou, sem olhar `review_validity_status`, `operational_conformance_status` e `critical_drifts_open`.
 - resultado esperado: `hold`.
 
 ## Green
@@ -22,7 +22,8 @@
   - `eval-gates: PASS`
   - `quality-check: PASS`
   - `security-check: PASS`
-  - `contract_review_status: FAIL`
+  - `review_validity_status: FAIL`
+  - `operational_conformance_status: FAIL`
   - `decision: hold`
 
 ## Refactor
@@ -33,7 +34,7 @@
 - regra final do runner:
   - falha em `eval-gates` impede execucao de `ci-quality` e `ci-security`;
   - falha em `ci-quality` impede execucao de `ci-security`;
-  - qualquer combinacao diferente de `PASS/PASS/PASS + contract_review_status=PASS + critical_drifts_open=0` resulta em `hold`.
+  - qualquer combinacao diferente de `PASS/PASS/PASS + review_validity_status=PASS + operational_conformance_status=PASS + critical_drifts_open=0` resulta em `hold`.
 - rerun autoritativo da semana:
   - `artifacts/phase-f8/weekly-governance/2026-W09.md`
   - `executed_at=2026-03-01T00:25:54-0300`

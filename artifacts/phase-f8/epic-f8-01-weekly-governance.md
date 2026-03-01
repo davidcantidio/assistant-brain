@@ -11,8 +11,10 @@
 - `eval_gates_status`: `PASS`
 - `ci_quality_status`: `PASS`
 - `ci_security_status`: `PASS`
-- `contract_review_status`: `FAIL`
-- `critical_drifts_open`: `0`
+- `review_validity_status`: `PASS`
+- `operational_conformance_status`: `FAIL`
+- `failed_domains`: `trading`
+- `critical_drifts_open`: `1`
 - `decision`: `hold`
 
 ## Status das issues
@@ -22,5 +24,5 @@
 
 ## Justificativa
 - a cadencia semanal do trio de gates esta implementada, reproduzivel e validada em `make ci-quality`.
-- a decisao semanal permanece `hold` porque a revisao contratual recorrente ainda nao foi executada no escopo de `F8-02`.
-- a conclusao do epic nao promove a fase automaticamente; apenas formaliza a governanca semanal e o bloqueio padrao sem review contratual.
+- a decisao semanal permanece `hold` porque o dominio `trading` segue com `operational_conformance_status=FAIL` e drift critico aberto.
+- a conclusao do epic nao promove a fase automaticamente; apenas formaliza a governanca semanal e o bloqueio padrao enquanto houver bloqueio operacional.

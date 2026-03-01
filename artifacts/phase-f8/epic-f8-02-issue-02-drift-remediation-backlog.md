@@ -30,7 +30,7 @@
 
 ## Refactor
 - manter o backlog canonico dentro do proprio artifact `contract-review`, sem arquivo paralelo para lista de drifts.
-- manter `contract_review_status=PASS` quando o artifact estiver valido, mesmo que `critical_drifts_open > 0`.
+- manter `review_validity_status=PASS` quando o artifact estiver valido, mesmo que `operational_conformance_status=FAIL` e `critical_drifts_open > 0`.
 
 ## Evidencia objetiva
 - validacoes novas do backlog:

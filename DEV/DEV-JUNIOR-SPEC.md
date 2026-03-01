@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-JUNIOR-SPEC.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-02-18"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -32,6 +32,13 @@ Exclui:
 - resultado de testes executados.
 - checklist de edge cases e limitacoes.
 - nota de risco da mudanca.
+
+## Compatibilidade com Pipeline de Codigo
+- para mudancas com codigo, o fluxo especializado usa:
+  - `M30` para geracao inicial;
+  - `M14-Code` para execucao tecnica final.
+- `M14-Code` e o unico autorizado a commitar, dar push, abrir PR e atualizar PR no pipeline de codigo.
+- `M30` nao pode alterar branch, commitar nem abrir PR.
 
 ## Regras de Seguranca
 - sem acesso a segredo, token ou credencial.

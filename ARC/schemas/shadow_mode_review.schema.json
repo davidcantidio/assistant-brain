@@ -15,6 +15,8 @@
     "stability_checks",
     "decision_id",
     "decision_status",
+    "decision_ref",
+    "shadow_evidence_refs",
     "promote_readiness",
     "notes"
   ],
@@ -97,9 +99,20 @@
       "type": "string",
       "enum": ["NOT_REQUIRED_YET", "PENDING", "APPROVED", "REJECTED"]
     },
+    "decision_ref": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
     "risk_tier": {
       "type": "string",
       "enum": ["R0", "R1", "R2", "R3"]
+    },
+    "shadow_evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "promote_readiness": {
       "type": "string",

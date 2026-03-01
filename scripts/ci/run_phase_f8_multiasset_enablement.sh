@@ -17,6 +17,7 @@ python3 scripts/ci/phase_f8_multiasset_enablement.py render \
   --shadow-dir "$SHADOW_DIR"
 
 python3 scripts/ci/phase_f8_multiasset_enablement.py check \
+  --week-id "$WEEK_ID" \
   --report-path "$REPORT_PATH" \
   --shadow-dir "$SHADOW_DIR" \
   --fixture-dir "$FIXTURE_DIR"
