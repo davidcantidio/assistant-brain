@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.35"
+version: "2.36"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,21 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F7-01-03 + fechamento do EPIC-F7-01 em `feito`
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-01-03` do `EPIC-F7-01` para consolidar evidencias minimas de janela `S0` em:
+    - `artifacts/phase-f7/epic-f7-01-issue-03-s0-window-evidence-s1-evaluation-ready.md`;
+    - `artifacts/phase-f7/epic-f7-01-s0-summary.md`;
+    - `artifacts/phase-f7/epic-f7-01-s0-paper-sandbox-operacional.md`.
+  - atualiza `PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md` para status `done` no `EPIC-F7-01`.
+  - move o documento do epic para:
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md`.
+  - resultado final no escopo do epic: `S0` apto para avaliar `S1` (sem liberacao automatica de live).
+- Migracao:
+  - `EPIC-F7-01` passa a ser referenciado em `../feito/F7-TRADING-POR-ESTAGIOS/` na tabela da fase `F7`.
+  - qualquer avaliacao de `S1` MUST preservar gating formal de enablement e checkpoint humano.
 
 ### 2026-03-01 - Execucao do ISSUE-F7-01-02 (aprovacao humana explicita por ordem de entrada em S0)
 - RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.

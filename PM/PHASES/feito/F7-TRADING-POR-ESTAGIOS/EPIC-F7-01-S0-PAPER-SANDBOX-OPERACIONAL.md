@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-050", "RFC-060"]
 ---
 
@@ -68,8 +68,22 @@ Como operador, quero evidencias minimas de estabilidade em `S0` para decidir com
   - evidencias de aprovacao humana por ordem;
   - resultado de `make eval-trading`.
 
+## Resultado desta Rodada
+- `make eval-trading` final: `PASS` (`eval-trading: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- `make eval-gates` final: `PASS` (`eval-gates: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f7/epic-f7-01-issue-01-s0-paper-only-trading-blocked.md`;
+  - `artifacts/phase-f7/epic-f7-01-issue-02-s0-explicit-human-approval-per-order.md`;
+  - `artifacts/phase-f7/epic-f7-01-issue-03-s0-window-evidence-s1-evaluation-ready.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f7/epic-f7-01-s0-summary.md`;
+  - `artifacts/phase-f7/epic-f7-01-s0-paper-sandbox-operacional.md`.
+- decisao final no escopo do epic: `S0` apto para avaliar `S1` (sem liberacao automatica de live).
+- conclusao: `EPIC-F7-01` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [Trading PRD](../../../VERTICALS/TRADING/TRADING-PRD.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Eval Trading Script](../../../scripts/ci/eval_trading.sh)
+- [Trading PRD](../../../../VERTICALS/TRADING/TRADING-PRD.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Eval Trading Script](../../../../scripts/ci/eval_trading.sh)
