@@ -198,6 +198,7 @@ challenge_expires_at: "ISO-8601|null"
   - sem fallback Slack validado, MUST operar em `TRADING_BLOCKED` ate restauracao de canal/aprovador.
 - indisponibilidade do operador primario por >4h em fila critica MUST abrir incidente de capacidade.
 - pre-condicao para Trading live:
+  - cada ordem de entrada em `S0 - Paper/Sandbox` MUST exigir aprovacao humana explicita e auditavel.
   - MUST existir pelo menos 1 `backup_operator` habilitado com permissao de `approve/reject/kill`.
   - sem fallback HITL validado, trading live MUST permanecer `TRADING_BLOCKED`.
   - remocao de `TRADING_BLOCKED` por prontidao HITL MUST ocorrer somente por decisao formal registrada.

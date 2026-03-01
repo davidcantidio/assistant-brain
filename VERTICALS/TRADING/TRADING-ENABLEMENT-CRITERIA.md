@@ -56,7 +56,7 @@ Exclui:
 - `S0 - Paper/Sandbox`:
   - sem ordem real.
   - tentativa de ordem live em `S0` MUST manter `TRADING_BLOCKED`.
-  - aprovacao humana por ordem de entrada.
+  - cada ordem de entrada em `S0` MUST exigir aprovacao humana explicita e auditavel.
   - janela minima: 4 semanas.
   - sem incidente `SEV-1/SEV-2` na janela.
 - `S1 - Micro-live`:
