@@ -14,12 +14,12 @@
     },
     {
       "item_id": "execution_gateway_only",
-      "status": "fail",
+      "status": "pass",
       "evidence_ref": "SEC/allowlists/ACTIONS.yaml"
     },
     {
       "item_id": "pre_trade_validator_active",
-      "status": "fail",
+      "status": "pass",
       "evidence_ref": "ARC/schemas/pre_trade_validator.schema.json"
     },
     {

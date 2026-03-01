@@ -29,6 +29,23 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F7-02-02 (guardrails de entrada em `S1`)
+- RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-02-02` do `EPIC-F7-02` para validar guardrails obrigatorios de entrada em `S1`:
+    - `capital_ramp_level=L0`;
+    - `execution_gateway_only=pass`;
+    - `pre_trade_validator_active=pass`.
+  - endurece validacao executavel em:
+    - `scripts/ci/eval_trading.sh`.
+  - atualiza artifact de checklist em:
+    - `artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f7/epic-f7-02-issue-02-s1-guardrails-l0-gateway-validator.md`.
+- Migracao:
+  - entrada em `S1` MUST permanecer bloqueada quando checklist nao comprovar `L0 + gateway_only + pre_trade_validator_active`.
+  - qualquer regressao desses guardrails MUST bloquear `make eval-trading`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:

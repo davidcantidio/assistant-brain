@@ -196,6 +196,45 @@ if missing_item_ids:
 PY
 }
 
+pre_live_checklist_assert_s1_guardrails() {
+  local checklist_path="$1"
+
+  python3 - "$checklist_path" <<'PY'
+import json
+import sys
+
+checklist_path = sys.argv[1]
+
+with open(checklist_path, "r", encoding="utf-8") as fh:
+    checklist = json.load(fh)
+
+def fail(msg):
+    print(f"S1 guardrail check failed: {checklist_path}")
+    print(msg)
+    sys.exit(1)
+
+capital_ramp_level = checklist.get("capital_ramp_level")
+if capital_ramp_level != "L0":
+    fail("capital_ramp_level MUST be 'L0' for S1 micro-live entry.")
+
+items = checklist.get("items")
+if not isinstance(items, list):
+    fail("items MUST be a JSON array.")
+
+status_by_item = {}
+for item in items:
+    if isinstance(item, dict):
+        item_id = item.get("item_id")
+        status = item.get("status")
+        if isinstance(item_id, str):
+            status_by_item[item_id] = status
+
+for item_id in ("execution_gateway_only", "pre_trade_validator_active"):
+    if status_by_item.get(item_id) != "pass":
+        fail(f"item '{item_id}' MUST be 'pass' for S1 guardrail compliance.")
+PY
+}
+
 PRE_LIVE_CHECKLIST_PATH="artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json"
 
 required_files=(
@@ -237,6 +276,7 @@ schema_assert_minimum_contract \
   "schema_version,contract_version,asset_profile_version,capital_ramp_level,symbol,symbol_constraints,order_intent,market_state,validator_status,block_reasons,normalized_order,effective_risk_quote"
 
 pre_live_checklist_assert_contract "$PRE_LIVE_CHECKLIST_PATH"
+pre_live_checklist_assert_s1_guardrails "$PRE_LIVE_CHECKLIST_PATH"
 
 search_re "S0 - Paper/Sandbox" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "tentativa de ordem live em .*S0.*TRADING_BLOCKED|TRADING_BLOCKED.*tentativa de ordem live em .*S0" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
