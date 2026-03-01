@@ -61,6 +61,17 @@ Exclui:
   - os criterios objetivos de promocao `S1 -> S2` permanecem inalterados no PRD e MUST continuar sendo avaliados antes de qualquer escala.
   - ausencia de evidencia da janela minima ou presenca de item critico `fail` em `S1` MUST manter o resultado operacional em `hold`.
 
+### 2026-03-01 - Execucao do ISSUE-F7-03-02 (decision `R3` obrigatoria para promocao `S1 -> S2`)
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-03-02` do `EPIC-F7-03` para validar a obrigatoriedade de `decision R3` com limites explicitos para promocao `S1 -> S2`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f7/epic-f7-03-issue-02-s2-r3-decision-required-hold.md`.
+  - registra resultado atual como `hold`, porque a `decision_id` presente no checklist de `S1` nao equivale a uma decisao de promocao para `S2` e nao ha evidencia de limites explicitos do novo nivel.
+- Migracao:
+  - a promocao `S1 -> S2` MUST continuar bloqueada sem `decision R3` formal e auditavel.
+  - qualquer referencia a `decision_id` de `S1` MUST permanecer separada da decisao de escala para `S2`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:
