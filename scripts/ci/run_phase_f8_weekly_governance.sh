@@ -9,8 +9,7 @@ EXECUTED_AT="${EXECUTED_AT:-$(date '+%Y-%m-%dT%H:%M:%S%z')}"
 EVAL_GATES_CMD="${EVAL_GATES_CMD:-make eval-gates}"
 CI_QUALITY_CMD="${CI_QUALITY_CMD:-make ci-quality}"
 CI_SECURITY_CMD="${CI_SECURITY_CMD:-make ci-security}"
-CONTRACT_REVIEW_STATUS="${CONTRACT_REVIEW_STATUS:-FAIL}"
-CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
+CONTRACT_REVIEW_DIR="${CONTRACT_REVIEW_DIR:-artifacts/phase-f8/contract-review}"
 
 ARTIFACT_DIR="${ARTIFACT_DIR:-artifacts/phase-f8/weekly-governance}"
 LOG_DIR="${ARTIFACT_DIR}/logs/${WEEK_ID}"
@@ -46,6 +45,18 @@ write_skip_log() {
 }
 
 FAILED_GATE=""
+
+if [[ -n "${CONTRACT_REVIEW_STATUS+x}" ]]; then
+  CONTRACT_REVIEW_STATUS="${CONTRACT_REVIEW_STATUS}"
+  CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
+else
+  if REVIEW_ENV="$(WEEK_ID="$WEEK_ID" CONTRACT_REVIEW_DIR="$CONTRACT_REVIEW_DIR" bash scripts/ci/read_phase_f8_contract_review.sh 2>/dev/null)"; then
+    eval "$REVIEW_ENV"
+  else
+    CONTRACT_REVIEW_STATUS="FAIL"
+    CRITICAL_DRIFTS_OPEN="0"
+  fi
+fi
 
 EVAL_RESULT="$(run_and_capture "eval-gates" "$EVAL_GATES_CMD")"
 IFS='|' read -r _ EVAL_GATES_STATUS EVAL_LOG_PATH <<<"$EVAL_RESULT"

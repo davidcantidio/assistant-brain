@@ -29,6 +29,24 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-02-01 (revisao contratual semanal canonica)
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-02-01` do `EPIC-F8-02` para trocar a revisao contratual semanal da `F8` de estado manual para artifact canonico:
+    - adiciona target `make phase-f8-contract-review`;
+    - cria parser/validator em `scripts/ci/phase_f8_contract_review.py`;
+    - adiciona wrappers `scripts/ci/read_phase_f8_contract_review.sh` e `scripts/ci/check_phase_f8_contract_review.sh`;
+    - liga `scripts/ci/run_phase_f8_weekly_governance.sh` ao artifact `artifacts/phase-f8/contract-review/<week_id>.md` por default.
+  - publica a primeira revisao real da semana `2026-W09` em:
+    - `artifacts/phase-f8/contract-review/2026-W09.md`.
+  - regrava o relatorio semanal autoritativo em:
+    - `artifacts/phase-f8/weekly-governance/2026-W09.md`.
+  - registra drift critico inicial `DRIFT-F8-2026-W09-01`, mantendo a decisao semanal em `hold` por `critical_drifts_open=1`.
+- Migracao:
+  - `contract_review_status` semanal deixa de depender de variavel manual e passa a depender do artifact canonico de `contract-review`.
+  - artifact valido de `contract-review` MUST manter `source_of_truth=PRD/PRD-MASTER.md` e cobertura explicita de `runtime`, `integrations`, `trading` e `security`.
+  - ausencia ou invalidade do artifact de `contract-review` MUST manter a rodada semanal em `hold`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-03-03 + fechamento do EPIC-F7-03 e consolidacao da fase F7 com decisao hold
 - RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
 - Impacto:

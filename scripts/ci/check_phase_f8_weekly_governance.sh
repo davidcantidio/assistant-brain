@@ -99,10 +99,12 @@ for report in reports:
 def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], dict[str, str]]:
     with tempfile.TemporaryDirectory(prefix=f"f8-weekly-{name}-") as tmpdir:
       artifact_dir = Path(tmpdir) / "weekly-governance"
+      contract_review_dir = Path(tmpdir) / "contract-review"
       env = os.environ.copy()
       env.update(
           {
               "ARTIFACT_DIR": str(artifact_dir),
+              "CONTRACT_REVIEW_DIR": str(contract_review_dir),
               "WEEK_ID": "2026-W09",
               "EXECUTED_AT": "2026-03-01T00:00:00-0300",
           }
@@ -116,6 +118,87 @@ def run_mock(name: str, env_updates: dict[str, str]) -> tuple[dict[str, str], di
           for key, log_path in logs.items()
       }
       return values, log_contents
+
+
+def write_contract_review(path: Path, *, source_of_truth: str = "PRD/PRD-MASTER.md") -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        """# F8 Contract Review 2026-W09
+
+## Metadata
+```json
+{
+  "week_id": "2026-W09",
+  "reviewed_at": "2026-03-01T00:00:00-0300",
+  "source_of_truth": "%s",
+  "previous_week_id": "none",
+  "contract_review_status": "PASS",
+  "critical_drifts_open": 0
+}
+```
+
+## Contracts Reviewed
+```json
+[
+  {
+    "domain": "runtime",
+    "owner": "Ayrton Senna",
+    "status": "PASS",
+    "canonical_refs": ["PRD/PRD-MASTER.md", "ARC/ARC-CORE.md"],
+    "gate_refs": ["make eval-runtime"],
+    "evidence_refs": ["scripts/ci/eval_runtime_contracts.sh"],
+    "notes": "runtime review mock"
+  },
+  {
+    "domain": "integrations",
+    "owner": "O Garcon",
+    "status": "PASS",
+    "canonical_refs": ["PRD/PRD-MASTER.md", "INTEGRATIONS/README.md"],
+    "gate_refs": ["make eval-integrations"],
+    "evidence_refs": ["scripts/ci/eval_integrations.sh"],
+    "notes": "integrations review mock"
+  },
+  {
+    "domain": "trading",
+    "owner": "Sr. Geldmacher",
+    "status": "PASS",
+    "canonical_refs": ["PRD/PRD-MASTER.md", "VERTICALS/TRADING/TRADING-PRD.md"],
+    "gate_refs": ["make eval-trading"],
+    "evidence_refs": ["scripts/ci/eval_trading.sh"],
+    "notes": "trading review mock"
+  },
+  {
+    "domain": "security",
+    "owner": "Bas Rutten",
+    "status": "PASS",
+    "canonical_refs": ["PRD/PRD-MASTER.md", "SEC/SEC-POLICY.md"],
+    "gate_refs": ["make ci-security"],
+    "evidence_refs": ["scripts/ci/check_security.sh"],
+    "notes": "security review mock"
+  }
+]
+```
+
+## Drift Backlog
+```json
+[]
+```
+
+## Previous Week Closure
+```json
+{
+  "status": "PASS",
+  "reviewed_drift_ids": [],
+  "closed_refs": [],
+  "risk_accepted_refs": [],
+  "open_critical_refs": [],
+  "notes": "first review cycle"
+}
+```
+"""
+        % source_of_truth,
+        encoding="utf-8",
+    )
 
 
 pass_values, _ = run_mock(
@@ -167,17 +250,41 @@ if quality_fail_values["ci_security_status"] != "FAIL":
 if "SKIPPED" not in quality_fail_logs["ci-security"]:
     fail("mock quality-fail deveria registrar skip de ci-security.")
 
+artifact_pass_dir = Path(tempfile.mkdtemp(prefix="f8-contract-review-pass-"))
+try:
+    write_contract_review(artifact_pass_dir / "2026-W09.md")
+    artifact_pass_values, _ = run_mock(
+        "artifact-pass",
+        {
+            "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
+            "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
+            "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
+            "CONTRACT_REVIEW_DIR": str(artifact_pass_dir),
+        },
+    )
+    if artifact_pass_values["contract_review_status"] != "PASS":
+        fail("mock artifact-pass deveria usar contract_review_status=PASS a partir do artifact.")
+    if artifact_pass_values["decision"] != "promote":
+        fail("mock artifact-pass deveria resultar em decision=promote.")
+finally:
+    for path in sorted(artifact_pass_dir.rglob("*"), reverse=True):
+        if path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            path.rmdir()
+    if artifact_pass_dir.exists():
+        artifact_pass_dir.rmdir()
+
 review_fail_values, _ = run_mock(
     "review-fail",
     {
         "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
         "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
-        "CRITICAL_DRIFTS_OPEN": "0",
     },
 )
 if review_fail_values["contract_review_status"] != "FAIL":
-    fail("mock review-fail deveria usar contract_review_status=FAIL por default.")
+    fail("mock review-fail deveria usar contract_review_status=FAIL quando o artifact estiver ausente.")
 if review_fail_values["decision"] != "hold":
     fail("mock review-fail deveria resultar em decision=hold.")
 

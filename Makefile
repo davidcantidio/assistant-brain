@@ -7,7 +7,7 @@ PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
 .PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
-	phase-f2-gate phase-f8-weekly-governance docling-install pdf-to-md check-pdf-md-sync
+	phase-f2-gate phase-f8-contract-review phase-f8-weekly-governance docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
 	@bash scripts/ci/eval_models.sh
@@ -41,6 +41,9 @@ ci-security:
 
 phase-f2-gate:
 	@bash scripts/ci/check_phase_f2_gate.sh
+
+phase-f8-contract-review:
+	@bash scripts/ci/check_phase_f8_contract_review.sh
 
 phase-f8-weekly-governance:
 	@bash scripts/ci/run_phase_f8_weekly_governance.sh
