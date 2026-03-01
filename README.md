@@ -70,6 +70,43 @@ Notas:
 - os scripts acima sao o contrato oficial de onboarding para Linux e macOS (detecao automatica no `onboard_linux.sh`).
 - `scripts/verify_linux.sh` e gate bloqueante e retorna `exit code != 0` quando faltar requisito obrigatorio.
 - template canonico de configuracao: `config/openclaw.env.example` (espelho em `.env_example`).
+- o onboarding interativo suporta:
+  - auto-geracao de `LITELLM_API_KEY` via LiteLLM `/key/generate`;
+  - `OPENROUTER_API_KEY` opcional no mesmo fluxo;
+  - preload de Telegram por JSON (`TELEGRAM_UPDATE_JSON` ou `TELEGRAM_UPDATE_JSON_FILE`).
+
+### Onboarding interativo com LiteLLM auto-key
+```bash
+INTERACTIVE=1 bash scripts/onboard_linux.sh
+```
+
+No fluxo interativo:
+- `LITELLM_PROXY_URL` e derivado de `LITELLM_BASE_URL` sem `/v1` (com override manual);
+- `LITELLM_MODELS` default: `codex-main,claude-review`;
+- se `OPENROUTER_API_KEY` estiver preenchida, o default inclui `openrouter/openai/gpt-4o-mini`;
+- se auto-geracao falhar, o script cai em fallback manual para `LITELLM_API_KEY`.
+
+### Preload de Telegram por payload JSON
+Exemplo via arquivo:
+```bash
+TELEGRAM_UPDATE_JSON_FILE=/caminho/update.json INTERACTIVE=1 bash scripts/onboard_linux.sh
+```
+
+Exemplo via inline:
+```bash
+TELEGRAM_UPDATE_JSON='{\"message\":{\"from\":{\"id\":7165399698},\"chat\":{\"id\":7165399698,\"type\":\"private\"}}}' INTERACTIVE=1 bash scripts/onboard_linux.sh
+```
+
+### Slack app manifesto (Socket Mode)
+Manifesto versionado:
+- `config/slack-app-manifest.socket-mode.yaml`
+
+Passos:
+1. criar app em [api.slack.com/apps](https://api.slack.com/apps) via "From an app manifest";
+2. colar o manifesto `config/slack-app-manifest.socket-mode.yaml`;
+3. instalar app no workspace;
+4. copiar `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, `SLACK_SIGNING_SECRET` para `.env`;
+5. manter os placeholders de URL do manifesto apenas como bootstrap ate definir endpoint final.
 
 Guia operacional detalhado:
 - `DEV/DEV-OPENCLAW-SETUP.md`

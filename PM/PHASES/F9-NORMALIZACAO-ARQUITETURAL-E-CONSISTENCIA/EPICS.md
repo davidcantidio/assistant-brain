@@ -17,7 +17,7 @@ Comandos obrigatorios:
 
 ```bash
 make ci-quality
-! rg -n "PM/PHASES/F7-TRADING-POR-ESTAGIOS" PM/audit/*.json
+bash scripts/ci/check_pm_audit_paths.sh
 ```
 
 Criterio objetivo:
@@ -25,7 +25,7 @@ Criterio objetivo:
 - `F9` publicada com `EPICS.md + 3 epics` e 9 issues com metadata obrigatoria completa.
 - `PM/audit/F9-NORMALIZACAO-ARQUITETURAL-EPICS-ISSUES-AUDIT.json` valido e parseavel.
 - `PM/TRACEABILITY/ARCHITECTURE-AUDIT-COVERAGE.md` mapeando conflitos e failure modes para o backlog `F9`.
-- zero referencia quebrada em `PM/audit/*` para `PM/PHASES/F7-TRADING-POR-ESTAGIOS/*`.
+- zero referencia legada de `F7` fora de `feito` em `PM/audit/*`.
 
 ## Contrato Canonico de Paths PM
 - fase ativa: `PM/PHASES/F*-.../`

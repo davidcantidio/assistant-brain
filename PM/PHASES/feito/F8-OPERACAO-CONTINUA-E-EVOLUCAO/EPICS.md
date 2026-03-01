@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F8-EPICS.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -60,6 +60,12 @@ Cada `ISSUE-F8-*` deve conter obrigatoriamente os campos:
 | `ISSUE-F8-03-02` | `P1` | `pm` | `2026-03-08` | planned | completar ownership do pacote de continuidade |
 | `ISSUE-F8-04-01` | `P1` | `tech-lead-trading` | `2026-03-08` | planned | completar ownership do contrato multiativo |
 | `ISSUE-F8-04-02` | `P1` | `tech-lead-trading` | `2026-03-08` | planned | completar ownership do workflow de evals multiativos |
+| `ISSUE-F8-01-04` | `P0` | `tech-lead` | `2026-03-08` | planned | materializar trilha minima de microtask em `runs` e validar coerencia de backlog |
+| `ISSUE-F8-02-04` | `P0` | `pm` | `2026-03-08` | planned | normalizar cadeia `PRD -> Fases -> Epicos -> Issues -> Microtasks` |
+| `ISSUE-F8-02-05` | `P1` | `security-owner + pm` | `2026-03-15` | planned | classificar dependencias externas em governadas vs fora de escopo |
+| `ISSUE-F8-03-04` | `P0` | `pm + architecture-owner` | `2026-03-08` | planned | normalizar fonte de autoridade documental (PRD/SEC/ARC) |
+| `ISSUE-F8-03-05` | `P0` | `tech-lead` | `2026-03-08` | planned | consolidar branch governance e ownership de PR com enforcement |
+| `ISSUE-F8-03-06` | `P1` | `architecture-owner + tech-lead` | `2026-03-15` | planned | harmonizar pipeline `M30 -> M14-Code -> Codex 5` com contratos canonicos |
 
 ## Escopo Desta Entrega
 - `EPIC-F8-01..04` concluidos no escopo documental/tdd desta rodada.

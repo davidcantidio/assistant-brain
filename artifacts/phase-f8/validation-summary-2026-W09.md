@@ -5,22 +5,22 @@
 - operational_readiness: `blocked`
 - decision: `hold`
 - release_review_status: `PASS`
-- release_justification: release bloqueado por ci-quality=FAIL;release bloqueado por operational_conformance_status=FAIL;release bloqueado por critical_drifts_open=1;phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.
+- release_justification: release bloqueado por operational_conformance_status=FAIL;release bloqueado por critical_drifts_open=1;phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.
 - phase_transition_status: `blocked`
 - blocking_reason: phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.
 - review_validity_status: `PASS`
 - operational_conformance_status: `FAIL`
 - failed_domains: `trading`
-- residual_risk_summary: falha de gate semanal em ci-quality;operational_conformance_status=FAIL;failed_domains=trading;critical_drifts_open=1;phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.
+- residual_risk_summary: operational_conformance_status=FAIL;failed_domains=trading;critical_drifts_open=1;phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.
 - rollback_plan: manter a baseline vigente de F7/F8-02, sem promover F8, preservar hold e rerodar a semana apos remediacao.
-- next_actions: corrigir ci-quality antes de rerodar a semana;remediar dominios operacionais em FAIL: trading;fechar ou aceitar formalmente os drifts criticos;recuar a ativacao da F8 e preservar hold ate F7 -> F8=promote
+- next_actions: remediar dominios operacionais em FAIL: trading;fechar ou aceitar formalmente os drifts criticos;recuar a ativacao da F8 e preservar hold ate F7 -> F8=promote
 - critical_drifts_open: `1`
 
 ## Gate Status
 
 - eval_gates_status: `PASS`
-- ci_quality_status: `FAIL`
-- ci_security_status: `FAIL`
+- ci_quality_status: `PASS`
+- ci_security_status: `PASS`
 
 ## Epic Status
 

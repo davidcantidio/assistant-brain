@@ -1,6 +1,6 @@
 ---
 doc_id: "ROADMAP-BACKLOG-COVERAGE.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -41,6 +41,9 @@ Mapear cada item `B*` do `PRD/ROADMAP.md` para ao menos uma issue executavel, co
 | `B0-19` | covered_existing | `EPIC-F6-01` / `ISSUE-F6-01-01` | pontos: controle por Telegram | `OPERATORS.yaml` |
 | `B0-20` | covered_existing | `EPIC-F3-02` / `ISSUE-F3-02-01` | pontos: daily notes | `memory_contract` |
 | `B0-21` | covered_existing | `EPIC-F6-01` / `ISSUE-F6-01-02` | felixcraft: email hard rules | `approval_policy` |
+| `B0-22` | covered_new | `EPIC-F9-01` / `ISSUE-F9-01-01` | pontos: setup guiado por contrato | auto-geracao de `LITELLM_API_KEY` via `/key/generate` |
+| `B0-23` | covered_new | `EPIC-F9-02` / `ISSUE-F9-02-01` | pontos: telegram como canal primario | preload de `TELEGRAM_CHAT_ID` e `TELEGRAM_USER_ID` por payload JSON |
+| `B0-24` | covered_new | `EPIC-F9-02` / `ISSUE-F9-02-02` | pontos: fallback Slack controlado | manifesto Socket Mode com `/oc-approve`, `/oc-reject`, `/oc-kill` |
 | `B1-01` | covered_new | `EPIC-F5-01` / `ISSUE-F5-01-01` | pontos: engine de sinal | adapter TradingAgents |
 | `B1-02` | covered_new | `EPIC-F5-01` / `ISSUE-F5-01-01` | pontos: deduplicacao | signal normalizer |
 | `B1-03` | covered_new | `EPIC-F5-01` / `ISSUE-F5-01-02` | felixcraft: safety rails | bloqueio de ordem direta externa |

@@ -56,12 +56,18 @@ f8_expected = {
     "ISSUE-F8-01-01": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P2", "mapped": {"R1"}},
     "ISSUE-F8-01-02": {"owner": "tech-lead-trading", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R2"}},
     "ISSUE-F8-01-03": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P2", "mapped": {"R3"}},
+    "ISSUE-F8-01-04": {"owner": "tech-lead", "estimativa": "1.5d", "prioridade": "P0", "mapped": {"R10"}},
     "ISSUE-F8-02-01": {"owner": "tech-lead-trading", "estimativa": "1d", "prioridade": "P0", "mapped": {"R4"}},
     "ISSUE-F8-02-02": {"owner": "product-owner + tech-lead-trading", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R5"}},
     "ISSUE-F8-02-03": {"owner": "product-owner + tech-lead-trading", "estimativa": "1d", "prioridade": "P0", "mapped": {"R6"}},
+    "ISSUE-F8-02-04": {"owner": "pm", "estimativa": "1.25d", "prioridade": "P0", "mapped": {"R11"}},
+    "ISSUE-F8-02-05": {"owner": "security-owner + pm", "estimativa": "1.25d", "prioridade": "P1", "mapped": {"R12"}},
     "ISSUE-F8-03-01": {"owner": "product-owner + tech-lead-trading", "estimativa": "0.5d", "prioridade": "P0", "mapped": {"R7", "R6"}},
     "ISSUE-F8-03-02": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R8"}},
     "ISSUE-F8-03-03": {"owner": "pm + tech-lead-trading", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R9", "R8"}},
+    "ISSUE-F8-03-04": {"owner": "pm + architecture-owner", "estimativa": "1d", "prioridade": "P0", "mapped": {"R13"}},
+    "ISSUE-F8-03-05": {"owner": "tech-lead", "estimativa": "1d", "prioridade": "P0", "mapped": {"R14"}},
+    "ISSUE-F8-03-06": {"owner": "architecture-owner + tech-lead", "estimativa": "1.75d", "prioridade": "P1", "mapped": {"R15"}},
     "ISSUE-F8-04-01": {"owner": "tech-lead-trading", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R10"}},
     "ISSUE-F8-04-02": {"owner": "tech-lead-trading", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R11"}},
     "ISSUE-F8-04-03": {"owner": "product-owner + tech-lead-trading", "estimativa": "1d", "prioridade": "P0", "mapped": {"R12", "R7"}},
@@ -147,6 +153,104 @@ if missing_f8:
     fail("issues F8 ausentes no contrato documental: " + ", ".join(missing_f8))
 if extra_f8:
     fail("issues F8 extras fora da matriz esperada: " + ", ".join(extra_f8))
+
+# F9 metadata contract
+f9_files = [
+    Path("PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-01-HIGIENE-PM-E-AUTORIDADE-NORMATIVA.md"),
+    Path("PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-02-CADEIA-PLANEJAMENTO-E-GOVERNANCA-CODIGO.md"),
+    Path("PM/PHASES/F9-NORMALIZACAO-ARQUITETURAL-E-CONSISTENCIA/EPIC-F9-03-MICROTASK-E-SUPERFICIES-EXTERNAS.md"),
+]
+
+f9_expected = {
+    "ISSUE-F9-01-01": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P0", "mapped": {"R1"}},
+    "ISSUE-F9-01-02": {"owner": "pm + architecture", "estimativa": "1d", "prioridade": "P0", "mapped": {"R2"}},
+    "ISSUE-F9-01-03": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R3"}},
+    "ISSUE-F9-02-01": {"owner": "pm", "estimativa": "1d", "prioridade": "P0", "mapped": {"R4"}},
+    "ISSUE-F9-02-02": {"owner": "pm + architecture", "estimativa": "1d", "prioridade": "P0", "mapped": {"R5"}},
+    "ISSUE-F9-02-03": {"owner": "tech-lead + pm", "estimativa": "1d", "prioridade": "P1", "mapped": {"R6"}},
+    "ISSUE-F9-03-01": {"owner": "architecture + pm", "estimativa": "1d", "prioridade": "P0", "mapped": {"R7"}},
+    "ISSUE-F9-03-02": {"owner": "security + pm", "estimativa": "1d", "prioridade": "P1", "mapped": {"R8"}},
+    "ISSUE-F9-03-03": {"owner": "pm", "estimativa": "0.5d", "prioridade": "P1", "mapped": {"R9"}},
+}
+
+f9_required_markers = [
+    "**Metadata da issue**",
+    "- **Owner**:",
+    "- **Estimativa**:",
+    "- **Dependencias**:",
+    "- **Mapped requirements**:",
+    "- **Prioridade**:",
+    "- **Checklist QA/Repro**:",
+    "- **Evidence refs**:",
+]
+
+f9_issue_heading = re.compile(r"^### (ISSUE-F9-[0-9]{2}-[0-9]{2})", re.M)
+
+seen_f9: set[str] = set()
+
+for path in f9_files:
+    if not path.exists():
+        fail(f"arquivo F9 obrigatorio ausente: {path}")
+    text = path.read_text(encoding="utf-8")
+    matches = list(f9_issue_heading.finditer(text))
+    if not matches:
+        fail(f"{path} sem issues F9 para validar.")
+    for idx, match in enumerate(matches):
+        issue_id = match.group(1)
+        if issue_id in seen_f9:
+            fail(f"issue F9 duplicada em docs: {issue_id}")
+        seen_f9.add(issue_id)
+        start = match.end()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(text)
+        block = text[start:end]
+
+        for marker in f9_required_markers:
+            if marker not in block:
+                fail(f"{path} com issue {issue_id} sem marcador obrigatorio: {marker}")
+
+        expected = f9_expected.get(issue_id)
+        if expected is None:
+            fail(f"{path} contem issue F9 nao mapeada: {issue_id}")
+
+        owner_match = owner_pat.search(block)
+        if not owner_match:
+            fail(f"{path} com issue {issue_id} sem Owner valido.")
+        if owner_match.group(1).strip() != expected["owner"]:
+            fail(
+                f"{path} com issue {issue_id} owner divergente: {owner_match.group(1).strip()} != {expected['owner']}"
+            )
+
+        estimativa_match = estimativa_pat.search(block)
+        if not estimativa_match:
+            fail(f"{path} com issue {issue_id} sem Estimativa valida.")
+        if estimativa_match.group(1).strip() != expected["estimativa"]:
+            fail(
+                f"{path} com issue {issue_id} estimativa divergente: {estimativa_match.group(1).strip()} != {expected['estimativa']}"
+            )
+
+        prioridade_match = prioridade_pat.search(block)
+        if not prioridade_match:
+            fail(f"{path} com issue {issue_id} sem Prioridade valida.")
+        if prioridade_match.group(1).strip() != expected["prioridade"]:
+            fail(
+                f"{path} com issue {issue_id} prioridade divergente: {prioridade_match.group(1).strip()} != {expected['prioridade']}"
+            )
+
+        mapped_match = mapped_pat.search(block)
+        if not mapped_match:
+            fail(f"{path} com issue {issue_id} sem Mapped requirements valido.")
+        mapped_reqs = set(re.findall(r"`(R[0-9]+)`", mapped_match.group(1)))
+        if mapped_reqs != expected["mapped"]:
+            fail(
+                f"{path} com issue {issue_id} mapped requirements divergente: {sorted(mapped_reqs)} != {sorted(expected['mapped'])}"
+            )
+
+missing_f9 = sorted(set(f9_expected) - seen_f9)
+extra_f9 = sorted(seen_f9 - set(f9_expected))
+if missing_f9:
+    fail("issues F9 ausentes no contrato documental: " + ", ".join(missing_f9))
+if extra_f9:
+    fail("issues F9 extras fora da matriz esperada: " + ", ".join(extra_f9))
 
 print("pm-issue-quality: PASS")
 PY

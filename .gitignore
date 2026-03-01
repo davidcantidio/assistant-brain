@@ -17,6 +17,7 @@
 .venv*/
 **/cache/
 **/.cache/
+**/__pycache__/
 **/sessions/
 !sessions/
 !sessions/README.md

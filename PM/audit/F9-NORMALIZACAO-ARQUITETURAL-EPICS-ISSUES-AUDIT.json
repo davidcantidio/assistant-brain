@@ -6,7 +6,7 @@
       "text": "Canonizar paths de fases concluidas em `PM/PHASES/feito/*` e remover referencias quebradas de F7 em auditorias PM.",
       "objective": "Eliminar ambiguidade de path e reduzir falhas de rastreabilidade documental.",
       "acceptance_criteria": [
-        "Zero ocorrencias de `PM/PHASES/F7-TRADING-POR-ESTAGIOS` em `PM/audit/*`.",
+        "Zero referencias legadas de F7 fora de `feito` em `PM/audit/*`.",
         "Referencias de F7 em auditorias apontam para `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/*`.",
         "Arquivos de auditoria alterados continuam parseaveis."
       ],

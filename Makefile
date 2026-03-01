@@ -9,7 +9,7 @@ MD ?= felixcraft.md
 .PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-trading-equities_br eval-trading-fii_br \
 	eval-trading-fixed_income_br eval-trading-multiasset eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
 	phase-f2-gate phase-f8-contract-review phase-f8-weekly-governance phase-f8-multiasset-contracts \
-	phase-f8-multiasset-enablement architecture-consistency-backlog-check docling-install pdf-to-md check-pdf-md-sync
+	phase-f8-multiasset-enablement architecture-consistency-backlog-check pm-audit-paths-check docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
 	@bash scripts/ci/eval_models.sh
@@ -72,6 +72,9 @@ phase-f8-multiasset-enablement:
 
 architecture-consistency-backlog-check:
 	@bash scripts/ci/check_architecture_consistency_backlog.sh
+
+pm-audit-paths-check:
+	@bash scripts/ci/check_pm_audit_paths.sh
 
 docling-install:
 	@if [[ ! -f requirements-docling.txt ]]; then \

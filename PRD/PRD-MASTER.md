@@ -1,6 +1,6 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.15"
+version: "1.16"
 status: "active"
 owner: "Marvin"
 last_updated: "2026-03-01"
@@ -581,6 +581,21 @@ Definicao objetiva de side effect:
   - qualquer item `fail` MUST bloquear `live-run`.
 - para vertical Trading:
   - usar checklist detalhado em `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.
+
+## Onboarding de Credenciais e Canais (F9)
+- onboarding interativo MUST suportar auto-geracao de `LITELLM_API_KEY` via endpoint `LiteLLM /key/generate` quando `LITELLM_MASTER_KEY` estiver disponivel.
+- onboarding MUST derivar `LITELLM_PROXY_URL` a partir de `LITELLM_BASE_URL` removendo sufixo `/v1`, com possibilidade de override explicito.
+- onboarding MUST manter fallback manual para `LITELLM_API_KEY` quando a auto-geracao falhar.
+- onboarding MUST perguntar `OPENROUTER_API_KEY` explicitamente, mantendo OpenRouter como adaptador cloud opcional/desabilitado por default ate decision formal.
+- onboarding MUST suportar preload de Telegram por payload:
+  - `TELEGRAM_UPDATE_JSON` (inline) e
+  - `TELEGRAM_UPDATE_JSON_FILE` (arquivo),
+  com parse de `message.from.id` e `message.chat.id` para defaults.
+- bootstrap de Slack MUST ter manifesto versionado no repositorio com:
+  - `socket_mode_enabled=true`,
+  - comandos `/oc-approve`, `/oc-reject`, `/oc-kill`,
+  - placeholders explicitos para URLs obrigatorias do schema.
+- qualquer mudanca neste contrato de onboarding MUST registrar impacto normativo em `PRD/CHANGELOG.md` e backlog em `PRD/ROADMAP.md`.
 
 ## Decisoes Fechadas
 - OpenClaw Gateway e o gateway padrao para chamadas LLM programaticas.

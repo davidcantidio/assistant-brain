@@ -214,6 +214,127 @@ set_env_kv() {
   mv "$tmp" "$file"
 }
 
+derive_litellm_proxy_url() {
+  local base_url="$1"
+  local trimmed="${base_url%/}"
+  if [[ "$trimmed" == */v1 ]]; then
+    printf "%s\n" "${trimmed%/v1}"
+    return
+  fi
+  printf "%s\n" "$trimmed"
+}
+
+telegram_defaults_from_payload() {
+  local payload=""
+
+  TELEGRAM_DEFAULT_USER_ID=""
+  TELEGRAM_DEFAULT_CHAT_ID=""
+  TELEGRAM_DEFAULT_CHAT_TYPE=""
+  TELEGRAM_DEFAULT_USERNAME=""
+
+  if [ -n "${TELEGRAM_UPDATE_JSON_FILE:-}" ]; then
+    if [ -f "${TELEGRAM_UPDATE_JSON_FILE}" ]; then
+      payload="$(cat "${TELEGRAM_UPDATE_JSON_FILE}")"
+    else
+      warn "TELEGRAM_UPDATE_JSON_FILE nao encontrado: ${TELEGRAM_UPDATE_JSON_FILE}"
+      return
+    fi
+  elif [ -n "${TELEGRAM_UPDATE_JSON:-}" ]; then
+    payload="${TELEGRAM_UPDATE_JSON}"
+  else
+    return
+  fi
+
+  local parsed=""
+  if ! parsed="$(
+    TELEGRAM_UPDATE_PAYLOAD="$payload" python3 - <<'PY'
+import json
+import os
+import sys
+
+raw = os.environ.get("TELEGRAM_UPDATE_PAYLOAD", "")
+try:
+    data = json.loads(raw)
+except Exception as exc:
+    print(f"invalid json: {exc}", file=sys.stderr)
+    sys.exit(1)
+
+msg = data.get("message") or data.get("edited_message") or {}
+chat = msg.get("chat") or {}
+sender = msg.get("from") or {}
+
+user_id = sender.get("id")
+chat_id = chat.get("id")
+chat_type = chat.get("type") or ""
+username = sender.get("username") or chat.get("username") or ""
+
+if user_id is None and chat_id is None:
+    print("telegram payload sem message.from.id e message.chat.id", file=sys.stderr)
+    sys.exit(1)
+
+def as_str(value):
+    return "" if value is None else str(value)
+
+print("|".join([as_str(user_id), as_str(chat_id), chat_type, username]))
+PY
+  )"; then
+    warn "Nao foi possivel parsear TELEGRAM_UPDATE_JSON/FILE."
+    return
+  fi
+
+  IFS='|' read -r TELEGRAM_DEFAULT_USER_ID TELEGRAM_DEFAULT_CHAT_ID TELEGRAM_DEFAULT_CHAT_TYPE TELEGRAM_DEFAULT_USERNAME <<< "$parsed"
+  say "Telegram preload detectado: user_id=${TELEGRAM_DEFAULT_USER_ID:-n/a}, chat_id=${TELEGRAM_DEFAULT_CHAT_ID:-n/a}, chat_type=${TELEGRAM_DEFAULT_CHAT_TYPE:-n/a}, username=${TELEGRAM_DEFAULT_USERNAME:-n/a}"
+}
+
+generate_litellm_key_and_write_env() {
+  local env_file="$1"
+  local litellm_base_url="$2"
+  local litellm_master="$3"
+  local litellm_models="$4"
+  local litellm_proxy_url="$5"
+
+  if [ -z "$litellm_base_url" ] || [ -z "$litellm_master" ] || [ -z "$litellm_models" ]; then
+    warn "Auto-geracao de LITELLM_API_KEY pulada: faltam LITELLM_BASE_URL, LITELLM_MASTER_KEY ou LITELLM_MODELS."
+    return 1
+  fi
+
+  local proxy_url="$litellm_proxy_url"
+  if [ -z "$proxy_url" ]; then
+    proxy_url="$(derive_litellm_proxy_url "$litellm_base_url")"
+  fi
+  if [ -z "$proxy_url" ]; then
+    warn "Nao foi possivel derivar LITELLM_PROXY_URL."
+    return 1
+  fi
+
+  local output=""
+  if ! output="$(
+    LITELLM_PROXY_URL="$proxy_url" \
+    LITELLM_MASTER_KEY="$litellm_master" \
+    LITELLM_MODELS="$litellm_models" \
+    LITELLM_OUTPUT_MODE="key-only" \
+    python3 "$REPO_ROOT/generate_litellm_virtual_key.py" 2>&1
+  )"; then
+    warn "Falha ao gerar LITELLM_API_KEY automaticamente via /key/generate."
+    echo "$output" >&2
+    return 1
+  fi
+
+  local generated_key
+  generated_key="$(printf "%s\n" "$output" | tail -n 1 | tr -d '\r' | xargs)"
+  if [ -z "$generated_key" ]; then
+    warn "Resposta do gerador LiteLLM sem chave consumivel."
+    echo "$output" >&2
+    return 1
+  fi
+
+  set_env_kv "$env_file" "LITELLM_PROXY_URL" "$proxy_url"
+  set_env_kv "$env_file" "LITELLM_MODELS" "$litellm_models"
+  set_env_kv "$env_file" "LITELLM_API_KEY" "$generated_key"
+  say "LITELLM_API_KEY gerada automaticamente via LiteLLM /key/generate."
+  return 0
+}
+
 configure_env_interactive() {
   local env_file="$REPO_ROOT/.env"
   echo
@@ -221,13 +342,11 @@ configure_env_interactive() {
   echo "Nada sera exibido ao digitar chaves."
   echo
 
+  telegram_defaults_from_payload
+
   local tz
   tz="$(prompt_text "TZ" "America/Sao_Paulo")"
   set_env_kv "$env_file" "TZ" "$tz"
-
-  local litellm_key
-  litellm_key="$(prompt_secret "LITELLM_API_KEY")"
-  [ -n "$litellm_key" ] && set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
 
   local litellm_master
   litellm_master="$(prompt_secret "LITELLM_MASTER_KEY (somente servico budget/admin)")"
@@ -236,6 +355,12 @@ configure_env_interactive() {
   local litellm_url
   litellm_url="$(prompt_text "LITELLM_BASE_URL" "http://127.0.0.1:4000/v1")"
   set_env_kv "$env_file" "LITELLM_BASE_URL" "$litellm_url"
+
+  local litellm_proxy_default
+  litellm_proxy_default="$(derive_litellm_proxy_url "$litellm_url")"
+  local litellm_proxy
+  litellm_proxy="$(prompt_text "LITELLM_PROXY_URL (sem /v1)" "$litellm_proxy_default")"
+  [ -n "$litellm_proxy" ] && set_env_kv "$env_file" "LITELLM_PROXY_URL" "$litellm_proxy"
 
   local codex_oauth
   codex_oauth="$(prompt_secret "CODEX_OAUTH_ACCESS_TOKEN (alias codex-main)")"
@@ -249,20 +374,62 @@ configure_env_interactive() {
   openai_key="$(prompt_secret "OPENAI_API_KEY (opcional)")"
   [ -n "$openai_key" ] && set_env_kv "$env_file" "OPENAI_API_KEY" "$openai_key"
 
+  local openrouter_key
+  openrouter_key="$(prompt_secret "OPENROUTER_API_KEY (opcional, cloud adapter)")"
+  [ -n "$openrouter_key" ] && set_env_kv "$env_file" "OPENROUTER_API_KEY" "$openrouter_key"
+
+  local litellm_auto_generate
+  litellm_auto_generate="$(prompt_text "LITELLM_AUTO_GENERATE_KEY via /key/generate? (Y/n)" "Y")"
+  local litellm_auto_generate_norm
+  litellm_auto_generate_norm="$(printf "%s" "$litellm_auto_generate" | tr '[:upper:]' '[:lower:]')"
+  local should_auto_generate="true"
+  case "$litellm_auto_generate_norm" in
+    n|no|0|false) should_auto_generate="false" ;;
+  esac
+  set_env_kv "$env_file" "LITELLM_AUTO_GENERATE_KEY" "$should_auto_generate"
+
+  local litellm_models_default="codex-main,claude-review"
+  if [ -n "$openrouter_key" ]; then
+    litellm_models_default="${litellm_models_default},openrouter/openai/gpt-4o-mini"
+  fi
+  local litellm_models
+  litellm_models="$(prompt_text "LITELLM_MODELS (escopo da virtual key)" "$litellm_models_default")"
+  [ -n "$litellm_models" ] && set_env_kv "$env_file" "LITELLM_MODELS" "$litellm_models"
+
+  local litellm_key_generated=0
+  if [ "$should_auto_generate" = "true" ]; then
+    if generate_litellm_key_and_write_env "$env_file" "$litellm_url" "$litellm_master" "$litellm_models" "$litellm_proxy"; then
+      litellm_key_generated=1
+    fi
+  fi
+
+  if [ "$litellm_key_generated" -ne 1 ]; then
+    local litellm_key
+    litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual)")"
+    [ -n "$litellm_key" ] && set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
+  fi
+
   local tgbot
   tgbot="$(prompt_secret "TELEGRAM_BOT_TOKEN")"
   [ -n "$tgbot" ] && set_env_kv "$env_file" "TELEGRAM_BOT_TOKEN" "$tgbot"
 
+  local tg_chat_default="${TELEGRAM_DEFAULT_CHAT_ID:-}"
+  local tg_user_default="${TELEGRAM_DEFAULT_USER_ID:-}"
+  local tg_group_default=""
+  if [ -n "${TELEGRAM_DEFAULT_CHAT_ID:-}" ] && [ "${TELEGRAM_DEFAULT_CHAT_TYPE:-}" != "private" ]; then
+    tg_group_default="${TELEGRAM_DEFAULT_CHAT_ID}"
+  fi
+
   local chat
-  chat="$(prompt_text "TELEGRAM_CHAT_ID (canonico, opcional se USER/GROUP definido)" "")"
+  chat="$(prompt_text "TELEGRAM_CHAT_ID (canonico, opcional se USER/GROUP definido)" "$tg_chat_default")"
   [ -n "$chat" ] && set_env_kv "$env_file" "TELEGRAM_CHAT_ID" "$chat"
 
   local tg_user
-  tg_user="$(prompt_text "TELEGRAM_USER_ID (alias opcional)" "")"
+  tg_user="$(prompt_text "TELEGRAM_USER_ID (alias opcional)" "$tg_user_default")"
   [ -n "$tg_user" ] && set_env_kv "$env_file" "TELEGRAM_USER_ID" "$tg_user"
 
   local tg_group
-  tg_group="$(prompt_text "TELEGRAM_GROUP_ID (alias opcional)" "")"
+  tg_group="$(prompt_text "TELEGRAM_GROUP_ID (alias opcional)" "$tg_group_default")"
   [ -n "$tg_group" ] && set_env_kv "$env_file" "TELEGRAM_GROUP_ID" "$tg_group"
 
   local slackbot

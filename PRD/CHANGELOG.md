@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.42"
+version: "2.44"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,62 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Endurecimento de validacao da fase F9 (paths PM/audit + contrato de issues)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050.
+- Impacto:
+  - adiciona checker dedicado `scripts/ci/check_pm_audit_paths.sh` para:
+    - bloquear referencias legadas de `F7` fora de `feito` em `PM/audit/*.json`;
+    - validar existencia de refs absolutas `assistant-brain/...` dentro dos JSONs de auditoria PM.
+  - integra o checker no `ci-quality` via `scripts/ci/check_quality.sh`.
+  - adiciona alvo utilitario `make pm-audit-paths-check`.
+  - endurece `scripts/ci/check_pm_issue_quality.sh` com contrato completo da fase `F9`:
+    - valida presenca dos 9 IDs `ISSUE-F9-01-01..ISSUE-F9-03-03`;
+    - valida metadata obrigatoria por issue (`Owner`, `Estimativa`, `Dependencias`, `Mapped requirements`, `Prioridade`, `Checklist QA/Repro`, `Evidence refs`);
+    - valida consistencia de owner/estimativa/prioridade/mapeamento `R1..R9`.
+  - atualiza documentos da `F9` para usar checker dedicado no gate, removendo validacao por `rg` literal suscetivel a falso positivo textual.
+- Migracao:
+  - o gate documental de higiene PM da F9 passa a depender de `bash scripts/ci/check_pm_audit_paths.sh`.
+  - auditorias PM novas devem usar apenas paths canonicos de fase concluida (`PM/PHASES/feito/...`) quando aplicavel.
+
+### 2026-03-01 - Onboarding com LiteLLM auto-key, OpenRouter opcional, Telegram preload JSON, Slack Socket Mode e fase PM F9
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - atualiza `scripts/onboard_linux.sh` para:
+    - suportar `LITELLM_AUTO_GENERATE_KEY`;
+    - derivar/usar `LITELLM_PROXY_URL` (sem `/v1`);
+    - gerar `LITELLM_API_KEY` via `generate_litellm_virtual_key.py` com fallback manual;
+    - suportar parse de `TELEGRAM_UPDATE_JSON` e `TELEGRAM_UPDATE_JSON_FILE` para defaults de `TELEGRAM_CHAT_ID` e `TELEGRAM_USER_ID`;
+    - coletar `OPENROUTER_API_KEY` de forma explicita sem tornar cloud obrigatoria.
+  - atualiza `generate_litellm_virtual_key.py` para remover dependencia de `requests` e adicionar modo maquina-consumivel `LITELLM_OUTPUT_MODE=key-only`.
+  - atualiza templates `config/openclaw.env.example` e `.env_example` com novas variaveis de onboarding.
+  - adiciona manifesto Slack versionado em `config/slack-app-manifest.socket-mode.yaml` com:
+    - `socket_mode_enabled=true`;
+    - `/oc-approve`, `/oc-reject`, `/oc-kill`;
+    - placeholders explicitos de URLs.
+  - atualiza docs:
+    - `README.md`;
+    - `DEV/DEV-OPENCLAW-SETUP.md`;
+    - `PRD/PRD-MASTER.md`;
+    - `PRD/ROADMAP.md`;
+    - `PRD/PHASE-USABILITY-GUIDE.md`.
+  - cria fase PM de onboarding:
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPICS.md`;
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md`;
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md`.
+  - atualiza rastreabilidade em `PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md` para `B0-22`, `B0-23`, `B0-24`.
+- Migracao:
+  - para auto-geracao de chave LiteLLM no onboarding:
+    - preencher `LITELLM_MASTER_KEY` + `LITELLM_BASE_URL`,
+    - manter `LITELLM_MODELS` com default `codex-main,claude-review`,
+    - opcionalmente incluir `openrouter/openai/gpt-4o-mini` quando `OPENROUTER_API_KEY` estiver presente.
+  - para preload de Telegram:
+    - fornecer payload em `TELEGRAM_UPDATE_JSON` ou `TELEGRAM_UPDATE_JSON_FILE`.
+  - para Slack:
+    - criar app via manifesto versionado,
+    - coletar `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, `SLACK_SIGNING_SECRET`,
+    - preencher `.env` local.
+  - `verify_linux.sh` permanece sem obrigar `OPENROUTER_API_KEY`.
 
 ### 2026-03-01 - Conversao da auditoria arquitetural em fase F9 (PM)
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050, RFC-060.

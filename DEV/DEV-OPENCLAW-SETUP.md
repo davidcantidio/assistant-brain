@@ -1,9 +1,9 @@
 ---
 doc_id: "DEV-OPENCLAW-SETUP.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "Engineering"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-050", "RFC-060"]
 ---
 
@@ -37,6 +37,16 @@ bash scripts/onboard_linux.sh
 ```
 > O script detecta automaticamente Linux/macOS e aplica o fluxo da plataforma.
 
+Fluxo interativo (recomendado para primeira instalacao):
+```bash
+INTERACTIVE=1 bash scripts/onboard_linux.sh
+```
+
+Com preload de Telegram por arquivo:
+```bash
+TELEGRAM_UPDATE_JSON_FILE=/caminho/update.json INTERACTIVE=1 bash scripts/onboard_linux.sh
+```
+
 2. Validar setup:
 ```bash
 bash scripts/verify_linux.sh
@@ -58,6 +68,12 @@ bash scripts/verify_linux.sh
   - `SLACK_SIGNING_SECRET`
   - `CONVEX_DEPLOYMENT_URL`
   - `CONVEX_DEPLOY_KEY`
+- variaveis de onboarding (novas):
+  - `LITELLM_AUTO_GENERATE_KEY=true|false`
+  - `LITELLM_PROXY_URL` (default derivado de `LITELLM_BASE_URL` sem `/v1`)
+  - `LITELLM_MODELS` (escopo da virtual key)
+  - `TELEGRAM_UPDATE_JSON` (payload inline)
+  - `TELEGRAM_UPDATE_JSON_FILE` (payload em arquivo)
 - variaveis de runtime:
   - `HEARTBEAT_MINUTES=15`
   - `STANDUP_TIME=11:30`
@@ -67,7 +83,25 @@ bash scripts/verify_linux.sh
   - `OPENCLAW_SUPERVISOR_SECONDARY=claude-review`
   - `OPENCLAW_WORKER_CODE_MODEL=ollama/qwen2.5-coder:32b`
   - `OPENCLAW_WORKER_REASON_MODEL=ollama/deepseek-r1:32b`
-  - `OPENROUTER_API_KEY` (opcional; fallback cloud desabilitado por default)
+  - `OPENROUTER_API_KEY` (opcional; onboarding pergunta explicitamente, mas cloud segue desabilitado por default)
+
+## LiteLLM Auto-Key no Onboarding
+- quando `LITELLM_AUTO_GENERATE_KEY=true`, onboarding tenta gerar `LITELLM_API_KEY` via `/key/generate`.
+- pre-requisitos para auto-geracao:
+  - `LITELLM_MASTER_KEY` valido;
+  - `LITELLM_BASE_URL` configurado;
+  - `LITELLM_MODELS` definido (default: `codex-main,claude-review`).
+- fallback:
+  - se `/key/generate` falhar, onboarding solicita `LITELLM_API_KEY` manualmente.
+
+## Slack Manifest (Socket Mode)
+- manifesto versionado: `config/slack-app-manifest.socket-mode.yaml`.
+- comandos provisionados no manifesto:
+  - `/oc-approve`
+  - `/oc-reject`
+  - `/oc-kill`
+- apos criar/instalar o app no Slack:
+  - preencher `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, `SLACK_SIGNING_SECRET` em `.env`.
 
 ## Estado Canonico
 - arquivo de estado do workspace:

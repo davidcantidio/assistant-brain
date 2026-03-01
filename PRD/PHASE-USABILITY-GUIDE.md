@@ -1,9 +1,9 @@
 ---
 doc_id: "PHASE-USABILITY-GUIDE.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-25"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -39,6 +39,7 @@ Exclui:
 | `F6` Operacao humana HITL | Fluxo humano de `approve/reject/kill` definido | usar Telegram como canal primario e Slack apenas fallback validado | checklist do `PM/DECISION-PROTOCOL.md` + `make ci-security` | operador/canal valido + `security-check: PASS` | checklist HITL preenchido com operador autorizado |
 | `F7` Trading por estagios (`S0 -> S1 -> S2`) | Uso progressivo com risco controlado | operar `S0` paper/sandbox com aprovacao humana por ordem | `make eval-trading` + revisao do `pre_live_checklist` | `eval-trading: PASS` e checklist sem `fail` | artifact de checklist e estado sem bypass |
 | `F8` Operacao continua e evolucao | Cadencia estavel de governanca | rodar rotina semanal de gates e revisao de contratos | `make eval-gates`, `make ci-quality`, `make ci-security` | trio de gates `PASS` | registro semanal de rodada de gates + revisao |
+| `F9` Onboarding de credenciais e canais automatizados | Bootstrap assistido de chaves/canais para setup inicial | executar onboarding interativo com auto-key LiteLLM + preload Telegram + manifesto Slack | `INTERACTIVE=1 bash scripts/onboard_linux.sh` e `bash scripts/verify_linux.sh` | `verify_linux.sh` com `exit code 0` e evidencias de bootstrap preenchidas | `.env` preenchido com `LITELLM_API_KEY`, IDs Telegram e tokens Slack; manifesto Slack versionado aplicado |
 
 ## Defaults e Assumptions
 - integracao externa default: `lab_isolated`; modo `governed` so apos gate verde.
@@ -55,6 +56,7 @@ Exclui:
 - `F5 -> F6`: anti-bypass trading confirmado.
 - `F6 -> F7`: HITL validado com operador autorizado.
 - `F7 -> F8`: readiness de trading sem item `fail`.
+- `F8 -> F9`: governanca semanal estabilizada e onboarding automatizado validado sem regressao de policy.
 
 ## Artefatos de Planejamento por Fase
 - `F1`: [EPICS da fase](../PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md)
@@ -65,6 +67,7 @@ Exclui:
 - `F6`: [EPICS da fase](../PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md)
 - `F7`: [EPICS da fase](../PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md)
 - `F8`: [EPICS da fase](../PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md)
+- `F9`: [EPICS da fase](../PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPICS.md)
 
 ## Links Relacionados
 - [Roadmap](./ROADMAP.md)

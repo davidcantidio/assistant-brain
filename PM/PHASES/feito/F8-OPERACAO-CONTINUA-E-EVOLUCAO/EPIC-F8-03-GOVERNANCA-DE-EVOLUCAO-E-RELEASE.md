@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md"
-version: "1.3"
+version: "1.4"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -106,6 +106,99 @@ Como operador, quero um sumario executivo semanal para auditoria rapida e handof
 **Criterios de aceitacao**
 - Given sumario semanal ausente, When auditoria semanal ocorre, Then resultado deve ser `hold`.
 - Given sumario semanal completo e coerente, When auditoria semanal ocorre, Then continuidade operacional fica rastreavel.
+
+### ISSUE-F8-03-04 - Normalizar fonte de autoridade arquitetural
+**User story**  
+Como operador, quero fonte de autoridade unica para evitar conflito entre PRD e referencia conceitual Felix.
+
+**Metadata da issue**
+- **Owner**: `pm + architecture-owner`
+- **Estimativa**: `1d`
+- **Dependencias**: `META/DOCUMENT-HIERARCHY.md`, `README.md`, `workspaces/main/AGENTS.md`, `PRD/PRD-MASTER.md`, `PRD/CHANGELOG.md`
+- **Mapped requirements**: `R13`
+- **Prioridade**: `P0`
+- **Checklist QA/Repro**:
+  1. validar que PRD/SEC/ARC ficam explicitos como fonte normativa;
+  2. validar que Felix fica definido como referencia conceitual com traceabilidade;
+  3. validar consistencia de mensagem entre `META`, `README` e `AGENTS`;
+  4. executar `bash scripts/ci/check_architecture_consistency_backlog.sh`.
+- **Evidence refs**: `artifacts/phase-f8/epic-f8-03-issue-04-authority-source-normalization.md`, `artifacts/architecture/2026-03-01-architectural-consistency-audit-backlog.md`
+
+**Micro-issues executaveis**
+- `MT-F8-03-04-01`: ajustar precedencia documental em `META` e `PRD`.
+- `MT-F8-03-04-02`: alinhar texto operacional em `README` e `AGENTS`.
+- `MT-F8-03-04-03`: registrar decisao no changelog e backlog arquitetural.
+
+**Plano TDD**
+1. `Red`: manter precedencia paralela sem regra de resolucao de conflito.
+2. `Green`: explicitar fonte normativa unica e relegar Felix a referencia importada.
+3. `Refactor`: consolidar rastreabilidade de override no changelog.
+
+**Criterios de aceitacao**
+- Given conflito de precedencia documental, When checker roda, Then resultado deve ser `FAIL`.
+- Given precedencia unica com evidencias de alinhamento, When checker roda, Then resultado deve ser `PASS`.
+
+### ISSUE-F8-03-05 - Formalizar branch governance e ownership de PR
+**User story**  
+Como operador, quero ownership e policy de branch enforceaveis para manter trilha de release sem ambiguidade.
+
+**Metadata da issue**
+- **Owner**: `tech-lead`
+- **Estimativa**: `1d`
+- **Dependencias**: `.github/CODEOWNERS`, `DEV/DEV-CI-RULES.md`, `scripts/ci/check_pr_governance.sh`, `scripts/ci/check_quality.sh`
+- **Mapped requirements**: `R14`
+- **Prioridade**: `P0`
+- **Checklist QA/Repro**:
+  1. validar regra global e cobertura minima no `CODEOWNERS`;
+  2. validar termos normativos de branch policy em `DEV/DEV-CI-RULES.md`;
+  3. executar `bash scripts/ci/check_pr_governance.sh`;
+  4. executar `make ci-quality`.
+- **Evidence refs**: `artifacts/phase-f8/epic-f8-03-issue-05-branch-governance-codeowners-enforcement.md`, `.github/CODEOWNERS`, `scripts/ci/check_pr_governance.sh`
+
+**Micro-issues executaveis**
+- `MT-F8-03-05-01`: consolidar `CODEOWNERS`.
+- `MT-F8-03-05-02`: harmonizar policy de branch no `DEV`.
+- `MT-F8-03-05-03`: manter enforcement automatizado no CI.
+
+**Plano TDD**
+1. `Red`: permitir governanca de PR sem ownership enforceavel.
+2. `Green`: consolidar ownership + policy + checker no pipeline de qualidade.
+3. `Refactor`: reduzir falsos positivos mantendo regras minimas explicitas.
+
+**Criterios de aceitacao**
+- Given arquivo de ownership ausente ou policy incompleta, When checker roda, Then resultado deve ser `FAIL`.
+- Given ownership e policy validos com enforcement CI, When checker roda, Then resultado deve ser `PASS`.
+
+### ISSUE-F8-03-06 - Harmonizar pipeline `M30 -> M14-Code -> Codex 5` com ARC/DEV/PM
+**User story**  
+Como operador, quero pipeline multi-modelo alinhado aos contratos canonicos para evitar governanca paralela.
+
+**Metadata da issue**
+- **Owner**: `architecture-owner + tech-lead`
+- **Estimativa**: `1.75d`
+- **Dependencias**: `PRD/PRD-MASTER.md`, `PRD/CHANGELOG.md`, `ARC/ARC-MODEL-ROUTING.md`, `DEV/DEV-TECH-LEAD-SPEC.md`, `DEV/DEV-JUNIOR-SPEC.md`, `PM/DECISION-PROTOCOL.md`
+- **Mapped requirements**: `R15`
+- **Prioridade**: `P1`
+- **Checklist QA/Repro**:
+  1. declarar se pipeline e `proposta` ou `norma` no PRD;
+  2. validar coerencia de papeis em `ARC/DEV/PM`;
+  3. validar cobertura da remediacao no backlog maquina-consumivel;
+  4. executar `bash scripts/ci/check_architecture_consistency_backlog.sh` e `make ci-quality`.
+- **Evidence refs**: `artifacts/phase-f8/epic-f8-03-issue-06-multi-model-pipeline-contract-harmonization.md`, `artifacts/architecture/2026-03-01-multi-model-pipeline-impact.md`
+
+**Micro-issues executaveis**
+- `MT-F8-03-06-01`: fixar status proposta/norma no PRD.
+- `MT-F8-03-06-02`: alinhar contratos `ARC/DEV/PM` com o status definido.
+- `MT-F8-03-06-03`: manter gate de coerencia arquitetural no CI.
+
+**Plano TDD**
+1. `Red`: manter pipeline declarado sem status normativo fechado.
+2. `Green`: definir status e harmonizar contratos tocados no mesmo ciclo.
+3. `Refactor`: garantir que checker impeça regressao de coerencia.
+
+**Criterios de aceitacao**
+- Given pipeline com status ambiguo, When checker roda, Then resultado deve ser `FAIL`.
+- Given status fechado e contratos harmonizados, When checker roda, Then resultado deve ser `PASS`.
 
 ## Artifact Minimo do Epico
 - registrar sumario em `artifacts/phase-f8/validation-summary-<week_id>.md` com:

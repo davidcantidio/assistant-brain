@@ -62,4 +62,4 @@ Mapear conflitos e failure modes da auditoria arquitetural de 2026-03-01 para ep
 ## Criterio de Aceite desta Cobertura
 - 100% dos conflitos criticos/altos mapeados para ao menos uma issue `F9`.
 - 100% dos requirements `R1..R9` mapeados para issues com metadata obrigatoria.
-- nenhuma referencia quebrada para `PM/PHASES/F7-TRADING-POR-ESTAGIOS/*` nos arquivos de auditoria PM alvo desta rodada.
+- nenhuma referencia legada de `F7` fora de `feito` nos arquivos de auditoria PM alvo desta rodada.

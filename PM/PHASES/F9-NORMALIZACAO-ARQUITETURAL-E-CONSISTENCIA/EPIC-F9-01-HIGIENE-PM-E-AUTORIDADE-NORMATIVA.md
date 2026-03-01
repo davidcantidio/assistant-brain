@@ -35,7 +35,7 @@ Como owner de governanca, quero referencias PM canonicamente resolviveis para re
 - **Mapped requirements**: `R1`
 - **Prioridade**: `P0`
 - **Checklist QA/Repro**:
-  1. executar `rg -n "PM/PHASES/F7-TRADING-POR-ESTAGIOS" PM/audit/*.json` e validar zero ocorrencias;
+  1. executar `bash scripts/ci/check_pm_audit_paths.sh` e validar `PASS`;
   2. validar que as referencias migradas apontam para `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/*`;
   3. validar que os arquivos de auditoria continuam parseaveis apos a troca.
 - **Evidence refs**: `assistant-brain/artifacts/architecture/2026-03-01-architectural-consistency-audit.md:31-66`, `assistant-brain/PM/audit/F7-TRADING-POR-ESTAGIOS-EPICS-ISSUES-AUDIT.json`, `assistant-brain/PM/audit/fase-f1-epicos-issues-audit.json`
@@ -43,7 +43,7 @@ Como owner de governanca, quero referencias PM canonicamente resolviveis para re
 **Plano TDD**
 1. `Red`: manter referencias para `PM/PHASES/F7-...` inexistente.
 2. `Green`: migrar todas as refs necessarias para `PM/PHASES/feito/F7-...`.
-3. `Refactor`: validar consistencia de paths com grep deterministico.
+3. `Refactor`: validar consistencia de paths com checker dedicado em CI.
 
 **Criterios de aceitacao**
 - Given referencias antigas para `PM/PHASES/F7-...`, When auditoria PM roda, Then caminho deve ser canonicamente resolvivel em `feito`.

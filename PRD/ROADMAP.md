@@ -1,9 +1,9 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.3"
+version: "2.4"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -101,6 +101,15 @@ Exclui:
 - `B0-21` implementar `approval_policy` baseline:
   - `financial_side_effect_requires_explicit_human_approval=true`,
   - `email_command_channel_trusted=false`.
+- `B0-22` automatizar bootstrap de credencial LiteLLM:
+  - gerar `LITELLM_API_KEY` via `/key/generate` no onboarding quando `LITELLM_MASTER_KEY` estiver disponivel,
+  - fallback manual obrigatorio quando auto-geracao falhar.
+- `B0-23` implementar bootstrap de Telegram por payload JSON:
+  - suportar `TELEGRAM_UPDATE_JSON` e `TELEGRAM_UPDATE_JSON_FILE`,
+  - preencher defaults de `TELEGRAM_CHAT_ID` e `TELEGRAM_USER_ID` no onboarding.
+- `B0-24` publicar manifesto versionado de app Slack (Socket Mode):
+  - incluir `/oc-approve`, `/oc-reject`, `/oc-kill`,
+  - manter placeholders explicitos para URLs exigidas pelo schema de manifesto.
 
 ### DoD Fase 0
 - 7 dias de operacao estavel.
