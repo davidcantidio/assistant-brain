@@ -135,6 +135,13 @@ else
     fi
   done
 
+  litellm_api_key_value="$(value_for_key "LITELLM_API_KEY" | tr -d '\r' | xargs)"
+  if [ -n "$litellm_api_key_value" ]; then
+    pass "LITELLM_API_KEY com valor nao vazio."
+  else
+    fail "LITELLM_API_KEY vazio. Rode onboarding interativo e informe fallback manual quando necessario."
+  fi
+
   if key_present "TELEGRAM_CHAT_ID"; then
     pass "Telegram ID canonico presente: TELEGRAM_CHAT_ID"
   elif key_present "TELEGRAM_USER_ID" || key_present "TELEGRAM_GROUP_ID"; then

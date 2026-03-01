@@ -214,6 +214,18 @@ set_env_kv() {
   mv "$tmp" "$file"
 }
 
+get_env_kv() {
+  local file="$1" key="$2"
+  [ -f "$file" ] || return 0
+  awk -F= -v key="$key" '
+    $0 ~ "^[[:space:]]*" key "=" {
+      sub("^[[:space:]]*" key "=", "", $0)
+      print $0
+      exit
+    }
+  ' "$file"
+}
+
 derive_litellm_proxy_url() {
   local base_url="$1"
   local trimmed="${base_url%/}"
@@ -404,9 +416,27 @@ configure_env_interactive() {
   fi
 
   if [ "$litellm_key_generated" -ne 1 ]; then
+    local existing_litellm_key
+    existing_litellm_key="$(get_env_kv "$env_file" "LITELLM_API_KEY" | tr -d '\r' | xargs)"
     local litellm_key
-    litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual)")"
-    [ -n "$litellm_key" ] && set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
+    while true; do
+      litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual, obrigatoria)")"
+      if [ -n "$litellm_key" ]; then
+        set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
+        break
+      fi
+      if [ -n "$existing_litellm_key" ]; then
+        warn "Entrada vazia; mantendo LITELLM_API_KEY ja existente no .env."
+        break
+      fi
+      warn "LITELLM_API_KEY e obrigatoria quando a auto-geracao falha."
+    done
+
+    local effective_litellm_key
+    effective_litellm_key="$(get_env_kv "$env_file" "LITELLM_API_KEY" | tr -d '\r' | xargs)"
+    if [ -z "$effective_litellm_key" ]; then
+      die "Nao foi possivel concluir onboarding: LITELLM_API_KEY obrigatoria apos falha da auto-geracao."
+    fi
   fi
 
   local tgbot
