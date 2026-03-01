@@ -86,7 +86,8 @@ Exclui:
 2. reprocessar eventos em ordem temporal.
 3. deduplicar por `idempotency_key` e `replay_key`.
 4. reabrir tasks/decisions pendentes.
-5. encerrar modo degradado com evidencias de saude.
+5. registrar `degraded_reconciliation_status` com `incident_id`, `status`, `reconciled_at`, `promotion_blocked` e `evidence_ref`.
+6. encerrar modo degradado com evidencias de saude.
 
 ## Chave de Replay Canonica
 - `replay_key = work_order_id + ":" + task_id + ":" + event_type + ":" + attempt`
@@ -101,6 +102,7 @@ Exclui:
   - `incident` com causa raiz;
   - `decision` de correcao;
   - teste/regra nova para evitar recorrencia.
+- enquanto `degraded_reconciliation_status.status != reconciled`, `promotion_blocked=true` MUST impedir promote de fase.
 
 ## Links Relacionados
 - [Incident Procedure](../INCIDENTS/DEGRADED-MODE-PROCEDURE.md)

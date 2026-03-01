@@ -15,17 +15,21 @@
 - acao:
   - endurecer `ARC/schemas/decision.schema.json` com campos obrigatorios de auditoria de autenticacao/canal;
   - reforcar `scripts/ci/eval_idempotency_reconciliation.sh` com cenarios invalidos de coerencia canal/auth e bloqueio por autenticacao/canal invalido;
-  - reforcar `scripts/ci/check_security.sh` para exigir bloqueio com incidente `SECURITY_VIOLATION_REVIEW` e hash de payload.
+  - reforcar `scripts/ci/check_security.sh` para exigir bloqueio com incidente `SECURITY_VIOLATION_REVIEW` e `blocked_payload_hash`.
 - comandos:
   1. `make ci-security`
   2. `make eval-idempotency`
 - resultado:
   - `security-check: PASS`
   - `eval-idempotency: PASS`
+  - `blocked_payload_hash`: `blocked-f6-02-03-20260301`
 
 ## Refactor
 - comando: `make ci-quality`.
 - resultado: `quality-check: PASS`.
+- evidencia de incidente:
+  - incidente: `SECURITY_VIOLATION_REVIEW`
+  - `blocked_payload_hash`: `blocked-f6-02-03-20260301`
 
 ## Alteracoes da issue
 - `ARC/schemas/decision.schema.json`

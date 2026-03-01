@@ -35,3 +35,11 @@
 - `workspaces/main/MEMORY.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-02-nightly-cron-memory-audit-trail.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Cobertura alinhada a B1-R11 e B1-R12 com model_catalog, eval_aggregates, embeddings e metadados completos de run.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

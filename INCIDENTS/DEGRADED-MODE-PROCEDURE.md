@@ -72,7 +72,8 @@ validacao_pos_fix:
 4. rodar reconciliador deterministico (`idempotency_key`, `replay_key`, hash-chain).
 5. deduplicar e reconciliar tasks/decisions.
 6. abrir fila de excecoes para casos sem resolucao automatica.
-7. validar metricas de saude e encerrar degradacao.
+7. registrar `degraded_reconciliation_status` com `promotion_blocked=true` ate conclusao da reconciliacao.
+8. validar metricas de saude e encerrar degradacao.
 
 ## Criterio de Saida
 - sem erro critico por 2 ciclos de heartbeat.
@@ -81,6 +82,8 @@ validacao_pos_fix:
 - logs sincronizados e auditados.
 - aprovacao do responsavel de operacao.
 - para trading: posicoes e ordens reconciliadas, sem `UNMANAGED_EXPOSURE`.
+- `degraded_reconciliation_status.status = reconciled`.
+- `promotion_blocked = false` com `evidence_ref` preenchido.
 
 ## Links Relacionados
 - [ARC Degraded Mode](../ARC/ARC-DEGRADED-MODE.md)

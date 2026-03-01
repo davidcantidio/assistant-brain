@@ -173,6 +173,7 @@ Exclui:
 - `effective_provider`
 - `provider_routing_applied`
 - `fallback_step`
+- `reason`
 - `estimated_cost`
 - `decision_explain`
 
@@ -204,7 +205,7 @@ Exclui:
   - ranking final,
   - decisao (`requested_model`, `effective_model`, `effective_provider`),
   - politica aplicada (`provider_routing_applied`, `risk_class`, `risk_tier`, `data_sensitivity`),
-  - fallback aplicado,
+  - fallback aplicado (`fallback_step`, `reason`),
   - justificativa curta.
 - contrato executavel canonico: `ARC/schemas/router_decision.schema.json`.
 

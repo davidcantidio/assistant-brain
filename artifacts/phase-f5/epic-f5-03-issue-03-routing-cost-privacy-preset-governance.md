@@ -37,3 +37,11 @@
 - `SEC/SEC-POLICY.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-03-routing-cost-privacy-preset-governance.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Thresholds objetivos de burn-rate e circuit breaker documentados junto da matriz de privacidade por task_type e do preset_id obrigatorio.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

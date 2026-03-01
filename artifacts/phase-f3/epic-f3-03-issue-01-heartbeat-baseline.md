@@ -1,41 +1,53 @@
 # EPIC-F3-03 ISSUE-F3-03-01 Heartbeat Baseline Validation
 
-- data/hora: 2026-02-26 12:15:20 -0300
+- data/hora: 2026-03-01 10:30:00 -0300
 - host alvo: Darwin arm64
-- escopo: `ISSUE-F3-03-01` (baseline oficial de 15 minutos)
+- escopo: `ISSUE-F3-03-01` (baseline oficial de 15 minutos + cobertura de autonomia)
 - fonte de verdade: `PRD/PRD-MASTER.md`
 
-## Red-A
-- cenario: alterar `ARC/ARC-HEARTBEAT.md` de `base global: 15 minutos.` para `base global: 10 minutos.`.
-- comando: `make eval-runtime`.
-- resultado esperado: `FAIL`.
-- evidencia:
-  - `make: *** [eval-runtime] Error 1`
+## Evidence Contract
 
-## Red-B
-- cenario: alterar `workspaces/main/HEARTBEAT.md` de `Baseline oficial: 15 minutos.` para `Baseline oficial: 10 minutos.`.
-- comando: `make eval-runtime`.
-- resultado esperado: `FAIL`.
-- evidencia:
-  - `make: *** [eval-runtime] Error 1`
+### Scenario 1
+```yaml
+scenario: "Red-A"
+command: "make eval-runtime"
+expected_result: "FAIL quando baseline ARC divergir de 15 minutos"
+actual_assert_message: "[E-RUNTIME-SEARCH-001] padrao obrigatorio nao encontrado: pattern='base global: 15 minutos' files='ARC/ARC-HEARTBEAT.md'"
+trace_id_or_ref: "artifact:f3-03-01:red-a"
+status: "PASS"
+```
 
-## Green
-- acao: restaurar documentos canonicos de heartbeat.
-- comando: `make eval-runtime`.
-- resultado: `eval-runtime-contracts: PASS`.
+### Scenario 2
+```yaml
+scenario: "Red-B"
+command: "make eval-runtime"
+expected_result: "FAIL quando baseline workspace divergir de 15 minutos"
+actual_assert_message: "[E-RUNTIME-SEARCH-001] padrao obrigatorio nao encontrado: pattern='Baseline oficial: 15 minutos' files='workspaces/main/HEARTBEAT.md'"
+trace_id_or_ref: "artifact:f3-03-01:red-b"
+status: "PASS"
+```
 
-## Refactor
-- comando: `make eval-runtime` (segunda execucao).
-- resultado: `eval-runtime-contracts: PASS`.
+### Scenario 3
+```yaml
+scenario: "Red-C"
+command: "make eval-runtime"
+expected_result: "FAIL quando stalled_threshold_checks != 2"
+actual_assert_message: "invalid_ops_autonomy_contract_stalled_threshold deveria falhar, mas passou. (bloqueado no expect_invalid)"
+trace_id_or_ref: "artifact:f3-03-01:red-c"
+status: "PASS"
+```
 
-## Ajuste de contingencia aplicado
-- problema identificado: o gate aceitava baseline no ARC por regex alternativa (`baseline unico` OU `base global`), permitindo falso positivo quando apenas `base global` era alterado.
-- acao: endurecer `scripts/ci/eval_runtime_contracts.sh` para exigir as duas evidencias no ARC:
-  - `baseline unico de 15 minutos`;
-  - `base global: 15 minutos`.
+### Scenario 4
+```yaml
+scenario: "Green/Refactor"
+command: "make eval-runtime"
+expected_result: "PASS com baseline e autonomia alinhados"
+actual_assert_message: "eval-runtime-contracts: PASS"
+trace_id_or_ref: "artifact:f3-03-01:green-refactor"
+status: "PASS"
+```
 
 ## Alteracoes da issue
 - `scripts/ci/eval_runtime_contracts.sh`
-  - baseline do ARC passou de check alternativo para dois checks obrigatorios.
-- `artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md`
-  - evidencia auditavel do ciclo TDD.
+  - baseline do ARC com checks obrigatorios explicitos.
+  - mensagens assertivas para falhas de padrao obrigatorio.

@@ -51,6 +51,8 @@ Exclui:
   - `medio -> R2`.
   - `alto -> R3`.
 - o payload de decision MUST carregar `risk_class` e `risk_tier` para evitar ambiguidade.
+- `R2` e `R3` MUST passar por `Review/Gate` com `Gatekeeper/Reviewer` antes de promover execucao ou mudanca.
+- quando houver side effect em `R2`/`R3`, o promote MUST depender de `pre_live_checklist` aprovado e anexado como evidencia.
 
 ## O que vira Decision
 - alto risco operacional/financeiro.
@@ -62,7 +64,7 @@ Exclui:
 
 ## Formato da Decision
 ```yaml
-schema_version: "1.3"
+schema_version: "1.4"
 decision_id: "DEC-YYYYMMDD-XXX"
 decision_key: "<scope>:<topic>:<window>"
 title: "resumo objetivo"
@@ -78,6 +80,10 @@ requested_provider: "string|null"
 effective_model: "string|null"
 effective_provider: "string|null"
 data_sensitivity: "public|internal|sensitive"
+side_effect_class: "none|operational|financial"
+explicit_human_approval: true
+approval_evidence_ref: "artifact://...|null"
+approval_signature_valid: "true|false|null"
 cost_impact: 120.0
 rollback_plan: "como desfazer"
 requested_by: "agente"
@@ -99,6 +105,15 @@ challenge_id: "CHL-UUID|null"
 challenge_status: "NOT_REQUIRED|PENDING|VALIDATED|EXPIRED|INVALIDATED"
 challenge_expires_at: "ISO-8601|null"
 ```
+
+## Regras de Aprovacao para Side Effect
+- `side_effect_class=financial` MUST exigir:
+  - `explicit_human_approval=true`;
+  - `challenge_status=VALIDATED`;
+  - `approver_operator_id` preenchido;
+  - `approval_evidence_ref` apontando para artefato auditavel.
+- quando `approver_channel=slack`, `approval_signature_valid=true` MUST ser registrado antes de qualquer aprovacao financeira.
+- ausencia de qualquer campo acima MUST bloquear a transicao da decision.
 
 ## Maquina de Estados
 - fluxo valido:

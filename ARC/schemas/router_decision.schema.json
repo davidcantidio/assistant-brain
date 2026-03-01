@@ -19,7 +19,7 @@
     "effective_provider",
     "provider_routing_applied",
     "fallback_step",
-    "fallback_reason",
+    "reason",
     "decision_explain",
     "pin_provider",
     "no_fallback",
@@ -117,6 +117,10 @@
     "fallback_step": {
       "type": "integer",
       "minimum": 0
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
     },
     "fallback_reason": {
       "type": "string",

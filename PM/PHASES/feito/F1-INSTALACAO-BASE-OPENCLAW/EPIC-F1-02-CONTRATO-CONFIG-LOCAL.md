@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050"]
 ---
 
@@ -28,6 +28,18 @@ Garantir que o setup local esteja coerente com o contrato de configuracao (`.env
 **User story**  
 Como operador, quero confirmar quais variaveis obrigatorias existem no contrato para evitar setup incompleto.
 
+**Metadados de governanca (DoR/DoD)**
+- objetivo_verificavel: `variaveis obrigatorias alinhadas ao contrato versionado de runtime`
+- risk_tier: `R1`
+- owner_issue: `Tech Lead`
+- estimativa: `0.5 dia util`
+- dependencias: `DEV/DEV-OPENCLAW-SETUP.md`, `PRD/PRD-MASTER.md`, `scripts/verify_linux.sh`
+- inputs_minimos: `.env` existente, lista de chaves obrigatorias, referencia do contrato `openclaw_runtime_config`
+- gate_path: `Ready -> Decomposed -> InProgress -> Verify -> Done`
+- evidence_refs_obrigatorios:
+  - `artifacts/phase-f1/epic-f1-02-config-validation.md`
+  - `stdout://bash scripts/verify_linux.sh`
+
 **Plano TDD**
 1. `Red`: executar `bash scripts/verify_linux.sh` com variavel obrigatoria ausente e observar falha (`exit code != 0`).
 2. `Green`: preencher variaveis obrigatorias conforme `DEV/DEV-OPENCLAW-SETUP.md`.
@@ -36,10 +48,24 @@ Como operador, quero confirmar quais variaveis obrigatorias existem no contrato 
 **Criterios de aceitacao**
 - Given variavel obrigatoria ausente, When `verify_linux.sh` roda, Then o check falha com indicacao de requisito faltante e `exit code != 0`.
 - Given variaveis obrigatorias preenchidas, When `verify_linux.sh` roda, Then o check de ambiente nao falha por ausencia de configuracao e retorna `exit code 0`.
+- Given validacao concluida, When a issue e auditada, Then a versao do contrato de runtime usada na checagem fica registrada no artifact do epico.
 
 ### ISSUE-F1-02-02 - Validar defaults operacionais
 **User story**  
 Como operador, quero validar defaults de operacao para iniciar o runtime com comportamento previsivel.
+
+**Metadados de governanca (DoR/DoD)**
+- objetivo_verificavel: `defaults operacionais canonicos validados e overrides bloqueados sem decisao formal`
+- risk_tier: `R2`
+- owner_issue: `Tech Lead`
+- estimativa: `1 dia util`
+- dependencias: `PRD/PRD-MASTER.md`, `ARC/ARC-MODEL-ROUTING.md`, `PM/DECISION-PROTOCOL.md`, `make eval-models`
+- inputs_minimos: `.env`, defaults normativos, `decision_id` quando houver excecao de cloud/supervisor
+- gate_path: `Ready -> Decomposed -> InProgress -> Verify -> Review/Gate -> Done`
+- evidence_refs_obrigatorios:
+  - `artifacts/phase-f1/epic-f1-02-config-validation.md`
+  - `stdout://bash scripts/verify_linux.sh`
+  - `stdout://make eval-models`
 
 **Plano TDD**
 1. `Red`: validar divergencia proposital em default critico (`HEARTBEAT_MINUTES`, `STANDUP_TIME`, base URL de gateway/LiteLLM ou alias de supervisor) e observar falha no `verify_linux.sh`.
@@ -50,10 +76,24 @@ Como operador, quero validar defaults de operacao para iniciar o runtime com com
 - Given defaults divergentes, When `verify_linux.sh` roda, Then o baseline e reprovado com indicacao explicita do default divergente.
 - Given defaults alinhados, When `verify_linux.sh` roda, Then retorna `exit code 0`.
 - Given defaults alinhados, When `make eval-models` roda, Then o comando retorna `eval-models: PASS`.
+- Given override de cloud, gateway ou supervisor, When nao existe `decision_id` formal anexado, Then a issue reprova em `Verify`.
+- Given risco `R2`, When a issue conclui `Verify`, Then o fechamento exige registro de `Review/Gate`.
 
 ### ISSUE-F1-02-03 - Validar politica de cloud opcional no baseline local
 **User story**  
 Como operador, quero garantir que OpenRouter fique desabilitado por default no baseline para evitar habilitacao indevida de cloud.
+
+**Metadados de governanca (DoR/DoD)**
+- objetivo_verificavel: `cloud_optional desabilitado por default e habilitacao somente com decisao formal`
+- risk_tier: `R1`
+- owner_issue: `Compliance/Security`
+- estimativa: `0.5 dia util`
+- dependencias: `PRD/PRD-MASTER.md`, `ARC/ARC-MODEL-ROUTING.md`, `PM/DECISION-PROTOCOL.md`
+- inputs_minimos: baseline textual/configuracional de cloud, `decision_id` para qualquer estado enabled
+- gate_path: `Ready -> Decomposed -> InProgress -> Verify -> Done`
+- evidence_refs_obrigatorios:
+  - `artifacts/phase-f1/epic-f1-02-config-validation.md`
+  - `stdout://make eval-models`
 
 **Plano TDD**
 1. `Red`: introduzir linguagem/configuracao ambigua de cloud default e executar `make eval-models`.
@@ -63,6 +103,7 @@ Como operador, quero garantir que OpenRouter fique desabilitado por default no b
 **Criterios de aceitacao**
 - Given baseline com regra ambigua de cloud, When `make eval-models` roda, Then o check falha.
 - Given baseline com regra canonica de cloud opcional desabilitada, When `make eval-models` roda, Then retorna `PASS`.
+- Given qualquer baseline com cloud habilitado, When nao existe `decision_id` e `evidence_ref` da decisao formal, Then o check reprova.
 
 ## Artifact Minimo do Epico
 - registrar resumo em `artifacts/phase-f1/epic-f1-02-config-validation.md` com:

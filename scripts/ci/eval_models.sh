@@ -294,9 +294,15 @@ def validate_router_decision(payload: dict, schema_required: set[str], label: st
     fallback_step = payload.get("fallback_step")
     if not isinstance(fallback_step, int) or fallback_step < 0:
         raise ValueError(f"{label} com fallback_step invalido.")
+    reason = payload.get("reason")
+    if not isinstance(reason, str) or not reason.strip():
+        raise ValueError(f"{label} com reason invalido.")
     fallback_reason = payload.get("fallback_reason")
-    if not isinstance(fallback_reason, str) or not fallback_reason.strip():
-        raise ValueError(f"{label} com fallback_reason invalido.")
+    if fallback_reason is not None:
+        if not isinstance(fallback_reason, str) or not fallback_reason.strip():
+            raise ValueError(f"{label} com fallback_reason invalido.")
+        if fallback_reason != reason:
+            raise ValueError(f"{label} com fallback_reason divergente de reason.")
 
     pin_provider = payload.get("pin_provider")
     if not isinstance(pin_provider, bool):
@@ -351,6 +357,7 @@ expected_required = {
     "requested_model",
     "effective_model",
     "effective_provider",
+    "reason",
     "pin_provider",
     "no_fallback",
     "burn_rate_policy",
@@ -385,6 +392,7 @@ valid_payload = {
         "require": []
     },
     "fallback_step": 0,
+    "reason": "primary_available",
     "fallback_reason": "primary_available",
     "candidates_considered": [
         {
@@ -423,6 +431,10 @@ expect_invalid(invalid_missing_effective, schema_required, "invalid_missing_effe
 invalid_missing_provider = deepcopy(valid_payload)
 invalid_missing_provider.pop("effective_provider")
 expect_invalid(invalid_missing_provider, schema_required, "invalid_missing_provider")
+
+invalid_missing_reason = deepcopy(valid_payload)
+invalid_missing_reason.pop("reason")
+expect_invalid(invalid_missing_reason, schema_required, "invalid_missing_reason")
 
 invalid_sensitive_without_zdr = deepcopy(valid_payload)
 invalid_sensitive_without_zdr["data_sensitivity"] = "sensitive"
@@ -463,6 +475,7 @@ search_re "qwen2\\.5-coder:32b" PRD/PRD-MASTER.md
 search_re "deepseek-r1:32b" PRD/PRD-MASTER.md
 search_re "preset_id" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md
 search_re "burn-rate|circuit breaker" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "fallback_step.*reason|reason.*fallback_step" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "sensitive.*no_fallback.*pin_provider.*ZDR|no_fallback.*pin_provider.*ZDR" ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
 search_fixed "OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido." PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md PRD/ROADMAP.md README.md
 search_re 'cloud_adapter_default: "disabled"' SEC/allowlists/PROVIDERS.yaml

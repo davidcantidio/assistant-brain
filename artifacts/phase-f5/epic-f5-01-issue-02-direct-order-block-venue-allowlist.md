@@ -43,3 +43,11 @@
   - registra execucao normativa da `ISSUE-F5-01-02`.
 - `artifacts/phase-f5/epic-f5-01-issue-02-direct-order-block-venue-allowlist.md`
   - evidencia auditavel do ciclo da issue.
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: ACs atualizados com incidente via trace_id, bloqueio hard por dominio fora da allowlist e rollback explicito com TRADING_BLOCKED.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

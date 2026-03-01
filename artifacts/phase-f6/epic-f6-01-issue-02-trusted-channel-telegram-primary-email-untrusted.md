@@ -10,6 +10,8 @@
 - resultado esperado: `FAIL` no `make ci-security`.
 - cenario B: ausencia de regra explicita de Telegram como canal primario HITL em um dos documentos normativos.
 - resultado esperado: `FAIL` no `make ci-security`.
+- cenario C: checklist HITL sem item de canal confiavel anexado ao mesmo ciclo de `security-check: PASS`.
+- resultado esperado: `hold` no gate documental da fase.
 
 ## Green
 - acao:
@@ -18,12 +20,17 @@
     - Slack apenas como fallback controlado;
     - email explicitamente nao confiavel para comando;
   - bloquear linguagem ambigua sobre confianca de email em docs de canal/comando.
+  - anexar checklist HITL com item de canal confiavel em `pass` e log `security-check: PASS` no mesmo ciclo.
 - comando: `make ci-security`.
 - resultado: `security-check: PASS`.
 
 ## Refactor
 - comando: `make ci-quality`.
 - resultado: `quality-check: PASS`.
+- rastreabilidade final:
+  - `primary_channel`: `telegram`
+  - `email_trusted_for_command`: `false`
+  - evidenciado no checklist HITL da fase.
 
 ## Alteracoes da issue
 - `scripts/ci/check_security.sh`

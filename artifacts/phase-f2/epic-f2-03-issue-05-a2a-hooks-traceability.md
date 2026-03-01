@@ -9,6 +9,7 @@
 - cenario: delegacao A2A com `allowed=false` (fora de allowlist) deve falhar.
 - cenario: webhook sem `mapping_id` deve falhar.
 - cenario: webhook sem `trace_id` deve falhar.
+- cenario: webhook sem `source_hook_id`, sem assinatura valida ou sem `duplicate_disposition` deve falhar.
 - validacao executavel: `scripts/ci/eval_runtime_contracts.sh` (fixtures invalidas inline em Python para contratos A2A/hooks).
 - resultado: cenarios opacos/bypass bloqueados.
 
@@ -19,10 +20,15 @@
 - acao: `eval_runtime_contracts.sh` reforcado para validar:
   - `tools.agentToAgent.allow[]`
   - `hooks.mappings[]`
-  - presenca obrigatoria de `trace_id` e mapping em eventos.
+  - presenca obrigatoria de `trace_id`, `source_hook_id`, assinatura valida e `duplicate_disposition` em eventos.
 - acao: `ARC/ARC-CORE.md` atualizado com referencias contratuais de A2A/hooks.
 - comando: `make eval-runtime`
 - resultado: `eval-runtime-contracts: PASS`.
+
+## Auditoria complementar
+- `hooks.mappings[]` agora exige `signature_required` e `source_hook_id`.
+- `webhook_ingest_event` passa a exigir `signature_status`, `signature_alg`, `signature_key_id` e `duplicate_disposition`.
+- webhook com assinatura invalida deve terminar em `status=blocked`.
 
 ## Refactor
 - comando: `make eval-gates`

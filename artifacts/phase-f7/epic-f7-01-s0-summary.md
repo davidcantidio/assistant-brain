@@ -15,6 +15,7 @@
 
 ## Janela S0 e status operacional
 - janela minima normativa em `S0`: 4 semanas.
+- estabilidade minima normativa em `S0`: zero `SEV-1/SEV-2` na janela revisada.
 - status documental desta rodada: criterios e evidencias minimas consolidados para avaliar `S1`.
 - observacao: este resultado nao autoriza live automatico; qualquer remocao de bloqueio segue enablement/checkpoint humano.
 

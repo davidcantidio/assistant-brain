@@ -9,15 +9,21 @@
 - cenario: run sem `requested_model` deve falhar.
 - cenario: run sem `effective_model` deve falhar.
 - cenario: run sem `effective_provider` deve falhar.
+- cenario: run sem `fallback_step` ou sem `reason` deve falhar.
+- cenario: `fallback_reason` divergente de `reason` deve falhar.
 - validacao executavel: `scripts/ci/eval_models.sh` (fixtures invalidas inline em Python para `router_decision`).
 - resultado: cenarios invalidos bloqueados.
 
 ## Green
 - acao: novo contrato executavel `ARC/schemas/router_decision.schema.json`.
-- acao: `ARC/ARC-MODEL-ROUTING.md` alinhado para exigir trilha de decisao + policy aplicada.
+- acao: `ARC/ARC-MODEL-ROUTING.md` alinhado para exigir trilha de decisao + policy aplicada + `fallback_step/reason`.
 - acao: `PM/DECISION-PROTOCOL.md` atualizado para incluir `requested_provider` no payload de decision.
 - comando: `make eval-models`
 - resultado: `eval-models: PASS`.
+
+## Auditoria complementar
+- `reason` vira campo canonico do contrato; `fallback_reason` permanece apenas por compatibilidade.
+- ausencia de trilha requested/effective/fallback agora caracteriza falha de compliance, nao apenas lacuna documental.
 
 ## Refactor
 - comando: `make phase-f2-gate`

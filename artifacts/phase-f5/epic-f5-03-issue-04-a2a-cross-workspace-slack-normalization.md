@@ -36,3 +36,11 @@
 - `PRD/PRD-MASTER.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-04-a2a-cross-workspace-slack-normalization.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: ACs mantidos com cenarios negativos de allowlist, idempotencia e bypass explicito de gates R2 e R3.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

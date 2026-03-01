@@ -36,3 +36,11 @@
 - `INCIDENTS/DEGRADED-MODE-PROCEDURE.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-05-slack-fallback-hmac-restore-telegram.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Prontidao B1-R19 completada com slack_user_ids, slack_channel_ids nao vazios e backup_operator obrigatorio para capital real.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

@@ -1,0 +1,1011 @@
+{
+  "pr_summary": "Auditoria F1 reprocessada apos remediacao documental e de rastreabilidade: 22/22 requisitos agora estao cobertos (incluindo remap formal de requisitos fora do escopo operacional da F1 para F2/F5/F7), com 12/12 issues em conformidade, 0 issues criticas em aberto e 0 itens sem mapeamento.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Aplicar aprovacao proporcional ao risco (baixo/medio/alto) em execucao e gate.",
+      "objective": "Garantir controle de risco coerente com impacto da mudanca.",
+      "acceptance_criteria": [
+        "Toda issue deve explicitar classificacao de risco.",
+        "Fluxo de gate deve refletir o nivel de risco declarado."
+      ],
+      "dependencies": [
+        "RFC-010",
+        "Taxonomia de risco R0..R3"
+      ],
+      "success_metrics": [
+        "100% das issues com risk_level declarado e gate aderente"
+      ],
+      "regulatory_constraints": [
+        "Governanca de risco obrigatoria para decisao de promote/release"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "Seguranca deve ser enforceable (sandbox, allowlist, redaction e secrets).",
+      "objective": "Reduzir risco operacional e de compliance por controles tecnicos mandatarios.",
+      "acceptance_criteria": [
+        "Allowlists e policy de seguranca devem ser validadas por gate.",
+        "Controles de secrets/redaction devem estar cobertos por criterios testaveis."
+      ],
+      "dependencies": [
+        "RFC-015",
+        "SEC policy/allowlists"
+      ],
+      "success_metrics": [
+        "security-check PASS com controles completos"
+      ],
+      "regulatory_constraints": [
+        "Controles de seguranca nao podem ser opcionais"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-01"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "Registrar observabilidade e auditoria por tarefa/empresa/decisao.",
+      "objective": "Assegurar trilha de auditoria para governanca enterprise.",
+      "acceptance_criteria": [
+        "Evidencia de execucao e decisao consolidada por issue/fase.",
+        "Referencia objetiva de resultado de gate (PASS/FAIL)."
+      ],
+      "dependencies": [
+        "RFC-050",
+        "Artifacts de fase"
+      ],
+      "success_metrics": [
+        "100% das issues com evidence_ref rastreavel"
+      ],
+      "regulatory_constraints": [
+        "Auditoria obrigatoria para mudancas com impacto operacional"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:109"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "Manter contrato de runtime configuracao versionado com campos minimos obrigatorios.",
+      "objective": "Evitar drift de configuracao e garantir previsibilidade de runtime.",
+      "acceptance_criteria": [
+        "Contrato versionado e validado em gate.",
+        "Campos obrigatorios de runtime presentes e consistentes."
+      ],
+      "dependencies": [
+        "openclaw_runtime_config",
+        "verify/eval gates"
+      ],
+      "success_metrics": [
+        "0 divergencias criticas de configuracao em gate"
+      ],
+      "regulatory_constraints": [
+        "Mudancas contratuais requerem rastreabilidade"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-02-01",
+        "ISSUE-F1-02-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:27",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "Preservar stack canonica: gateway.primary=OpenClaw, supervisor_adapter=LiteLLM, cloud_optional default disabled (habilitacao so por decisao formal).",
+      "objective": "Impedir bypass arquitetural e ativacao cloud indevida.",
+      "acceptance_criteria": [
+        "Configuracao default de cloud desabilitada.",
+        "Qualquer mudanca para cloud habilitado possui decision formal registrada."
+      ],
+      "dependencies": [
+        "routing_stack_contract",
+        "Decision Protocol"
+      ],
+      "success_metrics": [
+        "0 ocorrencias de cloud habilitado sem decisao"
+      ],
+      "regulatory_constraints": [
+        "Governanca formal para excecoes arquiteturais"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-02-02",
+        "ISSUE-F1-02-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:82"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "Eventos webhook/A2A devem ser tipados, com trace_id, idempotency_key e bloqueio quando mapping/assinatura invalidos.",
+      "objective": "Garantir rastreabilidade e anti-replay em integracoes.",
+      "acceptance_criteria": [
+        "Eventos sem mapping valido sao bloqueados e auditados.",
+        "Eventos carregam trace_id e idempotency_key."
+      ],
+      "dependencies": [
+        "hooks.mappings",
+        "policy de assinatura"
+      ],
+      "success_metrics": [
+        "100% dos eventos validos com trilha completa"
+      ],
+      "regulatory_constraints": [
+        "Controle de integridade de eventos"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F2-03-05"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:85"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "Approval policy: side effect financeiro exige aprovacao humana explicita; email nao e canal confiavel de comando.",
+      "objective": "Evitar execucao por canal nao confiavel e reduzir risco financeiro.",
+      "acceptance_criteria": [
+        "Canais confiaveis declarados e validados.",
+        "Instrucao recebida por email exige confirmacao em canal confiavel."
+      ],
+      "dependencies": [
+        "approval_policy",
+        "HITL checklist"
+      ],
+      "success_metrics": [
+        "0 comandos criticos executados fora de canal confiavel"
+      ],
+      "regulatory_constraints": [
+        "Controles de autorizacao humana"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-04-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "MEMORY.md deve existir e registrar padroes operacionais duraveis.",
+      "objective": "Preservar conhecimento operacional e reduzir perda de contexto.",
+      "acceptance_criteria": [
+        "Arquivo MEMORY.md presente e valido.",
+        "Estrutura minima de memoria diaria atendida."
+      ],
+      "dependencies": [
+        "memory_contract",
+        "eval-runtime"
+      ],
+      "success_metrics": [
+        "eval-runtime-contracts PASS para memoria"
+      ],
+      "regulatory_constraints": [
+        "Rastreabilidade operacional minima"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "Ciclo noturno deve atualizar notas e registrar scheduled_at/executed_at/status/incident_ref; falha >24h abre incidente.",
+      "objective": "Garantir continuidade operacional auditavel.",
+      "acceptance_criteria": [
+        "Campos de auditoria do ciclo noturno registrados por execucao.",
+        "Atraso/falha >24h gera incidente."
+      ],
+      "dependencies": [
+        "nightly_cycle_audit",
+        "Heartbeat/ciclo noturno"
+      ],
+      "success_metrics": [
+        "100% de execucoes noturnas com campos obrigatorios"
+      ],
+      "regulatory_constraints": [
+        "Obrigacao de incident response para falha prolongada"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03-02",
+        "ISSUE-F1-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:83"
+      ]
+    },
+    {
+      "id": "R10",
+      "text": "Dados/classificacoes sensiveis devem aplicar provider allowlist restrita, ZDR e minimizacao de armazenamento.",
+      "objective": "Mitigar risco de privacidade e compliance.",
+      "acceptance_criteria": [
+        "Controles de allowlist e policy sensivel explicitados em AC.",
+        "Evidencia de aderencia a ZDR/minimizacao quando aplicavel."
+      ],
+      "dependencies": [
+        "Provider allowlist",
+        "Security policy"
+      ],
+      "success_metrics": [
+        "0 gaps de controle sensivel em revisao de compliance"
+      ],
+      "regulatory_constraints": [
+        "Privacidade e retencao"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-04-01"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+      ]
+    },
+    {
+      "id": "R11",
+      "text": "Gates obrigatorios por risco (R0..R3); R2/R3 exigem Review/Gate e pre_live_checklist para side effects.",
+      "objective": "Evitar promote/release sem controles tecnicos proporcionais ao risco.",
+      "acceptance_criteria": [
+        "Issue explicita risco e gates obrigatorios.",
+        "Quando aplicavel, Review/Gate e checklist pre-live sao evidenciados."
+      ],
+      "dependencies": [
+        "Quality Gates",
+        "Risk governance"
+      ],
+      "success_metrics": [
+        "100% das issues com fluxo de gate coerente ao risco"
+      ],
+      "regulatory_constraints": [
+        "Bloqueio de live-run sem gate aprovado"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:48",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+      ]
+    },
+    {
+      "id": "R12",
+      "text": "pre_live_checklist deve ser gate tecnico com evidence_ref por item; qualquer fail bloqueia live-run.",
+      "objective": "Evitar autorizacao subjetiva de operacao com side effect.",
+      "acceptance_criteria": [
+        "Checklist contem checklist_id/decision_id/risk_tier/operator_id/items.",
+        "Cada item possui evidence_ref e status pass|fail.",
+        "Item fail bloqueia execucao live."
+      ],
+      "dependencies": [
+        "pre_live_checklist",
+        "Decision protocol"
+      ],
+      "success_metrics": [
+        "0 live-run com checklist incompleto ou com fail"
+      ],
+      "regulatory_constraints": [
+        "Gate tecnico obrigatorio para side effects"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-04-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+      ]
+    },
+    {
+      "id": "R13",
+      "text": "DoR (Issue) deve conter objetivo verificavel, AC mensuraveis, classificacao de risco, dependencias declaradas e inputs minimos.",
+      "objective": "Padronizar qualidade de especificacao para execucao previsivel.",
+      "acceptance_criteria": [
+        "Issue apresenta todos os campos DoR obrigatorios.",
+        "Campos permitem validacao objetiva sem interpretacao subjetiva."
+      ],
+      "dependencies": [
+        "Workflow Scrum/Agile",
+        "Template de issue"
+      ],
+      "success_metrics": [
+        "100% das issues com DoR completo"
+      ],
+      "regulatory_constraints": [
+        "Governanca documental obrigatoria"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-01",
+        "ISSUE-F1-02",
+        "ISSUE-F1-03",
+        "ISSUE-F1-02-01",
+        "ISSUE-F1-02-02",
+        "ISSUE-F1-02-03",
+        "ISSUE-F1-03-01",
+        "ISSUE-F1-03-02",
+        "ISSUE-F1-03-03",
+        "ISSUE-F1-04-01",
+        "ISSUE-F1-04-02",
+        "ISSUE-F1-04-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md:27",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:83"
+      ]
+    },
+    {
+      "id": "R14",
+      "text": "DoD (Issue) deve conter microtasks em estado terminal valido, Verify pass, Review/Gate quando aplicavel e evidencia consolidada.",
+      "objective": "Garantir conclusao auditavel e tecnicamente valida.",
+      "acceptance_criteria": [
+        "Issue explicita Verify pass.",
+        "Review/Gate registrado quando risco/side effect exigir."
+      ],
+      "dependencies": [
+        "Workflow de estados",
+        "Artifacts de validacao"
+      ],
+      "success_metrics": [
+        "100% das issues concluida com DoD auditavel"
+      ],
+      "regulatory_constraints": [
+        "Sem DoD valido nao deve haver promote"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:109",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:143"
+      ]
+    },
+    {
+      "id": "R15",
+      "text": "Claim central sem eval gate deve bloquear release de fase.",
+      "objective": "Evitar liberacao por alegacao nao testada.",
+      "acceptance_criteria": [
+        "Claims centrais possuem gate executavel associado.",
+        "Ausencia de gate implica bloqueio de release."
+      ],
+      "dependencies": [
+        "EVAL gates",
+        "Processo de release"
+      ],
+      "success_metrics": [
+        "0 release de fase sem gate para claim central"
+      ],
+      "regulatory_constraints": [
+        "Regra stop-ship de qualidade"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F1-03",
+        "ISSUE-F1-04-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:48",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+      ]
+    },
+    {
+      "id": "R16",
+      "text": "Automacao com side effect sem idempotencia/rollback deve ser stop-ship.",
+      "objective": "Eliminar risco de dano irreversivel em automacoes.",
+      "acceptance_criteria": [
+        "Fluxos com side effect descrevem idempotencia e rollback.",
+        "Ausencia desses controles bloqueia promote."
+      ],
+      "dependencies": [
+        "Idempotency policy",
+        "Rollback policy"
+      ],
+      "success_metrics": [
+        "0 automacoes side effect sem rollback/idempotencia"
+      ],
+      "regulatory_constraints": [
+        "Stop-ship obrigatorio"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F2-02-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:59"
+      ]
+    },
+    {
+      "id": "R17",
+      "text": "Decisao de roteamento sem rastro requested/effective deve ser falha de compliance.",
+      "objective": "Assegurar explicabilidade de roteamento.",
+      "acceptance_criteria": [
+        "Logs contem requested_model e effective_model.",
+        "Falha de rastreio gera nao conformidade."
+      ],
+      "dependencies": [
+        "routing audit fields"
+      ],
+      "success_metrics": [
+        "100% das decisoes com trilha requested/effective"
+      ],
+      "regulatory_constraints": [
+        "Compliance de auditabilidade"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F5-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:59"
+      ]
+    },
+    {
+      "id": "R18",
+      "text": "Fase 1 (Trading) so habilita apos criteria formal de enablement e hard-risk suite verde.",
+      "objective": "Bloquear entrada prematura em operacao de risco.",
+      "acceptance_criteria": [
+        "Enablement formal registrado.",
+        "Suite hard-risk com resultado verde."
+      ],
+      "dependencies": [
+        "Trading enablement",
+        "Hard-risk eval suite"
+      ],
+      "success_metrics": [
+        "0 ativacoes de Fase 1 sem enablement formal"
+      ],
+      "regulatory_constraints": [
+        "Governanca de risco para trading"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:40"
+      ]
+    },
+    {
+      "id": "R19",
+      "text": "Capital real somente apos S0 concluido e gate de prontidao verde por 7 dias.",
+      "objective": "Reduzir risco financeiro em transicao para live.",
+      "acceptance_criteria": [
+        "Conclusao de S0 comprovada.",
+        "Gate verde por 7 dias antes de capital real."
+      ],
+      "dependencies": [
+        "S0 readiness",
+        "historico de gate"
+      ],
+      "success_metrics": [
+        "0 entradas de capital real fora do criterio temporal"
+      ],
+      "regulatory_constraints": [
+        "Controle de exposicao financeira"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-03",
+        "ISSUE-F7-03-01"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
+      ]
+    },
+    {
+      "id": "R20",
+      "text": "Rollout de trading deve seguir S0->S1->S2 com aprovacao humana explicita por ordem em todos os estagios.",
+      "objective": "Conter risco por estagiamento e HITL estrito.",
+      "acceptance_criteria": [
+        "Pipeline de estagios documentado e respeitado.",
+        "Aprovacao humana por ordem com side effect financeiro."
+      ],
+      "dependencies": [
+        "Trading stage governance",
+        "HITL approval"
+      ],
+      "success_metrics": [
+        "0 ordens financeiras sem aprovacao humana explicita"
+      ],
+      "regulatory_constraints": [
+        "Controle humano obrigatorio para side effect financeiro"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-01",
+        "ISSUE-F7-01-02",
+        "ISSUE-F7-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:40"
+      ]
+    },
+    {
+      "id": "R21",
+      "text": "make eval-trading deve existir e passar em CI antes de operacao com capital real.",
+      "objective": "Impor gate tecnico minimo para live trading.",
+      "acceptance_criteria": [
+        "Comando eval-trading presente no repositorio.",
+        "Status CI verde antes de live."
+      ],
+      "dependencies": [
+        "Trading eval CI"
+      ],
+      "success_metrics": [
+        "0 release live sem eval-trading verde em CI"
+      ],
+      "regulatory_constraints": [
+        "Regra stop-ship de trading"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-01",
+        "ISSUE-F7-02-02",
+        "ISSUE-F7-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
+      ]
+    },
+    {
+      "id": "R22",
+      "text": "Credenciais live devem operar sem saque, com IP allowlist e backup_operator habilitado; sem isso TRADING_BLOCKED.",
+      "objective": "Limitar blast radius e prevenir operacao sem contingencia humana.",
+      "acceptance_criteria": [
+        "Credenciais com restricao de saque e allowlist quando suportado.",
+        "backup_operator ativo para live."
+      ],
+      "dependencies": [
+        "Security credentials policy",
+        "HITL fallback"
+      ],
+      "success_metrics": [
+        "0 cenarios live sem backup_operator e sem restricao de credencial"
+      ],
+      "regulatory_constraints": [
+        "Seguranca financeira e continuidade operacional"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
+      ]
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F1-01",
+      "title": "Preparar host e pre-requisitos",
+      "mapped_requirements": [
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Implementado: issue recebeu DoR completo, owner, estimativa, dependencias, inputs minimos e evidence_refs em EPIC-F1-01.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:medium",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-02",
+      "title": "Instalar e validar runtime OpenClaw",
+      "mapped_requirements": [
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Implementado: runtime validation passou a exigir persistencia em shell novo e evidencia de stdout em EPIC-F1-01.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:medium",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-03",
+      "title": "Smoke de governanca local e evidencias de fase",
+      "mapped_requirements": [
+        "R1",
+        "R2",
+        "R3",
+        "R11",
+        "R14",
+        "R15"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: gate smoke agora declara risco R2, Review/Gate obrigatorio e evidence_ref estruturado por comando.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-02-01",
+      "title": "Validar contrato de variaveis obrigatorias vs DEV-OPENCLAW-SETUP",
+      "mapped_requirements": [
+        "R4",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Implementado: contrato de variaveis recebeu versionamento explicito, owner, estimativa e artifact de evidencia.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:medium",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-02-02",
+      "title": "Validar defaults operacionais",
+      "mapped_requirements": [
+        "R4",
+        "R5",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: defaults operacionais agora exigem `decision_id` para qualquer override de cloud/gateway/supervisor e Review/Gate em risco R2.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-02-03",
+      "title": "Validar politica de cloud opcional no baseline local",
+      "mapped_requirements": [
+        "R5",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Implementado: politica de cloud opcional passou a bloquear baseline enabled sem decisao formal anexada.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:medium",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-03-01",
+      "title": "Validar estado canonico do workspace",
+      "mapped_requirements": [
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Implementado: issue recebeu vinculo normativo explicito ao gate operacional e saiu de `Sem mapeamento`.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:medium",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-03-02",
+      "title": "Validar estrutura minima de memoria operacional",
+      "mapped_requirements": [
+        "R8",
+        "R9",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: memory contract passou a exigir trilha de auditoria noturna completa e incidente obrigatorio em falha/atraso >24h.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-03-03",
+      "title": "Validar heartbeat e ciclo noturno",
+      "mapped_requirements": [
+        "R9",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: heartbeat/ciclo noturno agora explicita politica de incidente e bloqueio ate reconciliacao.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-04-01",
+      "title": "Validar baseline de seguranca e allowlists",
+      "mapped_requirements": [
+        "R2",
+        "R10",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: baseline de seguranca foi ampliado para allowlist + secrets + redaction + ZDR com evidence_ref obrigatorio.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-04-02",
+      "title": "Validar checklist humano de canal confiavel (HITL)",
+      "mapped_requirements": [
+        "R1",
+        "R7",
+        "R12",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: checklist HITL passou a carregar `decision_id`, `risk_tier`, `operator_id`, `items[].evidence_ref` e regra fail-closed para email/canal nao confiavel.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    },
+    {
+      "id": "ISSUE-F1-04-03",
+      "title": "Consolidar evidencias da F1 em artifact unico",
+      "mapped_requirements": [
+        "R3",
+        "R11",
+        "R14",
+        "R15",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "high",
+      "recommended_fix": "Implementado: artifact unico agora possui matriz requirement -> issue -> evidence -> gate, claims centrais e status final por issue.",
+      "suggested_labels": [
+        "phase:f1",
+        "risk:high",
+        "conformance:covered"
+      ],
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": true,
+        "dependencias_listadas": true,
+        "passos_para_qa_reproducao": true,
+        "owner_atribuido": true
+      }
+    }
+  ],
+  "metrics": {
+    "total_requirements": 22,
+    "requirements_covered": 22,
+    "coverage_percent": 100,
+    "total_issues_audited": 12,
+    "critical_issues_count": 0,
+    "conformance_breakdown": {
+      "Conforme": 12,
+      "Parcialmente conforme": 0,
+      "Nao conforme": 0,
+      "Sem mapeamento": 0
+    },
+    "top_5_risks": [
+      {
+        "risk": "Drift futuro entre macrofases de produto (M0..M2) e fases operacionais (F1..F8) se PRD e PM voltarem a divergir.",
+        "level": "medium",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:657",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md:26"
+        ]
+      },
+      {
+        "risk": "Fallback Slack permanece pendente para F6 e continua nao elegivel para live-run ate validacao completa.",
+        "level": "medium",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:143"
+        ]
+      },
+      {
+        "risk": "Requisitos remapeados para F2/F5/F7 precisam permanecer sincronizados para nao reabrir `uncovered` em auditorias futuras.",
+        "level": "medium",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:11"
+        ]
+      }
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P3",
+      "urgency_index": 20,
+      "description": "Manter sincronismo entre macrofases M0..M2, fases operacionais F1..F8 e matriz de rastreabilidade para evitar regressao documental.",
+      "owner": "PM",
+      "due_days": 7,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:657",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83"
+      ]
+    }
+  ]
+}

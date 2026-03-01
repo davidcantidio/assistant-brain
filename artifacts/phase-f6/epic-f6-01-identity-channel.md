@@ -8,8 +8,10 @@
 ## Status por trilha do epico
 - `ISSUE-F6-01-01` operadores HITL como fonte de verdade: `PASS`
   - evidencia: `artifacts/phase-f6/epic-f6-01-issue-01-operators-source-of-truth.md`
+  - validado `operator_id` + `primary_channel=telegram` no mesmo ciclo de `security-check: PASS`
 - `ISSUE-F6-01-02` Telegram primario e email nao confiavel: `PASS`
   - evidencia: `artifacts/phase-f6/epic-f6-01-issue-02-trusted-channel-telegram-primary-email-untrusted.md`
+  - checklist HITL com canal confiavel em `pass` no mesmo ciclo de `security-check: PASS`
 - `ISSUE-F6-01-03` fallback Slack com IDs/canal autorizados: `PASS`
   - evidencia: `artifacts/phase-f6/epic-f6-01-issue-03-slack-fallback-ids-and-authorized-channel.md`
 
@@ -19,3 +21,4 @@
 ## Gates finais do epico
 - `make ci-security`: `PASS`
 - `make ci-quality`: `PASS`
+- gate documental operador/canal: `PASS`

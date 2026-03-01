@@ -16,13 +16,15 @@
 ## Status consolidado do epico
 - fallback/contingencia: `PASS`
   - fallback Slack condicionado a degradacao de Telegram por > 2 heartbeats;
-  - controles equivalentes (`HMAC` + `anti-replay` + `challenge`) reforcados.
+  - controles equivalentes (`HMAC` + `anti-replay` + `challenge`) reforcados;
+  - `RESTORE_TELEGRAM_CHANNEL` obrigatorio quando fallback for acionado.
 - trading pre-live: `PASS`
   - sem fallback HITL validado, live permanece `TRADING_BLOCKED`;
-  - desbloqueio por prontidao HITL somente por decisao formal.
+  - desbloqueio por prontidao HITL somente por decisao formal com `decision_id`.
 - fechamento de fase: `PASS`
   - checklist HITL completo e artifact unico de validacao preenchidos;
-  - decisao final de fase: `hold`.
+  - decisao final de fase: `hold`;
+  - `consolidation_owner=pm`, `review_due_date=2026-03-03`, `decision_id=not-issued`.
 
 ## Gates finais do epico
 - `make ci-security`: `PASS`

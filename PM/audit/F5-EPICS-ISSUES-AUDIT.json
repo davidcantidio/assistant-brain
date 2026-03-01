@@ -1,0 +1,624 @@
+{
+  "pr_summary": "F5 tem forte alinhamento documental com anti-bypass e hardening de trading, cobrindo 28/30 requisitos extraidos de ROADMAP + PHASE-USABILITY. Os gaps principais estao em B1-R11 e B1-R19 (cobertura incompleta no texto das issues) e na qualidade operacional das descricoes (estimacao, owner e passos QA ausentes). Linha ironica: esta quase tudo \"done\", menos a parte de provar o \"done\" com o mesmo rigor.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "B1-01: integrar adapter de TradingAgents com contrato signal_intent canonico.",
+      "acceptance_criteria": [
+        "Adapter deve emitir signal_intent canonico.",
+        "Gate de trading deve falhar quando o contrato canonical estiver ausente."
+      ],
+      "linked_issues": ["ISSUE-F5-01-01"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R2",
+      "text": "B1-02: implementar signal_normalizer + deduplicacao + trace de origem do engine.",
+      "acceptance_criteria": [
+        "Sinais duplicados devem ser deduplicados.",
+        "Cada sinal aceito deve manter trace de origem."
+      ],
+      "linked_issues": ["ISSUE-F5-01-01"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R3",
+      "text": "B1-03: bloquear tecnicamente caminho de ordem direta de framework externo para exchange.",
+      "acceptance_criteria": [
+        "Tentativa de ordem direta fora do gateway deve falhar.",
+        "Fluxo live deve existir apenas via execution_gateway."
+      ],
+      "linked_issues": ["ISSUE-F5-01-02"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R4",
+      "text": "B1-05: reforcar pre_trade_validator com capital_ramp_level por simbolo.",
+      "acceptance_criteria": [
+        "Validator por simbolo deve estar ativo.",
+        "capital_ramp_level por simbolo deve estar explicitamente validado."
+      ],
+      "linked_issues": ["ISSUE-F5-02-01"],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R5",
+      "text": "B1-06: validar idempotencia de ordem (client_order_id) e reconciliacao em falha parcial.",
+      "acceptance_criteria": [
+        "Replay de client_order_id deve ser no-op auditavel.",
+        "Falha parcial deve terminar em estado reconciliado e consistente."
+      ],
+      "linked_issues": ["ISSUE-F5-02-02"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R6",
+      "text": "B1-07: implementar fail_closed para falha de engine primaria de sinal.",
+      "acceptance_criteria": [
+        "Falha da engine primaria deve bloquear novas entradas.",
+        "Nao pode haver entrada nova em modo inseguro."
+      ],
+      "linked_issues": ["ISSUE-F5-02-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R7",
+      "text": "B1-08: implementar runbook de degradacao com posicao aberta (TRADING_BLOCKED, snapshots, reconciliacao).",
+      "acceptance_criteria": [
+        "TRADING_BLOCKED deve ser aplicado em degradacao com posicao aberta.",
+        "position_snapshot/open_orders_snapshot e reconciliacao devem estar previstos."
+      ],
+      "linked_issues": ["ISSUE-F5-02-05"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R8",
+      "text": "B1-09: formalizar credenciais live sem saque + IP allowlist.",
+      "acceptance_criteria": [
+        "Credencial live deve ser no-withdraw.",
+        "IP allowlist deve ser obrigatoria quando suportado."
+      ],
+      "linked_issues": ["ISSUE-F5-02-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R9",
+      "text": "B1-10: versionar contratos execution_gateway e pre_trade_validator com validacao automatica.",
+      "acceptance_criteria": [
+        "Contratos devem ter metadados de versao obrigatorios.",
+        "Validacao automatica deve bloquear regressao estrutural."
+      ],
+      "linked_issues": ["ISSUE-F5-02-01"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R10",
+      "text": "B1-11: habilitar allowlist de dominios de venue e teste de bloqueio para dominio nao permitido.",
+      "acceptance_criteria": [
+        "Dominio fora de allowlist deve falhar.",
+        "Allowlist de venue deve estar explicitamente exigida."
+      ],
+      "linked_issues": ["ISSUE-F5-01-02"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R11",
+      "text": "B1-12: tornar make eval-trading gate obrigatorio em CI para mudancas de trading.",
+      "acceptance_criteria": [
+        "Workflow CI de trading deve executar make eval-trading.",
+        "Mudanca de trading sem gate deve ser bloqueada."
+      ],
+      "linked_issues": ["ISSUE-F5-02-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R12",
+      "text": "B1-20: criar pacote normativo INTEGRATIONS com template obrigatorio (objetivo, modo permitido, contratos, riscos, testes, rollback).",
+      "acceptance_criteria": [
+        "Template deve conter todos os campos obrigatorios.",
+        "Integracao sem template completo deve ficar em hold."
+      ],
+      "linked_issues": ["ISSUE-F5-01-04"],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R13",
+      "text": "B1-21: adicionar contratos versionados em ARC/schemas e gate make eval-integrations.",
+      "acceptance_criteria": [
+        "signal_intent/order_intent/execution_report/economic_run devem estar versionados.",
+        "make eval-integrations deve bloquear quando metadado de versao faltar."
+      ],
+      "linked_issues": ["ISSUE-F5-01-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R14",
+      "text": "B1-22: formalizar AI-Trader em signal_only com bloqueio explicito de ordem direta para venue.",
+      "acceptance_criteria": [
+        "AI-Trader deve operar somente como signal_only.",
+        "Qualquer caminho de ordem direta para venue deve ser bloqueado."
+      ],
+      "linked_issues": ["ISSUE-F5-01-01", "ISSUE-F5-01-02", "ISSUE-F5-01-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R15",
+      "text": "B1-23: formalizar ClawWork com lab_isolated default e governed gateway-only, incluindo politica de dados para E2B.",
+      "acceptance_criteria": [
+        "Modos lab_isolated e governed devem estar explicitos.",
+        "Politica de dados para E2B deve estar descrita."
+      ],
+      "linked_issues": ["ISSUE-F5-01-04"],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R16",
+      "text": "B1-24: formalizar matriz de compatibilidade runtime com gateway.control_plane.ws canonico e chatCompletions opcional sob policy.",
+      "acceptance_criteria": [
+        "Matriz de compatibilidade deve explicitar ws canonico.",
+        "chatCompletions deve aparecer como opcional sob policy."
+      ],
+      "linked_issues": ["ISSUE-F5-01-03", "ISSUE-F5-01-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R17",
+      "text": "B1-R08: expandir Model Catalog com versionamento de preco/capabilities/limites/supported parameters.",
+      "acceptance_criteria": [
+        "Catalogo deve conter versionamento explicito dos metadados.",
+        "Campos de capacidade/limites/preco devem ser auditaveis."
+      ],
+      "linked_issues": ["ISSUE-F5-03-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R18",
+      "text": "B1-R09: expandir Model Router com provider routing, pin provider, fallback chain, no-fallback sensivel e tool-calling confiavel.",
+      "acceptance_criteria": [
+        "Regras include/exclude/order/require devem existir.",
+        "Rotas sensiveis devem suportar no-fallback e pin_provider."
+      ],
+      "linked_issues": ["ISSUE-F5-03-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R19",
+      "text": "B1-R10: implementar entidade presets para governanca central de roteamento.",
+      "acceptance_criteria": [
+        "preset_id deve ser obrigatorio no contrato de decisao de roteamento.",
+        "Ausencia de preset deve bloquear gate."
+      ],
+      "linked_issues": ["ISSUE-F5-03-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R20",
+      "text": "B1-R11: expandir memory plane vetorial hibrido com model_catalog, eval_aggregates e embeddings operacionais.",
+      "acceptance_criteria": [
+        "model_catalog/eval_aggregates/embeddings devem estar explicitos no escopo da issue.",
+        "Gate deve validar os 3 elementos de forma objetiva."
+      ],
+      "linked_issues": ["ISSUE-F5-03-02"],
+      "coverage_status": "not_covered"
+    },
+    {
+      "id": "R21",
+      "text": "B1-R12: implementar ingestao completa de metadados de run (requested/effective, usage, fallback, erros, outcome).",
+      "acceptance_criteria": [
+        "Contrato deve listar metadados completos de run.",
+        "Validador deve bloquear falta de qualquer metadado obrigatorio."
+      ],
+      "linked_issues": ["ISSUE-F5-03-01", "ISSUE-F5-03-02"],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R22",
+      "text": "B1-R13: expandir Budget Governor com circuit breaker de custo e politicas de burn-rate.",
+      "acceptance_criteria": [
+        "burn_rate_policy e circuit_breaker_action devem estar explicitos.",
+        "Cenario de bloqueio por custo deve ser testavel."
+      ],
+      "linked_issues": ["ISSUE-F5-03-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R23",
+      "text": "B1-R14: expandir privacidade/retencao com ZDR por task_type sensitive e retention detalhada.",
+      "acceptance_criteria": [
+        "Rotas sensitive devem refletir controles ZDR/no-fallback/pin_provider.",
+        "Politica de retencao deve ser explicita e verificavel."
+      ],
+      "linked_issues": ["ISSUE-F5-03-03", "ISSUE-F5-03-06"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R24",
+      "text": "B1-R16: expandir A2A com delegacao cross-workspace, allowlist por papel, limites de concorrencia/custo e fallback serial.",
+      "acceptance_criteria": [
+        "Delegacao cross-workspace deve validar allowlist por papel.",
+        "Conflito de capacidade/custo deve acionar fallback serial."
+      ],
+      "linked_issues": ["ISSUE-F5-03-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R25",
+      "text": "B1-R17: implementar adapter Slack com task_event idempotente e mapeamento de thread, sem bypass de gates.",
+      "acceptance_criteria": [
+        "Evento Slack deve carregar idempotency_key.",
+        "Thread deve mapear para issue_id/microtask_id quando houver contexto."
+      ],
+      "linked_issues": ["ISSUE-F5-03-04"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R26",
+      "text": "B1-R18: implementar fallback HITL Slack com HMAC + anti-replay + challenge e task RESTORE_TELEGRAM_CHANNEL.",
+      "acceptance_criteria": [
+        "Fallback Slack deve exigir controles equivalentes ao canal primario.",
+        "Contingencia deve abrir task/incidente RESTORE_TELEGRAM_CHANNEL."
+      ],
+      "linked_issues": ["ISSUE-F5-03-05"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R27",
+      "text": "B1-R19: concluir prontidao fallback HITL Slack com slack_user_ids/slack_channel_ids nao vazios e backup_operator habilitado para capital real.",
+      "acceptance_criteria": [
+        "slack_user_ids e slack_channel_ids devem ser obrigatorios.",
+        "backup_operator para capital real deve estar explicito e testado."
+      ],
+      "linked_issues": ["ISSUE-F5-03-05"],
+      "coverage_status": "not_covered"
+    },
+    {
+      "id": "R28",
+      "text": "B2-R04: habilitar single_engine_mode apenas para falha de engine secundaria/auxiliar com primaria saudavel.",
+      "acceptance_criteria": [
+        "single_engine_mode deve depender de primaria saudavel.",
+        "Falha de primaria deve permanecer em fail_closed."
+      ],
+      "linked_issues": ["ISSUE-F5-02-03"],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R29",
+      "text": "PHASE-USABILITY F5: gate exige execucao de make eval-integrations e make eval-trading para promover fase.",
+      "acceptance_criteria": [
+        "Ambos os comandos devem ser executados no ciclo de gate da fase.",
+        "Falha de qualquer comando deve impedir promocao."
+      ],
+      "linked_issues": ["ISSUE-F5-01-03", "ISSUE-F5-02-04"],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R30",
+      "text": "PHASE-USABILITY F5: ambos gates em PASS sem bypass + evidencia de bloqueio de ordem direta externa.",
+      "acceptance_criteria": [
+        "Resultado final da fase deve provar PASS sem bypass.",
+        "Deve existir evidencia objetiva do bloqueio de ordem direta."
+      ],
+      "linked_issues": ["ISSUE-F5-01-02"],
+      "coverage_status": "partial"
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F5-01-01",
+      "title": "Validar adapter TradingAgents signal_intent com normalizacao e deduplicacao",
+      "mapped_requirements": ["R1", "R2", "R14"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC nao define dados de teste concretos (payload valido/invalido exemplar). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33]"
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo: [F5-01-01] Adapter TradingAgents com signal_intent canonico e deduplicacao auditavel. Descricao: explicitar contrato de entrada/saida, casos negativos e evidencias obrigatorias por execução. AC reescritos: (1) Given payload sem signal_intent, When make eval-trading, Then FAIL com codigo de erro definido; (2) Given payload duplicado com mesmo trace_id, When normalizer processa, Then apenas 1 evento e aceito e o duplicado e rejeitado; (3) Given payload valido, Then artifact registra origem do engine. QA checklist: pre-condicoes, fixture de payload, comando, evidencias em artifacts/phase-f5, rollback. Labels: prio:medium, risk:integration, needs-qa, needs-owner, needs-estimation.",
+      "suggested_labels": ["prio:medium", "risk:integration", "needs-qa", "needs-owner", "needs-estimation"]
+    },
+    {
+      "id": "ISSUE-F5-01-02",
+      "title": "Validar bloqueio tecnico de ordem direta externa e allowlist de venue",
+      "mapped_requirements": ["R3", "R10", "R14", "R30"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Nao ha criterio explicito de rollback operacional quando bypass for detectado. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:141 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:38 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:46]"
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo: [F5-01-02] Anti-bypass hard + allowlist de venue com rollback imediato. Descricao: incluir comportamento de bloqueio, incidente e rollback para tentativa de ordem fora do gateway. AC reescritos: (1) Given tentativa de ordem direta, When validacao roda, Then FAIL e abrir incidente com trace_id; (2) Given dominio fora allowlist, Then bloqueio hard e sem envio; (3) Given bypass detectado em live, Then TRADING_BLOCKED e rollback conforme runbook. QA checklist: teste com dominio permitido/nao permitido, evidencias de bloqueio, verificação de incidente e rollback. Labels: prio:p0, risk:security, blocking-release, needs-qa.",
+      "suggested_labels": ["prio:p0", "risk:security", "blocking-release", "needs-qa", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-01-03",
+      "title": "Validar contratos versionados de integracao e compatibilidade dual do runtime",
+      "mapped_requirements": ["R13", "R16", "R29"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC fala em contrato completo, mas nao lista explicitamente os 4 schemas requeridos (signal_intent, order_intent, execution_report, economic_run). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:68]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:59]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-01-03] Schemas versionados obrigatorios + compatibilidade dual runtime. Descricao: explicitar os 4 schemas obrigatorios e os metadados de versao esperados. AC reescritos: (1) Given qualquer um dos 4 schemas sem schema_version, Then make eval-integrations FAIL; (2) Given ws canonico e chatCompletions opcional sob policy, Then PASS; (3) Given quebra de compatibilidade dual, Then hold de promote. QA checklist: validar cada schema individualmente e anexar evidencias por arquivo. Labels: prio:high, risk:integration, needs-qa, needs-owner.",
+      "suggested_labels": ["prio:high", "risk:integration", "needs-qa", "needs-owner", "needs-estimation"]
+    },
+    {
+      "id": "ISSUE-F5-01-04",
+      "title": "Validar modo permitido por integracao sem ambiguidade operacional",
+      "mapped_requirements": ["R12", "R14", "R15", "R16"],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Cobertura de B1-20 parcial: template obrigatorio pede objetivo, modo, contratos, riscos, testes e rollback, mas issue enfatiza principalmente modo permitido. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:72]",
+        "Politica de dados E2B (B1-23) nao aparece explicitamente nos ACs. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:81]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-01-04] Modos permitidos + template INTEGRATIONS completo. Descricao: completar escopo para cobrir todos os campos de B1-20 e politica E2B de B1-23. AC reescritos: (1) Given integracao sem campos obrigatorios do template, Then hold; (2) Given AI-Trader signal_only e ClawWork lab_isolated/governed com policy E2B, Then pass; (3) Given ausencia de rollback documentado, Then hold. QA checklist: validar template campo a campo, policy E2B, e matriz de compatibilidade runtime. Labels: prio:high, risk:compliance, needs-qa, needs-po-review.",
+      "suggested_labels": ["prio:high", "risk:compliance", "needs-qa", "needs-po-review", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-02-01",
+      "title": "Validar pre_trade_validator por simbolo e contratos execution_gateway versionados",
+      "mapped_requirements": ["R4", "R9"],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "B1-05 exige capital_ramp_level por simbolo, mas AC nao menciona explicitamente capital_ramp_level. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:138 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-02-01] pre_trade_validator por simbolo com capital_ramp_level explicito. Descricao: detalhar regra de validacao por simbolo e limites por nivel de rampa. AC reescritos: (1) Given capital_ramp_level ausente para simbolo, Then FAIL; (2) Given contrato versionado sem campos obrigatorios, Then FAIL; (3) Given simbolo dentro do ramp permitido, Then PASS. QA checklist: casos por simbolo e por nivel, negativo para rampa ausente, evidencia de bloqueio. Labels: prio:high, risk:trading, blocking-release, needs-qa.",
+      "suggested_labels": ["prio:high", "risk:trading", "blocking-release", "needs-qa", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-02-02",
+      "title": "Validar idempotencia client_order_id e reconciliacao de falha parcial",
+      "mapped_requirements": ["R5"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Nao ha AC explicito para replay concorrente (duas tentativas simultaneas). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:139 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:55]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:46]"
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo: [F5-02-02] Idempotencia forte com teste de concorrencia. Descricao: incluir cenario de replay simultaneo e resultado deterministico de reconciliacao. AC reescritos: (1) Given duas requisicoes com mesmo client_order_id em paralelo, Then apenas 1 execucao financeira e permitida; (2) Given falha parcial, Then reconciliation_status final deve ser consistente e auditavel; (3) Given replay, Then no-op com trace. QA checklist: testes sequencial/paralelo, logs de reconciliacao e evidencias de no-op. Labels: prio:p0, risk:financial, blocking-release, needs-qa.",
+      "suggested_labels": ["prio:p0", "risk:financial", "blocking-release", "needs-qa", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-02-03",
+      "title": "Validar fail_closed para engine primaria e single_engine_mode para secundaria",
+      "mapped_requirements": ["R6", "R28"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC nao define tempo maximo para aplicar bloqueio apos falha primaria (SLO operacional). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:140 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:68]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:59]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-02-03] fail_closed primario com SLO e condicao de saude explicita. Descricao: adicionar tempo de resposta para bloqueio e condicoes de retorno controlado. AC reescritos: (1) Given falha primaria, Then novas entradas bloqueadas em <= N segundos; (2) Given falha secundaria e primaria saudavel, Then single_engine_mode permitido; (3) Given primaria nao saudavel, Then single_engine_mode proibido. QA checklist: simular falha primaria/secundaria e medir tempo de bloqueio. Labels: prio:high, risk:trading, needs-qa, blocking-release.",
+      "suggested_labels": ["prio:high", "risk:trading", "needs-qa", "blocking-release", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-02-04",
+      "title": "Validar credenciais live no-withdraw IP allowlist e gate CI obrigatorio",
+      "mapped_requirements": ["R8", "R11", "R29"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC usa hold/pass, mas nao explicita evidencia minima para credencial em cada provider suportado. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:142 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:145 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:72]"
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo: [F5-02-04] Credenciais live restritas com evidencia por provider + gate CI. Descricao: detalhar provas obrigatorias de no-withdraw/IP allowlist e enforcement em CI. AC reescritos: (1) Given credencial com permissao de saque, Then hold; (2) Given ausencia de IP allowlist em provider que suporta, Then hold; (3) Given workflow sem make eval-trading, Then fail de merge. QA checklist: validar credenciais mascaradas por provider, pipeline CI e bloqueio de excecao. Labels: prio:p0, risk:security, compliance-review, blocking-release.",
+      "suggested_labels": ["prio:p0", "risk:security", "compliance-review", "blocking-release", "needs-qa"]
+    },
+    {
+      "id": "ISSUE-F5-02-05",
+      "title": "Validar runbook de degradacao com posicao aberta e TRADING_BLOCKED",
+      "mapped_requirements": ["R7"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC nao define criterio quantitativo de retorno seguro (quando sair de TRADING_BLOCKED). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:141 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:94]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:85]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-02-05] Runbook degradacao com criterio de retorno seguro mensuravel. Descricao: incluir gatilhos de bloqueio/desbloqueio e checkpoints obrigatorios. AC reescritos: (1) Given degradacao com posicao aberta, Then TRADING_BLOCKED imediato; (2) Given snapshots ausentes, Then hold; (3) Given reconciliacao concluida e checklist completo, Then retorno permitido. QA checklist: simular degradacao, validar snapshots, reconciliacao e evidencia de desbloqueio autorizado. Labels: prio:high, risk:operations, blocking-release, needs-qa.",
+      "suggested_labels": ["prio:high", "risk:operations", "blocking-release", "needs-qa", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-03-01",
+      "title": "Validar contratos de autonomia para jobs longos com tmux heartbeat e restart",
+      "mapped_requirements": ["R21"],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Issue cobre autonomia/restart, mas B1-R12 pede ingestao completa de metadados de run (requested/effective, usage, fallback, erros, outcome) e isso nao aparece nos ACs. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33]"
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo: [F5-03-01] Autonomia jobs longos + metadados completos de run. Descricao: manter restart controlado e adicionar metadados obrigatorios de observabilidade de run. AC reescritos: (1) Given job stalled, Then incidente + restart com trace_id; (2) Given run concluida, Then requested/effective, usage, fallback, erros e outcome registrados; (3) Given metadado faltante, Then gate fail. QA checklist: simular stalled, validar restart e checar payload de metadados completo. Labels: prio:medium, risk:reliability, needs-qa.",
+      "suggested_labels": ["prio:medium", "risk:reliability", "needs-qa", "needs-owner", "needs-estimation"]
+    },
+    {
+      "id": "ISSUE-F5-03-02",
+      "title": "Validar cron proativo e memoria noturna com trilha auditavel",
+      "mapped_requirements": ["R20", "R21"],
+      "conformance_status": "Nao conforme",
+      "problems": [
+        "Inconsistencia de mapeamento: issue foi associada a B1-R11/B1-R12, mas o texto nao cobre explicitamente model_catalog/eval_aggregates/embeddings de B1-R11. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:164 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46]",
+        "B1-R12 pede ingestao completa de metadados de run; AC fala apenas de cron/memoria noturna pass/fail. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-03-02] Cron/memoria noturna alinhado a B1-R11 e B1-R12. Descricao: separar escopo de ciclo noturno e escopo de expansao do memory plane vetorial com metadados completos de run. AC reescritos: (1) Given ausencia de model_catalog/eval_aggregates/embeddings, Then FAIL; (2) Given metadados de run incompletos, Then FAIL; (3) Given nightly-extraction sem incident_ref em atraso >24h, Then FAIL. QA checklist: validar schema do ciclo noturno e schema de metadados de run, com casos valid/invalid. Labels: prio:p0, risk:observability, blocking-release, needs-po-review.",
+      "suggested_labels": ["prio:p0", "risk:observability", "blocking-release", "needs-po-review", "needs-qa"]
+    },
+    {
+      "id": "ISSUE-F5-03-03",
+      "title": "Validar governanca avancada de catalog router custo e privacidade por preset",
+      "mapped_requirements": ["R17", "R18", "R19", "R22", "R23"],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC nao define threshold mensuravel para burn-rate/circuit breaker (disparo e recuperacao). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:167 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:68]",
+        "Privacidade/ZDR aparece no texto, mas sem matriz de validacao por task_type sensivel. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:170 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:69]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-03-03] Governanca de router/custo/privacidade com thresholds objetivos. Descricao: explicitar limites, gatilhos e matriz de privacidade por task_type. AC reescritos: (1) Given burn-rate > limite X, Then circuit breaker aciona acao Y; (2) Given rota sensitive sem no_fallback/pin_provider/ZDR, Then FAIL; (3) Given ausencia de preset_id, Then FAIL. QA checklist: testes de limite de custo, rota sensivel e validacao de preset por schema. Labels: prio:high, risk:privacy, compliance-review, needs-qa.",
+      "suggested_labels": ["prio:high", "risk:privacy", "compliance-review", "needs-qa", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-03-04",
+      "title": "Validar A2A cross-workspace e adapter Slack event normalizado",
+      "mapped_requirements": ["R24", "R25"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC nao explicita teste negativo de bypass dos gates R2/R3 no fluxo Slack. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:179 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:81]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:72]"
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo: [F5-03-04] A2A + Slack adapter com teste negativo de bypass. Descricao: manter contrato de idempotencia/thread context e adicionar validacao explicita de gates. AC reescritos: (1) Given evento Slack sem idempotency_key, Then FAIL; (2) Given delegacao fora allowlist, Then FAIL; (3) Given tentativa de bypass de gate R2/R3, Then FAIL bloqueante. QA checklist: testes negativos para allowlist, idempotencia e bypass gate. Labels: prio:high, risk:integration, needs-qa, blocking-release.",
+      "suggested_labels": ["prio:high", "risk:integration", "needs-qa", "blocking-release", "needs-owner"]
+    },
+    {
+      "id": "ISSUE-F5-03-05",
+      "title": "Validar fallback HITL Slack com HMAC anti-replay e incidente de restauracao Telegram",
+      "mapped_requirements": ["R26", "R27"],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Cobertura de B1-R19 insuficiente: AC nao cita slack_user_ids/slack_channel_ids nao vazios nem backup_operator para capital real. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:185 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85]"
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo: [F5-03-05] Fallback HITL Slack seguro + prontidao B1-R19 completa. Descricao: manter controles HMAC/anti-replay/challenge e adicionar requisitos de prontidao de operador/canal. AC reescritos: (1) Given fallback sem HMAC/challenge, Then hold; (2) Given ausencia de RESTORE_TELEGRAM_CHANNEL, Then hold; (3) Given slack_user_ids/slack_channel_ids vazios ou backup_operator ausente para capital real, Then FAIL. QA checklist: validar assinaturas, replay, incident task e configuracao de operadores Slack. Labels: prio:p0, risk:security, compliance-review, blocking-release.",
+      "suggested_labels": ["prio:p0", "risk:security", "compliance-review", "blocking-release", "needs-qa"]
+    },
+    {
+      "id": "ISSUE-F5-03-06",
+      "title": "Validar segregacao de contas e credenciais do agente para reduzir blast radius",
+      "mapped_requirements": ["R23"],
+      "conformance_status": "Conforme",
+      "problems": [
+        "AC nao explicita evidencia legal/compliance (registro de aprovacao e trilha de excecao). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:170 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:107]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:98]"
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo: [F5-03-06] Segregacao de credenciais com evidencia de compliance. Descricao: manter segregacao por superficie e incluir trilha formal de aprovacao/excecao. AC reescritos: (1) Given conta pessoal igual a conta do agente, Then hold; (2) Given minimum_scope vazio, Then FAIL; (3) Given excecao de privilegio, Then exige aprovacao formal registrada. QA checklist: validar superficies social/email/pagamentos/carteira, minimum_scope e trilha de aprovacao. Labels: prio:p0, risk:compliance, security-review, blocking-release.",
+      "suggested_labels": ["prio:p0", "risk:compliance", "security-review", "blocking-release", "needs-qa"]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 30,
+    "requirements_covered": 28,
+    "coverage_percent": 93.3,
+    "total_issues_audited": 15,
+    "critical_issues_count": 5,
+    "critical_issue_ids": [
+      "ISSUE-F5-01-02",
+      "ISSUE-F5-02-02",
+      "ISSUE-F5-02-04",
+      "ISSUE-F5-03-05",
+      "ISSUE-F5-03-06"
+    ],
+    "conformance_breakdown": {
+      "conforme": 9,
+      "parcialmente_conforme": 5,
+      "nao_conforme": 1,
+      "sem_mapeamento": 0
+    },
+    "requirements_not_covered_ids": ["R20", "R27"],
+    "top_5_risks": [
+      "R20 (B1-R11) sem cobertura efetiva no texto de ISSUE-F5-03-02, com risco de lacuna no memory plane vetorial.",
+      "R27 (B1-R19) sem cobertura efetiva no texto de ISSUE-F5-03-05, com risco de fallback HITL incompleto para capital real.",
+      "Qualidade transversal das 15 issues: estimacao/owner/QA steps/dependencias ausentes, elevando risco de retrabalho e falha de auditoria.",
+      "R29/R30 parcialmente cobertos: gate F5 exige ambos comandos em PASS sem bypass no mesmo ciclo e evidencia consolidada.",
+      "Drift documental de status: epicos em pasta feito e tabela done, mas front matter ainda status=active."
+    ],
+    "immediate_mitigation_plan_3_actions": [
+      "Corrigir ISSUE-F5-03-02 para cobrir explicitamente B1-R11/B1-R12 (schema + AC mensuravel).",
+      "Corrigir ISSUE-F5-03-05 para incluir B1-R19 (slack_user_ids, slack_channel_ids, backup_operator).",
+      "Publicar artifact unico de gate F5 com evidencias de make eval-integrations + make eval-trading em PASS no mesmo ciclo."
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "urgency_index": 88,
+      "description": "Corrigir ISSUE-F5-03-02 para alinhar escopo com B1-R11/B1-R12 (model_catalog, eval_aggregates, embeddings e metadados completos de run).",
+      "owner": "Tech Lead",
+      "due_days": 3,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:164",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:20",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55"
+      ]
+    },
+    {
+      "priority": "P0",
+      "urgency_index": 86,
+      "description": "Corrigir ISSUE-F5-03-05 para cobrir integralmente B1-R19 (slack_user_ids/slack_channel_ids obrigatorios e backup_operator para capital real).",
+      "owner": "Compliance/Security",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:184",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:185",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:186",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
+      ]
+    },
+    {
+      "priority": "P0",
+      "urgency_index": 82,
+      "description": "Consolidar evidencia unica de gate F5 no mesmo ciclo para make eval-integrations + make eval-trading em PASS sem bypass, com referencia explicita de anti-bypass.",
+      "owner": "QA Lead",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:38",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:18",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:24",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:25",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:93",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:107"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 74,
+      "description": "Padronizar template de issue para F5/F6/F7 com campos obrigatorios: owner, estimacao, dependencias, passos QA/reproducao e Definition of Ready/Done.",
+      "owner": "PO",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 68,
+      "description": "Eliminar drift de status documental: epicos em pasta feito marcados como done na tabela de fase, mas com front matter status=active.",
+      "owner": "PO",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:30",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:31",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:32",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:4"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 63,
+      "description": "Reescrever ACs de risco alto/critico com thresholds mensuraveis e casos negativos obrigatorios (anti-bypass, credenciais live, fail_closed, fallback HITL).",
+      "owner": "Tech Lead",
+      "due_days": 4,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:140",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:142",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:145",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:180",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
+      ]
+    }
+  ]
+}

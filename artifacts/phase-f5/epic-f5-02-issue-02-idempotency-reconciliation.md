@@ -34,3 +34,11 @@
 - `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-02-issue-02-idempotency-reconciliation.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Issue reforcada com cenario de replay concorrente, no-op auditavel e reconciliacao com estado final deterministico.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

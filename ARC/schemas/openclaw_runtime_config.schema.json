@@ -75,9 +75,10 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["id", "match", "transform"],
+            "required": ["id", "source_hook_id", "match", "transform", "signature_required"],
             "properties": {
               "id": { "type": "string", "minLength": 1 },
+              "source_hook_id": { "type": "string", "minLength": 1 },
               "match": {
                 "type": "object",
                 "required": ["path"],
@@ -93,6 +94,9 @@
                   "module": { "type": "string", "minLength": 1 }
                 },
                 "additionalProperties": true
+              },
+              "signature_required": {
+                "type": "boolean"
               }
             },
             "additionalProperties": true

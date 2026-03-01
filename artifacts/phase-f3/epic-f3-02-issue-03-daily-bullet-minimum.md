@@ -1,27 +1,51 @@
 # EPIC-F3-02 ISSUE-F3-02-03 Daily Bullet Minimum Validation
 
-- data/hora: 2026-02-26 12:08:10 -0300
+- data/hora: 2026-03-01 10:25:00 -0300
 - host alvo: Darwin arm64
-- escopo: `ISSUE-F3-02-03` (bullet minimo por secao obrigatoria da nota diaria)
+- escopo: `ISSUE-F3-02-03` (bullet minimo por secao obrigatoria + excecao noturna)
 - fonte de verdade: `PRD/PRD-MASTER.md`
 
-## Red
-- cenario: fixture temporaria `workspaces/main/memory/2099-12-30.md` com secao obrigatoria `Decisions Made` sem bullet.
-- comando: `make eval-runtime`.
-- resultado esperado: `FAIL` por ausencia de bullet minimo.
-- evidencia:
-  - `workspaces/main/memory/2099-12-30.md: secao 'Decisions Made' sem bullet obrigatorio.`
-  - `make: *** [eval-runtime] Error 1`
+## Evidence Contract
 
-## Green
-- acao: remover fixture invalida e manter notas canonicas com bullet minimo em todas as secoes obrigatorias.
-- comando: `make eval-runtime`.
-- resultado: `eval-runtime-contracts: PASS`.
+### Scenario 1
+```yaml
+scenario: "Red-A"
+command: "make eval-runtime"
+expected_result: "FAIL por ausencia de bullet minimo"
+actual_assert_message: "workspaces/main/memory/2099-12-30.md: secao 'Decisions Made' sem bullet obrigatorio."
+trace_id_or_ref: "artifact:f3-02-03:red-a"
+status: "PASS"
+```
 
-## Refactor
-- comando: `make eval-runtime` (segunda execucao).
-- resultado: `eval-runtime-contracts: PASS`.
+### Scenario 2
+```yaml
+scenario: "Red-B"
+command: "make eval-runtime"
+expected_result: "FAIL por atraso >24h sem incident_ref"
+actual_assert_message: "invalid_nightly_memory_cycle_missing_incident_ref deveria falhar, mas passou. (bloqueado no expect_invalid)"
+trace_id_or_ref: "artifact:f3-02-03:red-b"
+status: "PASS"
+```
+
+### Scenario 3
+```yaml
+scenario: "Green"
+command: "make eval-runtime"
+expected_result: "PASS com bullets minimos e trilha noturna coerente"
+actual_assert_message: "eval-runtime-contracts: PASS"
+trace_id_or_ref: "artifact:f3-02-03:green"
+status: "PASS"
+```
+
+### Scenario 4
+```yaml
+scenario: "Refactor"
+command: "make eval-runtime"
+expected_result: "PASS estavel na segunda execucao"
+actual_assert_message: "eval-runtime-contracts: PASS"
+trace_id_or_ref: "artifact:f3-02-03:refactor"
+status: "PASS"
+```
 
 ## Alteracoes da issue
-- `artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md`
-  - evidencia auditavel do ciclo TDD (Red, Green, Refactor).
+- evidencia auditavel com cobertura semantica local e trilha de excecao noturna.

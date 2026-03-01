@@ -34,3 +34,11 @@
 - `ARC/ARC-HEARTBEAT.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-01-ops-autonomy-jobs-heartbeat.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Contrato de autonomia passou a exigir metadados completos de run: requested/effective, usage, fallback, errors e outcome.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

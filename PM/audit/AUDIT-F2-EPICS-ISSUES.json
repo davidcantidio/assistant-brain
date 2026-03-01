@@ -1,0 +1,944 @@
+{
+  "pr_summary": "Auditoria F2 executada sobre 12 issues contra 11 requisitos relevantes do PRD-MASTER. A cobertura de requisitos ficou em 100,0%, mas 9/12 issues estão apenas parcialmente conformes por lacunas de compliance operacional e rastreabilidade técnica. Ironia rápida: o status está \"PASS\", mas a explicação auditável do PASS ainda não está completa em pontos críticos.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Aplicar quality gates por risco (R0..R3) e bloquear promoção sem eval gate e sem Review/Gate para R2/R3.",
+      "objective": "Impedir promoção de mudanças sem validação técnica proporcional ao risco.",
+      "acceptance_criteria": [
+        "Mudança R2/R3 sem Review/Gatekeeper deve resultar em bloqueio.",
+        "Gates obrigatórios por nível de risco devem estar em PASS antes de promover.",
+        "Claim central sem eval gate deve bloquear release de fase."
+      ],
+      "dependencies": [
+        "Pipeline de CI com gates versionados",
+        "Fluxo de Review/Gate"
+      ],
+      "success_metrics": [
+        "100% de claims centrais com eval gate executado",
+        "0 promoções com gate obrigatório ausente"
+      ],
+      "regulatory_constraints": [
+        "RFC-010",
+        "RFC-015",
+        "RFC-040",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:512",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:662"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-01-01"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R2",
+      "text": "Manter baseline de segurança/privacidade enforceable com classificação de sensibilidade, provider allowlist e política ZDR.",
+      "objective": "Reduzir risco de vazamento e uso indevido de dados sensíveis.",
+      "acceptance_criteria": [
+        "Dados sensíveis devem operar com allowlist restrita de provider.",
+        "Classificação public/internal/sensitive deve ser validada por gate.",
+        "Política de privacidade/ZDR deve ser verificável."
+      ],
+      "dependencies": [
+        "Policy engine",
+        "Gate de segurança"
+      ],
+      "success_metrics": [
+        "0 fluxos sensíveis fora de allowlist",
+        "Gate security falha em qualquer desvio de policy"
+      ],
+      "regulatory_constraints": [
+        "RFC-015",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:30",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:518",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-01-02"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R3",
+      "text": "Toda ação com side effect financeiro exige aprovação humana explícita; email nunca é canal confiável de comando.",
+      "objective": "Evitar execução financeira sem autorização humana confiável.",
+      "acceptance_criteria": [
+        "Comando vindo de email deve ser bloqueado até confirmação em canal confiável.",
+        "Ação financeira sem aprovação explícita deve ser bloqueada.",
+        "Canal confiável deve exigir challenge/validação de operador."
+      ],
+      "dependencies": [
+        "Approval policy",
+        "Canal confiável com challenge"
+      ],
+      "success_metrics": [
+        "0 side effects financeiros sem aprovação explícita",
+        "100% comandos por canal não confiável bloqueados"
+      ],
+      "regulatory_constraints": [
+        "RFC-010",
+        "RFC-015",
+        "RFC-050",
+        "RFC-060"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:420",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:429",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-01-03"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R4",
+      "text": "Contratos de colaboração/evento devem ser formais e validados por schema com trilha auditável.",
+      "objective": "Garantir interoperabilidade e auditoria de payloads e eventos.",
+      "acceptance_criteria": [
+        "Payload fora de contrato deve falhar no gate de schema.",
+        "Evento normalizado deve manter rastreabilidade para issue/microtask quando aplicável."
+      ],
+      "dependencies": [
+        "Schemas versionados",
+        "Validador de schema"
+      ],
+      "success_metrics": [
+        "0 payload inválido promovido",
+        "100% eventos críticos com rastreabilidade mínima"
+      ],
+      "regulatory_constraints": [
+        "RFC-020",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:31",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:282",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:513"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-02-01"
+      ],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R5",
+      "text": "Overrides e automações com efeito colateral devem ser idempotentes e com rollback explícito (stop-ship sem isso).",
+      "objective": "Eliminar duplicidade de efeito colateral e permitir recuperação segura.",
+      "acceptance_criteria": [
+        "Reexecução com a mesma chave deve resultar em no-op.",
+        "Operação sem rollback definido deve ser bloqueada.",
+        "Automação com side effect sem idempotência/rollback deve ser stop-ship."
+      ],
+      "dependencies": [
+        "Contrato de idempotência",
+        "Procedimento de rollback"
+      ],
+      "success_metrics": [
+        "0 efeitos colaterais duplicados",
+        "100% operações críticas com rollback validado"
+      ],
+      "regulatory_constraints": [
+        "RFC-035",
+        "RFC-040",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-02-02",
+        "ISSUE-F2-02-03"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R6",
+      "text": "Degraded mode deve manter trilha offline e reconciliação posterior auditável, com bloqueio de promoção até saneamento.",
+      "objective": "Evitar perda de estado e exposição não gerenciada durante degradação.",
+      "acceptance_criteria": [
+        "Eventos sem chaves de reconciliação devem ser bloqueados.",
+        "Reconciliação deve resultar em estado determinístico e auditável.",
+        "Incidentes de degradação devem impedir promoção até reconciliação."
+      ],
+      "dependencies": [
+        "Runbook de degraded mode",
+        "Mecanismo de incidente"
+      ],
+      "success_metrics": [
+        "0 reconciliações sem rastreio",
+        "100% incidentes de degradação com trilha formal"
+      ],
+      "regulatory_constraints": [
+        "RFC-035",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:34",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:485",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:610"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-02-04"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R7",
+      "text": "Model Catalog MUST sincronizar metadados vivos de modelos/provedores/capacidades/preço/limites com versionamento.",
+      "objective": "Evitar decisões de roteamento com metadado obsoleto ou incompleto.",
+      "acceptance_criteria": [
+        "Gate deve falhar quando metadados obrigatórios estiverem ausentes.",
+        "Catálogo sincronizado deve passar em gate de modelos."
+      ],
+      "dependencies": [
+        "Serviço de sync de catálogo",
+        "Gate de modelos"
+      ],
+      "success_metrics": [
+        "100% de modelos ativos com metadado mínimo",
+        "0 uso de modelo sem metadado atualizado"
+      ],
+      "regulatory_constraints": [
+        "RFC-030",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:622"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-03-01"
+      ],
+      "coverage_status": "covered"
+    },
+    {
+      "id": "R8",
+      "text": "Roteamento deve ser explicável por execução (`requested/effective`, fallback_step, reason) e falhar em compliance sem trilha.",
+      "objective": "Permitir auditoria causal de decisão de modelo e fallback.",
+      "acceptance_criteria": [
+        "Toda execução deve registrar requested/effective/fallback_step/reason.",
+        "Ausência de trilha de roteamento deve resultar em falha de compliance."
+      ],
+      "dependencies": [
+        "Router com logging estruturado",
+        "Gate de compliance"
+      ],
+      "success_metrics": [
+        "100% de decisões com trilha completa",
+        "0 execução sem explicabilidade promovida"
+      ],
+      "regulatory_constraints": [
+        "RFC-030",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-03-02"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R9",
+      "text": "Memory plane deve manter backend/contrato de memória e trilha noturna auditável (`nightly-extraction`).",
+      "objective": "Assegurar memória operacional consistente e verificável.",
+      "acceptance_criteria": [
+        "Backend e caminhos de memória devem estar definidos e válidos.",
+        "Ciclo noturno deve registrar scheduled_at/executed_at/status/daily_note_ref/incident_ref.",
+        "Falha >24h no ciclo noturno deve abrir incidente."
+      ],
+      "dependencies": [
+        "Memory backend",
+        "Job nightly-extraction"
+      ],
+      "success_metrics": [
+        "100% ciclos noturnos auditados",
+        "0 lacuna de memória operacional >24h sem incidente"
+      ],
+      "regulatory_constraints": [
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:316",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-03-03"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R10",
+      "text": "Budget Governor deve usar telemetria consolidada do LiteLLM + snapshots do provedor efetivo com limites e circuito de proteção.",
+      "objective": "Conter burn-rate e anomalias de custo em tempo operacional.",
+      "acceptance_criteria": [
+        "Validação deve falhar sem limites por run/task/dia.",
+        "Telemetria consolidada e snapshots financeiros devem ser rastreáveis.",
+        "Mecanismo de contenção de custo (burn-rate/circuit breaker) deve ser verificável."
+      ],
+      "dependencies": [
+        "Telemetria de custo",
+        "Política de orçamento"
+      ],
+      "success_metrics": [
+        "0 execução fora de limite sem bloqueio",
+        "Redução de risco de custo imprevisível"
+      ],
+      "regulatory_constraints": [
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:54",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:578",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-03-04"
+      ],
+      "coverage_status": "partial"
+    },
+    {
+      "id": "R11",
+      "text": "A2A e webhooks devem usar allowlist, mapping tipado e rastreabilidade mínima (`trace_id`, `idempotency_key`, `source_hook_id`), bloqueando payload inválido/sem assinatura.",
+      "objective": "Prevenir execução opaca e bypass por eventos externos.",
+      "acceptance_criteria": [
+        "A2A fora de allowlist deve falhar.",
+        "Webhook sem mapping tipado ou sem assinatura exigida deve ser bloqueado e auditado.",
+        "Eventos devem carregar trace_id/idempotency_key/source_hook_id."
+      ],
+      "dependencies": [
+        "Contrato openclaw_runtime_config",
+        "Policy de webhook"
+      ],
+      "success_metrics": [
+        "100% de eventos A2A/webhook com trilha mínima",
+        "0 webhook inválido aceito"
+      ],
+      "regulatory_constraints": [
+        "RFC-015",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:301",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:313",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415"
+      ],
+      "linked_issues": [
+        "ISSUE-F2-03-05"
+      ],
+      "coverage_status": "partial"
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F2-01-01",
+      "title": "Validar gates obrigatorios em CI e fail-fast de promocao",
+      "mapped_requirements": [
+        "R1"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC cobre apenas o trio de comandos e não explicita a matriz completa de gates por risco (schema->security).",
+        "Não exige explicitamente Review/Gatekeeper para mudanças R2/R3 antes de promover."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Validar matriz de gates por risco + Review/Gate em R2/R3\". Descrição: Expandir a issue para incluir ordem mandatória de gates por nível de risco e bloqueio sem Gatekeeper. ACs reescritos: (1) Dado risco R2/R3 sem Review/Gate, então status=hold; (2) Dado side effect sem pre_live_checklist aprovado, então live-run bloqueado; (3) Dado schema, patch_hygiene, static, unit, integration e security em PASS, então promoção permitida. Checklist QA: simular falha em integration; validar bloqueio sem reviewer; anexar evidence_ref por gate.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-01",
+        "audit:partial",
+        "risk:high",
+        "needs-compliance",
+        "needs-qa"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:512",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:42",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:44"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-01-02",
+      "title": "Validar baseline de policy allowlists privacidade e identidade de operador",
+      "mapped_requirements": [
+        "R2"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC não explicita política ZDR e minimização de armazenamento para fluxos sensíveis.",
+        "Critério está centrado em PASS de comando sem critérios objetivos de retenção/compliance."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Endurecer baseline de privacidade (ZDR + retenção mínima)\". Descrição: Incluir requisitos explícitos de ZDR, minimização de prompt storage e evidências de retenção para `sensitive`. ACs reescritos: (1) Dado fluxo sensitive sem ZDR/allowlist, security-check=FAIL; (2) Dado storage de prompt fora da política, security-check=FAIL; (3) Dado classificação + allowlist + política ZDR válidas, security-check=PASS. Checklist QA: caso negativo com provider não allowlisted; caso negativo com retenção indevida; evidência de policy efetiva.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-01",
+        "audit:partial",
+        "risk:high",
+        "privacy",
+        "compliance"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:57"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-01-03",
+      "title": "Validar regra de canal confiavel + approval queue",
+      "mapped_requirements": [
+        "R3"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Não explicita que toda ação com side effect financeiro depende de aprovação humana explícita.",
+        "Não exige campos mínimos de auditoria (`decision_id`, `operator_id`) nem assinatura no fallback."
+      ],
+      "risk_level": "critical",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Canal confiável com aprovação financeira explícita e trilha formal\". Descrição: Amarrar a issue a side effects financeiros e exigir metadados de decisão. ACs reescritos: (1) Dado comando financeiro sem aprovação explícita, bloquear execução; (2) Dado instrução via email, exigir confirmação em canal confiável com challenge; (3) Dado fallback Slack, exigir assinatura válida + allowlist + challenge; (4) Toda aprovação deve registrar `decision_id`, `operator_id`, timestamp e evidence_ref. Checklist QA: teste negativo de email-only; teste negativo de assinatura inválida; teste positivo com challenge completo.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-01",
+        "audit:partial",
+        "risk:critical",
+        "security",
+        "compliance"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:429",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:288",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-02-01",
+      "title": "Validar contratos work_order decision task_event com schema versionado",
+      "mapped_requirements": [
+        "R4"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Sem correção bloqueante. Opcional: acrescentar versionamento semântico explícito de schema nos ACs para evitar ambiguidade futura.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-02",
+        "audit:ok",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:31",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:282",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:42"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-02-02",
+      "title": "Validar SPRINT_OVERRIDE com idempotencia e rollback executavel",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Sem correção bloqueante. Opcional: incluir evidência obrigatória de rollback executado em ambiente de teste no artifact da issue.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-02",
+        "audit:ok",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:46",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:56"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-02-03",
+      "title": "Validar contrato idempotente para auto-acoes de saude observabilidade",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC exige idempotência, mas não torna rollback requisito bloqueante para auto-ação com efeito colateral.",
+        "Não define evidência mínima de execução de rollback em cenário de falha."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Auto-ações idempotentes com rollback obrigatório\". Descrição: complementar o contrato de `automation_action_id` com rollback explícito e validação de stop-ship. ACs reescritos: (1) Dado auto-ação repetida com mesma chave, resultado=no-op; (2) Dado auto-ação sem rollback definido, gate=FAIL; (3) Dado rollback executado com sucesso, registrar evidence_ref no artifact. Checklist QA: replay de mesma chave; falha controlada com rollback; validação de trilha de auditoria.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-02",
+        "audit:partial",
+        "risk:high",
+        "idempotency",
+        "needs-qa"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:65",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-02-04",
+      "title": "Validar reconciliador de degraded mode com replay_key e trilha de incidente",
+      "mapped_requirements": [
+        "R6"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC cobre chaves de reconciliação, mas não exige explicitamente trilha offline de degradação.",
+        "Não explicita bloqueio de promoção até reconciliação concluída."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Reconciliador degraded com bloqueio de promoção e incidente\". Descrição: adicionar obrigação de trilha offline e incidente automático em degradação não reconciliada. ACs reescritos: (1) Evento sem idempotency_key/replay_key -> bloqueio; (2) Evento reconciliado -> estado determinístico + trilha completa; (3) Degradação sem reconciliação no SLA -> incidente aberto + promoção bloqueada. Checklist QA: simular perda de chave; simular atraso >SLA; validar incidente e bloqueio.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-02",
+        "audit:partial",
+        "risk:high",
+        "degraded-mode",
+        "needs-runbook"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:34",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:485",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:610",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:82",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:83"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-03-01",
+      "title": "Validar Model Catalog baseline com sync e metadados minimos",
+      "mapped_requirements": [
+        "R7"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "low",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Sem correção bloqueante. Opcional: adicionar teste de bloqueio por metadado desatualizado para reduzir risco de drift.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-03",
+        "audit:ok",
+        "risk:low",
+        "model-catalog"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:622",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:43"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-03-02",
+      "title": "Validar Model Router baseline com trilha requested effective",
+      "mapped_requirements": [
+        "R8"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC não exige campos `fallback_step` e `reason` para auditoria de fallback.",
+        "Não explicita regra de falha de compliance quando trilha de roteamento estiver incompleta."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Model Router com trilha completa de fallback\". Descrição: expandir AC para logging obrigatório de fallback. ACs reescritos: (1) Toda execução registra requested_model/effective_model/fallback_step/reason; (2) Ausência de qualquer campo implica compliance FAIL; (3) Trilhas completas em PASS habilitam promoção. Checklist QA: cenário com fallback; cenário sem fallback; cenário com campo faltante.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-03",
+        "audit:partial",
+        "risk:high",
+        "model-router",
+        "compliance"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:57"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-03-03",
+      "title": "Validar Memory Plane baseline e ingestao de metadados de run",
+      "mapped_requirements": [
+        "R9"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC cobre entidades de run, mas não cobre explicitamente o ciclo obrigatório `nightly-extraction`.",
+        "Não exige os campos de auditoria noturna (`scheduled_at`, `executed_at`, `status`, `incident_ref`)."
+      ],
+      "risk_level": "medium",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Memory Plane com auditoria noturna mandatória\". Descrição: integrar no escopo da issue o contrato `memory_contract` para o ciclo noturno. ACs reescritos: (1) `MEMORY.md` e `daily_notes_path` válidos; (2) nightly-extraction registra scheduled_at/executed_at/status/daily_note_ref/incident_ref; (3) atraso >24h abre incidente automaticamente. Checklist QA: simular ciclo noturno com sucesso, atraso e falha.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-03",
+        "audit:partial",
+        "risk:medium",
+        "memory",
+        "needs-ops"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:70"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-03-04",
+      "title": "Validar Budget Governor baseline e limites por run task dia",
+      "mapped_requirements": [
+        "R10"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC não exige explicitamente telemetria consolidada do LiteLLM como fonte de verdade de custo.",
+        "Não explicita mecanismo de burn-rate/circuit breaker."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"Budget Governor com telemetria LiteLLM e circuit breaker\". Descrição: tornar a origem de custo e a contenção de burn-rate critérios obrigatórios de aceite. ACs reescritos: (1) Sem telemetria LiteLLM + snapshot do provedor efetivo => FAIL; (2) Limites por run/task/dia e burn-rate ativo => PASS; (3) Violação de threshold aciona bloqueio automático. Checklist QA: teste com custo acima do threshold; teste com snapshots inconsistentes; teste com bloqueio automático.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-03",
+        "audit:partial",
+        "risk:high",
+        "budget",
+        "finops"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:54",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:578",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:82",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:83"
+      ]
+    },
+    {
+      "id": "ISSUE-F2-03-05",
+      "title": "Validar A2A e hooks webhooks baseline com trace_id",
+      "mapped_requirements": [
+        "R11"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC não exige explicitamente `idempotency_key` e `source_hook_id` no evento de webhook.",
+        "Não explicita bloqueio quando assinatura do webhook é inválida."
+      ],
+      "risk_level": "high",
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_de_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_para_qa_reproducao": false,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Título: \"A2A/Webhooks com hardening completo de rastreabilidade e assinatura\". Descrição: fechar lacunas de rastreabilidade e autenticação no contrato de webhook. ACs reescritos: (1) A2A fora de allowlist -> FAIL; (2) webhook sem mapping/assinatura válida -> FAIL; (3) webhook válido deve registrar trace_id/idempotency_key/source_hook_id; (4) eventos duplicados devem resultar em NO_OP_DUPLICATE. Checklist QA: replay de webhook duplicado; assinatura inválida; evento sem source_hook_id.",
+      "suggested_labels": [
+        "phase:F2",
+        "epic:F2-03",
+        "audit:partial",
+        "risk:high",
+        "webhook",
+        "a2a",
+        "security"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:301",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:313",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:91",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
+      ]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 11,
+    "requirements_covered": 11,
+    "coverage_percent": 100.0,
+    "total_issues_audited": 12,
+    "critical_issues_count": 1,
+    "conformance_breakdown": {
+      "Conforme": 3,
+      "Parcialmente conforme": 9,
+      "Não conforme": 0,
+      "Sem mapeamento": 0
+    },
+    "risk_breakdown": {
+      "critical": 1,
+      "high": 8,
+      "medium": 2,
+      "low": 1
+    },
+    "top_5_risks": [
+      {
+        "rank": 1,
+        "issue_id": "ISSUE-F2-01-03",
+        "risk": "Aprovação financeira explícita não está amarrada de forma inequívoca aos ACs.",
+        "severity": "critical"
+      },
+      {
+        "rank": 2,
+        "issue_id": "ISSUE-F2-03-05",
+        "risk": "Webhook sem assinatura/idempotência/source_hook_id explícitos pode abrir vetor de replay/bypass.",
+        "severity": "high"
+      },
+      {
+        "rank": 3,
+        "issue_id": "ISSUE-F2-02-03",
+        "risk": "Auto-ação idempotente sem rollback obrigatório mantém risco de efeito colateral irreversível.",
+        "severity": "high"
+      },
+      {
+        "rank": 4,
+        "issue_id": "ISSUE-F2-01-02",
+        "risk": "Privacidade sensível sem ZDR/minimização explícita aumenta risco de compliance.",
+        "severity": "high"
+      },
+      {
+        "rank": 5,
+        "issue_id": "ISSUE-F2-03-02",
+        "risk": "Trilha de roteamento sem fallback_step/reason reduz auditabilidade e mascaramento de fallback.",
+        "severity": "high"
+      }
+    ],
+    "immediate_mitigation_plan": [
+      "Corrigir ISSUE-F2-01-03 com regra explícita de side effect financeiro + challenge + trilha de aprovação.",
+      "Corrigir ISSUE-F2-03-05 para exigir assinatura, idempotency_key e source_hook_id em todo webhook.",
+      "Corrigir ISSUE-F2-02-03 para tornar rollback obrigatório e testado em auto-ações."
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "urgency_index": 97,
+      "description": "Endurecer ISSUE-F2-01-03 para bloquear qualquer side effect financeiro sem aprovação humana explícita, com challenge e trilha formal (`decision_id`, `operator_id`).",
+      "owner": "Compliance",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 91,
+      "description": "Atualizar ISSUE-F2-03-05 para exigir assinatura válida, `idempotency_key` e `source_hook_id` em eventos webhook; bloquear e auditar payload inválido.",
+      "owner": "Tech Lead",
+      "due_days": 3,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 88,
+      "description": "Reescrever ISSUE-F2-02-03 para incluir rollback obrigatório e evidência de teste negativo para auto-ações com efeito colateral.",
+      "owner": "Tech Lead",
+      "due_days": 3,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:69",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 84,
+      "description": "Ampliar ISSUE-F2-01-02 com critérios explícitos de ZDR, retenção e minimização de prompt storage para dados sensíveis.",
+      "owner": "Compliance",
+      "due_days": 4,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56"
+      ]
+    },
+    {
+      "priority": "P2",
+      "urgency_index": 77,
+      "description": "Completar ISSUE-F2-03-02 com trilha de fallback (`fallback_step`, `reason`) e regra explícita de compliance FAIL sem rastreio completo.",
+      "owner": "QA",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56"
+      ]
+    },
+    {
+      "priority": "P2",
+      "urgency_index": 73,
+      "description": "Expandir ISSUE-F2-03-03 para incluir `nightly-extraction` e auditoria de ciclo noturno com incidente automático em atraso/falha.",
+      "owner": "PO",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:437",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69"
+      ]
+    },
+    {
+      "priority": "P2",
+      "urgency_index": 71,
+      "description": "Reforçar ISSUE-F2-01-01 com matriz de gates por risco e obrigatoriedade de Review/Gate para R2/R3.",
+      "owner": "Tech Lead",
+      "due_days": 4,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:43"
+      ]
+    },
+    {
+      "priority": "P3",
+      "urgency_index": 62,
+      "description": "Padronizar qualidade de descrição para todas as 12 issues F2: owner por issue, estimativa, dependências explícitas e passos de QA/reprodução.",
+      "owner": "PO",
+      "due_days": 7,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md:38",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:33"
+      ]
+    }
+  ]
+}

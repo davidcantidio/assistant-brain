@@ -32,3 +32,11 @@
 - justificativa:
   - as 4 issues do epico foram executadas com evidencia auditavel.
   - gates de saida da fase (`eval-integrations` e `eval-trading`) estao verdes no mesmo ciclo.
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Consolidacao do epico agora referencia anti-bypass, rollback e a validacao unica da fase.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

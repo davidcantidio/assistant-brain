@@ -20,11 +20,12 @@
   - invalidacao por expiracao, 3 falhas, rotacao de chave e revogacao manual validada.
 - idempotencia de comando: `PASS`
   - `command_id` duplicado tratado como `NO_OP_DUPLICATE_AUDITED`;
-  - replay nao gera nova transicao de estado.
+  - replay nao gera nova transicao de estado;
+  - `replay_event_hash` registrado: `replay-f6-02-02-20260301`.
 - autenticacao/canal e incidente: `PASS`
   - comando invalido bloqueado;
   - incidente `SECURITY_VIOLATION_REVIEW` obrigatorio;
-  - hash de payload registrado no bloqueio.
+  - `blocked_payload_hash` registrado: `blocked-f6-02-03-20260301`.
 
 ## Gates finais do epico
 - `make ci-security`: `PASS`

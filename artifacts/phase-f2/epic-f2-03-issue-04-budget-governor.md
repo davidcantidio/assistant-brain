@@ -9,17 +9,23 @@
 - cenario: policy sem `limits` deve falhar.
 - cenario: policy sem `limits.day_usd` deve falhar.
 - cenario: policy sem `snapshot_contract.required_fields` deve falhar.
+- cenario: policy sem `telemetry_source=litellm_aggregated` deve falhar.
+- cenario: policy sem `provider_snapshot_source=effective_provider_snapshot` ou sem `burn_rate_policy` deve falhar.
 - validacao executavel: `scripts/ci/eval_runtime_contracts.sh` (fixtures invalidas inline em Python para `budget_governor_policy`).
 - resultado: contrato incompleto bloqueado.
 
 ## Green
 - acao: adicao do contrato `ARC/schemas/budget_governor_policy.schema.json`.
-- acao: `eval_runtime_contracts.sh` atualizado para validar limites run/task/day e vinculo obrigatorio com `credits_snapshots`.
+- acao: `eval_runtime_contracts.sh` atualizado para validar limites run/task/day, origem de telemetria, snapshot efetivo e vinculo obrigatorio com `credits_snapshots`.
 - acao: documentacao reforcada:
   - `CORE/FINANCIAL-GOVERNANCE.md` com bloqueio explicito sem limite run/tarefa/dia.
   - `EVALS/SYSTEM-HEALTH-THRESHOLDS.md` com regra de release bloqueante para baseline de budget.
 - comando: `make eval-runtime`
 - resultado: `eval-runtime-contracts: PASS`.
+
+## Auditoria complementar
+- `telemetry_source` e `provider_snapshot_source` passam a ser parte do contrato, nao apenas observacao de implementacao.
+- `burn_rate_policy` com thresholds por hora/dia e `circuit_breaker_action` passa a ser obrigatorio para promover.
 
 ## Refactor
 - comando: `make phase-f2-gate`

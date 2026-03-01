@@ -6,7 +6,7 @@
 - fonte de verdade: `VERTICALS/TRADING/TRADING-PRD.md`, `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`, `PRD/PRD-MASTER.md`, `PM/DECISION-PROTOCOL.md`
 
 ## Red
-- cenario A: evidencias da janela `S0` incompletas para rastrear bloqueio, aprovacao humana e estabilidade minima.
+- cenario A: evidencias da janela `S0` incompletas para rastrear bloqueio, aprovacao humana, janela minima de 4 semanas e zero `SEV-1/SEV-2`.
 - resultado esperado: `hold`.
 - cenario B: status de `S0` sem trilha consolidada para decidir avaliacao de `S1`.
 - resultado esperado: `hold`.
@@ -14,7 +14,7 @@
 ## Green
 - acao:
   - consolidar evidencias por issue de `S0` em artifact unico do epic;
-  - publicar resumo operacional de `S0` com status de bloqueio, aprovacao humana e janela minima;
+  - publicar resumo operacional de `S0` com status de bloqueio, aprovacao humana, janela minima de 4 semanas e zero `SEV-1/SEV-2`;
   - atualizar status do `EPIC-F7-01` para `done` em `PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md` e mover documento do epic para `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/`.
 - comandos:
   1. `make eval-trading`
@@ -27,7 +27,7 @@
 
 ## Refactor
 - manter coerencia de links apos mover o epic para `feito` sem encerrar a fase `F7`.
-- manter decisao final no escopo do epic como "apto para avaliar S1" sem promocao automatica para live.
+- manter decisao final no escopo do epic como "apto para avaliar S1" sem promocao automatica para live, e `hold` quando a evidencia quantitativa de `S0` estiver incompleta.
 
 ## Alteracoes da issue
 - `artifacts/phase-f7/epic-f7-01-issue-03-s0-window-evidence-s1-evaluation-ready.md`

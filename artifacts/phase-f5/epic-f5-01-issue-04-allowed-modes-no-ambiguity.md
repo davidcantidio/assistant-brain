@@ -38,3 +38,11 @@
   - registra execucao normativa da `ISSUE-F5-01-04`.
 - `artifacts/phase-f5/epic-f5-01-issue-04-allowed-modes-no-ambiguity.md`
   - evidencia auditavel do ciclo da issue.
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Template INTEGRATIONS completado com objetivo, modo, contratos, riscos, testes, rollback e policy E2B explicita.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

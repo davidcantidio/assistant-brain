@@ -16,7 +16,8 @@
   - consolidar checklist de prontidao HITL em `artifacts/phase-f6/hitl-readiness-checklist.md`;
   - consolidar resumo final da fase em `artifacts/phase-f6/validation-summary.md`;
   - consolidar status do epico em `artifacts/phase-f6/epic-f6-03-fallback-contingencia-promocao.md`;
-  - registrar decisao final `hold` com base no estado atual de `SEC/allowlists/OPERATORS.yaml`.
+  - registrar decisao final `hold` com base no estado atual de `SEC/allowlists/OPERATORS.yaml`;
+  - registrar `consolidation_owner` e `review_due_date` na evidencia unica da fase.
 - comandos:
   1. `make ci-security`
   2. `make eval-trading`
@@ -31,6 +32,10 @@
 ## Refactor
 - garantir consistencia de links internos apos mover fase F6 para `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/`.
 - manter rastreabilidade da decisao de fase (`hold`) em artifact unico.
+- metadados finais:
+  - `consolidation_owner`: `pm`
+  - `review_due_date`: `2026-03-03`
+  - `decision_id`: `not-issued` (fase em `hold`)
 
 ## Alteracoes da issue
 - `artifacts/phase-f6/hitl-readiness-checklist.md`

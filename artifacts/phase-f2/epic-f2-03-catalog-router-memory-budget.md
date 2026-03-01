@@ -7,21 +7,21 @@
 
 ## Status Catalog/Router
 - `ISSUE-F2-03-01` concluida com contrato minimo + sync explicito em `models_catalog`.
-- `ISSUE-F2-03-02` concluida com contrato `router_decision` e trilha obrigatoria `requested/effective`.
+- `ISSUE-F2-03-02` concluida com contrato `router_decision` e trilha obrigatoria `requested/effective/fallback_step/reason`.
 - evidencias:
   - `artifacts/phase-f2/epic-f2-03-issue-01-model-catalog.md`
   - `artifacts/phase-f2/epic-f2-03-issue-02-model-router.md`
 
 ## Status Memory/Budget
-- `ISSUE-F2-03-03` concluida com contratos executaveis de `llm_runs/router_decisions/credits_snapshots`.
-- `ISSUE-F2-03-04` concluida com contrato `budget_governor_policy` (limites por run/task/day + snapshot contract).
+- `ISSUE-F2-03-03` concluida com contratos executaveis de `llm_runs/router_decisions/credits_snapshots` e trilha `nightly-extraction`.
+- `ISSUE-F2-03-04` concluida com contrato `budget_governor_policy` (limites por run/task/day + snapshot contract + telemetry source + burn rate).
 - evidencias:
   - `artifacts/phase-f2/epic-f2-03-issue-03-memory-plane.md`
   - `artifacts/phase-f2/epic-f2-03-issue-04-budget-governor.md`
 
 ## Status A2A/Hooks
-- `ISSUE-F2-03-05` concluida com contratos executaveis de eventos A2A e webhook com `trace_id`.
-- validacoes bloqueiam delegacao fora de allowlist e webhook sem mapping/trace.
+- `ISSUE-F2-03-05` concluida com contratos executaveis de eventos A2A e webhook com `trace_id`, `source_hook_id`, assinatura valida e replay auditavel.
+- validacoes bloqueiam delegacao fora de allowlist, webhook sem mapping/trace/source hook e assinatura invalida.
 - evidencia:
   - `artifacts/phase-f2/epic-f2-03-issue-05-a2a-hooks-traceability.md`
 

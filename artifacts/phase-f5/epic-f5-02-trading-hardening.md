@@ -35,3 +35,11 @@
 - justificativa:
   - as 5 issues do epico foram executadas com evidencias auditaveis;
   - gate de trading e qualidade documental permanecem verdes no ciclo de fechamento.
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Consolidacao do epico agora referencia replay concorrente, prontidao live por provider e a validacao unica da fase.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

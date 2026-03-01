@@ -10,12 +10,14 @@
 - resultado esperado: `FAIL` no `make eval-trading`.
 - cenario B: permitir remocao de `TRADING_BLOCKED` sem decisao formal registrada.
 - resultado esperado: `FAIL` no `make eval-trading`.
+- cenario C: emitir decisao formal sem `decision_id`.
+- resultado esperado: `FAIL` no `make eval-trading`.
 
 ## Green
 - acao:
   - reforcar `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`, `VERTICALS/TRADING/TRADING-PRD.md` e `PM/DECISION-PROTOCOL.md` com regra explicita:
     - sem fallback HITL validado, live MUST permanecer `TRADING_BLOCKED`;
-    - remocao de `TRADING_BLOCKED` por prontidao HITL somente por decisao formal registrada.
+    - remocao de `TRADING_BLOCKED` por prontidao HITL somente por decisao formal registrada com `decision_id`.
   - endurecer `scripts/ci/eval_trading.sh` com checks executaveis dessas duas regras nos tres documentos.
 - comandos:
   1. `make eval-trading`
@@ -29,6 +31,9 @@
 ## Refactor
 - alinhar linguagem de bloqueio e desbloqueio formal entre politica de decisao e criterios de enablement.
 - manter o gate textual de trading como validador unico do requisito documental.
+- status final desta rodada:
+  - `decision_id`: `not-issued`
+  - consequencia: `TRADING_BLOCKED` mantido e fase permanece `hold`.
 
 ## Alteracoes da issue
 - `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`

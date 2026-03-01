@@ -32,3 +32,11 @@
 - `make eval-runtime`: `PASS`
 - `make eval-gates`: `PASS`
 - `make ci-security`: `PASS`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Consolidacao do epico agora referencia B1-R11, B1-R19, thresholds de custo e prontidao formal de operadores e canais.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

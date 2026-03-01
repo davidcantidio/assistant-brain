@@ -63,12 +63,13 @@ Exclui:
 
 ## Contrato Minimo de Auto-Acao
 ```yaml
-schema_version: "1.2"
+schema_version: "1.3"
 automation_action_id: "AUTO-UUID"
 coalescing_key: "<office>:<metric>:<cause>"
 idempotency_key: "IDEMP-UUID"
+has_side_effect: true
 rollback_plan_ref: "artifact://..."
-status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
+status: "CREATED|APPLIED|NOTIFY_ONLY|NO_OP_DUPLICATE|ROLLED_BACK|FAILED|FAIL_STOP_SHIP"
 ```
 
 ## Acoes Automaticas
@@ -77,7 +78,8 @@ status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
 - registrar evento no activity feed e incident log.
 - abrir decision para ajuste estrutural quando persistente.
 - nunca abrir mais de 1 decision para a mesma `coalescing_key` durante `cooldown_window`.
-- auto-acao sem `rollback_plan_ref` MUST degradar para `notify-only`.
+- auto-acao sem `rollback_plan_ref` e `has_side_effect=false` MUST degradar para `notify-only`.
+- auto-acao sem `rollback_plan_ref` e `has_side_effect=true` MUST retornar `FAIL_STOP_SHIP`.
 
 ## EVAL Gates de Claims Centrais (obrigatorio)
 | Claim central | Gate minimo | Threshold inicial | Acao em falha |
@@ -107,6 +109,7 @@ status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
 - qualquer claim central sem gate definido/executado => release bloqueada.
 - excecao apenas por decision explicita de risco, com prazo de correcao.
 - budget governor baseline MUST manter limites run/task/day e `credits_snapshots` atualizados; sem isso, release bloqueada.
+- budget governor baseline MUST usar `telemetry_source=litellm_aggregated`, `provider_snapshot_source=effective_provider_snapshot` e `burn_rate_policy` auditavel.
 
 ## Links Relacionados
 - [ARC Observability](../ARC/ARC-OBSERVABILITY.md)

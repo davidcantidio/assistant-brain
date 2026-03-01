@@ -18,6 +18,8 @@ required_files=(
   "ARC/schemas/work_order.schema.json"
   "ARC/schemas/decision.schema.json"
   "ARC/schemas/task_event.schema.json"
+  "ARC/schemas/automation_action_event.schema.json"
+  "ARC/schemas/degraded_reconciliation_status.schema.json"
   "PM/WORK-ORDER-SPEC.md"
   "PM/DECISION-PROTOCOL.md"
   "ARC/ARC-CORE.md"
@@ -35,6 +37,8 @@ done
 python3 -m json.tool ARC/schemas/work_order.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/decision.schema.json >/dev/null
 python3 -m json.tool ARC/schemas/task_event.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/automation_action_event.schema.json >/dev/null
+python3 -m json.tool ARC/schemas/degraded_reconciliation_status.schema.json >/dev/null
 
 search_re "## Contrato SPRINT_OVERRIDE" PM/SPRINT-LIMITS.md
 search_re "override_key" PM/SPRINT-LIMITS.md
@@ -57,6 +61,7 @@ search_re "NO_OP_DUPLICATE" ARC/ARC-OBSERVABILITY.md
 search_re "NO_OP_DUPLICATE" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "notify-only" ARC/ARC-OBSERVABILITY.md
 search_re "notify-only" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "FAIL_STOP_SHIP" ARC/ARC-OBSERVABILITY.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 
 search_re "idempotency_key" ARC/ARC-DEGRADED-MODE.md
 search_re "replay_key" ARC/ARC-DEGRADED-MODE.md
@@ -66,6 +71,7 @@ search_re 'reconciliador deterministico \(`idempotency_key`, `replay_key`, hash-
 search_re "idempotency_key" PM/WORK-ORDER-SPEC.md
 search_re "replay_key" PM/WORK-ORDER-SPEC.md
 search_re "reconciliacao offline sem duplicidade" EVALS/SYSTEM-HEALTH-THRESHOLDS.md
+search_re "promotion_blocked" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 
 python3 - <<'PY'
 import datetime as dt
@@ -159,12 +165,20 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
     assert_enum(payload, "risk_class", {"baixo", "medio", "alto"}, ctx)
     assert_enum(payload, "risk_tier", {"R0", "R1", "R2", "R3"}, ctx)
     assert_enum(payload, "data_sensitivity", {"public", "internal", "sensitive"}, ctx)
+    assert_enum(payload, "side_effect_class", {"none", "operational", "financial"}, ctx)
     assert_enum(payload, "status", {"PENDING", "APPROVED", "REJECTED", "KILLED", "EXPIRED"}, ctx)
     assert_nullable_string(payload, "approver_operator_id", ctx)
     assert_nullable_string(payload, "approver_telegram_user_id", ctx)
     assert_nullable_string(payload, "approver_telegram_chat_id", ctx)
     assert_nullable_string(payload, "approver_slack_user_id", ctx)
     assert_nullable_string(payload, "approver_slack_channel_id", ctx)
+    assert_nullable_string(payload, "approval_evidence_ref", ctx)
+    explicit_human_approval = payload.get("explicit_human_approval")
+    if not isinstance(explicit_human_approval, bool):
+        fail(f"{ctx} invalido: explicit_human_approval deve ser booleano.")
+    approval_signature_valid = payload.get("approval_signature_valid")
+    if approval_signature_valid is not None and not isinstance(approval_signature_valid, bool):
+        fail(f"{ctx} invalido: approval_signature_valid deve ser booleano ou null.")
     approver_channel = payload.get("approver_channel")
     if approver_channel not in {"telegram", "slack", None}:
         fail(f"{ctx} invalido: approver_channel fora do enum permitido.")
@@ -232,6 +246,8 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
             fail(f"{ctx} invalido: canal slack nao pode carregar campos telegram preenchidos.")
         if auth_method not in {"slack_allowlist", "challenge_secret"}:
             fail(f"{ctx} invalido: canal slack exige auth_method compativel.")
+        if approval_signature_valid is not True:
+            fail(f"{ctx} invalido: canal slack exige approval_signature_valid=true.")
     else:
         if any(
             payload.get(field) is not None
@@ -243,6 +259,21 @@ def validate_decision(payload: dict, schema: dict, ctx: str) -> None:
             )
         ):
             fail(f"{ctx} invalido: approver_channel=null exige ids de canal null.")
+        if approval_signature_valid is not None:
+            fail(f"{ctx} invalido: approver_channel=null exige approval_signature_valid=null.")
+
+    if approver_channel == "telegram" and approval_signature_valid is not None:
+        fail(f"{ctx} invalido: canal telegram exige approval_signature_valid=null.")
+
+    if payload.get("side_effect_class") == "financial":
+        if explicit_human_approval is not True:
+            fail(f"{ctx} invalido: side_effect_class=financial exige explicit_human_approval=true.")
+        if payload.get("challenge_status") != "VALIDATED":
+            fail(f"{ctx} invalido: side_effect_class=financial exige challenge_status=VALIDATED.")
+        if payload.get("approver_operator_id") is None:
+            fail(f"{ctx} invalido: side_effect_class=financial exige approver_operator_id.")
+        if payload.get("approval_evidence_ref") is None:
+            fail(f"{ctx} invalido: side_effect_class=financial exige approval_evidence_ref.")
 
 
 def validate_task_event(payload: dict, schema: dict, ctx: str) -> None:
@@ -328,39 +359,31 @@ def apply_sprint_override(state: dict, payload: dict, ctx: str) -> str:
     return "APPLIED"
 
 
-def validate_automation_action_payload(payload: dict, ctx: str) -> None:
-    required_fields = {
-        "automation_action_id",
-        "coalescing_key",
-        "idempotency_key",
-        "action_type",
-        "status",
-    }
-    missing = sorted([k for k in required_fields if k not in payload])
-    if missing:
-        fail(f"{ctx} invalido: campos obrigatorios ausentes: {missing}")
-
+def validate_automation_action_payload(payload: dict, schema: dict, ctx: str) -> None:
+    check_required_and_additional(schema, payload, ctx)
+    assert_string(payload, "schema_version", ctx)
     assert_string(payload, "automation_action_id", ctx)
     assert_string(payload, "coalescing_key", ctx)
     assert_string(payload, "idempotency_key", ctx)
     assert_string(payload, "action_type", ctx)
-    assert_string(payload, "status", ctx)
+    if not isinstance(payload.get("has_side_effect"), bool):
+        fail(f"{ctx} invalido: has_side_effect deve ser booleano.")
 
     if "rollback_plan_ref" in payload and payload["rollback_plan_ref"] is not None:
         value = payload["rollback_plan_ref"]
-        if not isinstance(value, str):
-            fail(f"{ctx} invalido: campo 'rollback_plan_ref' deve ser string quando presente.")
+        if not isinstance(value, str) or not value.strip():
+            fail(f"{ctx} invalido: campo 'rollback_plan_ref' deve ser string nao vazia quando presente.")
 
     assert_enum(
         payload,
         "status",
-        {"CREATED", "APPLIED", "NO_OP_DUPLICATE", "ROLLED_BACK", "FAILED"},
+        {"CREATED", "APPLIED", "NOTIFY_ONLY", "NO_OP_DUPLICATE", "ROLLED_BACK", "FAILED", "FAIL_STOP_SHIP"},
         ctx,
     )
 
 
-def apply_automation_action(state: dict, payload: dict, ctx: str) -> str:
-    validate_automation_action_payload(payload, ctx)
+def apply_automation_action(state: dict, payload: dict, schema: dict, ctx: str) -> str:
+    validate_automation_action_payload(payload, schema, ctx)
     coalescing_key = payload["coalescing_key"]
     idempotency_key = payload["idempotency_key"]
 
@@ -374,9 +397,32 @@ def apply_automation_action(state: dict, payload: dict, ctx: str) -> str:
 
     rollback_ref = payload.get("rollback_plan_ref")
     if rollback_ref is None or (isinstance(rollback_ref, str) and not rollback_ref.strip()):
+        if payload.get("has_side_effect") is True:
+            return "FAIL_STOP_SHIP"
         return "NOTIFY_ONLY"
 
     return "APPLIED"
+
+
+def validate_degraded_reconciliation_status(payload: dict, schema: dict, ctx: str) -> None:
+    check_required_and_additional(schema, payload, ctx)
+    assert_string(payload, "schema_version", ctx)
+    assert_string(payload, "incident_id", ctx)
+    assert_string(payload, "evidence_ref", ctx)
+    if payload.get("status") not in {"pending", "reconciled", "failed"}:
+        fail(f"{ctx} invalido: status fora do enum permitido.")
+    if not isinstance(payload.get("promotion_blocked"), bool):
+        fail(f"{ctx} invalido: promotion_blocked deve ser booleano.")
+    parse_optional_iso8601(payload.get("reconciled_at"), f"{ctx}.reconciled_at")
+
+    if payload.get("status") == "reconciled":
+        if payload.get("promotion_blocked") is not False:
+            fail(f"{ctx} invalido: status reconciled exige promotion_blocked=false.")
+        if payload.get("reconciled_at") is None:
+            fail(f"{ctx} invalido: status reconciled exige reconciled_at preenchido.")
+    else:
+        if payload.get("promotion_blocked") is not True:
+            fail(f"{ctx} invalido: status nao reconciled exige promotion_blocked=true.")
 
 
 def validate_reconciliation_event(payload: dict, ctx: str) -> None:
@@ -420,6 +466,10 @@ def apply_reconciliation_event(state: dict, payload: dict, ctx: str) -> str:
 work_order_schema = json.loads(Path("ARC/schemas/work_order.schema.json").read_text(encoding="utf-8"))
 decision_schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
 task_event_schema = json.loads(Path("ARC/schemas/task_event.schema.json").read_text(encoding="utf-8"))
+automation_action_schema = json.loads(Path("ARC/schemas/automation_action_event.schema.json").read_text(encoding="utf-8"))
+degraded_reconciliation_schema = json.loads(
+    Path("ARC/schemas/degraded_reconciliation_status.schema.json").read_text(encoding="utf-8")
+)
 
 expected_required_in_schema(
     work_order_schema,
@@ -458,6 +508,10 @@ expected_required_in_schema(
         "approver_slack_channel_id",
         "auth_method",
         "last_command_id",
+        "side_effect_class",
+        "explicit_human_approval",
+        "approval_evidence_ref",
+        "approval_signature_valid",
         "challenge_id",
         "challenge_status",
         "challenge_expires_at",
@@ -480,6 +534,32 @@ expected_required_in_schema(
     },
     "task_event.schema.json",
 )
+expected_required_in_schema(
+    automation_action_schema,
+    {
+        "schema_version",
+        "automation_action_id",
+        "coalescing_key",
+        "idempotency_key",
+        "action_type",
+        "has_side_effect",
+        "rollback_plan_ref",
+        "status",
+    },
+    "automation_action_event.schema.json",
+)
+expected_required_in_schema(
+    degraded_reconciliation_schema,
+    {
+        "schema_version",
+        "incident_id",
+        "status",
+        "reconciled_at",
+        "promotion_blocked",
+        "evidence_ref",
+    },
+    "degraded_reconciliation_status.schema.json",
+)
 
 valid_work_order = {
     "schema_version": "1.0",
@@ -500,8 +580,12 @@ valid_decision = {
     "title": "Validar contrato idempotente",
     "proposal": "Aplicar baseline de contratos",
     "risk_class": "medio",
-    "risk_tier": "R2",
+    "risk_tier": "R3",
     "data_sensitivity": "internal",
+    "side_effect_class": "financial",
+    "explicit_human_approval": True,
+    "approval_evidence_ref": "artifact://decisions/DEC-20260225-001/approval",
+    "approval_signature_valid": None,
     "status": "PENDING",
     "created_at": "2026-02-25T18:00:00Z",
     "timeout_at": "2026-02-25T19:00:00Z",
@@ -514,7 +598,7 @@ valid_decision = {
     "auth_method": "telegram_allowlist",
     "last_command_id": None,
     "challenge_id": "CHL-20260225-001",
-    "challenge_status": "PENDING",
+    "challenge_status": "VALIDATED",
     "challenge_expires_at": "2026-02-25T18:05:00Z",
 }
 
@@ -557,6 +641,19 @@ invalid_decision_slack_auth_mismatch["approver_telegram_chat_id"] = None
 invalid_decision_slack_auth_mismatch["approver_slack_user_id"] = "U12345"
 invalid_decision_slack_auth_mismatch["approver_slack_channel_id"] = "C12345"
 invalid_decision_slack_auth_mismatch["auth_method"] = "telegram_allowlist"
+invalid_decision_slack_auth_mismatch["approval_signature_valid"] = True
+
+invalid_decision_financial_without_approval = dict(valid_decision)
+invalid_decision_financial_without_approval["explicit_human_approval"] = False
+
+invalid_decision_slack_signature_missing = dict(valid_decision)
+invalid_decision_slack_signature_missing["approver_channel"] = "slack"
+invalid_decision_slack_signature_missing["approver_telegram_user_id"] = None
+invalid_decision_slack_signature_missing["approver_telegram_chat_id"] = None
+invalid_decision_slack_signature_missing["approver_slack_user_id"] = "U12345"
+invalid_decision_slack_signature_missing["approver_slack_channel_id"] = "C12345"
+invalid_decision_slack_signature_missing["auth_method"] = "slack_allowlist"
+invalid_decision_slack_signature_missing["approval_signature_valid"] = None
 
 invalid_task_event = dict(valid_task_event)
 invalid_task_event["attempt"] = 0
@@ -577,10 +674,12 @@ invalid_sprint_override_missing_rollback = dict(valid_sprint_override)
 invalid_sprint_override_missing_rollback.pop("rollback_snapshot_ref", None)
 
 valid_automation_action = {
+    "schema_version": "1.0",
     "automation_action_id": "AUTO-20260225-001",
     "coalescing_key": "main:latency_p95:timeout",
     "idempotency_key": "IDEMP-AUTO-001",
     "action_type": "open_task",
+    "has_side_effect": True,
     "status": "CREATED",
     "rollback_plan_ref": "artifact://automation/AUTO-20260225-001/rollback",
 }
@@ -591,7 +690,18 @@ invalid_automation_action_missing_id.pop("automation_action_id", None)
 automation_without_rollback = dict(valid_automation_action)
 automation_without_rollback["automation_action_id"] = "AUTO-20260225-002"
 automation_without_rollback["idempotency_key"] = "IDEMP-AUTO-002"
-automation_without_rollback["rollback_plan_ref"] = ""
+automation_without_rollback["rollback_plan_ref"] = None
+
+notify_only_automation = dict(valid_automation_action)
+notify_only_automation["automation_action_id"] = "AUTO-20260225-003"
+notify_only_automation["idempotency_key"] = "IDEMP-AUTO-003"
+notify_only_automation["has_side_effect"] = False
+notify_only_automation["rollback_plan_ref"] = None
+
+invalid_automation_action_empty_rollback = dict(valid_automation_action)
+invalid_automation_action_empty_rollback["automation_action_id"] = "AUTO-20260225-004"
+invalid_automation_action_empty_rollback["idempotency_key"] = "IDEMP-AUTO-004"
+invalid_automation_action_empty_rollback["rollback_plan_ref"] = ""
 
 valid_reconciliation_event = {
     "work_order_id": "WO-20260225-001",
@@ -608,9 +718,28 @@ invalid_reconciliation_missing_idempotency.pop("idempotency_key", None)
 invalid_reconciliation_missing_replay = dict(valid_reconciliation_event)
 invalid_reconciliation_missing_replay.pop("replay_key", None)
 
+valid_degraded_reconciliation = {
+    "schema_version": "1.0",
+    "incident_id": "INC-F2-20260225-001",
+    "status": "reconciled",
+    "reconciled_at": "2026-02-25T18:30:00Z",
+    "promotion_blocked": False,
+    "evidence_ref": "artifact://phase-f2/degraded-reconciliation-status"
+}
+
+invalid_degraded_reconciliation = dict(valid_degraded_reconciliation)
+invalid_degraded_reconciliation["status"] = "pending"
+invalid_degraded_reconciliation["promotion_blocked"] = False
+
 validate_work_order(valid_work_order, work_order_schema, "work_order.valid")
 validate_decision(valid_decision, decision_schema, "decision.valid")
 validate_task_event(valid_task_event, task_event_schema, "task_event.valid")
+validate_automation_action_payload(valid_automation_action, automation_action_schema, "automation_action.valid")
+validate_degraded_reconciliation_status(
+    valid_degraded_reconciliation,
+    degraded_reconciliation_schema,
+    "degraded_reconciliation.valid",
+)
 
 expect_invalid(validate_work_order, invalid_work_order, work_order_schema, "work_order.invalid")
 expect_invalid(validate_decision, invalid_decision, decision_schema, "decision.invalid")
@@ -644,7 +773,37 @@ expect_invalid(
     decision_schema,
     "decision.invalid_slack_auth_mismatch",
 )
+expect_invalid(
+    validate_decision,
+    invalid_decision_financial_without_approval,
+    decision_schema,
+    "decision.invalid_financial_without_approval",
+)
+expect_invalid(
+    validate_decision,
+    invalid_decision_slack_signature_missing,
+    decision_schema,
+    "decision.invalid_slack_signature_missing",
+)
 expect_invalid(validate_task_event, invalid_task_event, task_event_schema, "task_event.invalid")
+expect_invalid(
+    validate_automation_action_payload,
+    invalid_automation_action_missing_id,
+    automation_action_schema,
+    "automation_action.invalid_missing_id",
+)
+expect_invalid(
+    validate_automation_action_payload,
+    invalid_automation_action_empty_rollback,
+    automation_action_schema,
+    "automation_action.invalid_empty_rollback",
+)
+expect_invalid(
+    validate_degraded_reconciliation_status,
+    invalid_degraded_reconciliation,
+    degraded_reconciliation_schema,
+    "degraded_reconciliation.invalid_pending_without_block",
+)
 
 
 def apply_hitl_command(state: dict, command_id: str) -> str:
@@ -724,19 +883,37 @@ expect_invalid(
 )
 
 automation_state = {"coalescing_in_cooldown": set(), "idempotency_seen": set()}
-first_auto_apply = apply_automation_action(automation_state, valid_automation_action, "automation_action.first_apply")
+first_auto_apply = apply_automation_action(
+    automation_state,
+    valid_automation_action,
+    automation_action_schema,
+    "automation_action.first_apply",
+)
 if first_auto_apply != "APPLIED":
     fail("automation_action.first_apply deveria retornar APPLIED.")
 
 duplicate_auto_apply = apply_automation_action(
-    automation_state, valid_automation_action, "automation_action.duplicate_apply"
+    automation_state,
+    valid_automation_action,
+    automation_action_schema,
+    "automation_action.duplicate_apply",
 )
 if duplicate_auto_apply != "NO_OP_DUPLICATE":
     fail("automation_action.duplicate_apply deveria retornar NO_OP_DUPLICATE.")
 
-notify_only_apply = apply_automation_action(
+stop_ship_apply = apply_automation_action(
     {"coalescing_in_cooldown": set(), "idempotency_seen": set()},
     automation_without_rollback,
+    automation_action_schema,
+    "automation_action.fail_stop_ship",
+)
+if stop_ship_apply != "FAIL_STOP_SHIP":
+    fail("automation_action.fail_stop_ship deveria retornar FAIL_STOP_SHIP.")
+
+notify_only_apply = apply_automation_action(
+    {"coalescing_in_cooldown": set(), "idempotency_seen": set()},
+    notify_only_automation,
+    automation_action_schema,
     "automation_action.notify_only",
 )
 if notify_only_apply != "NOTIFY_ONLY":
@@ -744,10 +921,13 @@ if notify_only_apply != "NOTIFY_ONLY":
 
 expect_invalid(
     lambda payload, _schema, ctx: apply_automation_action(
-        {"coalescing_in_cooldown": set(), "idempotency_seen": set()}, payload, ctx
+        {"coalescing_in_cooldown": set(), "idempotency_seen": set()},
+        payload,
+        automation_action_schema,
+        ctx,
     ),
     invalid_automation_action_missing_id,
-    {},
+    automation_action_schema,
     "automation_action.invalid_missing_id",
 )
 

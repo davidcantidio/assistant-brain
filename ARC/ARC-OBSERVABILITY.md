@@ -66,7 +66,7 @@ Exclui:
 
 ## Contrato de Auto-Acao (obrigatorio)
 ```yaml
-schema_version: "1.2"
+schema_version: "1.3"
 automation_action_id: "AUTO-UUID"
 coalescing_key: "<office>:<metric>:<root_cause>"
 idempotency_key: "IDEMP-UUID"
@@ -74,16 +74,18 @@ trigger_metric: "latency_p95|daily_cost|burn_rate|parse_rate|tool_success_rate|.
 trigger_value: "numero"
 threshold_value: "numero"
 action_type: "open_task|open_decision|notify|reduce_load|activate_degraded"
+has_side_effect: true
 target_ref: "task://...|decision://...|incident://..."
 rollback_plan_ref: "artifact://..."
 created_at: "ISO-8601"
 cooldown_until: "ISO-8601"
-status: "CREATED|APPLIED|NO_OP_DUPLICATE|ROLLED_BACK|FAILED"
+status: "CREATED|APPLIED|NOTIFY_ONLY|NO_OP_DUPLICATE|ROLLED_BACK|FAILED|FAIL_STOP_SHIP"
 ```
 
 ## Regras de Idempotencia
 - mesma `coalescing_key` dentro do `cooldown_window` MUST virar `NO_OP_DUPLICATE`.
-- auto-acao sem `rollback_plan_ref` MUST ser convertida para `notify-only`.
+- auto-acao sem `rollback_plan_ref` e `has_side_effect=false` MUST ser convertida para `notify-only`.
+- auto-acao sem `rollback_plan_ref` e `has_side_effect=true` MUST virar `FAIL_STOP_SHIP`.
 - nunca abrir mais de 1 decision por `coalescing_key` durante cooldown.
 - toda auto-acao MUST emitir `task_event` com hash encadeado.
 

@@ -10,6 +10,10 @@
     "source_hook_id",
     "mapping_id",
     "idempotency_key",
+    "signature_status",
+    "signature_alg",
+    "signature_key_id",
+    "duplicate_disposition",
     "event_type",
     "status",
     "received_at"
@@ -38,6 +42,22 @@
     "idempotency_key": {
       "type": "string",
       "minLength": 2
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": ["valid", "invalid"]
+    },
+    "signature_alg": {
+      "type": "string",
+      "enum": ["hmac-sha256"]
+    },
+    "signature_key_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "duplicate_disposition": {
+      "type": "string",
+      "enum": ["APPLIED", "NO_OP_DUPLICATE"]
     },
     "event_type": {
       "type": "string",

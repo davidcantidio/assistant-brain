@@ -1,0 +1,643 @@
+{
+  "pr_summary": "Fase 6 cobre 8/12 requisitos do baseline composto; 3 requisitos estao parciais e 1 esta sem cobertura (R9). Foram auditadas 9 issues, com 3 classificadas como criticas por risco de seguranca/governanca em HITL e trading live. Pelo menos o botao de promote nao foi apertado no escuro.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Operador/canal valido + security-check: PASS para gate F6.",
+      "acceptance_criteria": [
+        "Checklist HITL da fase preenchido com operador autorizado.",
+        "Canal confiavel validado para comandos criticos.",
+        "make ci-security retorna security-check: PASS."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-01-01",
+        "ISSUE-F6-01-02"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md:23-24",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:36-37"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "Telegram e canal primario para comando critico HITL.",
+      "acceptance_criteria": [
+        "Regra explicita de Telegram primario nos artefatos de fase.",
+        "Fluxo de comando critico aprovado/rejeitado via canal confiavel."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-01-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:136",
+        "assistant-brain/PRD/PRD-MASTER.md:279",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:45,50"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "Slack so pode fallback HITL com Telegram degradado e controles equivalentes.",
+      "acceptance_criteria": [
+        "Fallback apenas apos degradacao do Telegram.",
+        "Fallback com assinatura, anti-replay e challenge equivalentes ao Telegram.",
+        "Sem controles equivalentes, fase deve permanecer hold."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-03-01"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:137-138",
+        "assistant-brain/PRD/PRD-MASTER.md:288",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:31-37"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "Email e canal nao confiavel para comando.",
+      "acceptance_criteria": [
+        "Policy explicita de email como nao confiavel.",
+        "Comando por email isolado nao pode ser aceito como comando HITL."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-01-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:40,143-145",
+        "assistant-brain/PRD/PRD-MASTER.md:586",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:45,50"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "Fallback Slack exige slack_user_ids e slack_channel_ids nao vazios para operador habilitado.",
+      "acceptance_criteria": [
+        "Fallback com IDs vazios deve resultar em hold/bloqueio.",
+        "Fallback so pode passar com IDs e canal autorizados por policy."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-01-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:139",
+        "assistant-brain/PRD/PRD-MASTER.md:614",
+        "assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:198",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:57-63"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "Comando critico/trading exige challenge 2FA com TTL, uso unico e invalidacao.",
+      "acceptance_criteria": [
+        "Sem challenge valido, comando critico deve ser bloqueado.",
+        "Challenge deve validar dentro do TTL e com uso unico.",
+        "Challenge deve ter invalidacao auditavel (sucesso/expiracao/falha/rotacao)."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-02-01"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:34,158,166-180",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:28,32,36-37"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "Comandos HITL devem ser idempotentes por command_id; replay e no-op auditado.",
+      "acceptance_criteria": [
+        "Reenvio de mesmo command_id nao gera nova transicao.",
+        "Replay e registrado explicitamente na trilha de auditoria."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-02-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:35,188-190",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:44-50"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "Falha de autenticacao/canal bloqueia comando e abre incidente SECURITY_VIOLATION_REVIEW.",
+      "acceptance_criteria": [
+        "Comando invalido deve ser bloqueado.",
+        "Incidente SECURITY_VIOLATION_REVIEW deve ser aberto e rastreavel."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-02-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:159-162",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:58,62-63"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "Ativacao de fallback Slack deve abrir incidente/task RESTORE_TELEGRAM_CHANNEL.",
+      "acceptance_criteria": [
+        "Acionamento do fallback Slack cria task/incidente de restauracao do canal primario.",
+        "Evidencia da task fica vinculada ao checklist/readiness da fase."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-03-01"
+      ],
+      "coverage_status": "uncovered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:140,197",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:31-37"
+      ]
+    },
+    {
+      "id": "R10",
+      "text": "Sem fallback HITL validado, live deve permanecer TRADING_BLOCKED.",
+      "acceptance_criteria": [
+        "Pre-condicao de live com fallback invalido mantem TRADING_BLOCKED.",
+        "Bloqueio se mantem ate atendimento integral de policy."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:198,203",
+        "assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:199",
+        "assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:132",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:45,49"
+      ]
+    },
+    {
+      "id": "R11",
+      "text": "Remocao de TRADING_BLOCKED por prontidao HITL so via decisao formal registrada.",
+      "acceptance_criteria": [
+        "Desbloqueio exige referencia de decisao formal.",
+        "Sem decisao formal, status bloqueado permanece."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/DECISION-PROTOCOL.md:204",
+        "assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:186,200",
+        "assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:161",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:50"
+      ]
+    },
+    {
+      "id": "R12",
+      "text": "Fechamento da fase exige checklist HITL e decisao final promote|hold com evidencia.",
+      "acceptance_criteria": [
+        "Checklist HITL completo com campos obrigatorios.",
+        "Resultado final de fase registrado como promote ou hold.",
+        "Evidencia consolidada unica da fase publicada."
+      ],
+      "linked_issues": [
+        "ISSUE-F6-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md:31",
+        "assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:52-63,70-82,94-99"
+      ]
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F6-01-01",
+      "title": "Validar OPERATORS.yaml como fonte de verdade para aprovadores HITL",
+      "mapped_requirements": [
+        "R1"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Escopo cobre identidade, mas nao explicita validacao de canal confiavel do gate F6.",
+        "Sem estimativa da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-01-01 - Validar identidade de operador com gate completo de canal e ci-security.\nDescricao reescrita: Como PO/QA, quero que a validacao de OPERATORS.yaml inclua evidencias de identidade + vinculo ao canal confiavel para fechar o gate F6 sem ambiguidade.\nACs reescritos: (1) Given operador sem campos obrigatorios, When make ci-security roda, Then security-check falha e bloqueia gate F6. (2) Given operador valido e canal confiavel referenciado no checklist HITL, When make ci-security roda, Then security-check: PASS e item operador/canal fica pass. (3) Given falta de evidencia de canal, When revisao final ocorre, Then resultado deve ser hold.\nChecklist QA: Executar make ci-security; validar evidencias no checklist HITL; anexar output do gate no artifact da issue.\nLabels recomendados: phase:f6, epic:f6-01, risk:high, compliance:identity, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-01",
+        "risk:high",
+        "compliance:identity",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:26-37"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-01-02",
+      "title": "Validar regra de canal confiavel Telegram primario e email nao confiavel",
+      "mapped_requirements": [
+        "R1",
+        "R2",
+        "R4"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Cobre Telegram primario e email nao confiavel, mas sem vinculo explicito ao security-check: PASS do gate F6.",
+        "Sem estimativa da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-01-02 - Endurecer contrato de canal confiavel com gate de seguranca da fase.\nDescricao reescrita: Como operador, quero contrato de canal confiavel com Telegram primario, email nao confiavel e criterio de gate objetivo para bloquear promocao sem evidencia.\nACs reescritos: (1) Given texto ambiguo de canal, When revisao de fase ocorre, Then fase fica hold. (2) Given Telegram primario e email nao confiavel explicitados, When checklist HITL e revisado, Then item de canal fica pass. (3) Given make ci-security sem PASS no mesmo ciclo, When gate F6 e avaliado, Then resultado final permanece hold.\nChecklist QA: Revisao cruzada com DECISION-PROTOCOL; executar make ci-security; anexar log e checklist HITL.\nLabels recomendados: phase:f6, epic:f6-01, risk:high, compliance:channel-trust, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-01",
+        "risk:high",
+        "compliance:channel-trust",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:40,136,143-145",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:39-50"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-01-03",
+      "title": "Validar criterio de fallback Slack somente com IDs preenchidos e canal autorizado",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa da issue.",
+        "Sem dependencias listadas no nivel da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-01-03 - Completar metadata operacional da validacao de fallback Slack.\nDescricao reescrita: Como operador, quero fallback Slack bloqueado por default e liberado apenas com IDs/canal autorizados para evitar bypass de autenticacao em live.\nACs reescritos: manter ACs atuais e adicionar AC de rastreabilidade com evidencia do operador habilitado.\nChecklist QA: validar slack_user_ids/slack_channel_ids nao vazios; confirmar canal autorizado por policy; registrar evidencia no artifact da issue.\nLabels recomendados: phase:f6, epic:f6-01, risk:high, hitl:fallback, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-01",
+        "risk:high",
+        "hitl:fallback",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:139",
+        "PRD assistant-brain/PRD/PRD-MASTER.md:614",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:52-63"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-02-01",
+      "title": "Validar lifecycle do challenge para comando critico",
+      "mapped_requirements": [
+        "R6"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC nao cobre explicitamente invalidacao por sucesso/expiracao/3 falhas/rotacao.",
+        "TTL nao esta ancorado no valor normativo de 5 minutos.",
+        "Sem estimativa e sem owner."
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-02-01 - Fechar lifecycle de challenge com TTL normativo e invalidacao completa.\nDescricao reescrita: Como seguranca/compliance, quero challenge 2FA com TTL fixo, uso unico e invalidacao completa para impedir aprovacao critica indevida.\nACs reescritos: (1) Given comando critico sem challenge valido, When tentativa ocorre, Then bloqueia e audita motivo. (2) Given challenge valido, When aprovado no prazo, Then comando prossegue com trilha auditavel. (3) Given challenge expirado (TTL=5 minutos), reutilizado, com 3 falhas ou apos rotacao de chave, When validacao ocorre, Then status = INVALIDATED e comando bloqueado.\nChecklist QA: teste positivo e negativo de challenge; teste de expiracao 5 min; teste de single-use; teste de invalidacao por rotacao/3 falhas; anexar logs.\nLabels recomendados: phase:f6, epic:f6-02, risk:critical, security:2fa, compliance:hitl, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-02",
+        "risk:critical",
+        "security:2fa",
+        "compliance:hitl",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:166-180",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:26-37"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-02-02",
+      "title": "Validar idempotencia de comando command_id unico e replay auditado",
+      "mapped_requirements": [
+        "R7"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa da issue.",
+        "Sem dependencias listadas no nivel da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-02-02 - Completar metadata de entrega para idempotencia HITL.\nDescricao reescrita: Como operador, quero replay de command_id tratado como no-op auditado para evitar dupla transicao de estado.\nACs reescritos: manter ACs atuais e adicionar AC de evidencia com referencia de log/replay hash.\nChecklist QA: reenviar command_id duplicado; validar no-op; validar evento de replay na auditoria; anexar evidencia.\nLabels recomendados: phase:f6, epic:f6-02, risk:high, reliability:idempotency, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-02",
+        "risk:high",
+        "reliability:idempotency",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:188-190",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:39-50"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-02-03",
+      "title": "Validar bloqueio e incidente para falha de autenticacao ou canal",
+      "mapped_requirements": [
+        "R8"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa da issue.",
+        "Sem dependencias listadas no nivel da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-02-03 - Endurecer evidencia de bloqueio por autenticacao/canal invalido.\nDescricao reescrita: Como seguranca, quero que falhas de autenticacao/canal sempre bloqueiem comando e abram SECURITY_VIOLATION_REVIEW com rastreabilidade completa.\nACs reescritos: manter ACs atuais e adicionar AC de hash do payload bloqueado para auditoria.\nChecklist QA: simular identidade invalida; simular canal invalido; validar bloqueio; validar incidente SECURITY_VIOLATION_REVIEW; validar hash de payload no artifact.\nLabels recomendados: phase:f6, epic:f6-02, risk:critical, security:authz, incident:mandatory, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-02",
+        "risk:critical",
+        "security:authz",
+        "incident:mandatory",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:159-162",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:52-63"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-03-01",
+      "title": "Validar runbook de contingencia Telegram degradado com fallback Slack controlado",
+      "mapped_requirements": [
+        "R3",
+        "R9"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Nao explicita limiar de degradacao > 2 heartbeats para ativar fallback.",
+        "Nao inclui AC para abrir RESTORE_TELEGRAM_CHANNEL ao acionar fallback.",
+        "Sem estimativa e sem owner."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-03-01 - Completar runbook de fallback com gatilho temporal e incidente de restauracao.\nDescricao reescrita: Como operador, quero contingencia de Telegram degradado com fallback Slack equivalente e abertura obrigatoria de task de restauracao para manter operacao fail-safe.\nACs reescritos: (1) Given Telegram degradado por >2 heartbeats, When fallback e acionado, Then aplicar assinatura HMAC + anti-replay + challenge equivalente. (2) Given fallback acionado, When operacao entra em contingencia, Then abrir incidente/task RESTORE_TELEGRAM_CHANNEL com evidencia vinculada. (3) Given fallback sem controles equivalentes, When revisao ocorre, Then fase permanece hold.\nChecklist QA: simular degradacao >2 heartbeats; validar controles de fallback; validar criacao da task RESTORE_TELEGRAM_CHANNEL; anexar artefatos.\nLabels recomendados: phase:f6, epic:f6-03, risk:high, hitl:fallback, incident:restore-telegram, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-03",
+        "risk:high",
+        "hitl:fallback",
+        "incident:restore-telegram",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:137-140,197",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:26-37"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-03-02",
+      "title": "Validar pre-condicao trading live sem fallback valido permanece TRADING_BLOCKED",
+      "mapped_requirements": [
+        "R10",
+        "R11"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa da issue.",
+        "Sem dependencias listadas no nivel da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-03-02 - Completar metadata operacional do bloqueio de live por prontidao HITL.\nDescricao reescrita: Como operador de trading, quero manter TRADING_BLOCKED sem fallback validado e liberar apenas por decisao formal para evitar live inseguro.\nACs reescritos: manter ACs atuais e adicionar AC de evidencia da decision_id no desbloqueio.\nChecklist QA: validar fallback invalido => TRADING_BLOCKED; validar tentativa de desbloqueio sem decision => bloqueado; validar desbloqueio com decision formal; anexar evidencias.\nLabels recomendados: phase:f6, epic:f6-03, risk:critical, trading:blocking-gate, compliance:decision-required, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-03",
+        "risk:critical",
+        "trading:blocking-gate",
+        "compliance:decision-required",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:203-204",
+        "PRD assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:199-200",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:39-50"
+      ]
+    },
+    {
+      "id": "ISSUE-F6-03-03",
+      "title": "Consolidar evidencia unica da fase e registrar decisao promote hold",
+      "mapped_requirements": [
+        "R12"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa da issue.",
+        "Sem dependencias listadas no nivel da issue.",
+        "Sem owner atribuido."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: ISSUE-F6-03-03 - Completar governanca da evidência unica de fase com metadata de ownership.\nDescricao reescrita: Como PO/QA, quero consolidacao unica de evidencia com resultado promote|hold e justificativa rastreavel para decisao de fase auditavel.\nACs reescritos: manter ACs atuais e adicionar AC de owner responsavel pela consolidacao e data alvo da revisao final.\nChecklist QA: validar checklist HITL completo; validar status ci-security; validar registro de resultado promote|hold; revisar links internos.\nLabels recomendados: phase:f6, epic:f6-03, risk:medium, governance:evidence, needs-estimate, needs-owner.",
+      "suggested_labels": [
+        "phase:f6",
+        "epic:f6-03",
+        "risk:medium",
+        "governance:evidence",
+        "needs-estimate",
+        "needs-owner"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_acceptance_criteria": true,
+        "has_estimation": false,
+        "has_dependencies_listed": false,
+        "has_qa_or_repro_steps": true,
+        "has_assigned_owner": false
+      },
+      "evidence_refs": [
+        "PRD assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:52-63,70-82"
+      ]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 12,
+    "requirements_covered": 8,
+    "coverage_percent": 66.7,
+    "total_issues_audited": 9,
+    "critical_issues_count": 3,
+    "top_5_risks": [
+      {
+        "issue_id": "ISSUE-F6-02-01",
+        "risk": "Lifecycle de challenge incompleto (invalidacao/TTL normativo) pode permitir aprovacao critica indevida.",
+        "level": "critical"
+      },
+      {
+        "issue_id": "ISSUE-F6-03-02",
+        "risk": "Qualquer drift no bloqueio de live sem fallback validado compromete fail-closed de trading.",
+        "level": "critical"
+      },
+      {
+        "issue_id": "ISSUE-F6-02-03",
+        "risk": "Falha de bloqueio/incidente em autenticacao invalida gera exposicao de seguranca e compliance.",
+        "level": "critical"
+      },
+      {
+        "issue_id": "ISSUE-F6-03-01",
+        "risk": "Fallback sem task RESTORE_TELEGRAM_CHANNEL aumenta MTTR e risco operacional em degradacao.",
+        "level": "high"
+      },
+      {
+        "issue_id": "ISSUE-F6-01-02",
+        "risk": "Contrato de canal sem ancoragem completa no gate de seguranca pode permitir promocao com evidencia incompleta.",
+        "level": "high"
+      }
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "description": "Corrigir ISSUE-F6-02-01 para cobrir invalidacao completa do challenge e TTL normativo de 5 minutos com testes negativos.",
+      "owner": "security-lead",
+      "due_days": 1,
+      "urgency_index": 80,
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:166-180",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:32,36-37"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Atualizar ISSUE-F6-03-01 para incluir gatilho >2 heartbeats e abertura obrigatoria de RESTORE_TELEGRAM_CHANNEL ao ativar fallback Slack.",
+      "owner": "product-owner + tech-lead-trading",
+      "due_days": 3,
+      "urgency_index": 70,
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:137-140,197",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:31-37"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Fechar lacunas de metadados obrigatorios (estimativa, owner, dependencias por issue) nas 9 ISSUE-F6-*.",
+      "owner": "pm",
+      "due_days": 3,
+      "urgency_index": 68,
+      "evidence_refs": [
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:26-63",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-02-CHALLENGE-IDEMPOTENCIA-E-AUDITORIA.md:26-63",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:26-63"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Adicionar em ISSUE-F6-03-02 evidencia explicita de decision_id no desbloqueio de TRADING_BLOCKED.",
+      "owner": "product-owner + tech-lead-trading",
+      "due_days": 3,
+      "urgency_index": 68,
+      "evidence_refs": [
+        "PRD assistant-brain/PM/DECISION-PROTOCOL.md:204",
+        "PRD assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:186,200",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:50"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Fortalecer ISSUE-F6-01-01 e ISSUE-F6-01-02 com ACs que amarrem operador/canal ao mesmo ciclo de security-check: PASS.",
+      "owner": "security-lead",
+      "due_days": 3,
+      "urgency_index": 70,
+      "evidence_refs": [
+        "PRD assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-01-IDENTIDADE-E-CANAL-CONFIAVEL.md:36-37,49-50"
+      ]
+    },
+    {
+      "priority": "P2",
+      "description": "Padronizar checklist QA/repro em template unico de issue F6 para reduzir retrabalho de auditoria.",
+      "owner": "qa-lead",
+      "due_days": 7,
+      "urgency_index": 48,
+      "evidence_refs": [
+        "PRD assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:39",
+        "Issue assistant-brain/PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md:30-33,56-59"
+      ]
+    }
+  ]
+}

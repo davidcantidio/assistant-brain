@@ -1,0 +1,743 @@
+{
+  "pr_summary": "F3 apresenta cobertura de requisitos de 90.0% (9/10) no recorte aplicavel do PRD-MASTER, com 1 issue critica. O gate `eval-runtime` esta verde e as evidencias de execucao estao documentadas, mas persistem lacunas de enforcement operacional e de qualidade de descricao de issue (estimativa/owner/dependencias). Se o objetivo era blindagem enterprise, ainda falta a ultima porta do cofre.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "O runtime MUST manter contrato canonico `openclaw_runtime_config` versionado com campos obrigatorios de agentes, A2A, canais, hooks, memoria e gateway.",
+      "objective": "Evitar drift estrutural de configuracao do runtime e garantir interoperabilidade auditavel.",
+      "acceptance_criteria": [
+        "Schema contem `required` top-level com `agents`, `tools`, `channels`, `hooks`, `memory`, `gateway`.",
+        "Schema exige `tools.agentToAgent.enabled` e `tools.agentToAgent.allow[]`.",
+        "Schema exige `hooks.enabled`, `hooks.mappings[]` e `hooks.internal.entries[]` com `boot-md`, `command-logger`, `session-memory`."
+      ],
+      "dependencies": [
+        "ARC/ARC-CORE.md",
+        "ARC/schemas/openclaw_runtime_config.schema.json",
+        "scripts/ci/eval_runtime_contracts.sh"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-030",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:294-323",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:21-24"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "Eventos A2A/Webhook MUST registrar campos mandatarios de rastreabilidade e contexto (`source_workspace`, `target_workspace`, limites, `issue_id`, `microtask_id`).",
+      "objective": "Assegurar trilha de auditoria e controle de risco em delegacao e ingestao de eventos.",
+      "acceptance_criteria": [
+        "Evento A2A cross-workspace registra `source_workspace`, `target_workspace`, `max_concurrency`, `max_cost_usd`, `serial_fallback_on_conflict`.",
+        "Webhook com contexto de thread registra `issue_id` e `microtask_id`.",
+        "Gate falha quando required fields obrigatorios sao removidos."
+      ],
+      "dependencies": [
+        "ARC/ARC-CORE.md",
+        "ARC/schemas/a2a_delegation_event.schema.json",
+        "ARC/schemas/webhook_ingest_event.schema.json"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:324-327",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:10-18"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "`approval_policy` MUST manter `financial_side_effect_requires_explicit_human_approval=true` e `email_command_channel_trusted=false`.",
+      "objective": "Bloquear execucao financeira sem HITL explicito e eliminar canal nao confiavel de comando.",
+      "acceptance_criteria": [
+        "Qualquer acao com side effect financeiro exige aprovacao humana explicita.",
+        "Email permanece apenas canal informacional e exige confirmacao em canal confiavel.",
+        "Gate falha quando termos canonicos de aprovacao/canal confiavel sao removidos ou ambiguos."
+      ],
+      "dependencies": [
+        "SEC/SEC-POLICY.md",
+        "PM/DECISION-PROTOCOL.md",
+        "VERTICALS/TRADING/TRADING-RISK-RULES.md"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-015",
+        "RFC-060"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-03-03"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:417-430",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "`memory_contract` MUST manter `MEMORY.md`, notas diarias canonicas, ciclo `nightly-extraction` as 23:00 em `America/Sao_Paulo` e trilha de auditoria do ciclo noturno.",
+      "objective": "Preservar continuidade operacional e auditabilidade do ciclo de memoria.",
+      "acceptance_criteria": [
+        "`workspaces/main/MEMORY.md` existe.",
+        "Existe ao menos uma nota diaria `workspaces/main/memory/YYYY-MM-DD.md` com estrutura minima.",
+        "Nightly extraction segue cron `0 23 * * *` com timezone `America/Sao_Paulo`.",
+        "Em falha/atraso >24h, `incident_ref` e obrigatorio."
+      ],
+      "dependencies": [
+        "ARC/ARC-HEARTBEAT.md",
+        "workspaces/main/HEARTBEAT.md",
+        "ARC/schemas/nightly_memory_cycle.schema.json"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-02-01",
+        "ISSUE-F3-02-02",
+        "ISSUE-F3-02-03",
+        "ISSUE-F3-03-02"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:432-459",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-64",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "`ops_autonomy_contract` MUST manter isolamento, healthcheck, `stalled_threshold_checks=2`, politica de restart, incidente em stalled e preservacao de contexto.",
+      "objective": "Garantir resiliência operacional com controle de incidentes e recuperacao auditavel.",
+      "acceptance_criteria": [
+        "Contrato exige campos obrigatorios de autonomia operacional.",
+        "`stalled_threshold_checks` permanece em 2.",
+        "Incidente em stalled e obrigatorio com `trace_id` preservado."
+      ],
+      "dependencies": [
+        "ARC/schemas/ops_autonomy_contract.schema.json",
+        "scripts/ci/eval_runtime_contracts.sh"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-035",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-03-01",
+        "ISSUE-F3-03-02"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-487",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/scripts/ci/eval_runtime_contracts.sh:213-319"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "Gateway exposto externamente MUST permanecer `bind=loopback`; `chatCompletions` MAY ser habilitado sem bypass de policy/gates.",
+      "objective": "Reduzir superficie de ataque e manter governanca de risco em interoperabilidade.",
+      "acceptance_criteria": [
+        "`gateway.bind` fixado em loopback.",
+        "`chatCompletions.enabled` existe no contrato e respeita policy.",
+        "Quebra do binding ou required fields de endpoint reprova gate."
+      ],
+      "dependencies": [
+        "ARC/ARC-CORE.md",
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-015"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:407-409",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:568-569",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:15-18"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "Decisoes fechadas de hard-rules MUST manter allowlist explicita para A2A, eventos de hooks com `trace_id`, email nao confiavel para comando e aprovacao humana explicita em side effect financeiro.",
+      "objective": "Consolidar controles de compliance e risco estrutural no runtime.",
+      "acceptance_criteria": [
+        "A2A ocorre somente com allowlist explicita.",
+        "Hooks internos/externos geram trilha com `trace_id`.",
+        "Email nao e canal de comando confiavel; side effect financeiro exige aprovacao explicita."
+      ],
+      "dependencies": [
+        "SEC/SEC-POLICY.md",
+        "PM/DECISION-PROTOCOL.md",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-015",
+        "RFC-060"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-02",
+        "ISSUE-F3-03-03"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:566-571",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:669-672",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-18",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:8-31"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "`DoR (Issue)` MUST conter objetivo verificavel, AC mensuravel, classificacao de risco, dependencias declaradas e inputs minimos disponiveis.",
+      "objective": "Evitar ambiguidades e retrabalho antes de execucao.",
+      "acceptance_criteria": [
+        "Issue explicita risco e dependencias no proprio bloco da issue.",
+        "Issue explicita input minimo para execucao.",
+        "Issue possui objetivo e AC testaveis."
+      ],
+      "dependencies": [
+        "PM/DECISION-PROTOCOL.md"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-040"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-01",
+        "ISSUE-F3-01-02",
+        "ISSUE-F3-01-03",
+        "ISSUE-F3-02-01",
+        "ISSUE-F3-02-02",
+        "ISSUE-F3-02-03",
+        "ISSUE-F3-03-01",
+        "ISSUE-F3-03-02",
+        "ISSUE-F3-03-03"
+      ],
+      "coverage_status": "uncovered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-657",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "`DoD (Issue)` MUST registrar verify em pass, gate concluido para risco aplicavel e evidencia auditavel consolidada.",
+      "objective": "Garantir fechamento auditavel da entrega sem bypass de gate.",
+      "acceptance_criteria": [
+        "Issue/epic registra resultado do gate de verificacao.",
+        "Evidencia consolidada por issue/epic fica referenciada no fechamento.",
+        "Para risco/compliance, existe trilha de gate formal."
+      ],
+      "dependencies": [
+        "scripts/ci/eval_runtime_contracts.sh",
+        "artifacts/phase-f3"
+      ],
+      "success_metrics": null,
+      "regulatory_constraints": [
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-01",
+        "ISSUE-F3-01-02",
+        "ISSUE-F3-01-03",
+        "ISSUE-F3-02-01",
+        "ISSUE-F3-02-02",
+        "ISSUE-F3-02-03",
+        "ISSUE-F3-03-01",
+        "ISSUE-F3-03-02",
+        "ISSUE-F3-03-03"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:659",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:71-79",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:72-81"
+      ]
+    },
+    {
+      "id": "R10",
+      "text": "Claim central sem eval gate MUST bloquear release de fase.",
+      "objective": "Assegurar testabilidade objetiva antes de promover fase.",
+      "acceptance_criteria": [
+        "Gate executavel existe e roda com criterio binario de pass/fail.",
+        "Falhas no gate bloqueiam promocao da fase.",
+        "Fechamento da fase referencia explicitamente o resultado do gate."
+      ],
+      "dependencies": [
+        "Makefile",
+        "scripts/ci/eval_runtime_contracts.sh",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md"
+      ],
+      "success_metrics": "eval-runtime-contracts: PASS",
+      "regulatory_constraints": [
+        "RFC-040",
+        "RFC-050"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F3-01-01",
+        "ISSUE-F3-01-02",
+        "ISSUE-F3-01-03",
+        "ISSUE-F3-02-01",
+        "ISSUE-F3-02-02",
+        "ISSUE-F3-02-03",
+        "ISSUE-F3-03-01",
+        "ISSUE-F3-03-02",
+        "ISSUE-F3-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:661-663",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md:15-24",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/Makefile:18-20"
+      ]
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F3-01-01",
+      "title": "Validar arquivos obrigatorios do gate runtime",
+      "mapped_requirements": [
+        "R9",
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: [F3-01-01] Validar required_files + ownership e estimativa. Descricao: incluir contexto de risco, estimativa (story points ou horas), owner responsavel e dependencias explicitas. ACs reescritos: (1) Given arquivo obrigatorio ausente, When eval-runtime executar, Then retornar FAIL com lista de ausentes; (2) Given todos os required_files presentes, When eval-runtime executar, Then retornar PASS; (3) Given change em required_files, When PR for aberta, Then issue deve conter owner, estimativa e dependencias atualizadas. Checklist QA: reproduzir Red/Green/Refactor, anexar logs do gate e revisar checklist de metadados da issue.",
+      "suggested_labels": [
+        "area:f3-runtime",
+        "risk:medium",
+        "status:needs-refinement",
+        "prio:P3"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 35,
+      "owner_recommended": "PO",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-660",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-01-required-files.md:8-24"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-01-02",
+      "title": "Validar schema/runtime contract e pontos A2A hooks gateway",
+      "mapped_requirements": [
+        "R1",
+        "R2",
+        "R6",
+        "R7",
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: [F3-01-02] Hardening de schema runtime com metadados de execucao. Descricao: manter cobertura de A2A/hooks/gateway e adicionar estimativa, owner e dependencia do schema no corpo da issue. ACs reescritos: (1) Given required field removido em A2A/hooks/gateway, When eval-runtime executar, Then FAIL com identificacao do campo; (2) Given schema valido, When eval-runtime executar, Then PASS; (3) Given alteracao de schema, When issue for atualizada, Then owner e risco devem ser revisados. Checklist QA: executar fixtures invalidas/validas, anexar stdout do gate e validar rastreabilidade `trace_id`.",
+      "suggested_labels": [
+        "area:f3-runtime",
+        "risk:high",
+        "status:needs-refinement",
+        "prio:P1"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 60,
+      "owner_recommended": "Tech Lead",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:294-327",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:407-415",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-24"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-01-03",
+      "title": "Validar fonte canonica de estado do workspace",
+      "mapped_requirements": [],
+      "conformance_status": "Sem mapeamento",
+      "problems": [
+        "Sem requisito explicito no PRD-MASTER para caminho canonico de `workspace-state`.",
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: [F3-01-03] Canonical workspace-state com referencia normativa explicita. Descricao: manter validacao de unicidade e incluir referencia normativa no PRD-MASTER (ou backlink formal) para eliminar zona cinzenta de mapeamento. ACs reescritos: (1) Given mais de um workspace-state, When eval-runtime executar, Then FAIL com lista de caminhos; (2) Given somente `workspaces/main/.openclaw/workspace-state.json`, When eval-runtime executar, Then PASS; (3) Given regra canonica sem referencia no PRD, When issue for revisada, Then registrar decisao formal de rastreabilidade. Checklist QA: testar cenario com caminho conflitante, anexar logs e validar consistencia PRD/ARC/META.",
+      "suggested_labels": [
+        "area:f3-runtime",
+        "risk:medium",
+        "status:compliance-review",
+        "prio:P2"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 55,
+      "owner_recommended": "PO",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/META/DOCUMENT-HIERARCHY.md:71",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/ARC/ARC-CORE.md:193",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md:13-16"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-02-01",
+      "title": "Validar MEMORY.md e nota diaria YYYY-MM-DD",
+      "mapped_requirements": [
+        "R4",
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: [F3-02-01] Presenca canonica de memoria com ownership/estimativa. Descricao: manter validacao de arquivos canonicos e registrar owner, estimativa e dependencias operacionais no corpo da issue. ACs reescritos: (1) Given ausencia de MEMORY.md ou nota diaria, When eval-runtime executar, Then FAIL com arquivo faltante; (2) Given presenca canonica, When eval-runtime executar, Then PASS; (3) Given alteracao de contrato de memoria, When issue atualizar, Then risco e dependencia devem ser revisados. Checklist QA: executar Red-A/Red-B/Green/Refactor e anexar logs.",
+      "suggested_labels": [
+        "area:memory",
+        "risk:medium",
+        "status:needs-refinement",
+        "prio:P3"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 35,
+      "owner_recommended": "PO",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435-437",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456-457",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-01-memory-daily-files.md:8-27"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-02-02",
+      "title": "Validar header e secoes obrigatorias da nota diaria",
+      "mapped_requirements": [
+        "R4"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC cobre estrutura de nota, mas nao cobre trilha de auditoria do ciclo noturno (`scheduled_at`, `executed_at`, `incident_ref`).",
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: [F3-02-02] Estrutura de nota diaria + auditoria do ciclo noturno. Descricao: manter validacao de header/secoes e adicionar AC para campos de auditoria noturna do memory cycle. ACs reescritos: (1) Given header/secoes invalidos, When eval-runtime executar, Then FAIL com apontamento da secao; (2) Given estrutura valida, When eval-runtime executar, Then PASS; (3) Given falha/atraso >24h no ciclo noturno, When validar contrato, Then `incident_ref` obrigatorio e auditavel. Checklist QA: criar fixture invalida de header e fixture de ciclo noturno sem incident_ref para atraso >24h.",
+      "suggested_labels": [
+        "area:memory",
+        "risk:medium",
+        "status:needs-qa",
+        "prio:P2"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 50,
+      "owner_recommended": "QA Lead",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:445-459",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-02-daily-header-sections.md:9-19"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-02-03",
+      "title": "Validar bullet minimo em Key Events Decisions Made Facts Extracted",
+      "mapped_requirements": [
+        "R4"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC garante minimo semantico local, mas nao cobre regra de incidente para falha/atraso >24h do ciclo noturno.",
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: [F3-02-03] Conteudo minimo de nota + trilha de excecao noturna. Descricao: manter bullet minimo e expandir cobertura para cenarios de excecao operacional do memory cycle. ACs reescritos: (1) Given secao sem bullet, When eval-runtime executar, Then FAIL com secao afetada; (2) Given secoes com bullet minimo, When eval-runtime executar, Then PASS; (3) Given atraso >24h, When validar contrato noturno, Then obrigar `incident_ref` e status coerente. Checklist QA: fixture sem bullet, fixture com atraso >24h e ausencia de incident_ref.",
+      "suggested_labels": [
+        "area:memory",
+        "risk:medium",
+        "status:needs-qa",
+        "prio:P2"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 50,
+      "owner_recommended": "QA Lead",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:458-459",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:52-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md:9-19"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-03-01",
+      "title": "Validar baseline de 15 minutos em docs canonicos",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Evidencia Red registra apenas erro generico (`make: Error 1`) sem assert textual do desvio em todos os cenarios.",
+        "Cobertura focada em heartbeat documental; cobertura de `ops_autonomy_contract` nao aparece explicitamente no escopo da issue.",
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: [F3-03-01] Heartbeat baseline com asserts explicitos e cobertura de autonomia. Descricao: endurecer evidencias Red com mensagens de assert e incluir criterio explicito para campos criticos do `ops_autonomy_contract`. ACs reescritos: (1) Given baseline !=15m, When eval-runtime executar, Then FAIL com mensagem contendo campo divergente; (2) Given baseline=15m, Then PASS; (3) Given `stalled_threshold_checks!=2`, When validar contrato de autonomia, Then FAIL explicito. Checklist QA: Red-A/Red-B com log assertivo, teste de autonomia e Green/Refactor.",
+      "suggested_labels": [
+        "area:heartbeat",
+        "risk:high",
+        "status:needs-qa",
+        "prio:P1"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 65,
+      "owner_recommended": "Tech Lead",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-467",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-03-02",
+      "title": "Validar America Sao_Paulo e nightly extraction as 23:00",
+      "mapped_requirements": [
+        "R4",
+        "R5"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: [F3-03-02] Timezone/nightly com metadados de planejamento. Descricao: preservar cobertura de timezone/schedule e adicionar metadados de ownership, estimativa e dependencia no bloco da issue. ACs reescritos: (1) Given timezone ou horario divergente, Then FAIL; (2) Given `America/Sao_Paulo` + 23:00, Then PASS; (3) Given alteracao do ciclo noturno, Then issue deve atualizar risco/dependencias/estimativa. Checklist QA: executar Red-A/Red-B/Green/Refactor e anexar logs de assert.",
+      "suggested_labels": [
+        "area:heartbeat",
+        "risk:high",
+        "status:needs-refinement",
+        "prio:P2"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 50,
+      "owner_recommended": "PO",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:437-440",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
+      ]
+    },
+    {
+      "id": "ISSUE-F3-03-03",
+      "title": "Validar coerencia de regras criticas de canal e side effect financeiro",
+      "mapped_requirements": [
+        "R3",
+        "R7"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Validacao principal esta ancorada em coerencia textual de documentos; falta teste de enforcement operacional ponta a ponta.",
+        "Evidencias Red mostram erro generico de gate sem assert semantico especifico no artifact.",
+        "Estimativa ausente na issue.",
+        "Owner nao atribuido no nivel da issue.",
+        "Dependencias nao listadas no bloco da issue."
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo sugerido: [F3-03-03] Enforcement operacional de canal confiavel e aprovacao financeira. Descricao: manter validacao documental e adicionar teste executavel de fluxo (comando por email bloqueado + side effect financeiro sem aprovacao explicita bloqueado). ACs reescritos: (1) Given instrucao por email sem confirmacao em canal confiavel, When tentativa de execucao ocorrer, Then bloqueio + trilha de auditoria; (2) Given side effect financeiro sem aprovacao explicita, When tentativa ocorrer, Then bloqueio deterministico; (3) Given aprovacao explicita em canal confiavel, When execucao ocorrer, Then fluxo permitido com rastreabilidade. Checklist QA: cenarios E2E bloqueio/permissao, evidencias de logs com `trace_id`, e regressao no eval-runtime.",
+      "suggested_labels": [
+        "area:heartbeat",
+        "risk:critical",
+        "status:compliance-review",
+        "prio:P0"
+      ],
+      "quality_checklist": {
+        "has_clear_objective": true,
+        "has_testable_ac": true,
+        "has_estimate": false,
+        "has_dependencies": false,
+        "has_qa_steps": true,
+        "has_assigned_owner": false
+      },
+      "urgency_index": 90,
+      "owner_recommended": "Compliance",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428-430",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+      ]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 10,
+    "requirements_covered": 9,
+    "coverage_percent": 90.0,
+    "total_issues_audited": 9,
+    "critical_issues_count": 1,
+    "top_5_risks": [
+      "ISSUE-F3-03-03: regra critica validada majoritariamente por texto, sem evidencias E2E de enforcement operacional.",
+      "ISSUE-F3-03-01: evidencias Red com erro generico podem mascarar regressao de criterio especifico.",
+      "ISSUE-F3-01-02: drift de schema A2A/hooks/gateway pode quebrar integracao e rastreabilidade.",
+      "ISSUE-F3-02-02/03: cobertura parcial do memory_contract para trilha de excecao (`incident_ref`, atraso >24h).",
+      "ISSUE-F3-01-03: ausencia de requisito explicito no PRD para workspace-state canonico cria lacuna de auditoria."
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "description": "Adicionar teste de enforcement operacional para canal confiavel e aprovacao financeira (bloqueio de email como comando + bloqueio de side effect sem aprovacao explicita).",
+      "owner": "Compliance",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428-430",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Expandir a cobertura explicita de `ops_autonomy_contract` em issue dedicada (stalled threshold, restart policy, incident_on_stalled, preserve_issue_context) com evidencias assertivas.",
+      "owner": "Tech Lead",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-487",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/scripts/ci/eval_runtime_contracts.sh:213-319"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Padronizar template de issue com campos obrigatorios de qualidade (`estimate`, `owner`, `dependencies`, `risk_class`) para aderencia ao DoR do PRD.",
+      "owner": "PO",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-657",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
+      ]
+    },
+    {
+      "priority": "P2",
+      "description": "Formalizar no PRD-MASTER a regra de fonte canonica de `workspace-state` (ou registrar decisao de referencia cruzada obrigatoria) para eliminar `Sem mapeamento`.",
+      "owner": "PO",
+      "due_days": 10,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/META/DOCUMENT-HIERARCHY.md:71",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/ARC/ARC-CORE.md:193",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63"
+      ]
+    },
+    {
+      "priority": "P2",
+      "description": "Melhorar qualidade de artifacts Red para registrar mensagem assertiva do criterio falho (nao apenas `make: Error 1`).",
+      "owner": "QA Lead",
+      "due_days": 10,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:659-664",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:11-20"
+      ]
+    }
+  ]
+}

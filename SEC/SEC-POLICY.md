@@ -99,6 +99,8 @@ Exclui:
 - qualquer acao que mova, bloqueie, arrisque ou comprometa dinheiro MUST exigir aprovacao humana explicita.
 - essa regra vale para todas as fases (`S0`, `S1`, `S2`) e para qualquer classe de ativo.
 - tentativa de execucao financeira sem aprovacao explicita MUST ser bloqueada e auditada.
+- aprovacao financeira MUST carregar `side_effect_class=financial`, `explicit_human_approval=true`, `approval_evidence_ref` e `approver_operator_id`.
+- aprovacao financeira por Slack MUST registrar `approval_signature_valid=true`; sem isso, o comando MUST ser bloqueado.
 
 ## HITL Operators (Multi-canal)
 - fonte de identidade: `./allowlists/OPERATORS.yaml`.
@@ -142,6 +144,7 @@ Exclui:
   - apenas por policy explicita,
   - com criptografia,
   - com retention curta e owner definido.
+- para fluxo `sensitive`, retention SHOULD permanecer em `zdr_minimal` e evidencias devem usar apenas `prompt_hash` + resumo sanitizado.
 
 ## Violacao de Politica
 - gatilho: comando fora de escopo, provider nao permitido, tentativa de extracao de segredo, acesso indevido.

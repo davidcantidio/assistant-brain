@@ -56,6 +56,11 @@
 - comando: `make eval-gates`
 - resultado: PASS
 
+### Auditoria complementar
+- `ARC/schemas/automation_action_event.schema.json` passa a formalizar `has_side_effect`, `rollback_plan_ref` e `status`.
+- auto-acao sem `rollback_plan_ref` e com `has_side_effect=true` agora retorna `FAIL_STOP_SHIP`.
+- `NOTIFY_ONLY` fica restrito a auto-acao sem side effect.
+
 ## ISSUE-F2-02-04 - Reconciliacao no degraded mode com replay_key
 
 ### Red
@@ -73,13 +78,18 @@
 - comando: `make eval-gates`
 - resultado: PASS
 
+### Auditoria complementar
+- `ARC/schemas/degraded_reconciliation_status.schema.json` formaliza `incident_id`, `status`, `reconciled_at`, `promotion_blocked` e `evidence_ref`.
+- `artifacts/phase-f2/degraded-reconciliation-status.json` passa a ser evidencia obrigatoria para `make phase-f2-gate`.
+- enquanto `status != reconciled`, a promocao da fase deve permanecer bloqueada.
+
 ## Validacao final do epico
 
 1. `make ci-quality` -> PASS (`quality-check: PASS`)
 2. `make ci-security` -> PASS (`security-check: PASS`)
 3. `make eval-idempotency` -> PASS (`eval-idempotency: PASS`)
 4. `make eval-gates` -> PASS (`eval-gates: PASS`)
-5. `make phase-f2-gate` -> PASS (`phase-f2-gate: PASS`)
+5. `make phase-f2-gate` -> PASS (`phase-f2-gate: PASS`, com `degraded-reconciliation-status.json` valido)
 
 ## Rastreabilidade
 

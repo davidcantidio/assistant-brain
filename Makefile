@@ -6,7 +6,7 @@ DOCLING_PIP := $(VENV_DOCLING)/bin/pip
 PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
-.PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-idempotency eval-gates ci-quality ci-security \
+.PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
 	phase-f2-gate phase-f8-weekly-governance docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
@@ -26,6 +26,9 @@ eval-trading:
 
 eval-idempotency:
 	@bash scripts/ci/eval_idempotency_reconciliation.sh
+
+eval-risk-gates:
+	@bash scripts/ci/eval_risk_gates.sh
 
 eval-gates:
 	@bash scripts/ci/eval_gates.sh

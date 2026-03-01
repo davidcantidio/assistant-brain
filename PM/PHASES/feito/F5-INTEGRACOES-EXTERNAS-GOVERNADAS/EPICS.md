@@ -1,9 +1,9 @@
 ---
 doc_id: "PHASE-F5-EPICS.md"
-version: "1.2"
-status: "active"
+version: "1.3"
+status: "done"
 owner: "PM"
-last_updated: "2026-02-26"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -23,6 +23,7 @@ make eval-trading
 Criterio objetivo:
 - ambos os comandos em `PASS` no mesmo ciclo.
 - evidencia objetiva de anti-bypass e segregacao de identidade/credenciais.
+- consolidacao da rodada em `artifacts/phase-f5/validation-summary.md`.
 
 ## Epics da Fase
 | Epic ID | Nome | Objetivo | Status | Documento |
@@ -37,3 +38,5 @@ Criterio objetivo:
 - cada issue desta fase deve referenciar:
   - ao menos um item de `PRD/ROADMAP.md` (`B*`);
   - ao menos uma fonte `felixcraft.md` ou `felix-openclaw-pontos-relevantes.md`.
+- cada issue da F5 MUST declarar `Owner`, `Estimativa`, `Dependencias`, `Passos QA`, `Definition of Ready`, `Definition of Done` e `Labels`.
+- qualquer issue de risco `high` ou `critical` MUST conter ao menos um cenario negativo mensuravel e um criterio de bloqueio explicito.

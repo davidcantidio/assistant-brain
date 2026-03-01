@@ -13,7 +13,7 @@
 
 ## Green
 - acao:
-  - criar `SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml` com superfícies `social/email/pagamentos/carteira`;
+  - criar `SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml` com superficies `social/email/pagamentos/carteira`;
   - endurecer `scripts/ci/check_security.sh` para validar segregacao, least privilege e diferenca obrigatoria entre contas pessoal/agente;
   - alinhar `SEC/SEC-POLICY.md` e `PRD/PRD-MASTER.md` ao contrato de blast radius.
 - comando: `make ci-security`.
@@ -34,3 +34,11 @@
 - `PRD/PRD-MASTER.md`
 - `PRD/CHANGELOG.md`
 - `artifacts/phase-f5/epic-f5-03-issue-06-account-credential-segregation-blast-radius.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Compliance endurecido com minimum_scope obrigatorio e falha explicita para excecao de privilegio sem aprovacao formal registrada.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

@@ -8,6 +8,7 @@ bash scripts/ci/eval_models.sh
 bash scripts/ci/eval_integrations.sh
 bash scripts/ci/eval_runtime_contracts.sh
 bash scripts/ci/eval_idempotency_reconciliation.sh
+bash scripts/ci/eval_risk_gates.sh
 bash scripts/ci/eval_rag.sh
 bash scripts/ci/eval_trading.sh
 

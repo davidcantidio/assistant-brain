@@ -1,0 +1,897 @@
+{
+  "pr_summary": "A fase F4 em `feito` cobre 10/10 requisitos selecionados do PRD (100.0%), com 9 issues auditadas e evidencia de `make eval-integrations` em PASS. Nao ha issues criticas, mas ha riscos medios de governanca: ausencia sistematica de estimativa/owner/dependencias por issue, conflito de status (`active` vs `done`) e um path invalido em evidencia. O sistema esta pronto; a papelada quase.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "F4 deve entregar onboarding de repositorios/contexto externo com base integrada de contratos.",
+      "objective": "Garantir onboarding externo governado sem interpretacao ad hoc.",
+      "acceptance_criteria": [
+        "Base integrada de contratos externos disponivel para uso operacional.",
+        "Decisao de modo permitido por integracao usando `INTEGRATIONS/`."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/README.md",
+        "INTEGRATIONS/AI-TRADER.md",
+        "INTEGRATIONS/CLAWWORK.md",
+        "INTEGRATIONS/OPENCLAW-UPSTREAM.md"
+      ],
+      "success_metrics": [
+        "EPIC-F4-01..03 concluidos",
+        "Validacao consolidada da fase publicada"
+      ],
+      "regulatory_constraints": [
+        "MUST bloquear promocao quando gate falhar"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-01",
+        "ISSUE-F4-01-02",
+        "ISSUE-F4-03-01"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:12",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:13"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "F4 exige teste humano obrigatorio com `make eval-integrations`.",
+      "objective": "Assegurar validacao reproduzivel por operador humano.",
+      "acceptance_criteria": [
+        "Execucao explicita de `make eval-integrations` no fluxo da fase.",
+        "Comando usado como prova operacional da fase."
+      ],
+      "dependencies": [
+        "scripts/ci/eval_integrations.sh",
+        "make"
+      ],
+      "success_metrics": [
+        "Execucao registrada em artifacts de issues/epics"
+      ],
+      "regulatory_constraints": [
+        "Gate operacional deve ser reproduzivel e versionado"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-01",
+        "ISSUE-F4-01-02",
+        "ISSUE-F4-01-03",
+        "ISSUE-F4-02-01",
+        "ISSUE-F4-02-02",
+        "ISSUE-F4-02-03",
+        "ISSUE-F4-03-01",
+        "ISSUE-F4-03-02",
+        "ISSUE-F4-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:19",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "Gate de saida F4 deve resultar em `eval-integrations: PASS` com evidencia minima de docs/schemas validos.",
+      "objective": "Bloquear promocao de fase com falha de integracao/contrato.",
+      "acceptance_criteria": [
+        "`eval-integrations: PASS` obrigatorio.",
+        "Evidencia minima de docs e schemas validos registrada."
+      ],
+      "dependencies": [
+        "artifacts/phase-f4/validation-summary.md",
+        "artifacts/phase-f4/epic-f4-01-integrations-baseline.md",
+        "artifacts/phase-f4/epic-f4-02-schema-validation.md"
+      ],
+      "success_metrics": [
+        "Gate PASS no fechamento da fase",
+        "Evidencia auditavel por issue/epic"
+      ],
+      "regulatory_constraints": [
+        "MUST bloquear promocao quando gate falhar"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-01",
+        "ISSUE-F4-01-02",
+        "ISSUE-F4-01-03",
+        "ISSUE-F4-02-01",
+        "ISSUE-F4-02-02",
+        "ISSUE-F4-02-03",
+        "ISSUE-F4-03-01",
+        "ISSUE-F4-03-02",
+        "ISSUE-F4-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:23",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "Integracao externa default e `lab_isolated`; `governed` somente apos gate verde.",
+      "objective": "Reduzir risco de integracao externa nao governada.",
+      "acceptance_criteria": [
+        "Default explicito `lab_isolated`.",
+        "Modo `governed` condicionado a gate verde."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/CLAWWORK.md",
+        "scripts/ci/eval_integrations.sh"
+      ],
+      "success_metrics": [
+        "Regras explicitas de modo no pacote INTEGRATIONS"
+      ],
+      "regulatory_constraints": [
+        "Operacao externa sem bypass de policy"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-03"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "Promocao F4->F5 exige integracoes e schemas verdes.",
+      "objective": "Evitar avanco de fase sem prontidao tecnica minima.",
+      "acceptance_criteria": [
+        "Decisao formal `promote|hold` com justificativa.",
+        "Gate de integracao verde como pre-condicao."
+      ],
+      "dependencies": [
+        "artifacts/phase-f4/validation-summary.md"
+      ],
+      "success_metrics": [
+        "Decisao de fase rastreavel"
+      ],
+      "regulatory_constraints": [
+        "Promocao bloqueada sem gate de saida valido"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-03-02",
+        "ISSUE-F4-03-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:54",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:27",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:30"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "Criar pacote normativo `INTEGRATIONS/` com template obrigatorio.",
+      "objective": "Padronizar onboarding por integracao com contrato explicito.",
+      "acceptance_criteria": [
+        "Pacote INTEGRATIONS completo e validado por gate.",
+        "Conteudo obrigatorio de objetivo, modo permitido, contratos, riscos, testes e rollback."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/*",
+        "scripts/ci/eval_integrations.sh"
+      ],
+      "success_metrics": [
+        "FAIL quando doc obrigatorio ausente",
+        "PASS com pacote completo"
+      ],
+      "regulatory_constraints": [
+        "Linguagem ambigua de integracao bloqueia promocao"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-01",
+        "ISSUE-F4-01-02",
+        "ISSUE-F4-01-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "Adicionar contratos versionados em `ARC/schemas` e gate `make eval-integrations`.",
+      "objective": "Tornar contratos de integracao verificaveis e enforceable.",
+      "acceptance_criteria": [
+        "Schemas obrigatorios presentes e JSON valido.",
+        "Campos minimos obrigatorios e contrato dual validados."
+      ],
+      "dependencies": [
+        "ARC/schemas/signal_intent.schema.json",
+        "ARC/schemas/order_intent.schema.json",
+        "ARC/schemas/execution_report.schema.json",
+        "ARC/schemas/economic_run.schema.json",
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "success_metrics": [
+        "FAIL em ausencia/invalidade",
+        "PASS apos restauracao"
+      ],
+      "regulatory_constraints": [
+        "Regressao de contrato bloqueia promote F4"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-02-01",
+        "ISSUE-F4-02-02",
+        "ISSUE-F4-02-03"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "AI-Trader deve operar em `signal_only` com bloqueio explicito de ordem direta.",
+      "objective": "Eliminar bypass de execucao financeira por integracao externa.",
+      "acceptance_criteria": [
+        "AI-Trader apenas gera `signal_intent`.",
+        "Ordem direta originada de AI-Trader e rejeitada e auditada."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/AI-TRADER.md",
+        "VERTICALS/TRADING/TRADING-PRD.md",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md"
+      ],
+      "success_metrics": [
+        "Gate falha com regra ausente/ambigua",
+        "Gate passa com regra restaurada"
+      ],
+      "regulatory_constraints": [
+        "MUST rejeitar e auditar payload de ordem direta"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-02",
+        "ISSUE-F4-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:583",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:584"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "ClawWork deve ter `lab_isolated` como default e `governed` em gateway-only com policy de dados.",
+      "objective": "Conter blast radius de integracao externa.",
+      "acceptance_criteria": [
+        "Default `lab_isolated` explicito.",
+        "Modo `governed` exige gateway-only e politica de dados."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/CLAWWORK.md"
+      ],
+      "success_metrics": [
+        "FAIL quando regra e removida/ambigua",
+        "PASS apos restauracao da regra"
+      ],
+      "regulatory_constraints": [
+        "Sem chamada direta externa em `governed`"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-01-03"
+      ],
+      "coverage_status": "partial",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:585",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-03-clawwork-governed-gateway-only.md:9"
+      ]
+    },
+    {
+      "id": "R10",
+      "text": "Formalizar matriz de compatibilidade runtime upstream (`gateway.control_plane.ws` canonico + `chatCompletions` opcional sob policy).",
+      "objective": "Evitar drift de interface de runtime entre docs e schemas.",
+      "acceptance_criteria": [
+        "Matriz de compatibilidade upstream presente.",
+        "Contrato dual de runtime e trilha de provider validados no gate."
+      ],
+      "dependencies": [
+        "INTEGRATIONS/OPENCLAW-UPSTREAM.md",
+        "ARC/schemas/openclaw_runtime_config.schema.json",
+        "ARC/schemas/economic_run.schema.json"
+      ],
+      "success_metrics": [
+        "FAIL quando matriz/contrato e removido",
+        "PASS com estrutura restaurada"
+      ],
+      "regulatory_constraints": [
+        "Sem bypass de policy/gates no runtime"
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F4-02-03",
+        "ISSUE-F4-03-01",
+        "ISSUE-F4-03-02"
+      ],
+      "coverage_status": "covered",
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:569",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9"
+      ]
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F4-01-01",
+      "title": "Validar presenca dos docs obrigatorios em INTEGRATIONS",
+      "mapped_requirements": [
+        "R1",
+        "R2",
+        "R3",
+        "R6"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "medium",
+      "risk_dimensions": {
+        "security": "low",
+        "privacy": "low",
+        "performance": "low",
+        "integration": "medium",
+        "user_experience": "low",
+        "legal_compliance": "medium"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-01-01] Completar metadata de governanca da issue. Descricao sugerida: adicionar `owner`, `estimativa`, `dependencias` e `evidence_ref` obrigatorio no card. ACs reescritos: (1) Dado o card da issue, quando revisado por PO/QA, entao contem owner, estimativa e dependencias explicitas. (2) Dado `make eval-integrations` em PASS, quando fechar a issue, entao anexa log e evidencia no artifact da fase. Checklist QA: [ ] reproduzir Red [ ] validar Green [ ] anexar saida PASS [ ] validar links de evidencia.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-01",
+        "type:governance",
+        "needs-estimation",
+        "needs-owner",
+        "needs-dependency-map",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:35",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-01-02",
+      "title": "Validar regra mandatoria AI-Trader signal_intent only",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R6",
+        "R8"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "high",
+      "risk_dimensions": {
+        "security": "high",
+        "privacy": "medium",
+        "performance": "low",
+        "integration": "high",
+        "user_experience": "low",
+        "legal_compliance": "high"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-01-02] Endurecer governanca de execucao AI-Trader. Descricao sugerida: manter regra `signal_only` e adicionar metadata operacional (owner/estimativa/dependencias) no card. ACs reescritos: (1) Dado payload de ordem direta do AI-Trader, quando `make eval-integrations` roda, entao retorna FAIL com evidencia de anti-bypass. (2) Dado regra restaurada de `signal_intent` only, quando o gate roda, entao retorna PASS com log anexado. Checklist QA: [ ] testar cenario de bypass [ ] confirmar FAIL [ ] restaurar regra [ ] confirmar PASS [ ] anexar evidencia.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-01",
+        "type:security-policy",
+        "integration:ai-trader",
+        "anti-bypass",
+        "needs-owner",
+        "risk:high"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:39",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-02-ai-trader-signal-only.md:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:584"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-01-03",
+      "title": "Validar regra mandatoria ClawWork lab_isolated / governed gateway-only",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R4",
+        "R6",
+        "R9"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "AC nao explicita a precondicao de `governed` somente apos gate verde.",
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner e dependencias no nivel da issue."
+      ],
+      "risk_level": "medium",
+      "risk_dimensions": {
+        "security": "medium",
+        "privacy": "medium",
+        "performance": "low",
+        "integration": "high",
+        "user_experience": "low",
+        "legal_compliance": "medium"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-01-03] Explicitar condicao de ativacao do modo governed. Descricao sugerida: adicionar no card que `governed` so e permitido apos gate verde da fase. ACs reescritos: (1) Dado gate nao verde, quando operacao tenta `governed`, entao deve ser bloqueada. (2) Dado gate verde e policy valida, quando operacao entra em `governed`, entao deve usar gateway-only com trilha auditavel. Checklist QA: [ ] validar bloqueio sem gate [ ] validar liberacao com gate [ ] anexar log PASS.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-01",
+        "integration:clawwork",
+        "needs-ac-clarification",
+        "needs-owner",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-02-01",
+      "title": "Validar presenca e JSON valido dos schemas obrigatorios",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R7"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "medium",
+      "risk_dimensions": {
+        "security": "medium",
+        "privacy": "low",
+        "performance": "medium",
+        "integration": "high",
+        "user_experience": "low",
+        "legal_compliance": "medium"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-02-01] Formalizar metadata da issue de schema baseline. Descricao sugerida: manter cenario Red/Green/Refactor e incluir owner, estimativa e dependencias tecnicas. ACs reescritos: (1) Dado schema ausente/invalido, quando gate roda, entao retorna FAIL com arquivo exato. (2) Dado schema restaurado, quando gate roda, entao retorna PASS e evidencia anexada. Checklist QA: [ ] quebrar schema [ ] validar FAIL [ ] restaurar [ ] validar PASS [ ] anexar logs.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-02",
+        "type:schema",
+        "contracts",
+        "needs-owner",
+        "needs-estimation",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-01-schema-presence-json-valid.md:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-02-02",
+      "title": "Validar campos minimos dos contratos versionados",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R7"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "high",
+      "risk_dimensions": {
+        "security": "medium",
+        "privacy": "medium",
+        "performance": "medium",
+        "integration": "high",
+        "user_experience": "low",
+        "legal_compliance": "high"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-02-02] Endurecer rastreabilidade de campos obrigatorios. Descricao sugerida: manter checks de `required[]` e incluir metadata de governanca no card. ACs reescritos: (1) Dado ausencia de campo obrigatorio em contrato versionado, quando gate roda, entao FAIL com schema afetado. (2) Dado campos restaurados, quando gate roda, entao PASS e checklist QA completo. Checklist QA: [ ] remover campo [ ] validar FAIL [ ] restaurar [ ] validar PASS [ ] anexar evidencia.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-02",
+        "type:schema",
+        "compliance",
+        "contracts",
+        "risk:high"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:39",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-02-03",
+      "title": "Validar contrato dual runtime e provider_path",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R7",
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "high",
+      "risk_dimensions": {
+        "security": "high",
+        "privacy": "medium",
+        "performance": "medium",
+        "integration": "high",
+        "user_experience": "medium",
+        "legal_compliance": "high"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-02-03] Formalizar metadata de compatibilidade dual runtime. Descricao sugerida: manter checks estruturais de `control_plane.ws`, `chatCompletions.enabled` e `provider_path`, e adicionar owner/estimativa/dependencias no card. ACs reescritos: (1) Dado remocao de qualquer campo canonico, quando gate roda, entao FAIL especifico. (2) Dado contrato restaurado, quando gate roda, entao PASS com evidencia anexada. Checklist QA: [ ] quebrar WS [ ] quebrar provider_path [ ] validar FAIL [ ] restaurar [ ] validar PASS.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-02",
+        "runtime-compatibility",
+        "integration",
+        "contracts",
+        "risk:high"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:52",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:569"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-03-01",
+      "title": "Validar regra canonica OpenRouter e frases proibidas",
+      "mapped_requirements": [
+        "R1",
+        "R2",
+        "R3",
+        "R10"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Rastreabilidade com F4 core e indireta (regra baseada em decisoes fechadas e nao apenas no bloco F4 do guide).",
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner e dependencias no nivel da issue."
+      ],
+      "risk_level": "medium",
+      "risk_dimensions": {
+        "security": "medium",
+        "privacy": "medium",
+        "performance": "low",
+        "integration": "medium",
+        "user_experience": "low",
+        "legal_compliance": "medium"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-03-01] Clarificar vinculo PRD-F4 da regra OpenRouter. Descricao sugerida: adicionar no card referencia explicita ao requisito F4 correspondente e metadata de governanca. ACs reescritos: (1) Dado frase proibida em qualquer arquivo normativo alvo, quando gate roda, entao FAIL por arquivo. (2) Dado frase canonica e allowlist alinhadas, quando gate roda, entao PASS com evidencia consolidada. Checklist QA: [ ] inserir frase proibida [ ] validar FAIL [ ] restaurar [ ] validar PASS.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-03",
+        "policy-drift",
+        "openrouter",
+        "needs-traceability",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-01-openrouter-canonical-rule.md:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:558"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-03-02",
+      "title": "Validar matriz de compatibilidade upstream e pipeline anti-bypass",
+      "mapped_requirements": [
+        "R2",
+        "R3",
+        "R5",
+        "R8",
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Sem estimativa explicita no nivel da issue.",
+        "Sem owner atribuido no nivel da issue.",
+        "Dependencias listadas apenas no nivel do epico."
+      ],
+      "risk_level": "high",
+      "risk_dimensions": {
+        "security": "high",
+        "privacy": "medium",
+        "performance": "medium",
+        "integration": "high",
+        "user_experience": "medium",
+        "legal_compliance": "high"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-03-02] Completar metadados de governanca para anti-bypass upstream. Descricao sugerida: preservar checks de matriz/pipeline e acrescentar owner, estimativa e dependencias no card. ACs reescritos: (1) Dado remocao de matriz ou pipeline anti-bypass, quando gate roda, entao FAIL por arquivo. (2) Dado regras restauradas em PRD/Enablement, quando gate roda, entao PASS. Checklist QA: [ ] remover matriz [ ] remover pipeline [ ] validar FAIL [ ] restaurar [ ] validar PASS.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-03",
+        "anti-bypass",
+        "upstream-compatibility",
+        "integration",
+        "risk:high"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:39",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-02-upstream-matrix-anti-bypass.md:15",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152"
+      ]
+    },
+    {
+      "id": "ISSUE-F4-03-03",
+      "title": "Consolidar evidencia de fase e decisao promote|hold",
+      "mapped_requirements": [
+        "R3",
+        "R5"
+      ],
+      "conformance_status": "Parcialmente conforme",
+      "problems": [
+        "Path de alteracao referencia diretorio sem `feito` e nao encontrado no repositorio atual.",
+        "Conflito semantico de status: EPICS marca `done`, frontmatter dos epicos mantem `active`.",
+        "Sem estimativa/owner/dependencias no nivel da issue."
+      ],
+      "risk_level": "medium",
+      "risk_dimensions": {
+        "security": "low",
+        "privacy": "low",
+        "performance": "low",
+        "integration": "medium",
+        "user_experience": "medium",
+        "legal_compliance": "medium"
+      },
+      "quality_checklist": {
+        "possui_objetivo_claro": true,
+        "possui_criterios_aceitacao_testaveis": true,
+        "estimacao_presente": false,
+        "dependencias_listadas": false,
+        "passos_qa_reproducao": true,
+        "owner_atribuido": false
+      },
+      "recommended_fix": "Titulo sugerido: [F4-03-03] Corrigir rastreabilidade de paths e status da fase. Descricao sugerida: ajustar paths para `PM/PHASES/feito/F4-...` e sincronizar status documental (`done` no frontmatter quando concluido). ACs reescritos: (1) Dado artifact da fase, quando validado por QA, entao todos os paths resolvem no repositorio. (2) Dado fechamento da fase, quando revisar EPICS e epicos, entao status e consistente (`done`). Checklist QA: [ ] validar links [ ] validar status cruzado [ ] rodar gate e anexar evidencia.",
+      "suggested_labels": [
+        "phase:F4",
+        "epic:F4-03",
+        "traceability",
+        "needs-path-fix",
+        "needs-status-sync",
+        "risk:medium"
+      ],
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
+      ]
+    }
+  ],
+  "metrics": {
+    "total_requirements": 10,
+    "requirements_covered": 10,
+    "coverage_percent": 100.0,
+    "total_issues_audited": 9,
+    "critical_issues_count": 0,
+    "conformance_breakdown": {
+      "Conforme": 6,
+      "Parcialmente conforme": 3,
+      "Nao conforme": 0,
+      "Sem mapeamento": 0
+    },
+    "risk_breakdown": {
+      "critical": 0,
+      "high": 4,
+      "medium": 5,
+      "low": 0
+    },
+    "top_5_risks": [
+      {
+        "risk": "Template de issue incompleto (sem estimativa/owner/dependencias) em 9/9 issues",
+        "level": "high",
+        "issue_ids": [
+          "ISSUE-F4-01-01",
+          "ISSUE-F4-01-02",
+          "ISSUE-F4-01-03",
+          "ISSUE-F4-02-01",
+          "ISSUE-F4-02-02",
+          "ISSUE-F4-02-03",
+          "ISSUE-F4-03-01",
+          "ISSUE-F4-03-02",
+          "ISSUE-F4-03-03"
+        ]
+      },
+      {
+        "risk": "Conflito de status documental (`active` vs `done`) reduz confiabilidade de auditoria",
+        "level": "medium",
+        "issue_ids": [
+          "ISSUE-F4-03-03"
+        ]
+      },
+      {
+        "risk": "Path invalido em evidencia de alteracao compromete rastreabilidade",
+        "level": "medium",
+        "issue_ids": [
+          "ISSUE-F4-03-03"
+        ]
+      },
+      {
+        "risk": "Condicao de gate para `governed` nao explicita no AC da issue de ClawWork",
+        "level": "medium",
+        "issue_ids": [
+          "ISSUE-F4-01-03"
+        ]
+      },
+      {
+        "risk": "Rastreabilidade indireta da regra OpenRouter para o bloco F4 aumenta chance de drift",
+        "level": "medium",
+        "issue_ids": [
+          "ISSUE-F4-03-01"
+        ]
+      }
+    ],
+    "evidence_refs": [
+      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10",
+      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:17",
+      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:27"
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P1",
+      "urgency_index": 82,
+      "description": "Padronizar template obrigatorio de issue (owner, estimativa, dependencias, QA checklist e evidence_ref) para todos os epicos F4.",
+      "owner": "PO (com Tech Lead e QA)",
+      "due_days": 3,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 78,
+      "description": "Sincronizar status documental da F4: frontmatter dos epicos deve refletir `done` quando tabela de EPICS ja estiver em `done`.",
+      "owner": "PO",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
+      ]
+    },
+    {
+      "priority": "P1",
+      "urgency_index": 76,
+      "description": "Corrigir referencias de path da ISSUE-F4-03-03 e adicionar validacao automatica de links de evidencia no gate de qualidade.",
+      "owner": "QA",
+      "due_days": 2,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:84"
+      ]
+    },
+    {
+      "priority": "P2",
+      "urgency_index": 68,
+      "description": "Reescrever AC da ISSUE-F4-01-03 para explicitar que `governed` so pode ser ativado apos gate verde.",
+      "owner": "Tech Lead",
+      "due_days": 4,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
+      ]
+    },
+    {
+      "priority": "P2",
+      "urgency_index": 62,
+      "description": "Adicionar rastreabilidade explicita `R#` e `B1-2x` em todas as issues F4 para reduzir drift entre PRD e execucao.",
+      "owner": "Compliance",
+      "due_days": 5,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:24"
+      ]
+    }
+  ]
+}

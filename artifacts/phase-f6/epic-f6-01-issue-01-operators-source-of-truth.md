@@ -10,6 +10,8 @@
 - resultado esperado: `FAIL` no `make ci-security`.
 - cenario B: colisao de identidade (`operator_id`, `telegram_user_id` ou `telegram_chat_id` duplicado entre operadores habilitados).
 - resultado esperado: `FAIL` no `make ci-security`.
+- cenario C: operador valido sem evidencia de canal confiavel no checklist HITL do mesmo ciclo.
+- resultado esperado: `hold` no gate documental da fase.
 
 ## Green
 - acao:
@@ -19,12 +21,17 @@
     - `telegram_user_id` unico e numerico para operador habilitado;
     - `telegram_chat_ids` nao vazio, numerico, sem duplicidade e sem compartilhamento entre operadores habilitados;
     - vinculo de identidade Telegram (`telegram_user_id` presente em `telegram_chat_ids`) para operador habilitado.
+  - vincular `operator_id` aprovado ao `primary_channel=telegram` no checklist HITL no mesmo ciclo de `make ci-security`.
 - comando: `make ci-security`.
 - resultado: `security-check: PASS`.
 
 ## Refactor
 - comando: `make ci-quality`.
 - resultado: `quality-check: PASS`.
+- evidencia de suporte:
+  - `operator_id`: `primary-01`
+  - `primary_channel`: `telegram`
+  - checklist HITL atualizado no mesmo ciclo com item operador/canal em `pass`.
 
 ## Alteracoes da issue
 - `scripts/ci/check_security.sh`

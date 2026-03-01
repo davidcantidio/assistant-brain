@@ -429,6 +429,21 @@ Regras mandatarias:
 - email e canal de informacao; nunca canal confiavel de comando.
 - instrucao recebida por email MUST exigir confirmacao em canal confiavel antes de qualquer execucao.
 
+### Contrato `workspace_state_contract`
+```yaml
+schema_version: "1.0"
+canonical_path: "workspaces/main/.openclaw/workspace-state.json"
+uniqueness_rule: "exactly_one_workspace_state_file"
+required_fields:
+  - "version"
+  - "bootstrapSeededAt"
+```
+
+Regras mandatarias:
+- a fonte canonica de estado de workspace MUST ser exatamente `workspaces/main/.openclaw/workspace-state.json`.
+- qualquer caminho adicional `workspaces/*/.openclaw/workspace-state.json` MUST bloquear o gate de runtime.
+- `bootstrapSeededAt` MUST estar em ISO-8601 UTC terminando com `Z`.
+
 ### Contrato `memory_contract`
 ```yaml
 schema_version: "1.0"
@@ -640,16 +655,20 @@ Definicao objetiva de side effect:
   - mitigacao: `TRADING_BLOCKED`, `position_snapshot`, protecao de posicao e incidente `SEV-1` para `UNMANAGED_EXPOSURE`.
 
 ## Fases e Definition of Done
-- Fase 0 (Mission Control MVP):
+- nota de escopo normativo:
+  - este bloco define macrofases de produto (`M0..M2`) para orientar estrategia.
+  - fases operacionais `F1..F8` usadas para execucao/gate diario sao definidas em `PRD/PHASE-USABILITY-GUIDE.md`.
+  - `M1 Trading` nao renomeia nem substitui `F1 Instalacao Base OpenClaw`; `F7` permanece a fase operacional de trading por estagios (`S0 -> S1 -> S2`).
+- Macrofase M0 (Mission Control MVP):
   - control-plane minimo + baseline executavel de catalog/router/memory/budget/privacidade.
-  - refinos avancados desses blocos devem ser diferidos para Fase 1/2 conforme `PRD/ROADMAP.md`, sem perda de escopo.
+  - refinos avancados desses blocos devem ser diferidos para macrofases seguintes conforme `PRD/ROADMAP.md`, sem perda de escopo.
   - DoD MUST: 7 dias estavel, rota explicavel por Issue/Microtask, claims centrais cobertos por gate, sem bypass de policy.
-- Fase 1 (Trading):
+- Macrofase M1 (Trading):
   - habilitada somente apos criteria formal de enablement e suite hard-risk verde.
   - engine primaria de sinal: `TradingAgents`.
   - capital real habilitado somente apos `S0` concluido e gate de prontidao verde por 7 dias.
   - aumento de capital/limites somente apos janela estavel de `S1` e decision `R3`.
-- Fase 2 (Expansao):
+- Macrofase M2 (Expansao):
   - novas verticais/escritorios com o mesmo padrao de governanca.
   - evolucao trading com modulos seletivos de `AgenticTrading` quando houver ganho comprovado.
   - expansao multiativos (acoes/FIIs/titulos) por classe de ativo, sem bypass de `execution_gateway`/risk gates.

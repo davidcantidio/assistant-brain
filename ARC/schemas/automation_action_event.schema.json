@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/automation_action_event.schema.json",
+  "title": "automation_action_event",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "automation_action_id",
+    "coalescing_key",
+    "idempotency_key",
+    "action_type",
+    "has_side_effect",
+    "rollback_plan_ref",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "automation_action_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "coalescing_key": {
+      "type": "string",
+      "minLength": 2
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 2
+    },
+    "action_type": {
+      "type": "string",
+      "minLength": 2
+    },
+    "has_side_effect": {
+      "type": "boolean"
+    },
+    "rollback_plan_ref": {
+      "type": ["string", "null"],
+      "minLength": 2
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "APPLIED",
+        "NOTIFY_ONLY",
+        "NO_OP_DUPLICATE",
+        "ROLLED_BACK",
+        "FAILED",
+        "FAIL_STOP_SHIP"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

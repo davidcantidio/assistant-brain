@@ -1,32 +1,43 @@
 # EPIC-F3-01 ISSUE-F3-01-02 Runtime Schema A2A/Hooks/Gateway Validation
 
-- data/hora: 2026-02-26 11:52:20 -0300
+- data/hora: 2026-03-01 10:05:00 -0300
 - host alvo: Darwin arm64
 - escopo: `ISSUE-F3-01-02` (schema/runtime contract + A2A/hooks/gateway)
 - fonte de verdade: `PRD/PRD-MASTER.md`
 
-## Red
-- cenario: fixtures invalidas no proprio gate removendo campos `required` mandatarios e alterando `gateway.bind.const`.
-- cobertura de cenarios invalidos:
-  - top-level required sem `hooks`;
-  - `tools.agentToAgent.required` sem `allow`;
-  - `hooks.required` sem `internal`;
-  - `hooks.internal.entries.required` sem `session-memory`;
-  - `gateway.bind.const != loopback`;
-  - `gateway.control_plane.ws.required` sem `url`;
-  - `gateway.http.endpoints.chatCompletions.required` sem `enabled`.
-- resultado esperado: todos os cenarios acima devem falhar em `expect_invalid`.
+## Evidence Contract
 
-## Green
-- acao: validacao executavel adicionada ao `scripts/ci/eval_runtime_contracts.sh` para o schema `ARC/schemas/openclaw_runtime_config.schema.json`.
-- comando: `make eval-runtime`.
-- resultado: `eval-runtime-contracts: PASS`.
+### Scenario 1
+```yaml
+scenario: "Red"
+command: "make eval-runtime"
+expected_result: "FAIL ao remover required fields mandatarios"
+actual_assert_message: "invalid_missing_top_required deveria falhar, mas passou. (bloqueado no expect_invalid)"
+trace_id_or_ref: "artifact:f3-01-02:red"
+status: "PASS"
+```
 
-## Refactor
-- o gate agora verifica explicitamente a estrutura contratual obrigatoria de runtime (nao apenas JSON sintatico).
-- validacoes negativas permanecem encapsuladas como fixtures de regressao no proprio script.
+### Scenario 2
+```yaml
+scenario: "Green"
+command: "make eval-runtime"
+expected_result: "PASS com schema runtime valido"
+actual_assert_message: "eval-runtime-contracts: PASS"
+trace_id_or_ref: "artifact:f3-01-02:green"
+status: "PASS"
+```
+
+### Scenario 3
+```yaml
+scenario: "Refactor"
+command: "make eval-runtime"
+expected_result: "PASS mantendo regressao protegida por fixtures invalidas"
+actual_assert_message: "eval-runtime-contracts: PASS"
+trace_id_or_ref: "artifact:f3-01-02:refactor"
+status: "PASS"
+```
 
 ## Alteracoes da issue
 - `scripts/ci/eval_runtime_contracts.sh`
-  - adiciona bloco Python para validação estrutural de `openclaw_runtime_config`.
-  - adiciona cenarios `valid/invalid` para bloquear drift contratual de A2A/hooks/gateway.
+  - validacao estrutural de `openclaw_runtime_config`.
+  - cenarios `valid/invalid` para bloquear drift contratual de A2A/hooks/gateway.

@@ -1,0 +1,933 @@
+{
+  "pr_summary": "A F7 esta documentalmente concluida e os 13 requisitos normativos agora possuem cobertura executada na propria fase. A decisao `F7 -> F8` permanece `hold` por risco operacional residual: quatro itens criticos ainda falham no checklist de `S1`, nao existe decisao `R3` para `S2` e falta evidenciar 30 dias em `S1`. A auditoria parou de discutir papel e voltou a discutir risco.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Operar `S0 -> S1 -> S2` com risco controlado e bloqueio de bypass.",
+      "acceptance_criteria": [
+        "`S0` permanece paper/sandbox antes de qualquer live.",
+        "`S1` opera com checklist contratual e guardrails de micro-live.",
+        "`S2` so e avaliado com criterios formais de escala e decisao de fase auditavel."
+      ],
+      "objective": "Executar rollout por estagios sem bypass de risco.",
+      "dependencies": [
+        "make eval-trading",
+        "pre_live_checklist",
+        "Decision Protocol",
+        "validation-summary.md"
+      ],
+      "success_metrics": [
+        "Nenhum bypass de estagio documentado.",
+        "Todos os epicos `EPIC-F7-01..03` em `done`.",
+        "Decisao de fase registrada como `hold` enquanto houver bloqueio operacional."
+      ],
+      "regulatory_constraints": [
+        "Bloqueio de bypass de estagio.",
+        "Trilha auditavel por gate e decisao."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-01",
+        "ISSUE-F7-01-02",
+        "ISSUE-F7-02-02",
+        "ISSUE-F7-02-03",
+        "ISSUE-F7-03-01",
+        "ISSUE-F7-03-02",
+        "ISSUE-F7-03-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:12",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:22",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:56",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:15"
+      ]
+    },
+    {
+      "id": "R2",
+      "text": "Gate da fase exige `make eval-trading = PASS`.",
+      "acceptance_criteria": [
+        "`make eval-trading` e comando obrigatorio da fase.",
+        "Ausencia ou falha do gate bloqueia live/promocao.",
+        "O resultado do gate deve ficar registrado nos artifacts da fase."
+      ],
+      "objective": "Bloquear evolucao de trading sem validacao executavel.",
+      "dependencies": [
+        "assistant-brain/Makefile",
+        "scripts/ci/eval_trading.sh",
+        "validation-summary.md"
+      ],
+      "success_metrics": [
+        "`eval-trading: PASS` registrado na fase.",
+        "Nenhuma decisao de promote sem gate verde."
+      ],
+      "regulatory_constraints": [
+        "Gate executavel obrigatorio antes de live."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-01",
+        "ISSUE-F7-02-02",
+        "ISSUE-F7-03-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:40",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:8"
+      ]
+    },
+    {
+      "id": "R3",
+      "text": "Promocao `F7 -> F8` exige `pre_live_checklist` sem item `fail`; caso contrario, `hold`.",
+      "acceptance_criteria": [
+        "Qualquer item `fail` mantem a decisao em `hold`.",
+        "Somente checklist sem `fail` permite avaliar `promote`.",
+        "A decisao final de fase precisa registrar justificativa `promote|hold`."
+      ],
+      "objective": "Impedir promocao de fase com prontidao live incompleta.",
+      "dependencies": [
+        "pre_live_checklist",
+        "validation-summary.md",
+        "Decision Protocol"
+      ],
+      "success_metrics": [
+        "Decisao `hold` registrada com justificativa unica de fase.",
+        "Checklist canonico referenciado no artifact final."
+      ],
+      "regulatory_constraints": [
+        "Checklist com `fail` MUST bloquear promote.",
+        "Decisao final precisa ser auditavel."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-03",
+        "ISSUE-F7-03-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:40",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:21",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26"
+      ]
+    },
+    {
+      "id": "R4",
+      "text": "`S0` nao pode permitir ordem real; tentativa live deve manter `TRADING_BLOCKED`.",
+      "acceptance_criteria": [
+        "Tentativa de ordem live em `S0` preserva `TRADING_BLOCKED`.",
+        "O bloqueio permanece auditavel.",
+        "`make eval-trading` nao aceita bypass de estagio."
+      ],
+      "objective": "Eliminar exposicao financeira prematura em `S0`.",
+      "dependencies": [
+        "TRADING_BLOCKED",
+        "scripts/ci/eval_trading.sh",
+        "artifact de evidencia da issue"
+      ],
+      "success_metrics": [
+        "Nenhuma ordem real aceita em `S0`.",
+        "Bloqueio auditavel registrado."
+      ],
+      "regulatory_constraints": [
+        "Ordem real em `S0` MUST permanecer bloqueada."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-01"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:41",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:58",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26"
+      ]
+    },
+    {
+      "id": "R5",
+      "text": "Cada ordem de entrada em `S0` exige aprovacao humana explicita e auditavel.",
+      "acceptance_criteria": [
+        "Ordem sem aprovacao humana deve ser bloqueada.",
+        "Aprovacao humana deve ficar rastreavel por ordem.",
+        "O criterio HITL de `S0` fica conforme."
+      ],
+      "objective": "Garantir controle humano total no estagio inicial.",
+      "dependencies": [
+        "Decision Protocol",
+        "artifact de aprovacao por ordem",
+        "make eval-trading"
+      ],
+      "success_metrics": [
+        "Nenhuma ordem de entrada aceita sem aprovacao humana.",
+        "Rastreabilidade por ordem em `S0`."
+      ],
+      "regulatory_constraints": [
+        "Aprovacao humana explicita e auditavel por ordem."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-02"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:127",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52"
+      ]
+    },
+    {
+      "id": "R6",
+      "text": "`S0` so habilita avaliacao de `S1` com janela minima e evidencias de estabilidade; default normativo = 4 semanas e `hold` se a evidencia for incompleta.",
+      "acceptance_criteria": [
+        "`S0` registra janela minima de 4 semanas.",
+        "A janela permanece sem `SEV-1/SEV-2`.",
+        "Sem evidencia minima completa, o resultado permanece `hold`."
+      ],
+      "objective": "Evitar avaliacao de `S1` sem historico minimo confiavel.",
+      "dependencies": [
+        "artifact de janela `S0`",
+        "classificacao de incidentes",
+        "summary do epic `F7-01`"
+      ],
+      "success_metrics": [
+        "Janela quantitativa explicitada no doc e nos artifacts.",
+        "Regra de `hold` preservada para evidencia incompleta."
+      ],
+      "regulatory_constraints": [
+        "Janela minima obrigatoria antes de live."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-01-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:44",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77"
+      ]
+    },
+    {
+      "id": "R7",
+      "text": "`S1` exige `pre_live_checklist` versionado com todos os campos obrigatorios e `items[]`.",
+      "acceptance_criteria": [
+        "Checklist sem campos obrigatorios resulta em `hold`.",
+        "O checklist contem `checklist_id`, `decision_id`, `risk_tier`, `asset_class`, `capital_ramp_level`, `operator_id`, `approved_at` e `items[]`.",
+        "Artifact JSON versionado do checklist existe."
+      ],
+      "objective": "Remover subjetividade da habilitacao de `S1`.",
+      "dependencies": [
+        "CHECKLIST-F7-02-S1-20260301-01.json",
+        "TRADING-PRD",
+        "TRADING-ENABLEMENT-CRITERIA"
+      ],
+      "success_metrics": [
+        "Checklist versionado publicado.",
+        "Contrato minimo validado por `make eval-trading`."
+      ],
+      "regulatory_constraints": [
+        "Checklist versionado MUST existir para `S1`."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-01"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:164",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:138",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28"
+      ]
+    },
+    {
+      "id": "R8",
+      "text": "`S1` exige guardrails minimos `capital_ramp_level=L0`, `execution_gateway_only`, `pre_trade_validator_active`.",
+      "acceptance_criteria": [
+        "`capital_ramp_level=L0` esta ativo.",
+        "`execution_gateway_only=pass` e `pre_trade_validator_active=pass` estao no checklist.",
+        "O gate falha se algum guardrail estiver ausente."
+      ],
+      "objective": "Limitar exposicao inicial de `S1` ao envelope aprovado.",
+      "dependencies": [
+        "checklist versionado",
+        "pre_trade_validator.schema.json",
+        "scripts/ci/eval_trading.sh"
+      ],
+      "success_metrics": [
+        "Guardrails de `S1` registrados e validados.",
+        "`make eval-trading` continua em `PASS`."
+      ],
+      "regulatory_constraints": [
+        "`capital_ramp_level=L0` MUST ser default de entrada em live."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-02"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:129",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
+      ]
+    },
+    {
+      "id": "R9",
+      "text": "`S1` exige todos os itens minimos obrigatorios do checklist; qualquer item `fail` mantem `TRADING_BLOCKED/hold`.",
+      "acceptance_criteria": [
+        "A matriz minima de 8 itens do checklist esta completa.",
+        "Qualquer item `fail` mantem `TRADING_BLOCKED`.",
+        "Remocao de `TRADING_BLOCKED` so ocorre por decisao formal registrada."
+      ],
+      "objective": "Bloquear live enquanto a prontidao operacional estiver incompleta.",
+      "dependencies": [
+        "pre_live_checklist",
+        "Decision Protocol",
+        "artifact de readiness de `S1`"
+      ],
+      "success_metrics": [
+        "Checklist completo com 8 itens e estado real preservado.",
+        "Decisao `hold` mantida enquanto houver `fail`."
+      ],
+      "regulatory_constraints": [
+        "Qualquer item `fail` MUST manter `TRADING_BLOCKED`."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-01",
+        "ISSUE-F7-02-02",
+        "ISSUE-F7-02-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:152",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:9",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79"
+      ]
+    },
+    {
+      "id": "R10",
+      "text": "Promocao `S1 -> S2` exige 30 dias em `S1`, zero `SEV-1/SEV-2`, zero violacao hard-risk e reconciliacao sem duplicidade.",
+      "acceptance_criteria": [
+        "Existe regra explicita de 30 dias em `S1`.",
+        "A promocao exige zero `SEV-1/SEV-2` e zero violacao hard-risk.",
+        "A reconciliacao sem duplicidade faz parte do gate de escala."
+      ],
+      "objective": "Impedir escala sem maturidade operacional comprovada.",
+      "dependencies": [
+        "criterios de enablement",
+        "artifact da issue `F7-03-01`",
+        "evidencia operacional de `S1`"
+      ],
+      "success_metrics": [
+        "Criterios de promocao explicitados e rastreaveis.",
+        "Ausencia de evidencia mantem a fase em `hold`."
+      ],
+      "regulatory_constraints": [
+        "Promocao de `S1 -> S2` so com criterio objetivo."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-03-01"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
+      ]
+    },
+    {
+      "id": "R11",
+      "text": "Promocao `S1 -> S2` exige decision `R3` com limites explicitos do novo nivel.",
+      "acceptance_criteria": [
+        "Promocao sem decision `R3` deve ser bloqueada.",
+        "A `decision_id` de readiness de `S1` nao substitui a decisao de escala.",
+        "A decisao de escala precisa explicitar os limites do novo nivel."
+      ],
+      "objective": "Garantir governanca formal antes de escalar capital/risco.",
+      "dependencies": [
+        "Decision Protocol",
+        "artifact da issue `F7-03-02`",
+        "evidencia de decisao `R3`"
+      ],
+      "success_metrics": [
+        "Separacao explicita entre readiness de `S1` e decisao de escala.",
+        "Promocao permanece bloqueada sem `R3`."
+      ],
+      "regulatory_constraints": [
+        "Escala de risco exige decisao formal com limites explicitos."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-03-02"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+      ]
+    },
+    {
+      "id": "R12",
+      "text": "Fechamento de F7 exige artifact unico com status de gates, checklist e decisao `promote|hold`.",
+      "acceptance_criteria": [
+        "Existe `validation-summary.md` para a fase.",
+        "O artifact registra status dos epicos, do checklist e do gate.",
+        "A decisao `promote|hold` fica centralizada em um unico resumo."
+      ],
+      "objective": "Fechar a fase com evidencias rastreaveis e unicas.",
+      "dependencies": [
+        "validation-summary.md",
+        "epic-f7-03-s2-escala-e-promocao.md",
+        "EPICS.md"
+      ],
+      "success_metrics": [
+        "Artifact unico publicado.",
+        "Decisao final de fase rastreavel em um unico ponto."
+      ],
+      "regulatory_constraints": [
+        "Decisao de fase MUST ser auditavel."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-03-03"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1"
+      ]
+    },
+    {
+      "id": "R13",
+      "text": "Aprovacao humana por ordem permanece mandatória em `S1` e `S2`.",
+      "acceptance_criteria": [
+        "`S1` mantem aprovacao humana por ordem.",
+        "`S2` nao remove aprovacao humana por ordem.",
+        "Sem aprovacao por ordem, a promocao/live permanece bloqueada."
+      ],
+      "objective": "Preservar controle humano em todos os estagios com side effect financeiro.",
+      "dependencies": [
+        "Decision Protocol",
+        "checklist de `S1`",
+        "issue de decisao `R3`"
+      ],
+      "success_metrics": [
+        "Regra explicitada em `S1` e `S2`.",
+        "Gate de fase continua bloqueado sem aprovacao por ordem."
+      ],
+      "regulatory_constraints": [
+        "Aprovacao humana explicita por ordem MUST existir em todos os estagios."
+      ],
+      "target_date": null,
+      "linked_issues": [
+        "ISSUE-F7-02-03",
+        "ISSUE-F7-03-02"
+      ],
+      "coverage_status": "covered",
+      "coverage_scope": {
+        "executed_status": "covered",
+        "phase_total_status": "covered"
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:34",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:70",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
+      ]
+    }
+  ],
+  "issues_audit": [
+    {
+      "id": "ISSUE-F7-01-01",
+      "title": "Validar regra S0 sem ordem real e estado TRADING_BLOCKED para tentativa live",
+      "mapped_requirements": [
+        "R2",
+        "R4"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "low",
+      "recommended_fix": "Titulo sugerido: 'Manter validacao de bloqueio live em S0'. Descricao: nenhuma correcao documental pendente; preservar o teste de tentativa live em `S0` e manter o artifact da issue atualizado em reruns. ACs reescritos: 1) tentativa live preserva `TRADING_BLOCKED`; 2) `make eval-trading=PASS`; 3) evidencia auditavel publicada. Checklist QA: rerodar o gate, revisar o artifact e confirmar ausencia de bypass. Labels: `prio:p2`, `monitoring`, `risk:trading`.",
+      "suggested_labels": [
+        "prio:p2",
+        "monitoring",
+        "risk:trading"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:42",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-01-issue-01-s0-paper-only-trading-blocked.md"
+      ],
+      "urgency_index": 20,
+      "owner_recommended": "Tech Lead"
+    },
+    {
+      "id": "ISSUE-F7-01-02",
+      "title": "Validar aprovacao humana explicita por ordem de entrada no S0",
+      "mapped_requirements": [
+        "R5"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: 'Preservar aprovacao humana por ordem em S0'. Descricao: nenhuma correcao documental pendente; manter a evidencia por ordem e repetir a revisao sempre que o protocolo de decisao mudar. ACs reescritos: 1) ordem sem aprovacao humana e bloqueada; 2) aprovacao por ordem fica auditavel; 3) `make eval-trading=PASS`. Checklist QA: revisar o artifact da issue, o protocolo de decisao e rerodar o gate. Labels: `prio:p2`, `needs-compliance`, `risk:hitl`.",
+      "suggested_labels": [
+        "prio:p2",
+        "needs-compliance",
+        "risk:hitl"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:127"
+      ],
+      "urgency_index": 40,
+      "owner_recommended": "Compliance/Security"
+    },
+    {
+      "id": "ISSUE-F7-01-03",
+      "title": "Validar evidencias minimas de janela S0 e status operacional para habilitar avaliacao de S1",
+      "mapped_requirements": [
+        "R6"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: 'Manter janela quantitativa de S0 auditavel'. Descricao: nenhuma correcao documental pendente; manter a referencia literal a `4 semanas` e `SEV-1/SEV-2` e atualizar o artifact de janela em reruns. ACs reescritos: 1) evidencia incompleta mantem `hold`; 2) 4 semanas e zero `SEV-1/SEV-2` habilitam avaliar `S1`; 3) resultado fica publicado no summary do epic. Checklist QA: revisar este doc, o artifact da issue e o summary do epic. Labels: `prio:p2`, `monitoring`, `risk:trading`.",
+      "suggested_labels": [
+        "prio:p2",
+        "monitoring",
+        "risk:trading"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-01-s0-summary.md"
+      ],
+      "urgency_index": 55,
+      "owner_recommended": "PO/PM"
+    },
+    {
+      "id": "ISSUE-F7-02-01",
+      "title": "Validar contrato do pre_live_checklist com campos obrigatorios e items[]",
+      "mapped_requirements": [
+        "R7",
+        "R9"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: 'Manter contrato do pre_live_checklist versionado'. Descricao: nenhuma correcao documental pendente; preservar a lista de campos obrigatorios e garantir que futuras revisoes atualizem o checklist canonico antes do gate. ACs reescritos: 1) checklist contem campos obrigatorios; 2) `items[]` inclui os itens minimos; 3) contrato incompleto reprova no gate. Checklist QA: validar o JSON canonico e rerodar `make eval-trading`. Labels: `prio:p2`, `monitoring`, `risk:trading`.",
+      "suggested_labels": [
+        "prio:p2",
+        "monitoring",
+        "risk:trading"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:164",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2"
+      ],
+      "urgency_index": 45,
+      "owner_recommended": "Tech Lead"
+    },
+    {
+      "id": "ISSUE-F7-02-02",
+      "title": "Validar guardrails de entrada em S1 capital_ramp_level L0 execution_gateway_only pre_trade_validator_active",
+      "mapped_requirements": [
+        "R2",
+        "R8",
+        "R9"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: 'Preservar guardrails obrigatorios de S1'. Descricao: nenhuma correcao documental pendente; manter `capital_ramp_level=L0`, `execution_gateway_only=pass` e `pre_trade_validator_active=pass` ancorados no checklist canonico. ACs reescritos: 1) guardrails ausentes falham no gate; 2) guardrails completos mantem `PASS`; 3) schema do `pre_trade_validator` permanece versionado. Checklist QA: revisar checklist JSON, schema e rerodar `make eval-trading`. Labels: `prio:p2`, `monitoring`, `risk:guardrails`.",
+      "suggested_labels": [
+        "prio:p2",
+        "monitoring",
+        "risk:guardrails"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6"
+      ],
+      "urgency_index": 50,
+      "owner_recommended": "Tech Lead"
+    },
+    {
+      "id": "ISSUE-F7-02-03",
+      "title": "Validar matriz minima do checklist S1 e manter hold enquanto houver item fail",
+      "mapped_requirements": [
+        "R3",
+        "R9",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Risco residual: `credentials_live_no_withdraw`, `hitl_channel_ready`, `backup_operator_enabled` e `explicit_order_approval_active` seguem em `fail`."
+      ],
+      "risk_level": "critical",
+      "recommended_fix": "Titulo sugerido: 'Remover bloqueios criticos do checklist de S1'. Descricao: tratar cada item `fail` como bloqueador de live e atualizar o checklist canonico somente com evidencia real. ACs reescritos: 1) os 8 itens minimos permanecem completos; 2) os 4 itens hoje em `fail` migram para `pass` com evidencia verificavel; 3) `TRADING_BLOCKED` so e removido por decisao formal registrada; 4) aprovacao humana por ordem permanece ativa. Checklist QA: revisar `CHECKLIST-F7-02-S1-20260301-01.json`, rerodar `make eval-trading` e atualizar `validation-summary.md`. Labels: `prio:p0`, `needs-compliance`, `risk:live-blocker`.",
+      "suggested_labels": [
+        "prio:p0",
+        "needs-compliance",
+        "risk:live-blocker"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:27"
+      ],
+      "urgency_index": 98,
+      "owner_recommended": "Compliance/Security"
+    },
+    {
+      "id": "ISSUE-F7-03-01",
+      "title": "Validar criterios minimos de promocao para escala",
+      "mapped_requirements": [
+        "R10"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Risco residual: ainda nao ha evidencia de 30 dias em `S1` com zero `SEV-1/SEV-2` e sem violacao hard-risk."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: 'Produzir evidencia de 30 dias para escala S1 -> S2'. Descricao: abrir pacote operacional para registrar a janela minima de `S1` antes de qualquer escala. ACs reescritos: 1) 30 dias corridos em `S1` comprovados; 2) zero `SEV-1/SEV-2` e zero violacao hard-risk no periodo; 3) reconciliacao sem duplicidade evidenciada. Checklist QA: revisar artifact da issue, incidentes e rerodar o summary da fase. Labels: `prio:p1`, `needs-ops`, `risk:promotion`.",
+      "suggested_labels": [
+        "prio:p1",
+        "needs-ops",
+        "risk:promotion"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:40"
+      ],
+      "urgency_index": 82,
+      "owner_recommended": "PO/PM"
+    },
+    {
+      "id": "ISSUE-F7-03-02",
+      "title": "Validar obrigatoriedade de decision R3 para promocao com limites explicitos",
+      "mapped_requirements": [
+        "R11",
+        "R13"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Risco residual: nao existe decision `R3` com limites explicitos para `S2`."
+      ],
+      "risk_level": "high",
+      "recommended_fix": "Titulo sugerido: 'Emitir decision R3 de escala para S2'. Descricao: registrar decisao formal de promocao `S1 -> S2` separada da `decision_id` de readiness de `S1`. ACs reescritos: 1) payload/registro `R3` com limites explicitos do novo nivel; 2) aprovacao humana por ordem preservada em `S2`; 3) ausencia da decisao mantem `hold`. Checklist QA: revisar protocolo de decisao, atualizar artifact da issue e publicar referencia no `validation-summary.md`. Labels: `prio:p1`, `needs-compliance`, `risk:governance`.",
+      "suggested_labels": [
+        "prio:p1",
+        "needs-compliance",
+        "risk:governance"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+      ],
+      "urgency_index": 88,
+      "owner_recommended": "Tech Lead"
+    },
+    {
+      "id": "ISSUE-F7-03-03",
+      "title": "Consolidar evidencias da fase em artifact unico e registrar decisao promote hold de F7 para F8",
+      "mapped_requirements": [
+        "R3",
+        "R12"
+      ],
+      "conformance_status": "Conforme",
+      "problems": [
+        "Risco residual: a decisao final da fase continua `hold` enquanto os bloqueios de `S1` e `S2` nao forem removidos."
+      ],
+      "risk_level": "medium",
+      "recommended_fix": "Titulo sugerido: 'Manter summary unico da F7 sincronizado com os bloqueios reais'. Descricao: nenhuma correcao documental pendente; atualizar `validation-summary.md` sempre que o checklist de `S1`, a decisao `R3` ou a janela de `S1` mudarem. ACs reescritos: 1) summary unico existe; 2) checklist canonico e decisao final sao referenciados; 3) `hold` ou `promote` refletem o estado real. Checklist QA: rerodar `make ci-quality`, `make eval-trading` e revisar links internos. Labels: `prio:p2`, `monitoring`, `risk:phase-governance`.",
+      "suggested_labels": [
+        "prio:p2",
+        "monitoring",
+        "risk:phase-governance"
+      ],
+      "quality_checklist": {
+        "clear_objective": true,
+        "testable_acceptance_criteria": true,
+        "estimation_present": true,
+        "dependencies_listed": true,
+        "qa_or_repro_steps_present": true,
+        "owner_assigned": true
+      },
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-03-issue-03-phase-evidence-promote-hold.md"
+      ],
+      "urgency_index": 60,
+      "owner_recommended": "PO/PM"
+    }
+  ],
+  "metrics": {
+    "total_requirements": 13,
+    "requirements_covered": 13,
+    "coverage_percent": 100.0,
+    "total_issues_audited": 9,
+    "critical_issues_count": 1,
+    "executed_requirements_covered": 13,
+    "executed_coverage_percent": 100.0,
+    "phase_total_requirements": 13,
+    "phase_total_covered": 13,
+    "phase_total_coverage_percent": 100.0,
+    "uncovered_requirement_ids": [],
+    "partially_covered_requirement_ids": [],
+    "executed_uncovered_requirement_ids": [],
+    "executed_partially_covered_requirement_ids": [],
+    "high_issues_count": 2,
+    "residual_hold_reasons": [
+      "`credentials_live_no_withdraw=fail`",
+      "`hitl_channel_ready=fail`",
+      "`backup_operator_enabled=fail`",
+      "`explicit_order_approval_active=fail`",
+      "ausencia de decisao `R3` com limites explicitos para `S2`",
+      "ausencia de evidencia de 30 dias em `S1`"
+    ],
+    "top_5_risks": [
+      {
+        "risk": "`credentials_live_no_withdraw` permanece `fail` e impede live seguro.",
+        "level": "critical",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:27"
+        ]
+      },
+      {
+        "risk": "`explicit_order_approval_active` permanece `fail` e deixa a trilha HITL incompleta para live.",
+        "level": "critical",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216"
+        ]
+      },
+      {
+        "risk": "`hitl_channel_ready` permanece `fail` e impede prontidao operacional de `S1`.",
+        "level": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:28"
+        ]
+      },
+      {
+        "risk": "`backup_operator_enabled` permanece `fail` e elimina redundancia operacional para live.",
+        "level": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:30"
+        ]
+      },
+      {
+        "risk": "Nao existe decision `R3` com limites explicitos para `S2`.",
+        "level": "high",
+        "evidence_refs": [
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
+          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+        ]
+      }
+    ]
+  },
+  "action_plan": [
+    {
+      "priority": "P0",
+      "description": "Habilitar credenciais live sem saque e atualizar o checklist canonico de `S1` para migrar `credentials_live_no_withdraw` de `fail` para `pass` com evidencia real.",
+      "owner": "Compliance/Security",
+      "due_days": 3,
+      "urgency_index": 100,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:101"
+      ]
+    },
+    {
+      "priority": "P0",
+      "description": "Validar canal HITL e operador de backup para remover `hitl_channel_ready` e `backup_operator_enabled` de `fail`, mantendo trilha auditavel no checklist de `S1`.",
+      "owner": "Compliance/Security",
+      "due_days": 5,
+      "urgency_index": 95,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:220",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41"
+      ]
+    },
+    {
+      "priority": "P0",
+      "description": "Ativar aprovacao humana explicita por ordem para `S1` e atualizar `explicit_order_approval_active` para `pass`, sem remover `TRADING_BLOCKED` fora de decisao formal.",
+      "owner": "Tech Lead + Compliance/Security",
+      "due_days": 3,
+      "urgency_index": 97,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:103"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Emitir decisao `R3` de promocao `S1 -> S2` com limites explicitos do novo nivel, separada da `decision_id` de readiness de `S1`.",
+      "owner": "Tech Lead",
+      "due_days": 5,
+      "urgency_index": 88,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+      ]
+    },
+    {
+      "priority": "P1",
+      "description": "Produzir pacote operacional de 30 dias em `S1` com zero `SEV-1/SEV-2`, zero violacao hard-risk e reconciliacao sem duplicidade para avaliar escala.",
+      "owner": "PO/PM",
+      "due_days": 30,
+      "urgency_index": 82,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:40"
+      ]
+    },
+    {
+      "priority": "P2",
+      "description": "Manter `validation-summary.md` e o checklist canonico sincronizados em reruns semanais enquanto a fase permanecer em `hold`.",
+      "owner": "PO/PM",
+      "due_days": 7,
+      "urgency_index": 50,
+      "evidence_refs": [
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1",
+        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/CHANGELOG.md:32"
+      ]
+    }
+  ]
+}

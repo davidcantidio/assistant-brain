@@ -45,3 +45,11 @@
   - registra execucao normativa da `ISSUE-F5-01-03`.
 - `artifacts/phase-f5/epic-f5-01-issue-03-versioned-contracts-runtime-dual.md`
   - evidencia auditavel do ciclo da issue.
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: ACs reescritos para exigir metadata minima de versionamento nos quatro schemas obrigatorios e criterio negativo para quebra do runtime dual.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

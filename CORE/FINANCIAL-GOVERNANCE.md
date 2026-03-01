@@ -30,13 +30,20 @@ Exclui:
 - [RFC-050] MUST calcular budget operacional a partir de saldo de creditos OpenRouter.
 - [RFC-001] SHOULD revisar parametros de custo em ciclo semanal.
 
-## Budget Governor (creditos OpenRouter)
+## Budget Governor (LiteLLM + snapshots do provider efetivo)
 - entrada primaria:
-  - `total_credits`, `total_usage`, `balance` via endpoint de creditos.
+  - telemetria consolidada `litellm_aggregated` como fonte de verdade operacional.
+  - `total_credits`, `total_usage`, `balance` via snapshot do provider efetivo.
 - tabela canonica:
   - `credits_snapshots`.
 - frequencia minima:
   - snapshot a cada 5 minutos em horario operacional.
+- contrato minimo da policy:
+  - `telemetry_source = litellm_aggregated`
+  - `provider_snapshot_source = effective_provider_snapshot`
+  - `burn_rate_policy.hour_threshold_usd`
+  - `burn_rate_policy.day_threshold_usd`
+  - `burn_rate_policy.circuit_breaker_action`
 
 ## Conversao Creditos <-> BRL (contrato)
 - objetivo:
@@ -87,6 +94,7 @@ Exclui:
   - reduzir retries
   - bloquear tarefas nao criticas
   - abrir decision de budget quando persistente
+- ausencia de `telemetry_source`, `provider_snapshot_source` ou `burn_rate_policy` MUST bloquear promote.
 
 ## Custo por Pattern de Execucao
 - `deterministic_script`:

@@ -8,8 +8,11 @@
     "policy_id",
     "scope",
     "currency",
+    "telemetry_source",
+    "provider_snapshot_source",
     "limits",
     "snapshot_contract",
+    "burn_rate_policy",
     "enforcement",
     "updated_at",
     "updated_by"
@@ -31,6 +34,14 @@
       "type": "string",
       "minLength": 3,
       "maxLength": 3
+    },
+    "telemetry_source": {
+      "type": "string",
+      "const": "litellm_aggregated"
+    },
+    "provider_snapshot_source": {
+      "type": "string",
+      "const": "effective_provider_snapshot"
     },
     "limits": {
       "type": "object",
@@ -86,6 +97,29 @@
               "burn_rate_day"
             ]
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "burn_rate_policy": {
+      "type": "object",
+      "required": [
+        "hour_threshold_usd",
+        "day_threshold_usd",
+        "circuit_breaker_action"
+      ],
+      "properties": {
+        "hour_threshold_usd": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "day_threshold_usd": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "circuit_breaker_action": {
+          "type": "string",
+          "enum": ["block_new_runs", "fallback_economic_preset"]
         }
       },
       "additionalProperties": false

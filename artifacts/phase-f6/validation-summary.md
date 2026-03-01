@@ -25,6 +25,9 @@
 - checklist: `artifacts/phase-f6/hitl-readiness-checklist.md`
 - resultado consolidado: `hold`
 - motivo determinante: fallback Slack nao validado para operador habilitado e `live_ready: false` em `SEC/allowlists/OPERATORS.yaml`.
+- `consolidation_owner`: `pm`
+- `review_due_date`: `2026-03-03`
+- `decision_id`: `not-issued`
 
 ## Decisao de fase (F6 -> F7)
 
@@ -32,4 +35,11 @@
 - justificativa:
   - gates tecnicos da fase em `PASS` (seguranca, trading e qualidade);
   - criterio humano de prontidao HITL para live permanece incompleto (`slack_fallback_validated: fail`);
-  - manter `TRADING_BLOCKED` ate validacao formal do fallback e decisao de desbloqueio.
+  - manter `TRADING_BLOCKED` ate validacao formal do fallback e decisao de desbloqueio com `decision_id`.
+
+## Status da remediacao documental F6
+
+- `R1`: coberto com vinculo explicito operador+canal no mesmo ciclo de `security-check: PASS`
+- `R3`: coberto com `Telegram degradado >2 heartbeats` e `RESTORE_TELEGRAM_CHANNEL` obrigatorio quando fallback for acionado
+- `R6`: coberto com `TTL=5 minutos` e invalidacao por sucesso/expiracao/3 falhas/rotacao
+- `R9`: coberto no runbook de contingencia; nesta rodada permaneceu `not-opened` porque o fallback Slack nao foi acionado

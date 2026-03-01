@@ -1,9 +1,9 @@
 ---
 doc_id: "ROADMAP-BACKLOG-COVERAGE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -79,6 +79,17 @@ Mapear cada item `B*` do `PRD/ROADMAP.md` para ao menos uma issue executavel, co
 | `B2-05` | covered_new | `EPIC-F8-04` / `ISSUE-F8-04-03` | pontos: promote gradual | shadow mode por classe |
 | `B2-R04` | covered_new | `EPIC-F5-02` / `ISSUE-F5-02-03` | pontos: degradacao segura | single_engine_mode secundario |
 | `B2-R15` | covered_existing | `EPIC-F7-03` / `ISSUE-F7-03-01` | pontos: criterios objetivos de promocao | 30 dias sem violacao hard |
+
+## Observacao de rastreabilidade cruzada (F1 audit)
+- referencia: `PM/audit/fase-f1-epicos-issues-audit.json`.
+- regra de leitura para auditoria da `F1`:
+  - requisitos fora do escopo operacional da `F1 Instalacao Base OpenClaw` devem apontar para fase alvo com issue ativa.
+  - mapeamento oficial:
+    - `R6`,`R16 -> F2`
+    - `R17 -> F5`
+    - `R18..R22 -> F7`
+- objetivo:
+  - impedir reincidencia de `uncovered` por erro de escopo (fase errada) quando a cobertura ja existe em `F2/F5/F7`.
 
 ## Criterio de aceite desta matriz
 - 100% dos IDs `B*` presentes em `PRD/ROADMAP.md` mapeados.

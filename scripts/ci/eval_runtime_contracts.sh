@@ -7,11 +7,18 @@ cd "$ROOT"
 search_re() {
   local pattern="$1"
   shift
+  local files=("$@")
   if command -v rg >/dev/null 2>&1; then
-    rg -n -- "$pattern" "$@" >/dev/null
+    if rg -n -- "$pattern" "${files[@]}" >/dev/null; then
+      return 0
+    fi
   else
-    grep -nE -- "$pattern" "$@" >/dev/null
+    if grep -nE -- "$pattern" "${files[@]}" >/dev/null; then
+      return 0
+    fi
   fi
+  echo "[E-RUNTIME-SEARCH-001] padrao obrigatorio nao encontrado: pattern='$pattern' files='${files[*]}'"
+  return 1
 }
 
 required_files=(
@@ -125,6 +132,13 @@ def validate_openclaw_runtime_schema(schema: dict, label: str) -> None:
         label,
     )
 
+    ensure_required(
+        schema,
+        ["properties", "hooks", "properties", "mappings", "items", "required"],
+        {"id", "source_hook_id", "match", "transform", "signature_required"},
+        label,
+    )
+
     bind_const = get_path(schema, ["properties", "gateway", "properties", "bind", "const"], label)
     if bind_const != "loopback":
         raise ValueError(f"{label} com gateway.bind.const invalido (esperado 'loopback').")
@@ -184,6 +198,10 @@ expect_invalid(invalid_missing_hooks_required, "invalid_missing_hooks_required")
 invalid_missing_hook_internal_entry = deepcopy(runtime_schema)
 invalid_missing_hook_internal_entry["properties"]["hooks"]["properties"]["internal"]["properties"]["entries"]["required"].remove("session-memory")
 expect_invalid(invalid_missing_hook_internal_entry, "invalid_missing_hook_internal_entry")
+
+invalid_missing_mapping_signature = deepcopy(runtime_schema)
+invalid_missing_mapping_signature["properties"]["hooks"]["properties"]["mappings"]["items"]["required"].remove("signature_required")
+expect_invalid(invalid_missing_mapping_signature, "invalid_missing_mapping_signature")
 
 invalid_gateway_bind = deepcopy(runtime_schema)
 invalid_gateway_bind["properties"]["gateway"]["properties"]["bind"]["const"] = "public"
@@ -498,7 +516,7 @@ def validate_router_decision(payload: dict, required_fields: set[str], label: st
     if missing:
         raise ValueError(f"{label} sem campos obrigatorios: {missing}")
 
-    for field in ("requested_model", "effective_model", "effective_provider", "decision_explain"):
+    for field in ("requested_model", "effective_model", "effective_provider", "reason", "decision_explain"):
         value = payload.get(field)
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"{label} com {field} invalido.")
@@ -540,6 +558,13 @@ def validate_router_decision(payload: dict, required_fields: set[str], label: st
             raise ValueError(f"{label} sensivel sem ZDR enforced.")
         if privacy_controls.get("retention_profile") != "zdr_minimal":
             raise ValueError(f"{label} sensivel sem retention_profile=zdr_minimal.")
+
+    fallback_reason = payload.get("fallback_reason")
+    if fallback_reason is not None:
+        if not isinstance(fallback_reason, str) or not fallback_reason.strip():
+            raise ValueError(f"{label} com fallback_reason invalido.")
+        if fallback_reason != payload.get("reason"):
+            raise ValueError(f"{label} com fallback_reason divergente de reason.")
 
     parse_iso8601(payload.get("created_at"), f"{label}.created_at")
 
@@ -587,6 +612,7 @@ missing_router = sorted(
         "requested_model",
         "effective_model",
         "effective_provider",
+        "reason",
         "decision_explain",
         "pin_provider",
         "no_fallback",
@@ -659,6 +685,7 @@ valid_router_decision = {
         "require": []
     },
     "fallback_step": 0,
+    "reason": "primary_available",
     "fallback_reason": "primary_available",
     "decision_explain": "modelo local atende policy e custo.",
     "pin_provider": False,
@@ -707,6 +734,10 @@ invalid_router_decision = deepcopy(valid_router_decision)
 invalid_router_decision.pop("requested_model")
 expect_invalid(validate_router_decision, invalid_router_decision, router_required, "invalid_router_decision")
 
+invalid_router_reason = deepcopy(valid_router_decision)
+invalid_router_reason.pop("reason")
+expect_invalid(validate_router_decision, invalid_router_reason, router_required, "invalid_router_reason")
+
 invalid_sensitive_router = deepcopy(valid_router_decision)
 invalid_sensitive_router["data_sensitivity"] = "sensitive"
 invalid_sensitive_router["pin_provider"] = True
@@ -747,6 +778,11 @@ def validate_budget_policy(payload: dict, required_fields: set[str], label: str)
     if missing:
         raise ValueError(f"{label} sem campos obrigatorios: {missing}")
 
+    if payload.get("telemetry_source") != "litellm_aggregated":
+        raise ValueError(f"{label} com telemetry_source invalido.")
+    if payload.get("provider_snapshot_source") != "effective_provider_snapshot":
+        raise ValueError(f"{label} com provider_snapshot_source invalido.")
+
     limits = payload.get("limits")
     if not isinstance(limits, dict):
         raise ValueError(f"{label} sem limits valido.")
@@ -768,6 +804,16 @@ def validate_budget_policy(payload: dict, required_fields: set[str], label: str)
     required_fields_snapshot = snapshot_contract.get("required_fields")
     if not isinstance(required_fields_snapshot, list) or len(required_fields_snapshot) == 0:
         raise ValueError(f"{label} com snapshot_contract.required_fields invalido.")
+
+    burn_rate_policy = payload.get("burn_rate_policy")
+    if not isinstance(burn_rate_policy, dict):
+        raise ValueError(f"{label} sem burn_rate_policy valido.")
+    for field in ("hour_threshold_usd", "day_threshold_usd"):
+        value = burn_rate_policy.get(field)
+        if not isinstance(value, (int, float)) or value <= 0:
+            raise ValueError(f"{label} com burn_rate_policy.{field} invalido.")
+    if burn_rate_policy.get("circuit_breaker_action") not in {"block_new_runs", "fallback_economic_preset"}:
+        raise ValueError(f"{label} com burn_rate_policy.circuit_breaker_action invalido.")
 
     enforcement = payload.get("enforcement")
     if not isinstance(enforcement, dict):
@@ -794,7 +840,7 @@ def expect_invalid(payload: dict, required_fields: set[str], label: str) -> None
 schema = json.loads(Path("ARC/schemas/budget_governor_policy.schema.json").read_text(encoding="utf-8"))
 required = set(schema.get("required", []))
 
-missing_required = sorted({"limits", "snapshot_contract", "enforcement"} - required)
+missing_required = sorted({"telemetry_source", "provider_snapshot_source", "limits", "snapshot_contract", "burn_rate_policy", "enforcement"} - required)
 if missing_required:
     fail(f"budget_governor_policy.schema.json sem required obrigatorio: {missing_required}")
 
@@ -803,6 +849,8 @@ valid_policy = {
     "policy_id": "budget-f2-baseline",
     "scope": "global",
     "currency": "USD",
+    "telemetry_source": "litellm_aggregated",
+    "provider_snapshot_source": "effective_provider_snapshot",
     "limits": {
         "run_usd": 2.5,
         "task_usd": 8.0,
@@ -820,6 +868,11 @@ valid_policy = {
             "burn_rate_hour",
             "burn_rate_day"
         ]
+    },
+    "burn_rate_policy": {
+        "hour_threshold_usd": 5.0,
+        "day_threshold_usd": 58.0,
+        "circuit_breaker_action": "fallback_economic_preset"
     },
     "enforcement": {
         "block_without_limits": True,
@@ -846,6 +899,14 @@ expect_invalid(invalid_missing_limits, required, "invalid_missing_limits")
 invalid_missing_day_limit = deepcopy(valid_policy)
 invalid_missing_day_limit["limits"].pop("day_usd")
 expect_invalid(invalid_missing_day_limit, required, "invalid_missing_day_limit")
+
+invalid_missing_telemetry = deepcopy(valid_policy)
+invalid_missing_telemetry.pop("telemetry_source")
+expect_invalid(invalid_missing_telemetry, required, "invalid_missing_telemetry")
+
+invalid_missing_burn_rate = deepcopy(valid_policy)
+invalid_missing_burn_rate.pop("burn_rate_policy")
+expect_invalid(invalid_missing_burn_rate, required, "invalid_missing_burn_rate")
 
 invalid_missing_snapshot = deepcopy(valid_policy)
 invalid_missing_snapshot["snapshot_contract"].pop("required_fields")
@@ -907,10 +968,15 @@ def validate_webhook(payload: dict, required_fields: set[str], label: str) -> No
     if missing:
         raise ValueError(f"{label} sem campos obrigatorios: {missing}")
 
-    for field in ("trace_id", "source_hook_id", "mapping_id", "idempotency_key"):
+    for field in ("trace_id", "source_hook_id", "mapping_id", "idempotency_key", "signature_alg", "signature_key_id"):
         value = payload.get(field)
         if not isinstance(value, str) or len(value.strip()) < 2:
             raise ValueError(f"{label} com {field} invalido.")
+
+    if payload.get("signature_status") not in {"valid", "invalid"}:
+        raise ValueError(f"{label} com signature_status invalido.")
+    if payload.get("duplicate_disposition") not in {"APPLIED", "NO_OP_DUPLICATE"}:
+        raise ValueError(f"{label} com duplicate_disposition invalido.")
 
     thread_context = payload.get("thread_context")
     if thread_context is not None:
@@ -925,6 +991,8 @@ def validate_webhook(payload: dict, required_fields: set[str], label: str) -> No
 
     if payload.get("status") not in {"accepted", "rejected", "blocked"}:
         raise ValueError(f"{label} com status invalido.")
+    if payload.get("signature_status") == "invalid" and payload.get("status") != "blocked":
+        raise ValueError(f"{label} invalido: assinatura invalida deve bloquear webhook.")
 
     parse_iso8601(payload.get("received_at"), f"{label}.received_at")
 
@@ -959,7 +1027,19 @@ missing_a2a = sorted(
 if missing_a2a:
     fail(f"a2a_delegation_event.schema.json sem required obrigatorio: {missing_a2a}")
 
-missing_webhook = sorted({"trace_id", "mapping_id", "idempotency_key"} - webhook_required)
+missing_webhook = sorted(
+    {
+        "trace_id",
+        "source_hook_id",
+        "mapping_id",
+        "idempotency_key",
+        "signature_status",
+        "signature_alg",
+        "signature_key_id",
+        "duplicate_disposition",
+    }
+    - webhook_required
+)
 if missing_webhook:
     fail(f"webhook_ingest_event.schema.json sem required obrigatorio: {missing_webhook}")
 
@@ -987,6 +1067,10 @@ valid_webhook = {
     "source_hook_id": "slack-mention",
     "mapping_id": "hooks.mappings.mention",
     "idempotency_key": "HOOK-IDEMP-001",
+    "signature_status": "valid",
+    "signature_alg": "hmac-sha256",
+    "signature_key_id": "slack-primary",
+    "duplicate_disposition": "APPLIED",
     "event_type": "task_event",
     "status": "accepted",
     "thread_context": {
@@ -1020,6 +1104,11 @@ expect_invalid(validate_webhook, invalid_webhook_trace, webhook_required, "inval
 invalid_webhook_thread = deepcopy(valid_webhook)
 invalid_webhook_thread["thread_context"].pop("microtask_id")
 expect_invalid(validate_webhook, invalid_webhook_thread, webhook_required, "invalid_webhook_thread_context")
+
+invalid_webhook_signature = deepcopy(valid_webhook)
+invalid_webhook_signature["signature_status"] = "invalid"
+invalid_webhook_signature["status"] = "accepted"
+expect_invalid(validate_webhook, invalid_webhook_signature, webhook_required, "invalid_webhook_signature")
 PY
 
 workspace_state_candidates=()
@@ -1077,8 +1166,100 @@ except ValueError:
     sys.exit(1)
 PY
 
+python3 - <<'PY'
+import re
+import sys
+from pathlib import Path
+
+
+def fail(code: str, message: str) -> None:
+    print(f"[{code}] {message}")
+    sys.exit(1)
+
+
+required_issue_fields = (
+    "owner",
+    "estimate_hours",
+    "estimate_points",
+    "risk_class",
+    "risk_tier",
+    "dependencies",
+    "required_inputs",
+)
+epic_files = (
+    "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md",
+    "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md",
+    "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md",
+)
+artifact_files = (
+    "artifacts/phase-f3/epic-f3-01-issue-01-required-files.md",
+    "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md",
+    "artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md",
+    "artifacts/phase-f3/epic-f3-02-issue-01-memory-daily-files.md",
+    "artifacts/phase-f3/epic-f3-02-issue-02-daily-header-sections.md",
+    "artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md",
+    "artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md",
+    "artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md",
+    "artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md",
+)
+required_artifact_fields = {
+    "scenario",
+    "command",
+    "expected_result",
+    "actual_assert_message",
+    "trace_id_or_ref",
+    "status",
+}
+
+header_re = re.compile(r"^###\s+(ISSUE-F3-\d{2}-\d{2})\s+-\s+.+$", re.M)
+yaml_block_re = re.compile(r"```yaml\n(.*?)\n```", re.S)
+
+for epic_path in epic_files:
+    text = Path(epic_path).read_text(encoding="utf-8")
+    matches = list(header_re.finditer(text))
+    if not matches:
+        fail("E-F3-DOR-001", f"nenhuma issue F3 encontrada em {epic_path}")
+    for idx, match in enumerate(matches):
+        issue_id = match.group(1)
+        start = match.end()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(text)
+        section = text[start:end]
+        for field in required_issue_fields:
+            if f"{field}:" not in section:
+                fail("E-F3-DOR-002", f"{issue_id} sem campo DoR obrigatorio '{field}' em {epic_path}")
+        if "Criterios de aceitacao" not in section:
+            fail("E-F3-DOD-001", f"{issue_id} sem bloco 'Criterios de aceitacao' em {epic_path}")
+        if "Checklist QA" not in section:
+            fail("E-F3-DOD-002", f"{issue_id} sem bloco 'Checklist QA' em {epic_path}")
+
+for artifact_path in artifact_files:
+    text = Path(artifact_path).read_text(encoding="utf-8")
+    if "## Evidence Contract" not in text:
+        fail("E-F3-ART-001", f"artifact sem 'Evidence Contract': {artifact_path}")
+    blocks = yaml_block_re.findall(text)
+    if len(blocks) < 3:
+        fail("E-F3-ART-002", f"artifact com menos de 3 cenarios em YAML: {artifact_path}")
+    for block in blocks:
+        fields = set()
+        for raw_line in block.splitlines():
+            line = raw_line.strip()
+            if not line or ":" not in line:
+                continue
+            fields.add(line.split(":", 1)[0].strip())
+        missing = sorted(required_artifact_fields - fields)
+        if missing:
+            fail("E-F3-ART-003", f"artifact {artifact_path} sem campos obrigatorios {missing}")
+
+print("f3_issue_contracts: PASS")
+PY
+
 # Canonical precedence
 search_re "felixcraft\.md" META/DOCUMENT-HIERARCHY.md
+
+# Workspace state canonical contract
+search_re 'Contrato `workspace_state_contract`' PRD/PRD-MASTER.md
+search_re 'canonical_path: "workspaces/main/\.openclaw/workspace-state\.json"' PRD/PRD-MASTER.md
+search_re 'uniqueness_rule: "exactly_one_workspace_state_file"' PRD/PRD-MASTER.md
 
 # Runtime contract and A2A/hooks
 search_re 'Contrato Canonico `openclaw_runtime_config`' PRD/PRD-MASTER.md
@@ -1173,6 +1354,88 @@ if errors:
     for err in errors:
         print(err)
     sys.exit(1)
+PY
+
+python3 - <<'PY'
+import sys
+from copy import deepcopy
+
+
+def fail(code: str, message: str) -> None:
+    print(f"[{code}] {message}")
+    sys.exit(1)
+
+
+def validate_policy_execution(payload: dict, label: str) -> None:
+    required = {
+        "trace_id",
+        "input_channel",
+        "confirmed_trusted_channel",
+        "trusted_instruction_channel",
+        "financial_side_effect",
+        "explicit_human_approval",
+    }
+    missing = sorted(required - set(payload))
+    if missing:
+        raise ValueError(f"[E-F3-033-VAL-001] {label} sem campos obrigatorios: {missing}")
+
+    trace_id = payload.get("trace_id")
+    if not isinstance(trace_id, str) or len(trace_id.strip()) < 4:
+        raise ValueError(f"[E-F3-033-VAL-002] {label} sem trace_id valido.")
+
+    trusted_channel = payload.get("trusted_instruction_channel")
+    if trusted_channel not in {"telegram", "slack_fallback_validado", None}:
+        raise ValueError(f"[E-F3-033-VAL-003] {label} com trusted_instruction_channel invalido.")
+
+    if payload.get("input_channel") == "email" and payload.get("confirmed_trusted_channel") is not True:
+        raise ValueError(f"[E-F3-033-RED-A] {label} bloqueado: email sem confirmacao em canal confiavel.")
+
+    if payload.get("financial_side_effect") is True and payload.get("explicit_human_approval") is not True:
+        raise ValueError(f"[E-F3-033-RED-B] {label} bloqueado: side effect financeiro sem aprovacao humana explicita.")
+
+    if payload.get("confirmed_trusted_channel") is True and trusted_channel not in {"telegram", "slack_fallback_validado"}:
+        raise ValueError(f"[E-F3-033-VAL-004] {label} sem canal confiavel aprovado.")
+
+
+def expect_invalid(payload: dict, label: str, expected_code: str) -> None:
+    try:
+        validate_policy_execution(payload, label)
+    except ValueError as exc:
+        message = str(exc)
+        if expected_code not in message:
+            fail("E-F3-033-VAL-005", f"{label} retornou codigo inesperado: {message}")
+        return
+    fail("E-F3-033-VAL-006", f"{label} deveria falhar, mas passou.")
+
+
+valid_payload = {
+    "trace_id": "TRACE-F3-033-GREEN",
+    "input_channel": "telegram",
+    "confirmed_trusted_channel": True,
+    "trusted_instruction_channel": "telegram",
+    "financial_side_effect": True,
+    "explicit_human_approval": True,
+}
+
+try:
+    validate_policy_execution(valid_payload, "scenario_green_trusted_approved")
+except ValueError as exc:
+    fail("E-F3-033-VAL-007", str(exc))
+
+invalid_email = deepcopy(valid_payload)
+invalid_email["trace_id"] = "TRACE-F3-033-RED-A"
+invalid_email["input_channel"] = "email"
+invalid_email["confirmed_trusted_channel"] = False
+invalid_email["trusted_instruction_channel"] = None
+invalid_email["financial_side_effect"] = False
+expect_invalid(invalid_email, "scenario_red_a_email_untrusted", "E-F3-033-RED-A")
+
+invalid_financial = deepcopy(valid_payload)
+invalid_financial["trace_id"] = "TRACE-F3-033-RED-B"
+invalid_financial["explicit_human_approval"] = False
+expect_invalid(invalid_financial, "scenario_red_b_financial_without_approval", "E-F3-033-RED-B")
+
+print("policy_execution_contract: PASS")
 PY
 
 # Channel trust + financial hard gate

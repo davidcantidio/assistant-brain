@@ -315,6 +315,10 @@ required_auth_fields = {
     "approver_slack_user_id",
     "approver_slack_channel_id",
     "auth_method",
+    "side_effect_class",
+    "explicit_human_approval",
+    "approval_evidence_ref",
+    "approval_signature_valid",
 }
 missing = sorted(required_auth_fields - required)
 if missing:
@@ -365,6 +369,70 @@ if block_channel_evidence.get("incident_ref") != "SECURITY_VIOLATION_REVIEW":
     fail("auth_channel.invalid_channel deveria abrir SECURITY_VIOLATION_REVIEW.")
 if not block_channel_evidence.get("payload_hash"):
     fail("auth_channel.invalid_channel deveria registrar hash de payload.")
+PY
+
+python3 - <<'PY'
+import json
+import sys
+from pathlib import Path
+
+
+def fail(msg: str) -> None:
+    print(msg)
+    sys.exit(1)
+
+
+schema = json.loads(Path("ARC/schemas/decision.schema.json").read_text(encoding="utf-8"))
+required = set(schema.get("required", []))
+expected_fields = {
+    "side_effect_class",
+    "explicit_human_approval",
+    "approval_evidence_ref",
+    "approval_signature_valid",
+}
+missing = sorted(expected_fields - required)
+if missing:
+    fail(f"decision.schema.json sem campos obrigatorios de side effect/aprovacao: {missing}")
+
+
+def validate_financial_approval(payload: dict) -> str:
+    if payload.get("side_effect_class") != "financial":
+        return "ALLOW"
+    if payload.get("explicit_human_approval") is not True:
+        return "BLOCK_MISSING_EXPLICIT_APPROVAL"
+    if payload.get("challenge_status") != "VALIDATED":
+        return "BLOCK_INVALID_CHALLENGE"
+    if not payload.get("approver_operator_id"):
+        return "BLOCK_MISSING_OPERATOR"
+    if not payload.get("approval_evidence_ref"):
+        return "BLOCK_MISSING_EVIDENCE"
+    if payload.get("approver_channel") == "slack" and payload.get("approval_signature_valid") is not True:
+        return "BLOCK_INVALID_SLACK_SIGNATURE"
+    return "ALLOW"
+
+
+valid_financial = {
+    "side_effect_class": "financial",
+    "explicit_human_approval": True,
+    "challenge_status": "VALIDATED",
+    "approver_operator_id": "primary-01",
+    "approval_evidence_ref": "artifact://decision/DEC-001/approval",
+    "approver_channel": "telegram",
+    "approval_signature_valid": None,
+}
+if validate_financial_approval(valid_financial) != "ALLOW":
+    fail("financial_approval.valid deveria permitir payload financeiro com aprovacao explicita.")
+
+invalid_missing_approval = dict(valid_financial)
+invalid_missing_approval["explicit_human_approval"] = False
+if validate_financial_approval(invalid_missing_approval) != "BLOCK_MISSING_EXPLICIT_APPROVAL":
+    fail("financial_approval.missing_explicit_approval deveria bloquear.")
+
+invalid_slack_signature = dict(valid_financial)
+invalid_slack_signature["approver_channel"] = "slack"
+invalid_slack_signature["approval_signature_valid"] = False
+if validate_financial_approval(invalid_slack_signature) != "BLOCK_INVALID_SLACK_SIGNATURE":
+    fail("financial_approval.invalid_slack_signature deveria bloquear.")
 PY
 
 python3 - <<'PY'

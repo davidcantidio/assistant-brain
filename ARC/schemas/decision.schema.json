@@ -23,6 +23,10 @@
     "approver_slack_channel_id",
     "auth_method",
     "last_command_id",
+    "side_effect_class",
+    "explicit_human_approval",
+    "approval_evidence_ref",
+    "approval_signature_valid",
     "challenge_id",
     "challenge_status",
     "challenge_expires_at"
@@ -109,6 +113,20 @@
     "last_command_id": {
       "type": ["string", "null"],
       "minLength": 1
+    },
+    "side_effect_class": {
+      "type": "string",
+      "enum": ["none", "operational", "financial"]
+    },
+    "explicit_human_approval": {
+      "type": "boolean"
+    },
+    "approval_evidence_ref": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "approval_signature_valid": {
+      "type": ["boolean", "null"]
     },
     "challenge_id": {
       "type": ["string", "null"],

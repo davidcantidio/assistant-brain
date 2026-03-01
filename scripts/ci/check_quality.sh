@@ -64,6 +64,7 @@ if dup:
 print('quality-links: PASS')
 PY
 
+bash scripts/ci/check_pm_issue_quality.sh
 bash scripts/ci/check_phase_f8_weekly_governance.sh
 
 echo "quality-check: PASS"

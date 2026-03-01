@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.36"
+version: "2.37"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,74 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F7-03-03 + fechamento do EPIC-F7-03 e consolidacao da fase F7 com decisao hold
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria os artifacts finais de fechamento da fase `F7`:
+    - `artifacts/phase-f7/epic-f7-03-issue-03-phase-evidence-promote-hold.md`;
+    - `artifacts/phase-f7/validation-summary.md`;
+    - `artifacts/phase-f7/epic-f7-03-s2-escala-e-promocao.md`.
+  - move `EPIC-F7-03` para:
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md`.
+  - atualiza `PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md` para registrar `EPIC-F7-03=done`.
+  - aplica remediacao documental da auditoria F7 em:
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md`;
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md`.
+  - registra decisao final de fase `F7 -> F8: hold`.
+- Migracao:
+  - `hold` MUST ser preservado enquanto o checklist de `S1` contiver item critico `fail`.
+  - `S2` MUST permanecer bloqueado sem decisao `R3` com limites explicitos.
+  - a cobertura documental da `F7` fica completa, mas o readiness operacional continua pendente.
+
+### 2026-03-01 - Endurecimento da Fase F2 para fechar lacunas da auditoria
+- RFCs afetadas: RFC-010, RFC-015, RFC-020, RFC-030, RFC-035, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - endurece contratos e gates de `F2` para transformar claims parcialmente conformes em enforcement tecnico auditavel, cobrindo:
+    - matriz executavel de risco `R0..R3` com `Gatekeeper/Reviewer` obrigatorio para `R2/R3`;
+    - aprovacao humana explicita para side effect financeiro com `explicit_human_approval`, `approval_evidence_ref` e assinatura valida em `slack`;
+    - baseline de privacidade/ZDR para fluxos `sensitive`;
+    - `automation_action_event` com `FAIL_STOP_SHIP` quando houver side effect sem rollback;
+    - `degraded_reconciliation_status` com `promotion_blocked` ate reconciliacao;
+    - `router_decision` com `reason` canonico;
+    - `budget_governor_policy` com `telemetry_source=litellm_aggregated`, `provider_snapshot_source=effective_provider_snapshot` e `burn_rate_policy`;
+    - webhook/A2A com `source_hook_id`, assinatura valida e `duplicate_disposition`.
+  - atualiza contratos, CI e evidencias em:
+    - `ARC/schemas/*.json`;
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/eval_idempotency_reconciliation.sh`;
+    - `scripts/ci/eval_runtime_contracts.sh`;
+    - `scripts/ci/eval_models.sh`;
+    - `scripts/ci/eval_risk_gates.sh`;
+    - `scripts/ci/check_phase_f2_gate.sh`;
+    - `artifacts/phase-f2/*`.
+  - atualiza planejamento e rastreabilidade de `F2` em:
+    - `PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md`;
+    - `PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md`;
+    - `PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md`;
+    - `PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md`.
+- Migracao:
+  - payloads legados continuam aceitos em modo aditivo onde previsto, mas fluxos criticos de `F2` agora MUST falhar nos gates quando ausentes os campos novos de compliance.
+  - `phase-f2-gate` MUST permanecer bloqueado enquanto houver reconciliacao degradada pendente ou lacuna de risco/compliance nos contratos F2.
+
+### 2026-03-01 - Execucao do ISSUE-F7-02-03 + fechamento do EPIC-F7-02 em `feito` com decisao `hold`
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-02-03` do `EPIC-F7-02` para validar itens criticos de prontidao live em `S1` com evidencia real:
+    - `credentials_live_no_withdraw`;
+    - `hitl_channel_ready`;
+    - `backup_operator_enabled`;
+    - `explicit_order_approval_active`.
+  - publica evidencias da issue e consolidado do epic em:
+    - `artifacts/phase-f7/epic-f7-02-issue-03-s1-critical-items-hold.md`;
+    - `artifacts/phase-f7/epic-f7-02-s1-readiness.md`.
+  - atualiza `PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md` para status `done` no `EPIC-F7-02`.
+  - move o documento do epic para:
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md`.
+  - decisao final no escopo do epic: `hold`, sem liberar live.
+- Migracao:
+  - fechamento do `EPIC-F7-02` MUST preservar estado real dos itens criticos do checklist, sem forcar `pass` artificial.
+  - enquanto houver item critico `fail` em `S1`, resultado operacional MUST permanecer `hold`.
 
 ### 2026-03-01 - Execucao do ISSUE-F7-02-02 (guardrails de entrada em `S1`)
 - RFCs afetadas: RFC-001, RFC-010, RFC-050, RFC-060.

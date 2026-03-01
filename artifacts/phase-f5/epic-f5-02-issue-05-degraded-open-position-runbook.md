@@ -35,3 +35,11 @@
 - `PM/PHASES/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md`
 - `artifacts/phase-f5/epic-f5-02-issue-05-degraded-open-position-runbook.md`
 - `artifacts/phase-f5/epic-f5-02-trading-hardening.md`
+
+
+## Auditoria F5 2026-03-01
+- escopo da rodada: remediacao documental da F5 e revalidacao dos gates de fase.
+- ajuste principal: Retorno seguro documentado com snapshots obrigatorios, reconciliacao concluida e bloqueio por ausencia de runbook valido.
+- `make eval-integrations`: `eval-integrations: PASS`
+- `make eval-trading`: `eval-trading: PASS`
+- evidencia consolidada: `artifacts/phase-f5/validation-summary.md`

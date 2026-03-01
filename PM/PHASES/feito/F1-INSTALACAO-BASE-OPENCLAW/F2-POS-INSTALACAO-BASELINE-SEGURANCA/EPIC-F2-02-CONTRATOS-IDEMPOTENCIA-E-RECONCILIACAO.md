@@ -34,6 +34,17 @@ Cobrir contratos minimos de trabalho/evento/decisao e garantir idempotencia + ro
 **User story**
 Como operador, quero contratos tipados de trabalho e decisao para manter interoperabilidade e auditoria.
 
+**Owner sugerido**
+- Tech Lead
+
+**Estimativa**
+- 1 dia
+
+**Dependencias**
+- `ARC/schemas/work_order.schema.json`
+- `ARC/schemas/decision.schema.json`
+- `ARC/schemas/task_event.schema.json`
+
 **Plano TDD**
 1. `Red`: introduzir payload invalido sem schema compativel.
 2. `Green`: validar contratos versionados para `work_order`, `decision`, `task_event`.
@@ -43,9 +54,24 @@ Como operador, quero contratos tipados de trabalho e decisao para manter interop
 - Given payload fora de contrato, When validacao de schema ocorre, Then o gate falha.
 - Given payload conforme contratos versionados, When validacao ocorre, Then o gate retorna `PASS`.
 
+**Checklist QA**
+- validar payload invalido para `work_order`.
+- validar payload invalido para `decision`.
+- anexar links dos schemas canonicos no artifact.
+
 ### ISSUE-F2-02-02 - Validar SPRINT_OVERRIDE com idempotencia e rollback executavel
 **User story**
 Como operador, quero override de sprint sem duplicidade e com rollback garantido para evitar regressao operacional.
+
+**Owner sugerido**
+- Tech Lead
+
+**Estimativa**
+- 1 dia
+
+**Dependencias**
+- `PM/SPRINT-LIMITS.md`
+- `scripts/ci/eval_idempotency_reconciliation.sh`
 
 **Plano TDD**
 1. `Red`: reaplicar override com mesma chave gerando novo efeito colateral.
@@ -56,37 +82,79 @@ Como operador, quero override de sprint sem duplicidade e com rollback garantido
 - Given reaplicacao com mesma `override_key`, When override e executado, Then resultado deve ser no-op.
 - Given override sem rollback definido, When tentativa ocorre, Then operacao deve ser bloqueada.
 
+**Checklist QA**
+- reexecutar mesma `override_key`.
+- remover `rollback_snapshot_ref` do fixture e validar bloqueio.
+- anexar `rollback_snapshot_ref` no artifact.
+
 ### ISSUE-F2-02-03 - Validar contrato idempotente para auto-acoes de saude observabilidade
 **User story**
 Como operador, quero auto-acoes com idempotencia para evitar acao duplicada em ciclos de saude.
 
+**Owner sugerido**
+- Tech Lead
+
+**Estimativa**
+- 2 dias
+
+**Dependencias**
+- `ARC/schemas/automation_action_event.schema.json`
+- `ARC/ARC-OBSERVABILITY.md`
+- `EVALS/SYSTEM-HEALTH-THRESHOLDS.md`
+
 **Plano TDD**
 1. `Red`: executar auto-acao repetida sem deduplicacao.
-2. `Green`: exigir `automation_action_id` e idempotencia por janela.
+2. `Green`: exigir `automation_action_id`, `has_side_effect` e rollback obrigatorio para auto-acao com side effect.
 3. `Refactor`: consolidar recomendacao de retry/rollback e auditoria.
 
 **Criterios de aceitacao**
 - Given auto-acao repetida com mesma chave, When processamento ocorre, Then deve ser no-op.
 - Given auto-acao sem contrato idempotente, When gate roda, Then resultado deve ser `FAIL`.
+- Given auto-acao com `has_side_effect=true` e sem `rollback_plan_ref`, When gate roda, Then resultado deve ser `FAIL_STOP_SHIP`.
+- Given auto-acao sem side effect e sem rollback, When gate roda, Then resultado deve ser `NOTIFY_ONLY`.
+
+**Checklist QA**
+- replay com mesma `idempotency_key`.
+- teste negativo de `has_side_effect=true` sem `rollback_plan_ref`.
+- teste de `NOTIFY_ONLY` apenas para acao sem side effect.
 
 ### ISSUE-F2-02-04 - Validar reconciliador de degraded mode com replay_key e trilha de incidente
 **User story**
 Como operador, quero reconciliacao controlada no degradado para evitar perda de estado em recuperacao.
 
+**Owner sugerido**
+- Tech Lead
+
+**Estimativa**
+- 2 dias
+
+**Dependencias**
+- `ARC/schemas/degraded_reconciliation_status.schema.json`
+- `ARC/ARC-DEGRADED-MODE.md`
+- `scripts/ci/check_phase_f2_gate.sh`
+
 **Plano TDD**
 1. `Red`: reconciliar evento sem `idempotency_key`/`replay_key`.
-2. `Green`: exigir chaves de reconciliacao e trilha completa de incidente.
+2. `Green`: exigir chaves de reconciliacao, incidente e `promotion_blocked` ate a reconciliacao final.
 3. `Refactor`: alinhar com runbook de degraded mode.
 
 **Criterios de aceitacao**
 - Given evento sem chaves obrigatorias, When reconciliacao ocorre, Then o fluxo deve ser bloqueado.
 - Given evento com chaves validas, When reconciliacao ocorre, Then o estado final e auditavel e deterministico.
+- Given reconciliacao ainda pendente, When `phase-f2-gate` roda, Then a promocao deve permanecer bloqueada.
+- Given reconciliacao concluida, When `degraded_reconciliation_status` e publicado, Then `promotion_blocked=false`.
+
+**Checklist QA**
+- remover `replay_key` do fixture e validar bloqueio.
+- testar `status=pending` com `promotion_blocked=true`.
+- validar artifact `artifacts/phase-f2/degraded-reconciliation-status.json`.
 
 ## Artifact Minimo do Epico
 - registrar em `artifacts/phase-f2/epic-f2-02-idempotency-reconciliation.md`:
   - cobertura de contratos `work_order/decision/task_event`;
   - evidencias de no-op duplicate e rollback;
   - evidencias de reconciliacao em degraded mode;
+  - `degraded_reconciliation_status` com `promotion_blocked`;
   - referencias `B*` cobertas.
 
 ## Resultado desta Rodada

@@ -15,17 +15,21 @@
 - acao:
   - endurecer `ARC/schemas/decision.schema.json` para exigir `last_command_id`;
   - reforcar `scripts/ci/eval_idempotency_reconciliation.sh` com simulacao de comando HITL idempotente (`APPLIED` -> `NO_OP_DUPLICATE_AUDITED`);
-  - reforcar `scripts/ci/check_security.sh` para bloquear transicao duplicada e exigir trilha auditavel de replay.
+  - reforcar `scripts/ci/check_security.sh` para bloquear transicao duplicada e exigir trilha auditavel de replay com `replay_event_hash`.
 - comandos:
   1. `make ci-security`
   2. `make eval-idempotency`
 - resultado:
   - `security-check: PASS`
   - `eval-idempotency: PASS`
+  - `replay_event_hash`: `replay-f6-02-02-20260301`
 
 ## Refactor
 - comando: `make ci-quality`.
 - resultado: `quality-check: PASS`.
+- evidencia de auditoria:
+  - `command_id`: `cmd-hitl-duplicate-01`
+  - `replay_event_hash`: `replay-f6-02-02-20260301`
 
 ## Alteracoes da issue
 - `ARC/schemas/decision.schema.json`

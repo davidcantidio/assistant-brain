@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "phase": "F2",
+  "risk_gate_matrix": {
+    "R0": {
+      "required_gates": ["schema", "patch_hygiene"],
+      "gatekeeper_required": false,
+      "pre_live_checklist_required": false
+    },
+    "R1": {
+      "required_gates": ["schema", "patch_hygiene", "static", "unit"],
+      "gatekeeper_required": false,
+      "pre_live_checklist_required": false
+    },
+    "R2": {
+      "required_gates": ["schema", "patch_hygiene", "static", "unit", "integration", "security"],
+      "gatekeeper_required": true,
+      "pre_live_checklist_required": true
+    },
+    "R3": {
+      "required_gates": ["schema", "patch_hygiene", "static", "unit", "integration", "security"],
+      "gatekeeper_required": true,
+      "pre_live_checklist_required": true,
+      "additional_controls": ["policy_defined_compliance"]
+    }
+  }
+}

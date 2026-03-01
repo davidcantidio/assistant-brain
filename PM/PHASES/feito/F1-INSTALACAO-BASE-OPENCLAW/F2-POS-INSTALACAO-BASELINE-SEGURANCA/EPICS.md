@@ -18,12 +18,15 @@ Comandos obrigatorios:
 ```bash
 make ci-quality
 make ci-security
+make eval-risk-gates
 make eval-gates
 ```
 
 Criterio objetivo:
 - todos os gates acima em `PASS` no mesmo ciclo.
 - matriz de rastreabilidade `ROADMAP -> Epic/Issue -> Source` sem lacunas para itens `B0-*` bloqueantes.
+- matriz `R0..R3` com `Gatekeeper/Reviewer` obrigatorio em `R2/R3`.
+- metadata minima por issue (`owner`, `estimativa`, `dependencias`, `checklist QA`) sem lacunas.
 
 ## Epics da Fase
 | Epic ID | Nome | Objetivo | Status | Documento |
