@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F9-ONBOARDING-EPICS.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -32,7 +32,7 @@ Criterio objetivo:
 ## Epics da Fase
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
-| `EPIC-F9-01` | LiteLLM auto-key e OpenRouter opcional | automatizar `LITELLM_API_KEY` via `/key/generate` e manter OpenRouter opcional no baseline | planned | [EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md](./EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md) |
+| `EPIC-F9-01` | LiteLLM auto-key e OpenRouter opcional | automatizar `LITELLM_API_KEY` via `/key/generate` e manter OpenRouter opcional no baseline | done | [EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md](./EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md) |
 | `EPIC-F9-02` | Bootstrap Telegram e Slack Socket Mode | habilitar preload Telegram por payload e manifesto Slack versionado com comandos HITL | planned | [EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md](./EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md) |
 
 ## Escopo desta entrega

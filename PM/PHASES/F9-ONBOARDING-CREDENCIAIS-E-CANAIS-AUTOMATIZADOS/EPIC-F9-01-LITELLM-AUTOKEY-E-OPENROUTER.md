@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -104,6 +104,21 @@ Como operador, quero configurar OpenRouter no mesmo onboarding sem tornalo requi
   - cenario de sucesso (`auto-key`);
   - cenario de fallback manual;
   - evidencia dos gates.
+
+## Resultado desta Rodada
+- status do epico: `Done`.
+- evidencia por issue:
+  - `artifacts/phase-f9/epic-f9-01-issue-01-autokey-fallback-hardening.md`;
+  - `artifacts/phase-f9/epic-f9-01-issue-02-litellm-keygen-ci-checks.md`;
+  - `artifacts/phase-f9/epic-f9-01-issue-03-openrouter-optional-docs.md`;
+  - `artifacts/phase-f9/epic-f9-01-litellm-autokey-openrouter.md`.
+- gates finais da rodada:
+  - `bash scripts/ci/check_quality.sh`: `PASS`;
+  - `bash scripts/ci/check_security.sh`: `PASS`;
+  - `bash scripts/ci/eval_models.sh`: `PASS`;
+  - `bash scripts/verify_linux.sh`: `PASS` com `.env` sem lacuna para `LITELLM_API_KEY`.
+- regra preservada:
+  - `OPENROUTER_API_KEY` permanece opcional e nao bloqueante no `verify_linux.sh`.
 
 ## Dependencias
 - [Roadmap](../../../PRD/ROADMAP.md)

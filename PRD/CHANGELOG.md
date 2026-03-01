@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.44"
+version: "2.45"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,28 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Fechamento do EPIC-F9-01 com hardening de fallback e checker dedicado de keygen
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - endurece `scripts/onboard_linux.sh` para bloquear conclusao do onboarding interativo sem `LITELLM_API_KEY` efetiva quando `/key/generate` falha;
+  - endurece `scripts/verify_linux.sh` para validar `LITELLM_API_KEY` nao vazia;
+  - adiciona checker dedicado `scripts/ci/check_phase_f9_litellm_keygen.sh` cobrindo:
+    - ausencia de dependencia `requests`,
+    - contrato `LITELLM_OUTPUT_MODE=key-only`,
+    - erro explicito quando resposta nao contem key;
+  - integra o checker ao `ci-quality` em `scripts/ci/check_quality.sh`;
+  - adiciona alvo utilitario `make phase-f9-litellm-keygen`;
+  - atualiza docs operacionais:
+    - `README.md`;
+    - `DEV/DEV-OPENCLAW-SETUP.md`;
+  - fecha documentacao da fase:
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPICS.md` com `EPIC-F9-01=done`;
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md` com resultado da rodada;
+    - `artifacts/phase-f9/epic-f9-01-litellm-autokey-openrouter.md` (artifact minimo do epico).
+- Migracao:
+  - onboarding interativo com auto-geracao falha MUST receber `LITELLM_API_KEY` manual para concluir;
+  - `OPENROUTER_API_KEY` permanece opcional e nao bloqueia `verify_linux.sh` quando vazia/ausente.
 
 ### 2026-03-01 - Endurecimento de validacao da fase F9 (paths PM/audit + contrato de issues)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050.

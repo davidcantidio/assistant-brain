@@ -84,7 +84,8 @@ No fluxo interativo:
 - `LITELLM_PROXY_URL` e derivado de `LITELLM_BASE_URL` sem `/v1` (com override manual);
 - `LITELLM_MODELS` default: `codex-main,claude-review`;
 - se `OPENROUTER_API_KEY` estiver preenchida, o default inclui `openrouter/openai/gpt-4o-mini`;
-- se auto-geracao falhar, o script cai em fallback manual para `LITELLM_API_KEY`.
+- se auto-geracao falhar, o script cai em fallback manual obrigatorio para `LITELLM_API_KEY` (nao permite lacuna).
+- `OPENROUTER_API_KEY` permanece opcional e nao bloqueia `scripts/verify_linux.sh` quando vazia.
 
 ### Preload de Telegram por payload JSON
 Exemplo via arquivo:

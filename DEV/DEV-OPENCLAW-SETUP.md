@@ -1,6 +1,6 @@
 ---
 doc_id: "DEV-OPENCLAW-SETUP.md"
-version: "1.5"
+version: "1.6"
 status: "active"
 owner: "Engineering"
 last_updated: "2026-03-01"
@@ -92,7 +92,13 @@ bash scripts/verify_linux.sh
   - `LITELLM_BASE_URL` configurado;
   - `LITELLM_MODELS` definido (default: `codex-main,claude-review`).
 - fallback:
-  - se `/key/generate` falhar, onboarding solicita `LITELLM_API_KEY` manualmente.
+  - se `/key/generate` falhar, onboarding exige `LITELLM_API_KEY` manual para concluir o fluxo interativo.
+  - `scripts/verify_linux.sh` valida `LITELLM_API_KEY` com valor nao vazio.
+
+## OpenRouter Opcional (sem bloqueio no verify)
+- `OPENROUTER_API_KEY` e opcional no baseline.
+- onboarding pergunta `OPENROUTER_API_KEY` explicitamente no fluxo interativo.
+- `scripts/verify_linux.sh` nao bloqueia setup quando `OPENROUTER_API_KEY` estiver vazia ou ausente.
 
 ## Slack Manifest (Socket Mode)
 - manifesto versionado: `config/slack-app-manifest.socket-mode.yaml`.

@@ -180,6 +180,17 @@ else
   else
     warn "Nenhuma chave opcional do template completo detectada (.env valido, mas minimo)."
   fi
+
+  if key_present "OPENROUTER_API_KEY"; then
+    openrouter_api_key_value="$(value_for_key "OPENROUTER_API_KEY" | tr -d '\r' | xargs)"
+    if [ -n "$openrouter_api_key_value" ]; then
+      pass "OPENROUTER_API_KEY informada (opcional)."
+    else
+      pass "OPENROUTER_API_KEY vazia (opcional)."
+    fi
+  else
+    pass "OPENROUTER_API_KEY ausente (opcional)."
+  fi
 fi
 
 echo
