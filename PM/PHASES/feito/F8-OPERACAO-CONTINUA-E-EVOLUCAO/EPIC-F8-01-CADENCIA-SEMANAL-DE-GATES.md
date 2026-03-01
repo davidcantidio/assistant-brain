@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -75,8 +75,23 @@ Como operador, quero um relatorio semanal padrao para auditoria e continuidade o
   - `risk_notes`
   - `next_actions`
 
+## Resultado desta Rodada
+- `make eval-gates` final: `PASS` (`eval-gates: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- `make ci-security` final: `PASS` (`security-check: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md`;
+  - `artifacts/phase-f8/epic-f8-01-issue-02-fail-fast-promotion-block.md`;
+  - `artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f8/weekly-governance/2026-W09.md`;
+  - `artifacts/phase-f8/epic-f8-01-weekly-governance.md`.
+- decisao semanal atual: `hold`.
+- justificativa: `contract_review_status=FAIL` por default ate a execucao recorrente de `F8-02`.
+- conclusao: `EPIC-F8-01` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [Makefile](../../../Makefile)
-- [Dev CI Rules](../../../DEV/DEV-CI-RULES.md)
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
-- [Eval Gates Script](../../../scripts/ci/eval_gates.sh)
+- [Makefile](../../../../Makefile)
+- [Dev CI Rules](../../../../DEV/DEV-CI-RULES.md)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [Eval Gates Script](../../../../scripts/ci/eval_gates.sh)

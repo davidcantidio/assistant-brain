@@ -61,5 +61,9 @@ if dup:
         print(f"DUPLICATE_DOC_ID {k} -> {v}")
     sys.exit(1)
 
-print('quality-check: PASS')
+print('quality-links: PASS')
 PY
+
+bash scripts/ci/check_phase_f8_weekly_governance.sh
+
+echo "quality-check: PASS"

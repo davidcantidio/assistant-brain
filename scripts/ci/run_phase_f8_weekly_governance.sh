@@ -12,7 +12,7 @@ CI_SECURITY_CMD="${CI_SECURITY_CMD:-make ci-security}"
 CONTRACT_REVIEW_STATUS="${CONTRACT_REVIEW_STATUS:-FAIL}"
 CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
 
-ARTIFACT_DIR="artifacts/phase-f8/weekly-governance"
+ARTIFACT_DIR="${ARTIFACT_DIR:-artifacts/phase-f8/weekly-governance}"
 LOG_DIR="${ARTIFACT_DIR}/logs/${WEEK_ID}"
 REPORT_PATH="${ARTIFACT_DIR}/${WEEK_ID}.md"
 STAMP="$(date '+%Y%m%dT%H%M%S')"
@@ -90,6 +90,10 @@ fi
 if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
   risk_notes_parts+=("critical_drifts_open=${CRITICAL_DRIFTS_OPEN}")
   next_actions_parts+=("fechar ou aceitar formalmente os drifts criticos")
+fi
+
+if [[ ${#risk_notes_parts[@]} -eq 0 ]]; then
+  risk_notes_parts+=("none")
 fi
 
 if [[ ${#next_actions_parts[@]} -eq 0 ]]; then

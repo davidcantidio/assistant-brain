@@ -103,6 +103,24 @@ Exclui:
   - a formula de decisao semanal `promote|hold` passa a ser aplicada pelo runner, e qualquer desvio do conjunto `PASS/PASS/PASS + PASS + 0` MUST resultar em `hold`.
   - reruns da mesma semana MUST preservar logs antigos e atualizar apenas o markdown autoritativo da semana.
 
+### 2026-03-01 - Execucao do ISSUE-F8-01-03 + fechamento do EPIC-F8-01 em `feito`
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-01-03` do `EPIC-F8-01` para padronizar e validar o relatorio semanal em `make ci-quality`:
+    - adiciona `scripts/ci/check_phase_f8_weekly_governance.sh`;
+    - integra o validador em `scripts/ci/check_quality.sh`;
+    - valida cenarios mockados de `promote`, fail-fast e fail-closed de `contract_review_status`.
+  - publica artifacts finais do epic em:
+    - `artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md`;
+    - `artifacts/phase-f8/epic-f8-01-weekly-governance.md`.
+  - atualiza `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` para status `done` no `EPIC-F8-01`.
+  - move o documento do epic para:
+    - `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md`.
+  - decisao semanal consolidada no escopo do epic: `hold`.
+- Migracao:
+  - relatorio semanal de `F8` passa a ser contrato verificavel em `make ci-quality`.
+  - `EPIC-F8-01` fica concluido, mas a rodada semanal MUST permanecer em `hold` enquanto `contract_review_status=FAIL`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:
