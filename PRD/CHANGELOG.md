@@ -72,6 +72,24 @@ Exclui:
   - a promocao `S1 -> S2` MUST continuar bloqueada sem `decision R3` formal e auditavel.
   - qualquer referencia a `decision_id` de `S1` MUST permanecer separada da decisao de escala para `S2`.
 
+### 2026-03-01 - Execucao do ISSUE-F8-01-01 (ciclo semanal do trio de gates com timestamp)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-01-01` do `EPIC-F8-01` para formalizar a rodada semanal do trio de gates em um comando unico:
+    - adiciona `make phase-f8-weekly-governance`;
+    - adiciona `scripts/ci/run_phase_f8_weekly_governance.sh`;
+    - publica artifact semanal real em `artifacts/phase-f8/weekly-governance/2026-W09.md`;
+    - publica logs brutos timestampados em `artifacts/phase-f8/weekly-governance/logs/2026-W09/`.
+  - registra a primeira rodada de `F8` com:
+    - `eval_gates_status=PASS`;
+    - `ci_quality_status=PASS`;
+    - `ci_security_status=PASS`;
+    - `contract_review_status=FAIL`;
+    - `decision=hold`.
+- Migracao:
+  - a governanca semanal da `F8` passa a ter entrypoint oficial em `make phase-f8-weekly-governance`.
+  - sem revisao contratual semanal publicada, o artifact de `F8` MUST permanecer em `hold` mesmo com o trio de gates em `PASS`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:
