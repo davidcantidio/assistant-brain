@@ -29,6 +29,29 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-02-03 + fechamento do EPIC-F8-02 em `feito`
+- RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-02-03` do `EPIC-F8-02` para validar o carry-over de drifts criticos entre semanas ISO:
+    - calcula `previous_week_id` a partir de `week_id`;
+    - aceita `previous_week_id=none` quando nao existe artifact da semana anterior;
+    - exige classificacao `closed|risk_accepted|open` para todo drift critico herdado quando houver semana anterior.
+  - adiciona self-tests no checker para cenarios `closed`, `risk_accepted`, `open` e omissao de carry-over.
+  - publica artifacts finais do epic em:
+    - `artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md`;
+    - `artifacts/phase-f8/epic-f8-02-contract-review-drift.md`.
+  - atualiza `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` para registrar `EPIC-F8-02=done`.
+  - move o documento do epic para:
+    - `PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md`.
+  - regrava o relatorio semanal de `2026-W09` mantendo:
+    - `contract_review_status=PASS`;
+    - `critical_drifts_open=1`;
+    - `decision=hold`.
+- Migracao:
+  - drift critico herdado ainda `open` MUST continuar no backlog atual como `critical/open`.
+  - `resolution=closed` MUST exigir evidencia de fechamento; `resolution=risk_accepted` MUST exigir `risk_exception_ref`.
+  - `EPIC-F8-02` fica concluido, mas a promocao semanal MUST continuar bloqueada enquanto `DRIFT-F8-2026-W09-01` permanecer aberto.
+
 ### 2026-03-01 - Execucao do ISSUE-F8-02-02 (backlog de remediacao com owner e prazo)
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
 - Impacto:

@@ -1,0 +1,11 @@
+>>> make eval-gates
+eval-models: PASS
+eval-integrations: PASS
+f3_issue_contracts: PASS
+policy_execution_contract: PASS
+eval-runtime-contracts: PASS
+eval-idempotency: PASS
+eval-risk-gates: PASS
+eval-rag: PASS
+eval-trading: PASS
+eval-gates: PASS

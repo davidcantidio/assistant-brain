@@ -198,6 +198,7 @@ def write_contract_review(
   "closed_refs": [],
   "risk_accepted_refs": [],
   "open_critical_refs": [],
+  "carried_over_drifts": [],
   "notes": "first review cycle"
 }
 ```

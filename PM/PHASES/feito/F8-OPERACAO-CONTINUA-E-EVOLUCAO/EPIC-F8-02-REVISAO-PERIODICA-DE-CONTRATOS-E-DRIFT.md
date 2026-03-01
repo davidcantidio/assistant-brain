@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
@@ -69,9 +69,24 @@ Como operador, quero validar fechamento dos drifts anteriores para evitar acumul
   - owner/prazo por drift;
   - status de fechamento da semana anterior.
 
+## Resultado desta Rodada
+- `make phase-f8-contract-review` final: `PASS`.
+- `make ci-quality` final: `PASS`.
+- evidencias por issue publicadas:
+  - `artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md`;
+  - `artifacts/phase-f8/epic-f8-02-issue-02-drift-remediation-backlog.md`;
+  - `artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f8/contract-review/2026-W09.md`;
+  - `artifacts/phase-f8/weekly-governance/2026-W09.md`;
+  - `artifacts/phase-f8/epic-f8-02-contract-review-drift.md`.
+- decisao semanal atual: `hold`.
+- justificativa: `DRIFT-F8-2026-W09-01` permanece `critical/open`, mesmo com `contract_review_status=PASS`.
+- conclusao: `EPIC-F8-02` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [PRD Master](../../../PRD/PRD-MASTER.md)
-- [Integrations README](../../../INTEGRATIONS/README.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [System Health Thresholds](../../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
+- [PRD Master](../../../../PRD/PRD-MASTER.md)
+- [Integrations README](../../../../INTEGRATIONS/README.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [System Health Thresholds](../../../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)

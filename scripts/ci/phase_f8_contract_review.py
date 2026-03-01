@@ -23,6 +23,7 @@ ALLOWED_DOMAIN_STATUS = {"PASS", "FAIL"}
 ALLOWED_DRIFT_SEVERITY = {"critical", "high", "medium", "low"}
 ALLOWED_DRIFT_STATUS = {"open", "closed", "risk_accepted"}
 ALLOWED_CLOSURE_STATUS = {"PASS", "FAIL"}
+ALLOWED_CARRY_RESOLUTION = {"closed", "risk_accepted", "open"}
 SOURCE_OF_TRUTH = "PRD/PRD-MASTER.md"
 
 
@@ -155,6 +156,21 @@ def expect_optional_string(value: object, label: str) -> str | None:
     return expect_non_empty_string(value, label)
 
 
+def parse_week_id(week_id: str) -> tuple[int, int]:
+    match = re.fullmatch(r"(\d{4})-W(0[1-9]|[1-4][0-9]|5[0-3])", week_id)
+    if not match:
+        raise ContractReviewError(f"WEEK_ID invalido para contract review: {week_id}")
+    return int(match.group(1)), int(match.group(2))
+
+
+def expected_previous_week_id(week_id: str) -> str:
+    iso_year, iso_week = parse_week_id(week_id)
+    current_monday = dt.date.fromisocalendar(iso_year, iso_week, 1)
+    previous_monday = current_monday - dt.timedelta(days=7)
+    previous_iso = previous_monday.isocalendar()
+    return f"{previous_iso.year}-W{previous_iso.week:02d}"
+
+
 def validate_contracts_reviewed(contracts: object) -> None:
     items = expect_list(contracts, "Contracts Reviewed")
     seen_domains: set[str] = set()
@@ -182,10 +198,11 @@ def validate_contracts_reviewed(contracts: object) -> None:
         )
 
 
-def validate_drift_backlog(backlog: object) -> int:
+def validate_drift_backlog(backlog: object) -> tuple[list[dict[str, object]], int]:
     items = expect_list(backlog, "Drift Backlog")
     seen_ids: set[str] = set()
     critical_open = 0
+    validated: list[dict[str, object]] = []
     for index, item in enumerate(items):
         drift = expect_dict(item, f"Drift Backlog[{index}]")
         drift_id = expect_non_empty_string(drift.get("drift_id"), f"Drift Backlog[{index}].drift_id")
@@ -212,24 +229,207 @@ def validate_drift_backlog(backlog: object) -> int:
             raise ContractReviewError(
                 f"Drift Backlog[{index}] com status=risk_accepted exige risk_exception_ref."
             )
+        validated.append(
+            {
+                "drift_id": drift_id,
+                "domain": drift["domain"],
+                "severity": severity,
+                "summary": drift["summary"],
+                "status": status,
+                "owner": drift["owner"],
+                "due_date": due_date,
+                "source_refs": drift["source_refs"],
+                "evidence_ref": drift["evidence_ref"],
+                "risk_exception_ref": risk_exception_ref,
+            }
+        )
         if severity == "critical" and status == "open":
             critical_open += 1
-    return critical_open
+    return validated, critical_open
 
 
-def validate_previous_week_closure(closure: object) -> None:
+def validate_previous_week_closure(closure: object) -> dict[str, object]:
     payload = expect_dict(closure, "Previous Week Closure")
     status = expect_non_empty_string(payload.get("status"), "Previous Week Closure.status")
     if status not in ALLOWED_CLOSURE_STATUS:
         raise ContractReviewError(f"Previous Week Closure.status invalido: {status}")
-    expect_string_list(payload.get("reviewed_drift_ids"), "Previous Week Closure.reviewed_drift_ids")
-    expect_string_list(payload.get("closed_refs"), "Previous Week Closure.closed_refs")
-    expect_string_list(payload.get("risk_accepted_refs"), "Previous Week Closure.risk_accepted_refs")
-    expect_string_list(payload.get("open_critical_refs"), "Previous Week Closure.open_critical_refs")
-    expect_non_empty_string(payload.get("notes"), "Previous Week Closure.notes")
+    reviewed_drift_ids = expect_string_list(
+        payload.get("reviewed_drift_ids"), "Previous Week Closure.reviewed_drift_ids"
+    )
+    closed_refs = expect_string_list(payload.get("closed_refs"), "Previous Week Closure.closed_refs")
+    risk_accepted_refs = expect_string_list(
+        payload.get("risk_accepted_refs"), "Previous Week Closure.risk_accepted_refs"
+    )
+    open_critical_refs = expect_string_list(
+        payload.get("open_critical_refs"), "Previous Week Closure.open_critical_refs"
+    )
+    notes = expect_non_empty_string(payload.get("notes"), "Previous Week Closure.notes")
+    carried = expect_list(payload.get("carried_over_drifts"), "Previous Week Closure.carried_over_drifts")
+    validated_carried: list[dict[str, object]] = []
+    seen_ids: set[str] = set()
+    for index, item in enumerate(carried):
+        entry = expect_dict(item, f"Previous Week Closure.carried_over_drifts[{index}]")
+        drift_id = expect_non_empty_string(
+            entry.get("drift_id"), f"Previous Week Closure.carried_over_drifts[{index}].drift_id"
+        )
+        if drift_id in seen_ids:
+            raise ContractReviewError(f"Previous Week Closure com drift_id duplicado: {drift_id}")
+        seen_ids.add(drift_id)
+        resolution = expect_non_empty_string(
+            entry.get("resolution"),
+            f"Previous Week Closure.carried_over_drifts[{index}].resolution",
+        )
+        if resolution not in ALLOWED_CARRY_RESOLUTION:
+            raise ContractReviewError(
+                f"Previous Week Closure.carried_over_drifts[{index}].resolution invalida: {resolution}"
+            )
+        evidence_ref = expect_non_empty_string(
+            entry.get("evidence_ref"),
+            f"Previous Week Closure.carried_over_drifts[{index}].evidence_ref",
+        )
+        risk_exception_ref = expect_optional_string(
+            entry.get("risk_exception_ref"),
+            f"Previous Week Closure.carried_over_drifts[{index}].risk_exception_ref",
+        )
+        if resolution == "risk_accepted" and risk_exception_ref is None:
+            raise ContractReviewError(
+                "Previous Week Closure com resolution=risk_accepted exige risk_exception_ref."
+            )
+        validated_carried.append(
+            {
+                "drift_id": drift_id,
+                "resolution": resolution,
+                "evidence_ref": evidence_ref,
+                "risk_exception_ref": risk_exception_ref,
+            }
+        )
+    return {
+        "status": status,
+        "reviewed_drift_ids": reviewed_drift_ids,
+        "closed_refs": closed_refs,
+        "risk_accepted_refs": risk_accepted_refs,
+        "open_critical_refs": open_critical_refs,
+        "carried_over_drifts": validated_carried,
+        "notes": notes,
+    }
 
 
-def validate_review(review_dir: Path, week_id: str) -> tuple[Path, int]:
+def validate_previous_week_relationship(
+    *,
+    review_dir: Path,
+    week_id: str,
+    previous_week_id: str,
+    current_backlog: list[dict[str, object]],
+    closure: dict[str, object],
+    path: Path,
+) -> None:
+    expected_previous = expected_previous_week_id(week_id)
+    previous_path = review_path(review_dir, expected_previous)
+    if not previous_path.exists():
+        if previous_week_id != "none":
+            raise ContractReviewError(
+                f"{display_path(path)} deve usar previous_week_id=none quando a semana anterior nao existir."
+            )
+        if any(
+            closure[key]
+            for key in (
+                "reviewed_drift_ids",
+                "closed_refs",
+                "risk_accepted_refs",
+                "open_critical_refs",
+                "carried_over_drifts",
+            )
+        ):
+            raise ContractReviewError(
+                f"{display_path(path)} nao pode registrar carry-over quando nao existe semana anterior."
+            )
+        if closure["status"] != "PASS":
+            raise ContractReviewError(
+                f"{display_path(path)} deve manter Previous Week Closure.status=PASS no primeiro ciclo."
+            )
+        return
+
+    if previous_week_id != expected_previous:
+        raise ContractReviewError(
+            f"{display_path(path)} com previous_week_id invalido: esperado {expected_previous}."
+        )
+
+    previous_review = validate_review(review_dir, expected_previous)
+    previous_open_critical = {
+        drift["drift_id"]: drift
+        for drift in previous_review["drift_backlog"]
+        if drift["severity"] == "critical" and drift["status"] == "open"
+    }
+    carry_entries = {
+        entry["drift_id"]: entry for entry in closure["carried_over_drifts"]
+    }
+    previous_ids = set(previous_open_critical)
+    carry_ids = set(carry_entries)
+    if previous_ids != carry_ids:
+        raise ContractReviewError(
+            f"{display_path(path)} deve classificar todos os drifts criticos herdados da semana {expected_previous}."
+        )
+    if set(closure["reviewed_drift_ids"]) != previous_ids:
+        raise ContractReviewError(
+            f"{display_path(path)} com reviewed_drift_ids divergente dos drifts criticos herdados."
+        )
+
+    current_open_critical_ids = {
+        drift["drift_id"]
+        for drift in current_backlog
+        if drift["severity"] == "critical" and drift["status"] == "open"
+    }
+    expected_closed_refs: set[str] = set()
+    expected_risk_refs: set[str] = set()
+    expected_open_ids: set[str] = set()
+
+    for drift_id, entry in carry_entries.items():
+        resolution = entry["resolution"]
+        if resolution == "closed":
+            expected_closed_refs.add(entry["evidence_ref"])
+            if drift_id in current_open_critical_ids:
+                raise ContractReviewError(
+                    f"{display_path(path)} nao pode manter {drift_id} aberto ao marcar resolution=closed."
+                )
+        elif resolution == "risk_accepted":
+            risk_exception_ref = entry["risk_exception_ref"]
+            if risk_exception_ref is None:
+                raise ContractReviewError(
+                    f"{display_path(path)} exige risk_exception_ref para {drift_id}."
+                )
+            expected_risk_refs.add(risk_exception_ref)
+            if drift_id in current_open_critical_ids:
+                raise ContractReviewError(
+                    f"{display_path(path)} nao pode manter {drift_id} aberto ao marcar resolution=risk_accepted."
+                )
+        else:
+            expected_open_ids.add(drift_id)
+            if drift_id not in current_open_critical_ids:
+                raise ContractReviewError(
+                    f"{display_path(path)} deve manter {drift_id} no backlog atual ao marcar resolution=open."
+                )
+
+    if set(closure["closed_refs"]) != expected_closed_refs:
+        raise ContractReviewError(
+            f"{display_path(path)} com closed_refs divergente dos drifts herdados fechados."
+        )
+    if set(closure["risk_accepted_refs"]) != expected_risk_refs:
+        raise ContractReviewError(
+            f"{display_path(path)} com risk_accepted_refs divergente dos drifts herdados aceitos por risco."
+        )
+    if set(closure["open_critical_refs"]) != expected_open_ids:
+        raise ContractReviewError(
+            f"{display_path(path)} com open_critical_refs divergente dos drifts herdados ainda abertos."
+        )
+
+    expected_status = "FAIL" if expected_open_ids else "PASS"
+    if closure["status"] != expected_status:
+        raise ContractReviewError(
+            f"{display_path(path)} com Previous Week Closure.status divergente do carry-over atual."
+        )
+
+
+def validate_review(review_dir: Path, week_id: str) -> dict[str, object]:
     path = review_path(review_dir, week_id)
     text = load_review_text(path)
     title_match = re.search(r"^# F8 Contract Review (.+)$", text, re.M)
@@ -275,8 +475,10 @@ def validate_review(review_dir: Path, week_id: str) -> tuple[Path, int]:
         )
 
     validate_contracts_reviewed(load_json_section(sections, "Contracts Reviewed", path))
-    critical_open = validate_drift_backlog(load_json_section(sections, "Drift Backlog", path))
-    validate_previous_week_closure(load_json_section(sections, "Previous Week Closure", path))
+    drift_backlog, critical_open = validate_drift_backlog(load_json_section(sections, "Drift Backlog", path))
+    previous_week_closure = validate_previous_week_closure(
+        load_json_section(sections, "Previous Week Closure", path)
+    )
 
     raw_critical_count = metadata.get("critical_drifts_open")
     if not isinstance(raw_critical_count, int) or raw_critical_count < 0:
@@ -287,14 +489,21 @@ def validate_review(review_dir: Path, week_id: str) -> tuple[Path, int]:
         raise ContractReviewError(
             f"{display_path(path)} com critical_drifts_open divergente do backlog."
         )
-    if previous_week_id == "none":
-        closure = expect_dict(load_json_section(sections, "Previous Week Closure", path), "Previous Week Closure")
-        if closure.get("status") != "PASS":
-            raise ContractReviewError(
-                f"{display_path(path)} deve manter Previous Week Closure.status=PASS no primeiro ciclo."
-            )
+    validate_previous_week_relationship(
+        review_dir=review_dir,
+        week_id=week_id,
+        previous_week_id=previous_week_id,
+        current_backlog=drift_backlog,
+        closure=previous_week_closure,
+        path=path,
+    )
 
-    return path, critical_open
+    return {
+        "path": path,
+        "critical_open": critical_open,
+        "drift_backlog": drift_backlog,
+        "previous_week_closure": previous_week_closure,
+    }
 
 
 def build_sample_review(
@@ -304,9 +513,21 @@ def build_sample_review(
     source_of_truth: str = SOURCE_OF_TRUTH,
     critical_drifts_open: int = 0,
     drift_backlog: list[dict[str, object]] | None = None,
+    previous_week_id: str = "none",
+    previous_week_closure: dict[str, object] | None = None,
 ) -> None:
     if drift_backlog is None:
         drift_backlog = []
+    if previous_week_closure is None:
+        previous_week_closure = {
+            "status": "PASS",
+            "reviewed_drift_ids": [],
+            "closed_refs": [],
+            "risk_accepted_refs": [],
+            "open_critical_refs": [],
+            "carried_over_drifts": [],
+            "notes": "first review cycle",
+        }
     review = f"""# F8 Contract Review {week_id}
 
 ## Metadata
@@ -315,7 +536,7 @@ def build_sample_review(
   "week_id": "{week_id}",
   "reviewed_at": "2026-03-01T00:00:00-0300",
   "source_of_truth": "{source_of_truth}",
-  "previous_week_id": "none",
+  "previous_week_id": "{previous_week_id}",
   "contract_review_status": "PASS",
   "critical_drifts_open": {critical_drifts_open}
 }}
@@ -370,14 +591,7 @@ def build_sample_review(
 
 ## Previous Week Closure
 ```json
-{{
-  "status": "PASS",
-  "reviewed_drift_ids": [],
-  "closed_refs": [],
-  "risk_accepted_refs": [],
-  "open_critical_refs": [],
-  "notes": "first review cycle"
-}}
+{json.dumps(previous_week_closure, ensure_ascii=True, indent=2)}
 ```
 """
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -398,8 +612,8 @@ def run_self_checks() -> None:
 
         valid_path = review_path(review_dir, week_id)
         build_sample_review(valid_path, week_id=week_id)
-        _, critical_open = validate_review(review_dir, week_id)
-        if critical_open != 0:
+        valid_review = validate_review(review_dir, week_id)
+        if valid_review["critical_open"] != 0:
             raise ContractReviewError("mock valido deveria retornar critical_drifts_open=0.")
 
         owner_missing_path = review_path(review_dir, "2026-W11")
@@ -487,14 +701,209 @@ def run_self_checks() -> None:
         try:
             validate_review(review_dir, "2026-W10")
         except ContractReviewError:
+            pass
+        else:
+            raise ContractReviewError("mock com source_of_truth invalida deveria falhar.")
+
+        previous_open_path = review_path(review_dir, "2026-W40")
+        build_sample_review(
+            previous_open_path,
+            week_id="2026-W40",
+            critical_drifts_open=1,
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W40-01",
+                    "domain": "trading",
+                    "severity": "critical",
+                    "summary": "carry-over base",
+                    "status": "open",
+                    "owner": "Sr. Geldmacher",
+                    "due_date": "2026-03-29",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+
+        closed_current_path = review_path(review_dir, "2026-W41")
+        build_sample_review(
+            closed_current_path,
+            week_id="2026-W41",
+            previous_week_id="2026-W40",
+            previous_week_closure={
+                "status": "PASS",
+                "reviewed_drift_ids": ["DRIFT-F8-2026-W40-01"],
+                "closed_refs": ["artifacts/mock-close.md"],
+                "risk_accepted_refs": [],
+                "open_critical_refs": [],
+                "carried_over_drifts": [
+                    {
+                        "drift_id": "DRIFT-F8-2026-W40-01",
+                        "resolution": "closed",
+                        "evidence_ref": "artifacts/mock-close.md",
+                        "risk_exception_ref": None,
+                    }
+                ],
+                "notes": "closed prior critical drift",
+            },
+        )
+        validate_review(review_dir, "2026-W41")
+
+        previous_risk_path = review_path(review_dir, "2026-W43")
+        build_sample_review(
+            previous_risk_path,
+            week_id="2026-W43",
+            critical_drifts_open=1,
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W43-01",
+                    "domain": "security",
+                    "severity": "critical",
+                    "summary": "risk acceptance base",
+                    "status": "open",
+                    "owner": "Bas Rutten",
+                    "due_date": "2026-04-12",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+
+        risk_current_path = review_path(review_dir, "2026-W44")
+        build_sample_review(
+            risk_current_path,
+            week_id="2026-W44",
+            previous_week_id="2026-W43",
+            previous_week_closure={
+                "status": "PASS",
+                "reviewed_drift_ids": ["DRIFT-F8-2026-W43-01"],
+                "closed_refs": [],
+                "risk_accepted_refs": ["decision://RISK-001"],
+                "open_critical_refs": [],
+                "carried_over_drifts": [
+                    {
+                        "drift_id": "DRIFT-F8-2026-W43-01",
+                        "resolution": "risk_accepted",
+                        "evidence_ref": "artifacts/mock-risk.md",
+                        "risk_exception_ref": "decision://RISK-001",
+                    }
+                ],
+                "notes": "accepted by risk exception",
+            },
+        )
+        validate_review(review_dir, "2026-W44")
+
+        previous_open_again_path = review_path(review_dir, "2026-W46")
+        build_sample_review(
+            previous_open_again_path,
+            week_id="2026-W46",
+            critical_drifts_open=1,
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W46-01",
+                    "domain": "trading",
+                    "severity": "critical",
+                    "summary": "open carry-over base",
+                    "status": "open",
+                    "owner": "Sr. Geldmacher",
+                    "due_date": "2026-04-26",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+
+        open_current_path = review_path(review_dir, "2026-W47")
+        build_sample_review(
+            open_current_path,
+            week_id="2026-W47",
+            previous_week_id="2026-W46",
+            critical_drifts_open=1,
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W46-01",
+                    "domain": "trading",
+                    "severity": "critical",
+                    "summary": "open carry-over base",
+                    "status": "open",
+                    "owner": "Sr. Geldmacher",
+                    "due_date": "2026-05-03",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock-open.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+            previous_week_closure={
+                "status": "FAIL",
+                "reviewed_drift_ids": ["DRIFT-F8-2026-W46-01"],
+                "closed_refs": [],
+                "risk_accepted_refs": [],
+                "open_critical_refs": ["DRIFT-F8-2026-W46-01"],
+                "carried_over_drifts": [
+                    {
+                        "drift_id": "DRIFT-F8-2026-W46-01",
+                        "resolution": "open",
+                        "evidence_ref": "artifacts/mock-open.md",
+                        "risk_exception_ref": None,
+                    }
+                ],
+                "notes": "carry-over remains open",
+            },
+        )
+        open_review = validate_review(review_dir, "2026-W47")
+        if open_review["critical_open"] != 1:
+            raise ContractReviewError("mock open carry-over deveria manter critical_open=1.")
+
+        previous_omission_path = review_path(review_dir, "2026-W49")
+        build_sample_review(
+            previous_omission_path,
+            week_id="2026-W49",
+            critical_drifts_open=1,
+            drift_backlog=[
+                {
+                    "drift_id": "DRIFT-F8-2026-W49-01",
+                    "domain": "trading",
+                    "severity": "critical",
+                    "summary": "omission base",
+                    "status": "open",
+                    "owner": "Sr. Geldmacher",
+                    "due_date": "2026-05-10",
+                    "source_refs": ["PRD/PRD-MASTER.md"],
+                    "evidence_ref": "artifacts/mock.md",
+                    "risk_exception_ref": None,
+                }
+            ],
+        )
+
+        omission_current_path = review_path(review_dir, "2026-W50")
+        build_sample_review(
+            omission_current_path,
+            week_id="2026-W50",
+            previous_week_id="2026-W49",
+            previous_week_closure={
+                "status": "PASS",
+                "reviewed_drift_ids": [],
+                "closed_refs": [],
+                "risk_accepted_refs": [],
+                "open_critical_refs": [],
+                "carried_over_drifts": [],
+                "notes": "omitted carry-over",
+            },
+        )
+        try:
+            validate_review(review_dir, "2026-W50")
+        except ContractReviewError:
             return
-        raise ContractReviewError("mock com source_of_truth invalida deveria falhar.")
+        raise ContractReviewError("mock sem classificacao do carry-over deveria falhar.")
 
 
 def command_read(week_id: str, review_dir: Path) -> int:
-    _, critical_open = validate_review(review_dir, week_id)
+    review = validate_review(review_dir, week_id)
     print("CONTRACT_REVIEW_STATUS=PASS")
-    print(f"CRITICAL_DRIFTS_OPEN={critical_open}")
+    print(f"CRITICAL_DRIFTS_OPEN={review['critical_open']}")
     return 0
 
 
