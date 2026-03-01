@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.31"
+version: "2.32"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,20 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F6-03-02 (Trading live bloqueado sem fallback HITL validado)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F6-03-02` do `EPIC-F6-03` com `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`, `VERTICALS/TRADING/TRADING-PRD.md`, `PM/DECISION-PROTOCOL.md` e `PRD/PRD-MASTER.md` como fonte de verdade para reforcar:
+    - sem fallback HITL validado, Trading live MUST permanecer `TRADING_BLOCKED`;
+    - remocao de `TRADING_BLOCKED` por prontidao HITL somente por decisao formal registrada.
+  - endurece validacao executavel em:
+    - `scripts/ci/eval_trading.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-03-issue-02-trading-blocked-without-valid-hitl-fallback.md`.
+- Migracao:
+  - qualquer texto normativo de enablement/live MUST preservar bloqueio de live sem fallback HITL validado.
+  - desbloqueio por prontidao HITL sem decisao formal MUST bloquear `make eval-trading`.
 
 ### 2026-03-01 - Execucao do ISSUE-F6-03-01 (runbook de contingencia Telegram degradado + fallback Slack controlado)
 - RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-050, RFC-060.

@@ -172,6 +172,8 @@ search_re_each_file 'caminho de execucao unico confirmado: somente `execution_ga
 search_re_each_file "dominio de venue ativo.*SEC/allowlists/DOMAINS\\.yaml.*dominio fora da allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "sem permissao de saque|permissao sem saque" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
 search_re_each_file "IP allowlist" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md
+search_re_each_file "sem fallback HITL validado.*TRADING_BLOCKED|TRADING_BLOCKED.*sem fallback HITL validado" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PM/DECISION-PROTOCOL.md
+search_re_each_file "remocao de .*TRADING_BLOCKED.*decisao formal|decisao formal.*TRADING_BLOCKED" VERTICALS/TRADING/TRADING-PRD.md VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md PM/DECISION-PROTOCOL.md
 search_re_each_file "TRADING_BLOCKED" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "position_snapshot" ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "open_orders_snapshot" INCIDENTS/DEGRADED-MODE-PROCEDURE.md

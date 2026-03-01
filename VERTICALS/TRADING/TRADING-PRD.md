@@ -169,6 +169,8 @@ Exclui:
   - fallback HITL:
     - Telegram operacional.
     - Slack fallback apenas com `slack_user_ids` e `slack_channel_ids` preenchidos.
+  - sem fallback HITL validado, Trading live MUST permanecer `TRADING_BLOCKED`.
+  - remocao de `TRADING_BLOCKED` por prontidao HITL MUST ocorrer somente por decisao formal registrada.
   - runbook de degradacao com posicao aberta validado em simulacao.
 
 ## Links Relacionados

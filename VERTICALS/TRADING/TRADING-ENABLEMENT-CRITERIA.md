@@ -128,6 +128,7 @@ Todos obrigatorios antes da primeira ordem com dinheiro real:
 - fallback HITL:
   - Telegram operacional;
   - Slack fallback somente se `slack_user_ids` e `slack_channel_ids` estiverem preenchidos para operador habilitado.
+- sem fallback HITL validado, Trading live MUST permanecer `TRADING_BLOCKED`.
 - credencial de trading live com:
   - permissao sem saque;
   - IP allowlist ativa quando suportado.
@@ -156,6 +157,7 @@ Todos obrigatorios antes da primeira ordem com dinheiro real:
   - `explicit_order_approval_active` (sem bypass para aprovacao por ordem)
 - regra de bloqueio:
   - qualquer item `fail` MUST manter `TRADING_BLOCKED`.
+  - remocao de `TRADING_BLOCKED` por prontidao HITL MUST ocorrer somente por decisao formal registrada.
 - artifact minimo:
   - `artifacts/trading/pre_live_checklist/<checklist_id>.json`
 
