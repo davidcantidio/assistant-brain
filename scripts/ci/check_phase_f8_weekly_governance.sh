@@ -7,8 +7,8 @@ cd "$ROOT"
 python3 - <<'PY'
 from __future__ import annotations
 
+import json
 import os
-import re
 import subprocess
 import sys
 import tempfile
@@ -22,6 +22,10 @@ REPORT_DIR = ROOT / "artifacts/phase-f8/weekly-governance"
 FIELD_ORDER = [
     "week_id",
     "executed_at",
+    "source_of_truth",
+    "prior_phase_decision",
+    "phase_transition_status",
+    "blocking_reason",
     "eval_gates_status",
     "ci_quality_status",
     "ci_security_status",
@@ -41,38 +45,42 @@ def fail(message: str) -> None:
 
 
 def parse_report(path: Path) -> tuple[dict[str, str], dict[str, str], str]:
-    text = path.read_text(encoding="utf-8")
-    values: dict[str, str] = {}
-    logs: dict[str, str] = {}
+    proc = subprocess.run(
+        [
+            "python3",
+            str(ROOT / "scripts/ci/phase_f8_release_governance.py"),
+            "parse-weekly-report",
+            "--report-path",
+            str(path),
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        fail(proc.stderr.strip() or proc.stdout.strip() or f"falha ao interpretar {path}")
 
-    for key in FIELD_ORDER:
-      match = re.search(rf"^- {re.escape(key)}: (.+)$", text, re.M)
-      if not match:
-        fail(f"{path} sem campo obrigatorio: {key}")
-      value = match.group(1).strip()
-      if value.startswith("`") and value.endswith("`"):
-        value = value[1:-1]
-      values[key] = value
-
-    for key in LOG_KEYS:
-      match = re.search(rf"^- {re.escape(key)}: `(.+?)`$", text, re.M)
-      if not match:
-        fail(f"{path} sem log obrigatorio: {key}")
-      logs[key] = match.group(1)
+    payload = json.loads(proc.stdout)
+    values = payload["values"]
+    logs = payload["logs"]
+    text = payload["text"]
 
     positions = []
     for key in FIELD_ORDER:
-      token = f"- {key}:"
-      positions.append(text.index(token))
+        token = f"- {key}:"
+        positions.append(text.index(token))
     if positions != sorted(positions):
-      fail(f"{path} com ordem invalida dos campos obrigatorios.")
+        fail(f"{path} com ordem invalida dos campos obrigatorios.")
 
     return values, logs, text
 
 
 def expected_decision(values: dict[str, str]) -> str:
     if (
-        values["eval_gates_status"] == "PASS"
+        values["prior_phase_decision"] == "promote"
+        and values["phase_transition_status"] == "ready"
+        and values["blocking_reason"] == "none"
+        and values["eval_gates_status"] == "PASS"
         and values["ci_quality_status"] == "PASS"
         and values["ci_security_status"] == "PASS"
         and values["contract_review_status"] == "PASS"
@@ -88,6 +96,16 @@ if not reports:
 
 for report in reports:
     values, logs, _ = parse_report(report)
+    if values["source_of_truth"] != "PRD/PRD-MASTER.md":
+      fail(f"{report} com source_of_truth invalido: {values['source_of_truth']}")
+    if values["phase_transition_status"] not in {"ready", "blocked"}:
+      fail(f"{report} com phase_transition_status invalido: {values['phase_transition_status']}")
+    if values["prior_phase_decision"] not in {"promote", "hold"}:
+      fail(f"{report} com prior_phase_decision invalido: {values['prior_phase_decision']}")
+    if values["phase_transition_status"] == "blocked" and values["blocking_reason"] in {"", "none"}:
+      fail(f"{report} com blocking_reason vazio para transicao bloqueada.")
+    if values["phase_transition_status"] == "ready" and values["blocking_reason"] != "none":
+      fail(f"{report} deveria usar blocking_reason=none quando a transicao estiver ready.")
     if values["decision"] != expected_decision(values):
       fail(f"{report} com decision inconsistente com a formula semanal.")
     for key, rel_path in logs.items():
@@ -216,6 +234,9 @@ pass_values, _ = run_mock(
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
         "CONTRACT_REVIEW_STATUS": "PASS",
         "CRITICAL_DRIFTS_OPEN": "0",
+        "PRIOR_PHASE_DECISION": "promote",
+        "PHASE_TRANSITION_STATUS": "ready",
+        "BLOCKING_REASON": "none",
     },
 )
 if pass_values["decision"] != "promote":
@@ -229,6 +250,9 @@ eval_fail_values, eval_fail_logs = run_mock(
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
         "CONTRACT_REVIEW_STATUS": "PASS",
         "CRITICAL_DRIFTS_OPEN": "0",
+        "PRIOR_PHASE_DECISION": "promote",
+        "PHASE_TRANSITION_STATUS": "ready",
+        "BLOCKING_REASON": "none",
     },
 )
 if eval_fail_values["eval_gates_status"] != "FAIL":
@@ -248,6 +272,9 @@ quality_fail_values, quality_fail_logs = run_mock(
         "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
         "CONTRACT_REVIEW_STATUS": "PASS",
         "CRITICAL_DRIFTS_OPEN": "0",
+        "PRIOR_PHASE_DECISION": "promote",
+        "PHASE_TRANSITION_STATUS": "ready",
+        "BLOCKING_REASON": "none",
     },
 )
 if quality_fail_values["ci_quality_status"] != "FAIL":
@@ -267,6 +294,9 @@ try:
             "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
             "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
             "CONTRACT_REVIEW_DIR": str(artifact_pass_dir),
+            "PRIOR_PHASE_DECISION": "promote",
+            "PHASE_TRANSITION_STATUS": "ready",
+            "BLOCKING_REASON": "none",
         },
     )
     if artifact_pass_values["contract_review_status"] != "PASS":
@@ -309,6 +339,9 @@ try:
             "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
             "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
             "CONTRACT_REVIEW_DIR": str(artifact_open_dir),
+            "PRIOR_PHASE_DECISION": "promote",
+            "PHASE_TRANSITION_STATUS": "ready",
+            "BLOCKING_REASON": "none",
         },
     )
     if artifact_open_values["contract_review_status"] != "PASS":
@@ -338,6 +371,24 @@ if review_fail_values["contract_review_status"] != "FAIL":
     fail("mock review-fail deveria usar contract_review_status=FAIL quando o artifact estiver ausente.")
 if review_fail_values["decision"] != "hold":
     fail("mock review-fail deveria resultar em decision=hold.")
+
+prior_phase_hold_values, _ = run_mock(
+    "prior-phase-hold",
+    {
+        "EVAL_GATES_CMD": "printf 'eval-gates: PASS\\n'",
+        "CI_QUALITY_CMD": "printf 'quality-check: PASS\\n'",
+        "CI_SECURITY_CMD": "printf 'security-check: PASS\\n'",
+        "CONTRACT_REVIEW_STATUS": "PASS",
+        "CRITICAL_DRIFTS_OPEN": "0",
+        "PRIOR_PHASE_DECISION": "hold",
+        "PHASE_TRANSITION_STATUS": "blocked",
+        "BLOCKING_REASON": "phase_transition_blocked: F7 -> F8 permanece hold; ativacao prematura da F8 foi recuada ao contrato de promocao entre fases.",
+    },
+)
+if prior_phase_hold_values["decision"] != "hold":
+    fail("mock prior-phase-hold deveria resultar em decision=hold.")
+if prior_phase_hold_values["phase_transition_status"] != "blocked":
+    fail("mock prior-phase-hold deveria marcar phase_transition_status=blocked.")
 
 print("phase-f8-weekly-governance: PASS")
 PY

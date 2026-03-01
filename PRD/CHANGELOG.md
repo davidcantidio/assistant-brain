@@ -29,6 +29,22 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-03-01 (criterios de decisao semanal + recuo formal da F8)
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-03-01` do `EPIC-F8-03` para consolidar a decisao semanal da `F8` contra a fase anterior:
+    - adiciona helper `scripts/ci/phase_f8_release_governance.py` para parsing e renderizacao do pacote semanal de release governance;
+    - amplia `scripts/ci/run_phase_f8_weekly_governance.sh` com `source_of_truth`, `prior_phase_decision`, `phase_transition_status` e `blocking_reason`;
+    - passa a consultar `artifacts/phase-f7/validation-summary.md` para derivar a prontidao de transicao `F7 -> F8`;
+    - endurece a formula canonica de `promote|hold`: sem `prior_phase_decision=promote`, a rodada semanal MUST permanecer `hold`.
+  - atualiza o checker de `F8` para validar os novos campos e cobrir o cenario mockado `prior_phase_decision=hold`.
+  - regrava o artifact autoritativo da semana `2026-W09` mantendo `decision=hold`, agora com bloqueio explicito da transicao de fase.
+  - atualiza `PM/PHASES/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md` e `EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md` para materializar o recuo documental da ativacao prematura da `F8`.
+- Migracao:
+  - `phase-f8-weekly-governance` MUST consultar a decisao consolidada da fase anterior antes de promover `F8`.
+  - `prior_phase_decision != promote` MUST resultar em `phase_transition_status=blocked`.
+  - o recuo da `F8` nao equivale a excecao de risco: a fase continua `planned` e a decisao semanal permanece `hold` ate promote formal da `F7`.
+
 ### 2026-03-01 - Execucao do ISSUE-F8-02-03 + fechamento do EPIC-F8-02 em `feito`
 - RFCs afetadas: RFC-001, RFC-015, RFC-030, RFC-050, RFC-060.
 - Impacto:

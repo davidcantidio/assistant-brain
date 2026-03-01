@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F8-EPICS.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -38,3 +38,5 @@ Criterio objetivo:
 - `EPIC-F8-03` e `EPIC-F8-04` permanecem planejados.
 - decisao semanal atual da `F8`: `hold`.
 - `hold` permanece obrigatorio enquanto `critical_drifts_open > 0` no artifact canonico de `contract-review`.
+- a ativacao prematura da `F8` foi recuada ao contrato de promocao entre fases.
+- enquanto `artifacts/phase-f7/validation-summary.md` mantiver `F7 -> F8: hold`, o artifact semanal da `F8` MUST registrar `phase_transition_status=blocked`.

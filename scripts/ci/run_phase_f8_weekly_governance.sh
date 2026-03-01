@@ -6,10 +6,12 @@ cd "$ROOT"
 
 WEEK_ID="${WEEK_ID:-$(date +%G-W%V)}"
 EXECUTED_AT="${EXECUTED_AT:-$(date '+%Y-%m-%dT%H:%M:%S%z')}"
+SOURCE_OF_TRUTH="${SOURCE_OF_TRUTH:-PRD/PRD-MASTER.md}"
 EVAL_GATES_CMD="${EVAL_GATES_CMD:-make eval-gates}"
 CI_QUALITY_CMD="${CI_QUALITY_CMD:-make ci-quality}"
 CI_SECURITY_CMD="${CI_SECURITY_CMD:-make ci-security}"
 CONTRACT_REVIEW_DIR="${CONTRACT_REVIEW_DIR:-artifacts/phase-f8/contract-review}"
+F7_SUMMARY_PATH="${F7_SUMMARY_PATH:-artifacts/phase-f7/validation-summary.md}"
 
 ARTIFACT_DIR="${ARTIFACT_DIR:-artifacts/phase-f8/weekly-governance}"
 LOG_DIR="${ARTIFACT_DIR}/logs/${WEEK_ID}"
@@ -58,6 +60,18 @@ else
   fi
 fi
 
+if [[ -n "${PRIOR_PHASE_DECISION+x}" && -n "${PHASE_TRANSITION_STATUS+x}" && -n "${BLOCKING_REASON+x}" ]]; then
+  PRIOR_PHASE_DECISION="${PRIOR_PHASE_DECISION}"
+  PHASE_TRANSITION_STATUS="${PHASE_TRANSITION_STATUS}"
+  BLOCKING_REASON="${BLOCKING_REASON}"
+else
+  PHASE_ENV="$(
+    python3 scripts/ci/phase_f8_release_governance.py read-prior-phase-status \
+      --summary-path "$F7_SUMMARY_PATH"
+  )"
+  eval "$PHASE_ENV"
+fi
+
 EVAL_RESULT="$(run_and_capture "eval-gates" "$EVAL_GATES_CMD")"
 IFS='|' read -r _ EVAL_GATES_STATUS EVAL_LOG_PATH <<<"$EVAL_RESULT"
 
@@ -81,7 +95,7 @@ IFS='|' read -r _ CI_QUALITY_STATUS QUALITY_LOG_PATH <<<"$QUALITY_RESULT"
 IFS='|' read -r _ CI_SECURITY_STATUS SECURITY_LOG_PATH <<<"$SECURITY_RESULT"
 
 DECISION="hold"
-if [[ "$EVAL_GATES_STATUS" == "PASS" && "$CI_QUALITY_STATUS" == "PASS" && "$CI_SECURITY_STATUS" == "PASS" && "$CONTRACT_REVIEW_STATUS" == "PASS" && "$CRITICAL_DRIFTS_OPEN" == "0" ]]; then
+if [[ "$EVAL_GATES_STATUS" == "PASS" && "$CI_QUALITY_STATUS" == "PASS" && "$CI_SECURITY_STATUS" == "PASS" && "$CONTRACT_REVIEW_STATUS" == "PASS" && "$CRITICAL_DRIFTS_OPEN" == "0" && "$PRIOR_PHASE_DECISION" == "promote" ]]; then
   DECISION="promote"
 fi
 
@@ -103,6 +117,11 @@ if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
   next_actions_parts+=("fechar ou aceitar formalmente os drifts criticos")
 fi
 
+if [[ "$PHASE_TRANSITION_STATUS" != "ready" ]]; then
+  risk_notes_parts+=("${BLOCKING_REASON}")
+  next_actions_parts+=("recuar a ativacao da F8 e preservar hold ate F7 -> F8=promote")
+fi
+
 if [[ ${#risk_notes_parts[@]} -eq 0 ]]; then
   risk_notes_parts+=("none")
 fi
@@ -114,26 +133,25 @@ fi
 RISK_NOTES="$(IFS='; '; echo "${risk_notes_parts[*]}")"
 NEXT_ACTIONS="$(IFS='; '; echo "${next_actions_parts[*]}")"
 
-cat >"$REPORT_PATH" <<EOF
-# F8 Weekly Governance ${WEEK_ID}
-
-- week_id: \`${WEEK_ID}\`
-- executed_at: \`${EXECUTED_AT}\`
-- eval_gates_status: \`${EVAL_GATES_STATUS}\`
-- ci_quality_status: \`${CI_QUALITY_STATUS}\`
-- ci_security_status: \`${CI_SECURITY_STATUS}\`
-- contract_review_status: \`${CONTRACT_REVIEW_STATUS}\`
-- critical_drifts_open: \`${CRITICAL_DRIFTS_OPEN}\`
-- decision: \`${DECISION}\`
-- risk_notes: ${RISK_NOTES}
-- next_actions: ${NEXT_ACTIONS}
-
-## Logs
-
-- eval-gates: \`${EVAL_LOG_PATH}\`
-- ci-quality: \`${QUALITY_LOG_PATH}\`
-- ci-security: \`${SECURITY_LOG_PATH}\`
-EOF
+python3 scripts/ci/phase_f8_release_governance.py render-weekly-report \
+  --report-path "$REPORT_PATH" \
+  --week-id "$WEEK_ID" \
+  --executed-at "$EXECUTED_AT" \
+  --source-of-truth "$SOURCE_OF_TRUTH" \
+  --prior-phase-decision "$PRIOR_PHASE_DECISION" \
+  --phase-transition-status "$PHASE_TRANSITION_STATUS" \
+  --blocking-reason "$BLOCKING_REASON" \
+  --eval-gates-status "$EVAL_GATES_STATUS" \
+  --ci-quality-status "$CI_QUALITY_STATUS" \
+  --ci-security-status "$CI_SECURITY_STATUS" \
+  --contract-review-status "$CONTRACT_REVIEW_STATUS" \
+  --critical-drifts-open "$CRITICAL_DRIFTS_OPEN" \
+  --decision "$DECISION" \
+  --risk-notes "$RISK_NOTES" \
+  --next-actions "$NEXT_ACTIONS" \
+  --eval-log-path "$EVAL_LOG_PATH" \
+  --quality-log-path "$QUALITY_LOG_PATH" \
+  --security-log-path "$SECURITY_LOG_PATH"
 
 echo "phase-f8-weekly-governance: REPORT=${REPORT_PATH}"
 echo "phase-f8-weekly-governance: decision=${DECISION}"

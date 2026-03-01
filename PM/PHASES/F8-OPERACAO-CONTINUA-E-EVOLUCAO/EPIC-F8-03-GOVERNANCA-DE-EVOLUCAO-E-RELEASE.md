@@ -1,10 +1,10 @@
 ---
 doc_id: "EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
-rfc_refs: ["RFC-001", "RFC-040", "RFC-050", "RFC-060"]
+last_updated: "2026-03-01"
+rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
 # EPIC-F8-03 Governanca de evolucao e release
@@ -21,20 +21,26 @@ Fechar cada ciclo semanal com decisao formal `promote|hold`, trilha de risco res
 - trio de gates (`eval-gates`, `ci-quality`, `ci-security`) com `PASS` no ciclo semanal.
 - decisao semanal registrada com `promote|hold` e justificativa.
 
+## Contexto normativo desta rodada
+- fonte de verdade: `PRD/PRD-MASTER.md`, `PRD/ROADMAP.md`, `PRD/PHASE-USABILITY-GUIDE.md`, `PM/DECISION-PROTOCOL.md`, `EVALS/SYSTEM-HEALTH-THRESHOLDS.md` e `PRD/CHANGELOG.md`.
+- a `F8` permanece em estado `planned` no planejamento da fase, sem novo enum de status.
+- a ativacao prematura da `F8` MUST ser recuada documentalmente enquanto a decisao `F7 -> F8` permanecer `hold`.
+- este epico consolida a trilha de release e auditoria da `F8`, mas NAO substitui a promocao formal entre fases.
+
 ## Issues (Scrum + TDD + Criterios de Aceitacao)
 
-### ISSUE-F8-03-01 - Validar criterios de decisao semanal promote hold baseados no trio de gates e drifts
+### ISSUE-F8-03-01 - Validar criterios de decisao semanal promote hold baseados no trio de gates drifts e decisao da fase anterior
 **User story**  
 Como operador, quero criterios objetivos de decisao semanal para evitar promocao por percepcao subjetiva.
 
 **Plano TDD**
-1. `Red`: considerar promocao sem validar gates e drifts.
-2. `Green`: decidir `promote|hold` com base no trio de gates e status de drifts criticos.
-3. `Refactor`: padronizar criterio de decisao no sumario semanal.
+1. `Red`: considerar promocao sem validar gates, drifts e a decisao `F7 -> F8`.
+2. `Green`: decidir `promote|hold` com base no trio de gates, status de drifts criticos e `prior_phase_decision`.
+3. `Refactor`: padronizar criterio de decisao no sumario semanal com recuo formal da ativacao da `F8`.
 
 **Criterios de aceitacao**
-- Given qualquer gate em `FAIL` ou drift critico aberto, When decisao semanal e tomada, Then resultado deve ser `hold`.
-- Given trio de gates em `PASS` e sem drift critico pendente, When decisao semanal e tomada, Then resultado pode ser `promote`.
+- Given qualquer gate em `FAIL`, drift critico aberto ou `prior_phase_decision != promote`, When decisao semanal e tomada, Then resultado deve ser `hold`.
+- Given trio de gates em `PASS`, sem drift critico pendente e `prior_phase_decision=promote`, When decisao semanal e tomada, Then resultado pode ser `promote`.
 
 ### ISSUE-F8-03-02 - Registrar risco residual rollback e acoes da proxima semana
 **User story**  
@@ -70,6 +76,8 @@ Como operador, quero um sumario executivo semanal para auditoria rapida e handof
   - risco residual, rollback e `next_actions`.
 
 ## Dependencias
+- [PRD Master](../../../PRD/PRD-MASTER.md)
 - [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
 - [Roadmap](../../../PRD/ROADMAP.md)
+- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
 - [System Health Thresholds](../../../EVALS/SYSTEM-HEALTH-THRESHOLDS.md)
