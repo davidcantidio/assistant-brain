@@ -96,6 +96,9 @@ search_re "bloquear comando" PM/DECISION-PROTOCOL.md
 search_re 'abrir `SECURITY_VIOLATION_REVIEW`' PM/DECISION-PROTOCOL.md SEC/SEC-POLICY.md
 search_re "registrar hash do payload do update" PM/DECISION-PROTOCOL.md
 search_re "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md SEC/SEC-POLICY.md
+search_re_each_file "Telegram.*> 2 heartbeats|> 2 heartbeats.*Telegram" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re_each_file "fallback Slack" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
+search_re_each_file "HMAC.*anti-replay.*challenge|challenge.*HMAC.*anti-replay" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re "RESTORE_TELEGRAM_CHANNEL" PM/DECISION-PROTOCOL.md ARC/ARC-DEGRADED-MODE.md INCIDENTS/DEGRADED-MODE-PROCEDURE.md
 search_re 'action: "restore_telegram_channel"' SEC/allowlists/ACTIONS.yaml
 search_re "approval queue para acao sensivel" PM/TRACEABILITY/FELIX-ALIGNMENT-MATRIX.md

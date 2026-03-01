@@ -34,8 +34,10 @@ Exclui:
 3. manter apenas tarefas idempotentes de baixo risco.
 4. registrar toda acao offline.
 5. notificar stakeholders via Telegram (primario) ou Slack (fallback validado), se disponivel.
-6. se fallback Slack for acionado por degradacao de Telegram, abrir incidente/task `RESTORE_TELEGRAM_CHANNEL`.
-7. se Convex estiver indisponivel ou ambos Telegram/Slack indisponiveis, registrar aviso em `human_action_required.md`.
+6. fallback Slack para HITL critico so pode ser acionado apos indisponibilidade de Telegram por > 2 heartbeats consecutivos.
+7. fallback Slack acionado MUST manter controles equivalentes: assinatura HMAC valida + anti-replay + challenge.
+8. se fallback Slack for acionado por degradacao de Telegram, abrir incidente/task `RESTORE_TELEGRAM_CHANNEL`.
+9. se Convex estiver indisponivel ou ambos Telegram/Slack indisponiveis, registrar aviso em `human_action_required.md`.
 
 ## Checklist de Exposicao Aberta (Trading)
 1. colocar sistema em `TRADING_BLOCKED` para novas entradas.

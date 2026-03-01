@@ -135,6 +135,7 @@ challenge_expires_at: "ISO-8601|null"
 - regra de fallback:
   - Telegram e canal primario para comandos criticos.
   - indisponibilidade de Telegram por > 2 heartbeats permite fallback em Slack com os mesmos controles de autenticacao, challenge e auditoria.
+  - ativacao de fallback Slack MUST exigir assinatura HMAC valida + janela anti-replay + challenge valido de uso unico.
   - fallback Slack para trading live so e permitido quando operador habilitado tiver `slack_user_ids` e `slack_channel_ids` nao vazios.
   - fallback Slack acionado MUST abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` ate restauracao do canal primario.
 
@@ -192,7 +193,8 @@ challenge_expires_at: "ISO-8601|null"
 - modo bootstrap permitido: 1 operador primario (`single_primary`).
 - regra para Trading live: adicionar `backup_operator` em break-glass antes de habilitar capital real.
 - indisponibilidade de Telegram:
-  - com fallback Slack validado, MUST ativar fallback com os mesmos controles de auth/challenge.
+  - com fallback Slack validado e degradacao de Telegram por > 2 heartbeats, MUST ativar fallback com assinatura HMAC, anti-replay e challenge equivalente.
+  - fallback Slack acionado MUST abrir incidente/task `RESTORE_TELEGRAM_CHANNEL`.
   - sem fallback Slack validado, MUST operar em `TRADING_BLOCKED` ate restauracao de canal/aprovador.
 - indisponibilidade do operador primario por >4h em fila critica MUST abrir incidente de capacidade.
 - pre-condicao para Trading live:

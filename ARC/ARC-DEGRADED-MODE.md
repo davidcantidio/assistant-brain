@@ -73,9 +73,10 @@ Exclui:
     - passos de recuperacao;
     - criterio de validacao pos-recuperacao;
   - quando apenas Telegram estiver indisponivel e Slack estiver saudavel:
-    - migrar HITL critico para Slack somente com fallback validado:
+    - migrar HITL critico para fallback Slack somente com fallback validado:
+      - degradacao de Telegram MUST persistir por > 2 heartbeats consecutivos antes do fallback;
       - operador habilitado com `slack_user_ids` e `slack_channel_ids` nao vazios;
-      - challenge + assinatura HMAC + anti-replay obrigatorios;
+      - challenge + assinatura HMAC + anti-replay obrigatorios e equivalentes ao canal primario;
       - abrir incidente/task `RESTORE_TELEGRAM_CHANNEL` ate retorno do canal Telegram;
     - manter trilha de `command_id` idempotente por canal;
   - criar `task` e `decision` de correcao no retorno do sistema.

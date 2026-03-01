@@ -1,9 +1,9 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.30"
+version: "2.31"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-27"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -28,6 +28,21 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F6-03-01 (runbook de contingencia Telegram degradado + fallback Slack controlado)
+- RFCs afetadas: RFC-001, RFC-015, RFC-035, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F6-03-01` do `EPIC-F6-03` com `PRD/PRD-MASTER.md`, `PM/DECISION-PROTOCOL.md`, `ARC/ARC-DEGRADED-MODE.md`, `INCIDENTS/DEGRADED-MODE-PROCEDURE.md` e `PRD/ROADMAP.md` como fonte de verdade para reforcar:
+    - fallback Slack em HITL critico somente apos degradacao de Telegram por > 2 heartbeats;
+    - exigencia explicita de controles equivalentes (`HMAC` + `anti-replay` + `challenge`);
+    - abertura obrigatoria de incidente/task `RESTORE_TELEGRAM_CHANNEL` quando fallback for acionado.
+  - endurece validacao executavel em:
+    - `scripts/ci/check_security.sh`.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f6/epic-f6-03-issue-01-telegram-degraded-slack-fallback-controlled.md`.
+- Migracao:
+  - fallback Slack em contingencia de Telegram MUST permanecer bloqueado sem degradacao comprovada por > 2 heartbeats.
+  - fallback Slack sem controles equivalentes (`HMAC` + `anti-replay` + `challenge`) MUST bloquear `make ci-security`.
 
 ### 2026-02-27 - Fechamento do EPIC-F6-02 (challenge, idempotencia e auditoria)
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050.
