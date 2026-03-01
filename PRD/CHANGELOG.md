@@ -46,6 +46,21 @@ Exclui:
   - entrada em `S1` MUST permanecer bloqueada quando checklist nao comprovar `L0 + gateway_only + pre_trade_validator_active`.
   - qualquer regressao desses guardrails MUST bloquear `make eval-trading`.
 
+### 2026-03-01 - Execucao do ISSUE-F7-03-01 (criterios minimos de promocao `S1 -> S2`)
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F7-03-01` do `EPIC-F7-03` para validar os criterios minimos de promocao `S1 -> S2` ja definidos nas fontes de verdade:
+    - janela minima de 30 dias em `S1`;
+    - zero incidentes `SEV-1/SEV-2`;
+    - sem violacao hard de risco;
+    - reconciliacao sem duplicidade.
+  - publica evidencia da issue em:
+    - `artifacts/phase-f7/epic-f7-03-issue-01-s2-promotion-criteria-hold.md`.
+  - registra resultado atual como `hold`, porque o checklist `CHECKLIST-F7-02-S1-20260301-01` ainda contem itens criticos em `fail`.
+- Migracao:
+  - os criterios objetivos de promocao `S1 -> S2` permanecem inalterados no PRD e MUST continuar sendo avaliados antes de qualquer escala.
+  - ausencia de evidencia da janela minima ou presenca de item critico `fail` em `S1` MUST manter o resultado operacional em `hold`.
+
 ### 2026-03-01 - Execucao do ISSUE-F7-02-01 (contrato do `pre_live_checklist`)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
 - Impacto:
