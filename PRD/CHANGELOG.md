@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.32"
+version: "2.33"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,24 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F6-03-03 + fechamento do EPIC/Fase F6 com decisao `hold`
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F6-03-03` do `EPIC-F6-03` para consolidar evidencia unica da fase em:
+    - `artifacts/phase-f6/hitl-readiness-checklist.md`;
+    - `artifacts/phase-f6/validation-summary.md`;
+    - `artifacts/phase-f6/epic-f6-03-issue-03-phase-evidence-promote-hold.md`;
+    - `artifacts/phase-f6/epic-f6-03-fallback-contingencia-promocao.md`.
+  - atualiza `EPIC-F6-03` com resultado da rodada e marca `EPIC-F6-03` como `done` em `EPICS.md`.
+  - fecha a fase `F6` em estrutura de planejamento:
+    - move `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPICS.md` para `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md`;
+    - move `PM/PHASES/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md` para `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md`;
+    - ajusta links internos do `EPICS.md` movido e atualiza `PRD/PHASE-USABILITY-GUIDE.md` para o novo caminho.
+  - decisao final de fase `F6 -> F7`: `hold`.
+- Migracao:
+  - fase `F6` passa a ser referenciada exclusivamente em `PM/PHASES/feito/F6-OPERACAO-HUMANA-HITL/EPICS.md`.
+  - `hold` de fase MUST ser mantido enquanto `live_ready=false` e fallback HITL nao estiver validado para operador habilitado.
 
 ### 2026-03-01 - Execucao do ISSUE-F6-03-02 (Trading live bloqueado sem fallback HITL validado)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.

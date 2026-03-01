@@ -1,9 +1,9 @@
 ---
 doc_id: "EPIC-F6-03-FALLBACK-CONTINGENCIA-E-PROMOCAO.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
-last_updated: "2026-02-24"
+last_updated: "2026-03-01"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -81,9 +81,26 @@ Como operador, quero artifact unico da F6 para justificar com clareza a decisao 
   - `result` (`promote|hold`)
   - `justification`
 
+## Resultado desta Rodada
+- `make ci-security` final: `PASS` (`security-check: PASS`).
+- `make eval-trading` final: `PASS` (`eval-trading: PASS`).
+- `make ci-quality` final: `PASS` (`quality-check: PASS`).
+- `make eval-gates` final: `PASS` (`eval-gates: PASS`).
+- evidencias por issue publicadas:
+  - `artifacts/phase-f6/epic-f6-03-issue-01-telegram-degraded-slack-fallback-controlled.md`;
+  - `artifacts/phase-f6/epic-f6-03-issue-02-trading-blocked-without-valid-hitl-fallback.md`;
+  - `artifacts/phase-f6/epic-f6-03-issue-03-phase-evidence-promote-hold.md`.
+- evidencias consolidadas:
+  - `artifacts/phase-f6/hitl-readiness-checklist.md`;
+  - `artifacts/phase-f6/validation-summary.md`;
+  - `artifacts/phase-f6/epic-f6-03-fallback-contingencia-promocao.md`.
+- decisao final de fase (`F6 -> F7`): `hold`.
+- justificativa: `live_ready: false` em `SEC/allowlists/OPERATORS.yaml` e fallback Slack nao validado para operador habilitado.
+- conclusao: `EPIC-F6-03` concluido no escopo documental/tdd desta rodada.
+
 ## Dependencias
-- [Phase Usability Guide](../../../PRD/PHASE-USABILITY-GUIDE.md)
-- [Trading Enablement Criteria](../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
-- [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)
-- [Security Policy](../../../SEC/SEC-POLICY.md)
-- [CI Security Check](../../../scripts/ci/check_security.sh)
+- [Phase Usability Guide](../../../../PRD/PHASE-USABILITY-GUIDE.md)
+- [Trading Enablement Criteria](../../../../VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md)
+- [Decision Protocol](../../../../PM/DECISION-PROTOCOL.md)
+- [Security Policy](../../../../SEC/SEC-POLICY.md)
+- [CI Security Check](../../../../scripts/ci/check_security.sh)
