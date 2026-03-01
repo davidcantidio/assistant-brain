@@ -29,6 +29,24 @@ Exclui:
 
 ## Entradas
 
+### 2026-03-01 - Execucao do ISSUE-F8-03-02 (risco residual rollback e continuidade)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-03-02` do `EPIC-F8-03` para tornar o pacote de continuidade semanal obrigatorio:
+    - amplia o artifact `artifacts/phase-f8/weekly-governance/<week_id>.md` com `release_review_status`, `release_justification`, `residual_risk_summary` e `rollback_plan`;
+    - fecha o comportamento canonico de `rollback_plan` para `hold` e `promote`;
+    - propaga o pacote de continuidade para o runner e para o checker da `F8`.
+  - adiciona self-tests para validar:
+    - `release_review_status=PASS` no cenario `promote`;
+    - justificativa explicita quando `ci-quality=FAIL`;
+    - `residual_risk_summary` refletindo `critical_drifts_open`;
+    - rollback canonico quando a rodada permanece em `hold`.
+  - regrava o artifact autoritativo da semana `2026-W09` mantendo `decision=hold`, com trilha de risco residual e rollback preenchidas.
+- Migracao:
+  - ausencia ou vazio em `release_justification`, `residual_risk_summary`, `rollback_plan` ou `next_actions` MUST invalidar o pacote de release governance.
+  - `decision=promote` MUST depender de `release_review_status=PASS`.
+  - `decision=hold` MUST manter rollback canonico apontando para a baseline vigente de `F7/F8-02`.
+
 ### 2026-03-01 - Execucao do ISSUE-F8-03-01 (criterios de decisao semanal + recuo formal da F8)
 - RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
 - Impacto:

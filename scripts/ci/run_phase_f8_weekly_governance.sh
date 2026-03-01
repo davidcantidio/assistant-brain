@@ -133,6 +133,53 @@ fi
 RISK_NOTES="$(IFS='; '; echo "${risk_notes_parts[*]}")"
 NEXT_ACTIONS="$(IFS='; '; echo "${next_actions_parts[*]}")"
 
+release_justification_parts=()
+residual_risk_parts=()
+
+if [[ "$DECISION" == "promote" ]]; then
+  release_justification_parts+=("trio de gates em PASS")
+  release_justification_parts+=("contract_review_status=PASS")
+  release_justification_parts+=("critical_drifts_open=0")
+  release_justification_parts+=("prior_phase_decision=promote")
+  residual_risk_parts+=("none")
+  ROLLBACK_PLAN="retornar ao ultimo artifact semanal valido com decision=hold e rerodar a governanca da F8 ao primeiro sinal de regressao."
+else
+  if [[ -n "$FAILED_GATE" ]]; then
+    release_justification_parts+=("release bloqueado por ${FAILED_GATE}=FAIL")
+    residual_risk_parts+=("falha de gate semanal em ${FAILED_GATE}")
+  fi
+  if [[ "$CONTRACT_REVIEW_STATUS" != "PASS" ]]; then
+    release_justification_parts+=("release bloqueado por contract_review_status=${CONTRACT_REVIEW_STATUS}")
+    residual_risk_parts+=("contract_review_status=${CONTRACT_REVIEW_STATUS}")
+  fi
+  if [[ "$CRITICAL_DRIFTS_OPEN" != "0" ]]; then
+    release_justification_parts+=("release bloqueado por critical_drifts_open=${CRITICAL_DRIFTS_OPEN}")
+    residual_risk_parts+=("critical_drifts_open=${CRITICAL_DRIFTS_OPEN}")
+  fi
+  if [[ "$PHASE_TRANSITION_STATUS" != "ready" ]]; then
+    release_justification_parts+=("${BLOCKING_REASON}")
+    residual_risk_parts+=("${BLOCKING_REASON}")
+  fi
+  if [[ ${#release_justification_parts[@]} -eq 0 ]]; then
+    release_justification_parts+=("release mantido em hold por ausencia de pacote minimo de continuidade")
+  fi
+  if [[ ${#residual_risk_parts[@]} -eq 0 ]]; then
+    residual_risk_parts+=("hold sem risco residual adicional")
+  fi
+  ROLLBACK_PLAN="manter a baseline vigente de F7/F8-02, sem promover F8, preservar hold e rerodar a semana apos remediacao."
+fi
+
+RELEASE_JUSTIFICATION="$(IFS='; '; echo "${release_justification_parts[*]}")"
+RESIDUAL_RISK_SUMMARY="$(IFS='; '; echo "${residual_risk_parts[*]}")"
+RELEASE_REVIEW_STATUS="PASS"
+
+for value in "$RELEASE_JUSTIFICATION" "$RESIDUAL_RISK_SUMMARY" "$ROLLBACK_PLAN" "$NEXT_ACTIONS"; do
+  if [[ -z "${value// }" ]]; then
+    RELEASE_REVIEW_STATUS="FAIL"
+    DECISION="hold"
+  fi
+done
+
 python3 scripts/ci/phase_f8_release_governance.py render-weekly-report \
   --report-path "$REPORT_PATH" \
   --week-id "$WEEK_ID" \
@@ -147,6 +194,10 @@ python3 scripts/ci/phase_f8_release_governance.py render-weekly-report \
   --contract-review-status "$CONTRACT_REVIEW_STATUS" \
   --critical-drifts-open "$CRITICAL_DRIFTS_OPEN" \
   --decision "$DECISION" \
+  --release-review-status "$RELEASE_REVIEW_STATUS" \
+  --release-justification "$RELEASE_JUSTIFICATION" \
+  --residual-risk-summary "$RESIDUAL_RISK_SUMMARY" \
+  --rollback-plan "$ROLLBACK_PLAN" \
   --risk-notes "$RISK_NOTES" \
   --next-actions "$NEXT_ACTIONS" \
   --eval-log-path "$EVAL_LOG_PATH" \

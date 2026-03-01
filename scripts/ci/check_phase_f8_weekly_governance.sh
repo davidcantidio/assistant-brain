@@ -32,6 +32,10 @@ FIELD_ORDER = [
     "contract_review_status",
     "critical_drifts_open",
     "decision",
+    "release_review_status",
+    "release_justification",
+    "residual_risk_summary",
+    "rollback_plan",
     "risk_notes",
     "next_actions",
 ]
@@ -85,6 +89,7 @@ def expected_decision(values: dict[str, str]) -> str:
         and values["ci_security_status"] == "PASS"
         and values["contract_review_status"] == "PASS"
         and values["critical_drifts_open"] == "0"
+        and values["release_review_status"] == "PASS"
     ):
       return "promote"
     return "hold"
@@ -106,6 +111,13 @@ for report in reports:
       fail(f"{report} com blocking_reason vazio para transicao bloqueada.")
     if values["phase_transition_status"] == "ready" and values["blocking_reason"] != "none":
       fail(f"{report} deveria usar blocking_reason=none quando a transicao estiver ready.")
+    if values["release_review_status"] not in {"PASS", "FAIL"}:
+      fail(f"{report} com release_review_status invalido: {values['release_review_status']}")
+    for key in ("release_justification", "residual_risk_summary", "rollback_plan", "next_actions"):
+      if not values[key].strip():
+        fail(f"{report} com {key} vazio.")
+    if values["decision"] == "promote" and values["release_review_status"] != "PASS":
+      fail(f"{report} nao pode promover release com release_review_status!=PASS.")
     if values["decision"] != expected_decision(values):
       fail(f"{report} com decision inconsistente com a formula semanal.")
     for key, rel_path in logs.items():
@@ -241,6 +253,8 @@ pass_values, _ = run_mock(
 )
 if pass_values["decision"] != "promote":
     fail("mock promote deveria resultar em decision=promote.")
+if pass_values["release_review_status"] != "PASS":
+    fail("mock promote deveria manter release_review_status=PASS.")
 
 eval_fail_values, eval_fail_logs = run_mock(
     "eval-fail",
@@ -283,6 +297,8 @@ if quality_fail_values["ci_security_status"] != "FAIL":
     fail("mock quality-fail deveria marcar ci_security_status=FAIL por fail-fast.")
 if "SKIPPED" not in quality_fail_logs["ci-security"]:
     fail("mock quality-fail deveria registrar skip de ci-security.")
+if "release bloqueado por ci-quality=FAIL" not in quality_fail_values["release_justification"]:
+    fail("mock quality-fail deveria registrar release_justification para falha de quality.")
 
 artifact_pass_dir = Path(tempfile.mkdtemp(prefix="f8-contract-review-pass-"))
 try:
@@ -350,6 +366,8 @@ try:
         fail("mock artifact-open deveria propagar critical_drifts_open=1.")
     if artifact_open_values["decision"] != "hold":
         fail("mock artifact-open deveria resultar em decision=hold.")
+    if "critical_drifts_open=1" not in artifact_open_values["residual_risk_summary"]:
+        fail("mock artifact-open deveria refletir drift critico no residual_risk_summary.")
 finally:
     for path in sorted(artifact_open_dir.rglob("*"), reverse=True):
         if path.is_file():
@@ -389,6 +407,8 @@ if prior_phase_hold_values["decision"] != "hold":
     fail("mock prior-phase-hold deveria resultar em decision=hold.")
 if prior_phase_hold_values["phase_transition_status"] != "blocked":
     fail("mock prior-phase-hold deveria marcar phase_transition_status=blocked.")
+if "manter a baseline vigente de F7/F8-02" not in prior_phase_hold_values["rollback_plan"]:
+    fail("mock prior-phase-hold deveria usar o rollback canonico de hold.")
 
 print("phase-f8-weekly-governance: PASS")
 PY

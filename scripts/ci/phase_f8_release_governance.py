@@ -21,6 +21,10 @@ WEEKLY_FIELD_ORDER = [
     "contract_review_status",
     "critical_drifts_open",
     "decision",
+    "release_review_status",
+    "release_justification",
+    "residual_risk_summary",
+    "rollback_plan",
     "risk_notes",
     "next_actions",
 ]
@@ -120,6 +124,10 @@ def render_weekly_report(args: argparse.Namespace) -> None:
         f"- contract_review_status: `{args.contract_review_status}`",
         f"- critical_drifts_open: `{args.critical_drifts_open}`",
         f"- decision: `{args.decision}`",
+        f"- release_review_status: `{args.release_review_status}`",
+        f"- release_justification: {args.release_justification}",
+        f"- residual_risk_summary: {args.residual_risk_summary}",
+        f"- rollback_plan: {args.rollback_plan}",
         f"- risk_notes: {args.risk_notes}",
         f"- next_actions: {args.next_actions}",
         "",
@@ -157,6 +165,10 @@ def build_parser() -> argparse.ArgumentParser:
     render_parser.add_argument("--contract-review-status", required=True)
     render_parser.add_argument("--critical-drifts-open", required=True)
     render_parser.add_argument("--decision", required=True)
+    render_parser.add_argument("--release-review-status", required=True)
+    render_parser.add_argument("--release-justification", required=True)
+    render_parser.add_argument("--residual-risk-summary", required=True)
+    render_parser.add_argument("--rollback-plan", required=True)
     render_parser.add_argument("--risk-notes", required=True)
     render_parser.add_argument("--next-actions", required=True)
     render_parser.add_argument("--eval-log-path", required=True)

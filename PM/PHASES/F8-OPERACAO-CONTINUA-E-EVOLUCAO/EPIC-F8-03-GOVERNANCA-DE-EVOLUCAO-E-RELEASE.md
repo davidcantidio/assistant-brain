@@ -49,7 +49,7 @@ Como operador, quero registrar risco residual e rollback para manter continuidad
 **Plano TDD**
 1. `Red`: registrar decisao semanal sem risco residual/rollback.
 2. `Green`: incluir risco residual, estrategia de rollback e acoes da semana seguinte.
-3. `Refactor`: alinhar plano semanal com backlog de remediacao de drift.
+3. `Refactor`: alinhar plano semanal com backlog de remediacao de drift e baseline vigente da `F7/F8-02`.
 
 **Criterios de aceitacao**
 - Given decisao semanal sem risco residual ou rollback, When revisao de release ocorre, Then resultado deve ser `hold`.
