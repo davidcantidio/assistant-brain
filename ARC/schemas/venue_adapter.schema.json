@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/venue_adapter.schema.json",
+  "title": "venue_adapter",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "adapter_id",
+    "asset_class",
+    "venue_type",
+    "execution_path",
+    "allowlist_group",
+    "supported_order_types",
+    "shadow_mode_required",
+    "decision_r3_required_for_live",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "adapter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_class": {
+      "type": "string",
+      "enum": ["equities_br", "fii_br", "fixed_income_br"]
+    },
+    "venue_type": {
+      "type": "string",
+      "enum": ["broker_adapter", "exchange_adapter", "otc_adapter"]
+    },
+    "execution_path": {
+      "type": "string",
+      "const": "execution_gateway_only"
+    },
+    "allowlist_group": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supported_order_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["market", "limit", "stop", "stop_limit"]
+      }
+    },
+    "shadow_mode_required": {
+      "type": "boolean"
+    },
+    "decision_r3_required_for_live": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["blocked", "paper_only", "shadow_only", "live_ready"]
+    }
+  },
+  "additionalProperties": false
+}

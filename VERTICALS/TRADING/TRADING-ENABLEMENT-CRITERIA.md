@@ -94,6 +94,8 @@ Regra de bloqueio:
 - `equities_br`, `fii_br`, `fixed_income_br`:
   - bloqueadas por default ate completar:
     - `asset_profile` completo e versionado;
+    - `VERTICALS/TRADING/asset_profiles/<asset_class>.json` publicado como fonte canonica do profile;
+    - `VERTICALS/TRADING/venue_adapters/<asset_class>.json` publicado como fonte canonica do adapter;
     - `eval-trading-<asset_class>` verde com 100% de cenarios hard-risk bloqueantes;
     - `shadow_mode` com evidencia auditavel de estabilidade;
     - decision `R3` + checkpoint humano para primeira ativacao live;

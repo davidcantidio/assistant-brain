@@ -91,6 +91,10 @@ Exclui:
   - calendario e horario de mercado.
   - lote/tick/notional e regras de arredondamento.
   - modelo de custo (fees, emolumentos, impostos) e slippage.
+  - fonte canonica por classe em `VERTICALS/TRADING/asset_profiles/<asset_class>.json`.
+- `venue_adapter` obrigatorio por classe:
+  - adapter canonico em `VERTICALS/TRADING/venue_adapters/<asset_class>.json`.
+  - `execution_path` MUST permanecer `execution_gateway_only`.
 - `capital_ramp_level`:
   - classe nova MUST iniciar em `L0` da classe, sem excecao.
 - validacao operacional:

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "v1",
+  "asset_class": "fixed_income_br",
+  "profile_version": "2026-03-01",
+  "market_calendar": "b3_fixed_income",
+  "market_sessions": [
+    {
+      "label": "regular",
+      "timezone": "America/Sao_Paulo",
+      "opens_at": "09:00",
+      "closes_at": "18:00"
+    }
+  ],
+  "order_constraints": {
+    "min_notional": 1000.0,
+    "lot_size": 1,
+    "tick_size": 0.01
+  },
+  "rounding_rules": {
+    "quantity_mode": "unit_round_down",
+    "price_mode": "tick_round_down"
+  },
+  "cost_model": {
+    "base_fee_bps": 2.5,
+    "emoluments_bps": 0.8,
+    "taxes_bps": 0.0,
+    "slippage_bps": 6.0
+  },
+  "liquidity_controls": {
+    "max_spread_bps": 60.0,
+    "min_average_daily_volume_brl": 2500000.0
+  },
+  "risk_units": {
+    "quote_currency": "BRL",
+    "quantity_unit": "bond_unit",
+    "max_loss_per_unit_brl": 25.0
+  },
+  "capital_ramp_defaults": {
+    "L0": {
+      "max_notional_per_order": 2000.0,
+      "max_daily_notional": 8000.0,
+      "max_orders_per_day": 3
+    }
+  }
+}

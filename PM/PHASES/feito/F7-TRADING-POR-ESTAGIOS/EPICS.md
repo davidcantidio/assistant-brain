@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F7-EPICS.md"
-version: "1.2"
+version: "1.3"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -39,9 +39,9 @@ Cada `ISSUE-F7-*` deve conter obrigatoriamente os campos:
 ## Epics da Fase
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
-| `EPIC-F7-01` | S0 paper sandbox operacional | consolidar `S0` como etapa obrigatoria sem ordem real | done | [EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md](../feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md) |
-| `EPIC-F7-02` | S1 micro-live pre-live checklist | fechar prontidao de `S1` com checklist contratual e guardrails hard-risk | done | [EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md](../feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md) |
-| `EPIC-F7-03` | S2 escala e promocao | formalizar criterios de escala e decisao `promote|hold` de `F7 -> F8` | done | [EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md](../feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md) |
+| `EPIC-F7-01` | S0 paper sandbox operacional | consolidar `S0` como etapa obrigatoria sem ordem real | done | [EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md](./EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md) |
+| `EPIC-F7-02` | S1 micro-live pre-live checklist | fechar prontidao de `S1` com checklist contratual e guardrails hard-risk | done | [EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md](./EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md) |
+| `EPIC-F7-03` | S2 escala e promocao | formalizar criterios de escala e decisao `promote|hold` de `F7 -> F8` | done | [EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md](./EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md) |
 
 ## Escopo Desta Entrega
 - fase `F7` concluida no escopo documental/tdd desta rodada.

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "v1",
+  "asset_class": "fii_br",
+  "profile_version": "2026-03-01",
+  "market_calendar": "b3_fii",
+  "market_sessions": [
+    {
+      "label": "regular",
+      "timezone": "America/Sao_Paulo",
+      "opens_at": "10:00",
+      "closes_at": "17:00"
+    }
+  ],
+  "order_constraints": {
+    "min_notional": 50.0,
+    "lot_size": 1,
+    "tick_size": 0.01
+  },
+  "rounding_rules": {
+    "quantity_mode": "integer_lot",
+    "price_mode": "tick_round_down"
+  },
+  "cost_model": {
+    "base_fee_bps": 4.0,
+    "emoluments_bps": 1.1,
+    "taxes_bps": 0.0,
+    "slippage_bps": 10.0
+  },
+  "liquidity_controls": {
+    "max_spread_bps": 90.0,
+    "min_average_daily_volume_brl": 500000.0
+  },
+  "risk_units": {
+    "quote_currency": "BRL",
+    "quantity_unit": "share"
+  },
+  "capital_ramp_defaults": {
+    "L0": {
+      "max_notional_per_order": 400.0,
+      "max_daily_notional": 2400.0,
+      "max_orders_per_day": 4
+    }
+  }
+}

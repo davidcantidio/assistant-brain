@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "v1",
+  "adapter_id": "venue-adapter-fixed-income-br-v1",
+  "asset_class": "fixed_income_br",
+  "venue_type": "otc_adapter",
+  "execution_path": "execution_gateway_only",
+  "allowlist_group": "trading_phase2_brokers",
+  "supported_order_types": ["limit"],
+  "shadow_mode_required": true,
+  "decision_r3_required_for_live": true,
+  "status": "blocked"
+}

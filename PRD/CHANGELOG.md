@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.37"
+version: "2.38"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,24 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F8-04-01 (asset_profile + venue adapters por classe)
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-04-01` do `EPIC-F8-04` para fechar a baseline contratual da expansao multiativos:
+    - cria `ARC/schemas/asset_profile.schema.json`;
+    - cria `ARC/schemas/venue_adapter.schema.json`;
+    - publica manifests canonicos em `VERTICALS/TRADING/asset_profiles/` para `equities_br`, `fii_br` e `fixed_income_br`;
+    - publica manifests canonicos em `VERTICALS/TRADING/venue_adapters/` para `equities_br`, `fii_br` e `fixed_income_br`.
+  - adiciona `scripts/ci/check_phase_f8_multiasset_contracts.sh` e o target `make phase-f8-multiasset-contracts`.
+  - integra o novo checker ao `make ci-quality`.
+  - atualiza `VERTICALS/TRADING/TRADING-PRD.md`, `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md` e `VERTICALS/TRADING/TRADING-RISK-RULES.md` para apontar os manifests como fonte canonica por classe.
+  - move `PM/PHASES/F7-TRADING-POR-ESTAGIOS/EPICS.md` para:
+    - `PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md`.
+- Migracao:
+  - qualquer classe multiativos fora de `crypto_spot` MUST possuir `asset_profile` e `venue_adapter` dedicados antes de evoluir para validator/suite.
+  - `fixed_income_br` MUST declarar `risk_units.max_loss_per_unit_brl` no `asset_profile`.
+  - enquanto `SEC/allowlists/DOMAINS.yaml` mantiver `trading_phase2_brokers` vazio, os adapters de `equities_br`, `fii_br` e `fixed_income_br` MUST permanecer `status=blocked`.
 
 ### 2026-03-01 - Execucao do ISSUE-F8-03-03 + fechamento do EPIC-F8-03 em `feito`
 - RFCs afetadas: RFC-001, RFC-040, RFC-050, RFC-060.

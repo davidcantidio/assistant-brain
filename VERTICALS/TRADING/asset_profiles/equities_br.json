@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "v1",
+  "asset_class": "equities_br",
+  "profile_version": "2026-03-01",
+  "market_calendar": "b3_cash_equities",
+  "market_sessions": [
+    {
+      "label": "regular",
+      "timezone": "America/Sao_Paulo",
+      "opens_at": "10:00",
+      "closes_at": "17:00"
+    }
+  ],
+  "order_constraints": {
+    "min_notional": 100.0,
+    "lot_size": 1,
+    "tick_size": 0.01
+  },
+  "rounding_rules": {
+    "quantity_mode": "integer_lot",
+    "price_mode": "tick_round_down"
+  },
+  "cost_model": {
+    "base_fee_bps": 5.0,
+    "emoluments_bps": 1.2,
+    "taxes_bps": 0.4,
+    "slippage_bps": 8.0
+  },
+  "liquidity_controls": {
+    "max_spread_bps": 75.0,
+    "min_average_daily_volume_brl": 1000000.0
+  },
+  "risk_units": {
+    "quote_currency": "BRL",
+    "quantity_unit": "share"
+  },
+  "capital_ramp_defaults": {
+    "L0": {
+      "max_notional_per_order": 500.0,
+      "max_daily_notional": 3000.0,
+      "max_orders_per_day": 4
+    }
+  }
+}

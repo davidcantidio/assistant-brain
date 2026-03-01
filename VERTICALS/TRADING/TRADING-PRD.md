@@ -102,11 +102,14 @@ Exclui:
   - `fixed_income_br` (titulos/renda fixa).
 - Regra de entrada por classe:
   - cada classe MUST ter `asset_profile` versionado com: calendario de mercado, regras de lote/tick/notional, custos/taxas/impostos e limites de liquidez/slippage.
+  - a fonte canonica desses contratos por classe MUST viver em `VERTICALS/TRADING/asset_profiles/<asset_class>.json`.
   - cada classe MUST passar em suite de validacao dedicada (`eval-trading-<asset_class>`) com cobertura hard-risk.
   - cada classe MUST operar primeiro em `shadow_mode` com evidencia auditavel antes de impactar decisao live.
   - primeira ativacao live de classe nova MUST iniciar em `capital_ramp_level=L0` da classe e exigir decision `R3` + checkpoint humano.
 - Regra de execucao:
   - toda ordem de qualquer classe MUST passar por `execution_gateway` unico e `pre_trade_validator` especifico da classe.
+  - o adapter canonico de venue por classe MUST viver em `VERTICALS/TRADING/venue_adapters/<asset_class>.json`.
+  - enquanto `SEC/allowlists/DOMAINS.yaml` mantiver `trading_phase2_brokers` sem broker homologado, os adapters `equities_br`, `fii_br` e `fixed_income_br` MUST permanecer com `status=blocked`.
   - fonte de sinal pode variar, mas a fonte de verdade de execucao/auditoria permanece no OpenClaw.
 
 ## Contratos Operacionais (versionados)
