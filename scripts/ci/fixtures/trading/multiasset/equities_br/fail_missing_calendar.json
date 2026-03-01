@@ -1,0 +1,36 @@
+{
+  "case_id": "equities-br-fail-missing-calendar",
+  "expected_status": "FAIL",
+  "asset_class": "equities_br",
+  "market_state": {
+    "status": "open"
+  },
+  "validator_profile": {
+    "schema_version": "1.0",
+    "contract_version": "v1",
+    "asset_class": "equities_br",
+    "asset_profile_ref": "VERTICALS/TRADING/asset_profiles/equities_br.json",
+    "lot_tick_notional_rules": {
+      "min_notional": 100.0,
+      "lot_size": 1,
+      "tick_size": 0.01,
+      "quantity_rounding": "integer_lot"
+    },
+    "cost_rules": {
+      "base_fee_bps": 5.0,
+      "emoluments_bps": 1.2,
+      "taxes_bps": 0.4,
+      "slippage_bps": 8.0
+    },
+    "market_state_blockers": ["closed", "auction", "halt"],
+    "normalization_rules": {
+      "quantity_mode": "integer_lot",
+      "price_mode": "tick_round_down"
+    },
+    "risk_assertions": {
+      "unit_guard": "brl_equity_quote",
+      "effective_risk_quote_required": true,
+      "requires_max_loss_per_unit_brl": false
+    }
+  }
+}

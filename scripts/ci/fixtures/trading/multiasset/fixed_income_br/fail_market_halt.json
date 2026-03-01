@@ -1,0 +1,41 @@
+{
+  "case_id": "fixed-income-br-fail-market-halt",
+  "expected_status": "FAIL",
+  "asset_class": "fixed_income_br",
+  "market_state": {
+    "status": "halt"
+  },
+  "validator_profile": {
+    "schema_version": "1.0",
+    "contract_version": "v1",
+    "asset_class": "fixed_income_br",
+    "asset_profile_ref": "VERTICALS/TRADING/asset_profiles/fixed_income_br.json",
+    "calendar_rules": {
+      "calendar_id": "b3_fixed_income",
+      "timezone": "America/Sao_Paulo",
+      "tradable_statuses": ["open"]
+    },
+    "lot_tick_notional_rules": {
+      "min_notional": 1000.0,
+      "lot_size": 1,
+      "tick_size": 0.01,
+      "quantity_rounding": "unit_round_down"
+    },
+    "cost_rules": {
+      "base_fee_bps": 2.5,
+      "emoluments_bps": 0.8,
+      "taxes_bps": 0.0,
+      "slippage_bps": 6.0
+    },
+    "market_state_blockers": ["closed", "halt"],
+    "normalization_rules": {
+      "quantity_mode": "unit_round_down",
+      "price_mode": "tick_round_down"
+    },
+    "risk_assertions": {
+      "unit_guard": "brl_fixed_income_quote",
+      "effective_risk_quote_required": true,
+      "requires_max_loss_per_unit_brl": true
+    }
+  }
+}

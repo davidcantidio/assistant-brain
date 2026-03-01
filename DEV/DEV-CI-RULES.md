@@ -61,7 +61,7 @@ Exclui:
   - `ci-security.yml` (secret scan, allowlists, policy)
   - `ci-routing.yml` (catalog/presets/router contracts)
   - `ci-evals.yml` (claim gates, `eval-integrations` e suites de avaliacao)
-  - `ci-trading.yml` (harness `eval-trading`, contratos `execution_gateway`/`pre_trade_validator`, cenarios hard-risk)
+  - `ci-trading.yml` (harness `eval-trading`, `eval-trading-multiasset`, contratos `execution_gateway`/`pre_trade_validator` e validator profiles por classe)
 
 ## Criterios de Merge
 - todos os gates verdes.

@@ -6,7 +6,8 @@ DOCLING_PIP := $(VENV_DOCLING)/bin/pip
 PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
-.PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
+.PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-trading-equities_br eval-trading-fii_br \
+	eval-trading-fixed_income_br eval-trading-multiasset eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
 	phase-f2-gate phase-f8-contract-review phase-f8-weekly-governance phase-f8-multiasset-contracts docling-install pdf-to-md check-pdf-md-sync
 
 eval-models:
@@ -23,6 +24,20 @@ eval-rag:
 
 eval-trading:
 	@bash scripts/ci/eval_trading.sh
+
+eval-trading-equities_br:
+	@ASSET_CLASS=equities_br bash scripts/ci/eval_trading_asset_class.sh
+
+eval-trading-fii_br:
+	@ASSET_CLASS=fii_br bash scripts/ci/eval_trading_asset_class.sh
+
+eval-trading-fixed_income_br:
+	@ASSET_CLASS=fixed_income_br bash scripts/ci/eval_trading_asset_class.sh
+
+eval-trading-multiasset:
+	@$(MAKE) eval-trading-equities_br
+	@$(MAKE) eval-trading-fii_br
+	@$(MAKE) eval-trading-fixed_income_br
 
 eval-idempotency:
 	@bash scripts/ci/eval_idempotency_reconciliation.sh

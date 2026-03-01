@@ -96,7 +96,9 @@ Regra de bloqueio:
     - `asset_profile` completo e versionado;
     - `VERTICALS/TRADING/asset_profiles/<asset_class>.json` publicado como fonte canonica do profile;
     - `VERTICALS/TRADING/venue_adapters/<asset_class>.json` publicado como fonte canonica do adapter;
+    - `VERTICALS/TRADING/validator_profiles/<asset_class>.json` publicado como fonte canonica do validator;
     - `eval-trading-<asset_class>` verde com 100% de cenarios hard-risk bloqueantes;
+    - `make eval-trading-multiasset` verde cobrindo `eval-trading-equities_br`, `eval-trading-fii_br` e `eval-trading-fixed_income_br`;
     - `shadow_mode` com evidencia auditavel de estabilidade;
     - decision `R3` + checkpoint humano para primeira ativacao live;
     - inicio obrigatorio em `capital_ramp_level=L0` da classe.

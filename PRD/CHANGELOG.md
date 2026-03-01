@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.38"
+version: "2.39"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -28,6 +28,26 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-01 - Execucao do ISSUE-F8-04-02 (validator por classe + suites multiasset)
+- RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - executa `ISSUE-F8-04-02` do `EPIC-F8-04` para fechar `B2-03` e `B2-04` sem alterar o baseline `make eval-trading` da Fase 1:
+    - cria `ARC/schemas/asset_class_validator.schema.json`;
+    - publica `VERTICALS/TRADING/validator_profiles/` para `equities_br`, `fii_br` e `fixed_income_br`;
+    - publica fixtures positivas e negativas em `scripts/ci/fixtures/trading/multiasset/` cobrindo calendario, lote/tick/notional, custos, `max_loss_per_unit_brl` e bloqueios de mercado;
+    - adiciona `scripts/ci/eval_trading_asset_class.sh`.
+  - adiciona os targets:
+    - `make eval-trading-equities_br`;
+    - `make eval-trading-fii_br`;
+    - `make eval-trading-fixed_income_br`;
+    - `make eval-trading-multiasset`.
+  - atualiza `.github/workflows/ci-trading.yml` e `DEV/DEV-CI-RULES.md` para exigir o bloco multiasset no workflow oficial de Trading.
+  - atualiza `VERTICALS/TRADING/TRADING-PRD.md`, `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md` e `VERTICALS/TRADING/TRADING-RISK-RULES.md` para apontar `validator_profiles` e as suites por classe.
+- Migracao:
+  - cada classe multiativos MUST possuir `validator_profile` dedicado antes de qualquer promote para `shadow_mode` ou live.
+  - `fixed_income_br` MUST validar explicitamente `max_loss_per_unit_brl` no validator profile e nos fixtures negativos.
+  - `ci-trading.yml` passa a bloquear quando `make eval-trading-multiasset` falhar em qualquer classe.
 
 ### 2026-03-01 - Execucao do ISSUE-F8-04-01 (asset_profile + venue adapters por classe)
 - RFCs afetadas: RFC-001, RFC-010, RFC-040, RFC-050, RFC-060.

@@ -1,0 +1,40 @@
+{
+  "case_id": "fii-br-fail-missing-min-notional",
+  "expected_status": "FAIL",
+  "asset_class": "fii_br",
+  "market_state": {
+    "status": "open"
+  },
+  "validator_profile": {
+    "schema_version": "1.0",
+    "contract_version": "v1",
+    "asset_class": "fii_br",
+    "asset_profile_ref": "VERTICALS/TRADING/asset_profiles/fii_br.json",
+    "calendar_rules": {
+      "calendar_id": "b3_fii",
+      "timezone": "America/Sao_Paulo",
+      "tradable_statuses": ["open"]
+    },
+    "lot_tick_notional_rules": {
+      "lot_size": 1,
+      "tick_size": 0.01,
+      "quantity_rounding": "integer_lot"
+    },
+    "cost_rules": {
+      "base_fee_bps": 4.0,
+      "emoluments_bps": 1.1,
+      "taxes_bps": 0.0,
+      "slippage_bps": 10.0
+    },
+    "market_state_blockers": ["closed", "auction", "halt"],
+    "normalization_rules": {
+      "quantity_mode": "integer_lot",
+      "price_mode": "tick_round_down"
+    },
+    "risk_assertions": {
+      "unit_guard": "brl_fii_quote",
+      "effective_risk_quote_required": true,
+      "requires_max_loss_per_unit_brl": false
+    }
+  }
+}

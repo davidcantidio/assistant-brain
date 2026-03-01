@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/asset_class_validator.schema.json",
+  "title": "asset_class_validator",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "asset_class",
+    "asset_profile_ref",
+    "calendar_rules",
+    "lot_tick_notional_rules",
+    "cost_rules",
+    "market_state_blockers",
+    "normalization_rules",
+    "risk_assertions"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "asset_class": {
+      "type": "string",
+      "enum": ["equities_br", "fii_br", "fixed_income_br"]
+    },
+    "asset_profile_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "calendar_rules": {
+      "type": "object",
+      "required": ["calendar_id", "timezone", "tradable_statuses"],
+      "properties": {
+        "calendar_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tradable_statuses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "lot_tick_notional_rules": {
+      "type": "object",
+      "required": ["min_notional", "lot_size", "tick_size", "quantity_rounding"],
+      "properties": {
+        "min_notional": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "lot_size": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "tick_size": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "quantity_rounding": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "cost_rules": {
+      "type": "object",
+      "required": ["base_fee_bps", "emoluments_bps", "taxes_bps", "slippage_bps"],
+      "properties": {
+        "base_fee_bps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "emoluments_bps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "taxes_bps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "slippage_bps": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "market_state_blockers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "normalization_rules": {
+      "type": "object",
+      "required": ["quantity_mode", "price_mode"],
+      "properties": {
+        "quantity_mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "price_mode": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "risk_assertions": {
+      "type": "object",
+      "required": [
+        "unit_guard",
+        "effective_risk_quote_required",
+        "requires_max_loss_per_unit_brl"
+      ],
+      "properties": {
+        "unit_guard": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effective_risk_quote_required": {
+          "type": "boolean"
+        },
+        "requires_max_loss_per_unit_brl": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "asset_class": {
+            "const": "fixed_income_br"
+          }
+        },
+        "required": ["asset_class"]
+      },
+      "then": {
+        "properties": {
+          "risk_assertions": {
+            "properties": {
+              "requires_max_loss_per_unit_brl": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -103,7 +103,9 @@ Exclui:
 - Regra de entrada por classe:
   - cada classe MUST ter `asset_profile` versionado com: calendario de mercado, regras de lote/tick/notional, custos/taxas/impostos e limites de liquidez/slippage.
   - a fonte canonica desses contratos por classe MUST viver em `VERTICALS/TRADING/asset_profiles/<asset_class>.json`.
+  - o validator canonico por classe MUST viver em `VERTICALS/TRADING/validator_profiles/<asset_class>.json`.
   - cada classe MUST passar em suite de validacao dedicada (`eval-trading-<asset_class>`) com cobertura hard-risk.
+  - a rodada multiativos MUST expor os entrypoints `eval-trading-equities_br`, `eval-trading-fii_br` e `eval-trading-fixed_income_br`, agregados por `make eval-trading-multiasset`.
   - cada classe MUST operar primeiro em `shadow_mode` com evidencia auditavel antes de impactar decisao live.
   - primeira ativacao live de classe nova MUST iniciar em `capital_ramp_level=L0` da classe e exigir decision `R3` + checkpoint humano.
 - Regra de execucao:

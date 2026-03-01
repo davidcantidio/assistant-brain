@@ -95,6 +95,9 @@ Exclui:
 - `venue_adapter` obrigatorio por classe:
   - adapter canonico em `VERTICALS/TRADING/venue_adapters/<asset_class>.json`.
   - `execution_path` MUST permanecer `execution_gateway_only`.
+- `asset_class_validator` obrigatorio por classe:
+  - validator canonico em `VERTICALS/TRADING/validator_profiles/<asset_class>.json`.
+  - a cobertura minima MUST passar por `eval-trading-equities_br`, `eval-trading-fii_br` ou `eval-trading-fixed_income_br`, conforme a classe.
 - `capital_ramp_level`:
   - classe nova MUST iniciar em `L0` da classe, sem excecao.
 - validacao operacional:
