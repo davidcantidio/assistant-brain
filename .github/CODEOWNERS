@@ -1,1 +1,10 @@
-* @davidcantidio
+* @davidcantidio @openclaw-breakglass
+ARC/ @davidcantidio @openclaw-architecture
+SEC/ @davidcantidio @openclaw-security
+scripts/ @davidcantidio @openclaw-platform
+platform/policy-engine/ @davidcantidio @openclaw-platform
+platform/event-ledger/ @davidcantidio @openclaw-platform
+contracts/ @davidcantidio @openclaw-architecture
+domains/ @davidcantidio @openclaw-architecture
+apps/ @davidcantidio @openclaw-platform
+tests/ @davidcantidio @openclaw-platform

@@ -30,10 +30,10 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:41-57",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:19-22",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
+        "PRD/PHASE-USABILITY-GUIDE.md:41-57",
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:19-22",
+        "artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
       ]
     },
     {
@@ -64,9 +64,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-02-fail-fast-promotion-block.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:9-18"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:39-50",
+        "artifacts/phase-f8/epic-f8-01-issue-02-fail-fast-promotion-block.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:9-18"
       ]
     },
     {
@@ -97,9 +97,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:52-76",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md:14-41",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:3-27"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:52-76",
+        "artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md:14-41",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:3-27"
       ]
     },
     {
@@ -130,10 +130,10 @@
       ],
       "coverage_status": "at_risk",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:19-22",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:14-53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:15-99",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:33-49"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:19-22",
+        "artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:14-53",
+        "artifacts/phase-f8/contract-review/2026-W09.md:15-99",
+        "artifacts/phase-f7/validation-summary.md:33-49"
       ]
     },
     {
@@ -163,9 +163,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-02-drift-remediation-backlog.md:16-49",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:102-121"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:39-50",
+        "artifacts/phase-f8/epic-f8-02-issue-02-drift-remediation-backlog.md:16-49",
+        "artifacts/phase-f8/contract-review/2026-W09.md:102-121"
       ]
     },
     {
@@ -197,10 +197,10 @@
       ],
       "coverage_status": "at_risk",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:52-70",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md:14-47",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:102-135",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:12-21"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:52-70",
+        "artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md:14-47",
+        "artifacts/phase-f8/contract-review/2026-W09.md:102-135",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:12-21"
       ]
     },
     {
@@ -232,11 +232,11 @@
       ],
       "coverage_status": "at_risk",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:27-32",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:50-57",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:24-28",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:33-49"
+        "PRD/ROADMAP.md:27-32",
+        "PRD/PHASE-USABILITY-GUIDE.md:50-57",
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:24-28",
+        "artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md:14-45",
+        "artifacts/phase-f7/validation-summary.md:33-49"
       ]
     },
     {
@@ -268,9 +268,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:45-56",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:14-21"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:45-56",
+        "artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:14-21"
       ]
     },
     {
@@ -301,10 +301,10 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:58-76",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:14-47",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/validation-summary-2026-W09.md:3-40",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:58-76",
+        "artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:14-47",
+        "artifacts/phase-f8/validation-summary-2026-W09.md:3-40",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
       ]
     },
     {
@@ -335,10 +335,10 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:204-209",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-RISK-RULES.md:89-106",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:33-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md:16-53"
+        "PRD/ROADMAP.md:204-209",
+        "VERTICALS/TRADING/TRADING-RISK-RULES.md:89-106",
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:33-45",
+        "artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md:16-53"
       ]
     },
     {
@@ -369,10 +369,10 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:207-209",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-RISK-RULES.md:98-105",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:20-60"
+        "PRD/ROADMAP.md:207-209",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
+        "VERTICALS/TRADING/TRADING-RISK-RULES.md:98-105",
+        "artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:20-60"
       ]
     },
     {
@@ -404,12 +404,12 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618-630",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-RISK-RULES.md:74-76",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:16-39"
+        "PRD/PRD-MASTER.md:618-630",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
+        "VERTICALS/TRADING/TRADING-RISK-RULES.md:74-76",
+        "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
+        "artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
+        "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:16-39"
       ]
     }
   ],
@@ -440,9 +440,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:26-37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:26-37",
+        "artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:3-21"
       ],
       "recommended_fix": "Titulo sugerido: Formalizar owner, sizing e dependencias do ciclo semanal de gates.\nDescricao: manter o runner semanal existente, mas explicitar responsavel, esforco estimado e dependencias operacionais do artifact para reduzir risco de handoff.\nCriterios de aceitacao: 1) owner nomeado; 2) estimate explicito; 3) dependencias `Makefile`, `weekly-governance`, logs e `contract-review` listadas; 4) rerun semanal preserva `week_id` e `executed_at`.\nQA checklist: executar `make phase-f8-weekly-governance`; validar tres logs, `week_id`, `executed_at` e coerencia do artifact semanal.\nLabels: prio:p2, area:f8, needs-spec, needs-qa, risk:medium",
       "suggested_labels": [
@@ -479,9 +479,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-02-fail-fast-promotion-block.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:9-18"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:39-50",
+        "artifacts/phase-f8/epic-f8-01-issue-02-fail-fast-promotion-block.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:9-18"
       ],
       "recommended_fix": "Titulo sugerido: Acrescentar ownership e criterio operacional do fail-fast semanal.\nDescricao: a regra tecnica esta correta, mas a issue precisa declarar quem responde por rerun, triagem de falha e atualizacao de `next_actions`.\nCriterios de aceitacao: 1) owner de triagem definido; 2) estimate explicito; 3) dependencia do artifact semanal e do `contract-review` documentada; 4) falha de gate gera `hold` e acao corretiva atribuida.\nQA checklist: simular falha em `eval-gates` e em `ci-quality`; verificar skip dos gates seguintes, `decision=hold` e `next_actions` coerente.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high",
       "suggested_labels": [
@@ -518,9 +518,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:52-76",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md:14-41",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:14-27"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-01-CADENCIA-SEMANAL-DE-GATES.md:52-76",
+        "artifacts/phase-f8/epic-f8-01-issue-03-weekly-report-actions.md:14-41",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:14-27"
       ],
       "recommended_fix": "Titulo sugerido: Completar metadados de governanca do relatorio semanal.\nDescricao: preservar o checker e o artifact atuais, mas explicitar ownership, estimate e dependencias do fluxo de validacao para reduzir ambiguidade operacional.\nCriterios de aceitacao: 1) owner do artifact semanal definido; 2) sizing explicito; 3) dependencias de `ci-quality`, checker e logs listadas; 4) relatorio incompleto continua gerando `hold`.\nQA checklist: executar `make ci-quality`; validar presenca dos campos obrigatorios, links de logs e formula `promote|hold`.\nLabels: prio:p2, area:f8, needs-spec, needs-qa, risk:medium",
       "suggested_labels": [
@@ -559,10 +559,10 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:26-37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:14-53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:60-79",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:35-49"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:26-37",
+        "artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:14-53",
+        "artifacts/phase-f8/contract-review/2026-W09.md:60-79",
+        "artifacts/phase-f7/validation-summary.md:35-49"
       ],
       "recommended_fix": "Titulo sugerido: Separar validade do review de conformidade operacional do dominio trading.\nDescricao: manter o `contract-review` como artifact canonico, mas publicar dois campos distintos: um para validade estrutural do review e outro para conformidade operacional por dominio, evitando interpretar `PASS` como ausencia de bloqueador.\nCriterios de aceitacao: 1) `review_validity=PASS|FAIL` separado de `domain_conformance`; 2) dominio `trading=FAIL` eleva destaque executivo; 3) drift critico aberto aparece no resumo semanal como release blocker; 4) owner e estimate da issue documentados.\nQA checklist: validar rodada com dominio `trading=FAIL`; conferir que o summary nao apresenta `PASS` ambiguo e que `decision=hold` permanece coerente.\nLabels: prio:p0, area:f8, needs-spec, needs-qa, risk:critical, trading, compliance",
       "suggested_labels": [
@@ -602,9 +602,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-02-drift-remediation-backlog.md:16-49",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:105-121"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:39-50",
+        "artifacts/phase-f8/epic-f8-02-issue-02-drift-remediation-backlog.md:16-49",
+        "artifacts/phase-f8/contract-review/2026-W09.md:105-121"
       ],
       "recommended_fix": "Titulo sugerido: Completar metadados de execucao da remediacao de drift.\nDescricao: o backlog de drift esta correto, mas a issue precisa explicitar owner, estimate e dependencias do fluxo de fechamento para evitar que a responsabilidade fique apenas no artifact final.\nCriterios de aceitacao: 1) owner da issue definido; 2) estimate explicito; 3) dependencia com `contract-review` e `weekly-governance` listada; 4) `risk_exception_ref` continua obrigatorio em aceite formal.\nQA checklist: validar um drift `open` e um `risk_accepted`; conferir `owner`, `due_date`, `risk_exception_ref` e impacto no `decision=hold`.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high, trading",
       "suggested_labels": [
@@ -644,10 +644,10 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md:14-47",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:125-135",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:12-18"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-02-REVISAO-PERIODICA-DE-CONTRATOS-E-DRIFT.md:52-63",
+        "artifacts/phase-f8/epic-f8-02-issue-03-prior-week-critical-drift-closure.md:14-47",
+        "artifacts/phase-f8/contract-review/2026-W09.md:125-135",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:12-18"
       ],
       "recommended_fix": "Titulo sugerido: Fechar validacao de carry-over com evidencia real de semana anterior.\nDescricao: manter o checker atual, mas adicionar uma rodada real subsequente que comprove o caminho `closed|risk_accepted|open` fora de mocks e deixe a trilha enterprise completa.\nCriterios de aceitacao: 1) semana N+1 referencia `previous_week_id` real; 2) todo drift herdado aparece com resolucao explicita; 3) `risk_accepted` exige `risk_exception_ref`; 4) owner e estimate da issue documentados.\nQA checklist: comparar duas semanas consecutivas; validar `carried_over_drifts`, evidencia de fechamento/aceite e impacto em `critical_drifts_open`.\nLabels: prio:p0, area:f8, needs-spec, needs-qa, risk:critical, trading",
       "suggested_labels": [
@@ -687,10 +687,10 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:32-43",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:6-18",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:33-49"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:32-43",
+        "artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:6-18",
+        "artifacts/phase-f7/validation-summary.md:33-49"
       ],
       "recommended_fix": "Titulo sugerido: Formalizar owner e runbook de desbloqueio do gate F7 -> F8.\nDescricao: a formula semanal esta correta, mas a issue precisa declarar quem conduz a remediacao da dependencia `F7 -> F8` e em que janela o gate sera reavaliado.\nCriterios de aceitacao: 1) owner da dependencia externa definido; 2) estimate explicito; 3) criterio de reexecucao apos remediacao do F7 documentado; 4) `prior_phase_decision=promote` segue obrigatorio para qualquer `promote`.\nQA checklist: validar rodada com `prior_phase_decision=hold` e outra mockada com `promote`; conferir `phase_transition_status`, `blocking_reason` e `decision`.\nLabels: prio:p0, area:f8, needs-spec, needs-qa, risk:critical, trading",
       "suggested_labels": [
@@ -728,9 +728,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:45-56",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md:14-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:14-21"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:45-56",
+        "artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md:14-45",
+        "artifacts/phase-f8/weekly-governance/2026-W09.md:14-21"
       ],
       "recommended_fix": "Titulo sugerido: Completar ownership do pacote de continuidade semanal.\nDescricao: manter os campos de risco residual e rollback, mas explicitar owner, sizing e gatilho de reexecucao para evitar que o plano semanal fique apenas declarativo.\nCriterios de aceitacao: 1) owner do rollback definido; 2) estimate explicito; 3) dependencia com backlog de drift listada; 4) `next_actions` apontam para tarefa e data de reavaliacao.\nQA checklist: validar artifact com e sem `rollback_plan`; verificar falha do checker e coerencia de `release_justification` com `decision`.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high",
       "suggested_labels": [
@@ -770,10 +770,10 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:58-76",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:14-47",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-03-GOVERNANCA-DE-EVOLUCAO-E-RELEASE.md:58-76",
+        "artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:14-47",
+        "artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43"
       ],
       "recommended_fix": "Titulo sugerido: Diferenciar `epic_done` de `operational_readiness` no summary executivo.\nDescricao: manter o validation summary, mas adicionar um indicador executivo separado para prontidao operacional da fase, evitando que `done` documental seja lido como `ready to promote`.\nCriterios de aceitacao: 1) novo campo `operational_readiness`; 2) `decision`, `phase_transition_status` e `critical_drifts_open` aparecem no topo; 3) epics `done` nao anulam `hold` operacional; 4) owner e estimate da issue documentados.\nQA checklist: comparar `validation-summary` e `weekly-governance`; verificar que bloqueios de fase aparecem antes da tabela de epics.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high, compliance",
       "suggested_labels": [
@@ -812,9 +812,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:33-45",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md:16-53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-RISK-RULES.md:89-106"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:33-45",
+        "artifacts/phase-f8/epic-f8-04-issue-01-asset-profile-venue-adapters.md:16-53",
+        "VERTICALS/TRADING/TRADING-RISK-RULES.md:89-106"
       ],
       "recommended_fix": "Titulo sugerido: Completar ownership do contrato multiativo por classe.\nDescricao: os manifests e schemas estao corretos, mas a issue precisa declarar owner, sizing e dependencias do rollout de cada classe para facilitar manutencao e auditoria.\nCriterios de aceitacao: 1) owner por classe ou owner unico do bloco; 2) estimate explicito; 3) dependencias de allowlist e manifests listadas; 4) gate continua falhando sem schema/adapter.\nQA checklist: executar `make phase-f8-multiasset-contracts`; validar ausencia de bypass, `execution_gateway_only` e `allowlist_group` por classe.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high, trading",
       "suggested_labels": [
@@ -853,9 +853,9 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:46-57",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:20-60",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:46-57",
+        "artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:20-60",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
       ],
       "recommended_fix": "Titulo sugerido: Declarar ownership e sizing do bloco de evals multiativos.\nDescricao: as suites por classe estao verdes, mas a issue precisa registrar owner, estimate e dependencias do workflow para reduzir risco de regressao sem responsavel explicito.\nCriterios de aceitacao: 1) owner do workflow e dos validator profiles definido; 2) estimate explicito; 3) dependencias de fixtures e `ci-trading.yml` listadas; 4) `eval-trading-multiasset` continua agregando as classes.\nQA checklist: executar os tres `eval-trading-<asset_class>` e `make eval-trading-multiasset`; validar cenarios bloqueantes negativos por fixture.\nLabels: prio:p1, area:f8, needs-spec, needs-qa, risk:high, trading",
       "suggested_labels": [
@@ -897,11 +897,11 @@
         "owner_assigned": false
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:59-77",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:16-39",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPIC-F8-04-EXPANSAO-MULTIATIVOS-ENABLEMENT.md:59-77",
+        "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:16-39",
+        "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
+        "artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
       ],
       "recommended_fix": "Titulo sugerido: Fechar shadow_mode real e emitir decisao R3 por classe antes de qualquer promote.\nDescricao: o bloco atual protege o sistema com `hold`, mas ainda nao entrega evidencia real de shadow concluido nem decision `R3` aprovada por classe.\nCriterios de aceitacao: 1) cada `SHADOW-*` mostra sessoes concluidas e checks `shadow_history_minimum=pass`; 2) `decision_id` valido e `decision_status=APPROVED`; 3) `promote_readiness=pass` so aparece com shadow+R3 completos; 4) `hold` permanece default ate la; 5) owner e estimate da issue documentados.\nQA checklist: validar `completed_sessions > 0`, anexar evidence refs auditaveis da janela de shadow, conferir decision R3 correspondente e coerencia com `epic-f8-04-multiasset-enablement.md`.\nLabels: prio:p0, area:f8, needs-spec, needs-qa, risk:critical, trading, compliance",
       "suggested_labels": [
@@ -931,44 +931,44 @@
         "title": "Drift critico: F8 iniciou com F7 ainda em hold",
         "severity": "critical",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:50-57",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:35-49",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:106-121"
+          "PRD/PHASE-USABILITY-GUIDE.md:50-57",
+          "artifacts/phase-f7/validation-summary.md:35-49",
+          "artifacts/phase-f8/contract-review/2026-W09.md:106-121"
         ]
       },
       {
         "title": "Ambiguidade executiva entre `contract_review_status=PASS` e dominio trading em `FAIL`",
         "severity": "critical",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:60-79",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/weekly-governance/2026-W09.md:12-18",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:41-49"
+          "artifacts/phase-f8/contract-review/2026-W09.md:60-79",
+          "artifacts/phase-f8/weekly-governance/2026-W09.md:12-18",
+          "artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:41-49"
         ]
       },
       {
         "title": "Summary executivo pode ser lido como prontidao apesar de `phase_transition_status=blocked`",
         "severity": "high",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43"
+          "artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
+          "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43"
         ]
       },
       {
         "title": "Multiativos seguem sem shadow concluido e sem decisao R3 real",
         "severity": "critical",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
+          "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
+          "artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34",
+          "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104"
         ]
       },
       {
         "title": "Higiene de backlog insuficiente: 12/12 issues sem estimate e sem owner explicito",
         "severity": "medium",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:690-694",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:1-6",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:1-6"
+          "PRD/PRD-MASTER.md:690-694",
+          "artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:1-6",
+          "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md:1-6"
         ]
       }
     ]
@@ -981,9 +981,9 @@
       "owner": "trading-owner",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:50-57",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:35-49",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:106-121"
+        "PRD/PHASE-USABILITY-GUIDE.md:50-57",
+        "artifacts/phase-f7/validation-summary.md:35-49",
+        "artifacts/phase-f8/contract-review/2026-W09.md:106-121"
       ]
     },
     {
@@ -993,9 +993,9 @@
       "owner": "tech-lead",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:690-694",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:33-49",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/contract-review/2026-W09.md:60-79"
+        "PRD/PRD-MASTER.md:690-694",
+        "artifacts/phase-f8/epic-f8-02-issue-01-contract-review-conformity.md:33-49",
+        "artifacts/phase-f8/contract-review/2026-W09.md:60-79"
       ]
     },
     {
@@ -1005,10 +1005,10 @@
       "owner": "trading-owner",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618-630",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34"
+        "PRD/PRD-MASTER.md:618-630",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:94-104",
+        "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md:11-15",
+        "artifacts/trading/shadow_mode/SHADOW-F8-04-EQUITIES-BR-20260301-01.json:8-34"
       ]
     },
     {
@@ -1018,9 +1018,9 @@
       "owner": "tech-lead",
       "due_days": 7,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:36-43"
+        "PM/PHASES/feito/F8-OPERACAO-CONTINUA-E-EVOLUCAO/EPICS.md:36-43",
+        "artifacts/phase-f8/validation-summary-2026-W09.md:5-27",
+        "artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md:36-43"
       ]
     },
     {
@@ -1030,9 +1030,9 @@
       "owner": "po",
       "due_days": 14,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:690-694",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:1-6",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:1-6"
+        "PRD/PRD-MASTER.md:690-694",
+        "artifacts/phase-f8/epic-f8-01-issue-01-weekly-gates-timestamp.md:1-6",
+        "artifacts/phase-f8/epic-f8-04-issue-02-validator-evals-by-class.md:1-6"
       ]
     }
   ]

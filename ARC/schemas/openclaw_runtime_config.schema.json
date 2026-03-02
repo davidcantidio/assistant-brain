@@ -159,6 +159,66 @@
             }
           },
           "additionalProperties": true
+        },
+        "telemetry_store": {
+          "type": "object",
+          "required": ["backend"],
+          "properties": {
+            "backend": {
+              "type": "string",
+              "enum": ["memory", "postgres"]
+            },
+            "postgres": {
+              "type": "object",
+              "required": ["dsn"],
+              "properties": {
+                "dsn": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "privacy": {
+      "type": "object",
+      "required": [
+        "data_sensitivity_default",
+        "provider_allowlist_by_sensitivity",
+        "prompt_storage_mode"
+      ],
+      "properties": {
+        "data_sensitivity_default": {
+          "type": "string",
+          "enum": ["public", "internal", "sensitive"]
+        },
+        "provider_allowlist_by_sensitivity": {
+          "type": "object",
+          "required": ["public", "internal", "sensitive"],
+          "properties": {
+            "public": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "internal": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "sensitive": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "additionalProperties": false
+        },
+        "prompt_storage_mode": {
+          "type": "string",
+          "enum": ["hash_and_summary", "summary_only", "disabled"]
         }
       },
       "additionalProperties": true

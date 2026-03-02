@@ -309,8 +309,8 @@
       "mapped_requirements": ["R1", "R2", "R14"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC nao define dados de teste concretos (payload valido/invalido exemplar). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:42]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33]"
+        "AC nao define dados de teste concretos (payload valido/invalido exemplar). [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33]"
       ],
       "risk_level": "medium",
       "recommended_fix": "Titulo: [F5-01-01] Adapter TradingAgents com signal_intent canonico e deduplicacao auditavel. Descricao: explicitar contrato de entrada/saida, casos negativos e evidencias obrigatorias por execução. AC reescritos: (1) Given payload sem signal_intent, When make eval-trading, Then FAIL com codigo de erro definido; (2) Given payload duplicado com mesmo trace_id, When normalizer processa, Then apenas 1 evento e aceito e o duplicado e rejeitado; (3) Given payload valido, Then artifact registra origem do engine. QA checklist: pre-condicoes, fixture de payload, comando, evidencias em artifacts/phase-f5, rollback. Labels: prio:medium, risk:integration, needs-qa, needs-owner, needs-estimation.",
@@ -322,8 +322,8 @@
       "mapped_requirements": ["R3", "R10", "R14", "R30"],
       "conformance_status": "Conforme",
       "problems": [
-        "Nao ha criterio explicito de rollback operacional quando bypass for detectado. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:141 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:38 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:46]"
+        "Nao ha criterio explicito de rollback operacional quando bypass for detectado. [PRD: PRD/ROADMAP.md:141 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/PHASE-USABILITY-GUIDE.md:38 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:46]"
       ],
       "risk_level": "critical",
       "recommended_fix": "Titulo: [F5-01-02] Anti-bypass hard + allowlist de venue com rollback imediato. Descricao: incluir comportamento de bloqueio, incidente e rollback para tentativa de ordem fora do gateway. AC reescritos: (1) Given tentativa de ordem direta, When validacao roda, Then FAIL e abrir incidente com trace_id; (2) Given dominio fora allowlist, Then bloqueio hard e sem envio; (3) Given bypass detectado em live, Then TRADING_BLOCKED e rollback conforme runbook. QA checklist: teste com dominio permitido/nao permitido, evidencias de bloqueio, verificação de incidente e rollback. Labels: prio:p0, risk:security, blocking-release, needs-qa.",
@@ -335,8 +335,8 @@
       "mapped_requirements": ["R13", "R16", "R29"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC fala em contrato completo, mas nao lista explicitamente os 4 schemas requeridos (signal_intent, order_intent, execution_report, economic_run). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:68]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:59]"
+        "AC fala em contrato completo, mas nao lista explicitamente os 4 schemas requeridos (signal_intent, order_intent, execution_report, economic_run). [PRD: PRD/ROADMAP.md:149 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:68]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:59]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-01-03] Schemas versionados obrigatorios + compatibilidade dual runtime. Descricao: explicitar os 4 schemas obrigatorios e os metadados de versao esperados. AC reescritos: (1) Given qualquer um dos 4 schemas sem schema_version, Then make eval-integrations FAIL; (2) Given ws canonico e chatCompletions opcional sob policy, Then PASS; (3) Given quebra de compatibilidade dual, Then hold de promote. QA checklist: validar cada schema individualmente e anexar evidencias por arquivo. Labels: prio:high, risk:integration, needs-qa, needs-owner.",
@@ -348,8 +348,8 @@
       "mapped_requirements": ["R12", "R14", "R15", "R16"],
       "conformance_status": "Parcialmente conforme",
       "problems": [
-        "Cobertura de B1-20 parcial: template obrigatorio pede objetivo, modo, contratos, riscos, testes e rollback, mas issue enfatiza principalmente modo permitido. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:72]",
-        "Politica de dados E2B (B1-23) nao aparece explicitamente nos ACs. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:81]"
+        "Cobertura de B1-20 parcial: template obrigatorio pede objetivo, modo, contratos, riscos, testes e rollback, mas issue enfatiza principalmente modo permitido. [PRD: PRD/ROADMAP.md:148 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:72]",
+        "Politica de dados E2B (B1-23) nao aparece explicitamente nos ACs. [PRD: PRD/ROADMAP.md:151 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:81]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-01-04] Modos permitidos + template INTEGRATIONS completo. Descricao: completar escopo para cobrir todos os campos de B1-20 e politica E2B de B1-23. AC reescritos: (1) Given integracao sem campos obrigatorios do template, Then hold; (2) Given AI-Trader signal_only e ClawWork lab_isolated/governed com policy E2B, Then pass; (3) Given ausencia de rollback documentado, Then hold. QA checklist: validar template campo a campo, policy E2B, e matriz de compatibilidade runtime. Labels: prio:high, risk:compliance, needs-qa, needs-po-review.",
@@ -361,8 +361,8 @@
       "mapped_requirements": ["R4", "R9"],
       "conformance_status": "Parcialmente conforme",
       "problems": [
-        "B1-05 exige capital_ramp_level por simbolo, mas AC nao menciona explicitamente capital_ramp_level. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:138 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:42]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33]"
+        "B1-05 exige capital_ramp_level por simbolo, mas AC nao menciona explicitamente capital_ramp_level. [PRD: PRD/ROADMAP.md:138 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-02-01] pre_trade_validator por simbolo com capital_ramp_level explicito. Descricao: detalhar regra de validacao por simbolo e limites por nivel de rampa. AC reescritos: (1) Given capital_ramp_level ausente para simbolo, Then FAIL; (2) Given contrato versionado sem campos obrigatorios, Then FAIL; (3) Given simbolo dentro do ramp permitido, Then PASS. QA checklist: casos por simbolo e por nivel, negativo para rampa ausente, evidencia de bloqueio. Labels: prio:high, risk:trading, blocking-release, needs-qa.",
@@ -374,8 +374,8 @@
       "mapped_requirements": ["R5"],
       "conformance_status": "Conforme",
       "problems": [
-        "Nao ha AC explicito para replay concorrente (duas tentativas simultaneas). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:139 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:55]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:46]"
+        "Nao ha AC explicito para replay concorrente (duas tentativas simultaneas). [PRD: PRD/ROADMAP.md:139 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:55]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:46]"
       ],
       "risk_level": "critical",
       "recommended_fix": "Titulo: [F5-02-02] Idempotencia forte com teste de concorrencia. Descricao: incluir cenario de replay simultaneo e resultado deterministico de reconciliacao. AC reescritos: (1) Given duas requisicoes com mesmo client_order_id em paralelo, Then apenas 1 execucao financeira e permitida; (2) Given falha parcial, Then reconciliation_status final deve ser consistente e auditavel; (3) Given replay, Then no-op com trace. QA checklist: testes sequencial/paralelo, logs de reconciliacao e evidencias de no-op. Labels: prio:p0, risk:financial, blocking-release, needs-qa.",
@@ -387,8 +387,8 @@
       "mapped_requirements": ["R6", "R28"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC nao define tempo maximo para aplicar bloqueio apos falha primaria (SLO operacional). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:140 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:68]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:59]"
+        "AC nao define tempo maximo para aplicar bloqueio apos falha primaria (SLO operacional). [PRD: PRD/ROADMAP.md:140 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:68]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:59]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-02-03] fail_closed primario com SLO e condicao de saude explicita. Descricao: adicionar tempo de resposta para bloqueio e condicoes de retorno controlado. AC reescritos: (1) Given falha primaria, Then novas entradas bloqueadas em <= N segundos; (2) Given falha secundaria e primaria saudavel, Then single_engine_mode permitido; (3) Given primaria nao saudavel, Then single_engine_mode proibido. QA checklist: simular falha primaria/secundaria e medir tempo de bloqueio. Labels: prio:high, risk:trading, needs-qa, blocking-release.",
@@ -400,8 +400,8 @@
       "mapped_requirements": ["R8", "R11", "R29"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC usa hold/pass, mas nao explicita evidencia minima para credencial em cada provider suportado. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:142 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:145 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:72]"
+        "AC usa hold/pass, mas nao explicita evidencia minima para credencial em cada provider suportado. [PRD: PRD/ROADMAP.md:142 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:145 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:72]"
       ],
       "risk_level": "critical",
       "recommended_fix": "Titulo: [F5-02-04] Credenciais live restritas com evidencia por provider + gate CI. Descricao: detalhar provas obrigatorias de no-withdraw/IP allowlist e enforcement em CI. AC reescritos: (1) Given credencial com permissao de saque, Then hold; (2) Given ausencia de IP allowlist em provider que suporta, Then hold; (3) Given workflow sem make eval-trading, Then fail de merge. QA checklist: validar credenciais mascaradas por provider, pipeline CI e bloqueio de excecao. Labels: prio:p0, risk:security, compliance-review, blocking-release.",
@@ -413,8 +413,8 @@
       "mapped_requirements": ["R7"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC nao define criterio quantitativo de retorno seguro (quando sair de TRADING_BLOCKED). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:141 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:94]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:85]"
+        "AC nao define criterio quantitativo de retorno seguro (quando sair de TRADING_BLOCKED). [PRD: PRD/ROADMAP.md:141 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:94]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:85]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-02-05] Runbook degradacao com criterio de retorno seguro mensuravel. Descricao: incluir gatilhos de bloqueio/desbloqueio e checkpoints obrigatorios. AC reescritos: (1) Given degradacao com posicao aberta, Then TRADING_BLOCKED imediato; (2) Given snapshots ausentes, Then hold; (3) Given reconciliacao concluida e checklist completo, Then retorno permitido. QA checklist: simular degradacao, validar snapshots, reconciliacao e evidencia de desbloqueio autorizado. Labels: prio:high, risk:operations, blocking-release, needs-qa.",
@@ -426,8 +426,8 @@
       "mapped_requirements": ["R21"],
       "conformance_status": "Parcialmente conforme",
       "problems": [
-        "Issue cobre autonomia/restart, mas B1-R12 pede ingestao completa de metadados de run (requested/effective, usage, fallback, erros, outcome) e isso nao aparece nos ACs. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:42]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33]"
+        "Issue cobre autonomia/restart, mas B1-R12 pede ingestao completa de metadados de run (requested/effective, usage, fallback, erros, outcome) e isso nao aparece nos ACs. [PRD: PRD/ROADMAP.md:166 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:42]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33]"
       ],
       "risk_level": "medium",
       "recommended_fix": "Titulo: [F5-03-01] Autonomia jobs longos + metadados completos de run. Descricao: manter restart controlado e adicionar metadados obrigatorios de observabilidade de run. AC reescritos: (1) Given job stalled, Then incidente + restart com trace_id; (2) Given run concluida, Then requested/effective, usage, fallback, erros e outcome registrados; (3) Given metadado faltante, Then gate fail. QA checklist: simular stalled, validar restart e checar payload de metadados completo. Labels: prio:medium, risk:reliability, needs-qa.",
@@ -439,8 +439,8 @@
       "mapped_requirements": ["R20", "R21"],
       "conformance_status": "Nao conforme",
       "problems": [
-        "Inconsistencia de mapeamento: issue foi associada a B1-R11/B1-R12, mas o texto nao cobre explicitamente model_catalog/eval_aggregates/embeddings de B1-R11. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:164 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46]",
-        "B1-R12 pede ingestao completa de metadados de run; AC fala apenas de cron/memoria noturna pass/fail. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55]"
+        "Inconsistencia de mapeamento: issue foi associada a B1-R11/B1-R12, mas o texto nao cobre explicitamente model_catalog/eval_aggregates/embeddings de B1-R11. [PRD: PRD/ROADMAP.md:164 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46]",
+        "B1-R12 pede ingestao completa de metadados de run; AC fala apenas de cron/memoria noturna pass/fail. [PRD: PRD/ROADMAP.md:166 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-03-02] Cron/memoria noturna alinhado a B1-R11 e B1-R12. Descricao: separar escopo de ciclo noturno e escopo de expansao do memory plane vetorial com metadados completos de run. AC reescritos: (1) Given ausencia de model_catalog/eval_aggregates/embeddings, Then FAIL; (2) Given metadados de run incompletos, Then FAIL; (3) Given nightly-extraction sem incident_ref em atraso >24h, Then FAIL. QA checklist: validar schema do ciclo noturno e schema de metadados de run, com casos valid/invalid. Labels: prio:p0, risk:observability, blocking-release, needs-po-review.",
@@ -452,8 +452,8 @@
       "mapped_requirements": ["R17", "R18", "R19", "R22", "R23"],
       "conformance_status": "Parcialmente conforme",
       "problems": [
-        "AC nao define threshold mensuravel para burn-rate/circuit breaker (disparo e recuperacao). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:167 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:68]",
-        "Privacidade/ZDR aparece no texto, mas sem matriz de validacao por task_type sensivel. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:170 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:69]"
+        "AC nao define threshold mensuravel para burn-rate/circuit breaker (disparo e recuperacao). [PRD: PRD/ROADMAP.md:167 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:68]",
+        "Privacidade/ZDR aparece no texto, mas sem matriz de validacao por task_type sensivel. [PRD: PRD/ROADMAP.md:170 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:69]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-03-03] Governanca de router/custo/privacidade com thresholds objetivos. Descricao: explicitar limites, gatilhos e matriz de privacidade por task_type. AC reescritos: (1) Given burn-rate > limite X, Then circuit breaker aciona acao Y; (2) Given rota sensitive sem no_fallback/pin_provider/ZDR, Then FAIL; (3) Given ausencia de preset_id, Then FAIL. QA checklist: testes de limite de custo, rota sensivel e validacao de preset por schema. Labels: prio:high, risk:privacy, compliance-review, needs-qa.",
@@ -465,8 +465,8 @@
       "mapped_requirements": ["R24", "R25"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC nao explicita teste negativo de bypass dos gates R2/R3 no fluxo Slack. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:179 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:81]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:72]"
+        "AC nao explicita teste negativo de bypass dos gates R2/R3 no fluxo Slack. [PRD: PRD/ROADMAP.md:179 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:81]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:72]"
       ],
       "risk_level": "high",
       "recommended_fix": "Titulo: [F5-03-04] A2A + Slack adapter com teste negativo de bypass. Descricao: manter contrato de idempotencia/thread context e adicionar validacao explicita de gates. AC reescritos: (1) Given evento Slack sem idempotency_key, Then FAIL; (2) Given delegacao fora allowlist, Then FAIL; (3) Given tentativa de bypass de gate R2/R3, Then FAIL bloqueante. QA checklist: testes negativos para allowlist, idempotencia e bypass gate. Labels: prio:high, risk:integration, needs-qa, blocking-release.",
@@ -478,8 +478,8 @@
       "mapped_requirements": ["R26", "R27"],
       "conformance_status": "Parcialmente conforme",
       "problems": [
-        "Cobertura de B1-R19 insuficiente: AC nao cita slack_user_ids/slack_channel_ids nao vazios nem backup_operator para capital real. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:185 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85]"
+        "Cobertura de B1-R19 insuficiente: AC nao cita slack_user_ids/slack_channel_ids nao vazios nem backup_operator para capital real. [PRD: PRD/ROADMAP.md:185 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85]"
       ],
       "risk_level": "critical",
       "recommended_fix": "Titulo: [F5-03-05] Fallback HITL Slack seguro + prontidao B1-R19 completa. Descricao: manter controles HMAC/anti-replay/challenge e adicionar requisitos de prontidao de operador/canal. AC reescritos: (1) Given fallback sem HMAC/challenge, Then hold; (2) Given ausencia de RESTORE_TELEGRAM_CHANNEL, Then hold; (3) Given slack_user_ids/slack_channel_ids vazios ou backup_operator ausente para capital real, Then FAIL. QA checklist: validar assinaturas, replay, incident task e configuracao de operadores Slack. Labels: prio:p0, risk:security, compliance-review, blocking-release.",
@@ -491,8 +491,8 @@
       "mapped_requirements": ["R23"],
       "conformance_status": "Conforme",
       "problems": [
-        "AC nao explicita evidencia legal/compliance (registro de aprovacao e trilha de excecao). [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:170 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:107]",
-        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19 | Issue: /Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:98]"
+        "AC nao explicita evidencia legal/compliance (registro de aprovacao e trilha de excecao). [PRD: PRD/ROADMAP.md:170 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:107]",
+        "Checklist qualidade incompleto: objetivo=true; ac_testaveis=true; estimacao=false; dependencias=false; qa_steps=false; owner=false. [PRD: PRD/ROADMAP.md:19 | Issue: PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:98]"
       ],
       "risk_level": "critical",
       "recommended_fix": "Titulo: [F5-03-06] Segregacao de credenciais com evidencia de compliance. Descricao: manter segregacao por superficie e incluir trilha formal de aprovacao/excecao. AC reescritos: (1) Given conta pessoal igual a conta do agente, Then hold; (2) Given minimum_scope vazio, Then FAIL; (3) Given excecao de privilegio, Then exige aprovacao formal registrada. QA checklist: validar superficies social/email/pagamentos/carteira, minimum_scope e trilha de aprovacao. Labels: prio:p0, risk:compliance, security-review, blocking-release.",
@@ -540,11 +540,11 @@
       "owner": "Tech Lead",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:164",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:166",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:20",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55"
+        "PRD/ROADMAP.md:164",
+        "PRD/ROADMAP.md:166",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:20",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:46",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:55"
       ]
     },
     {
@@ -554,11 +554,11 @@
       "owner": "Compliance/Security",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:184",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:185",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:186",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
+        "PRD/ROADMAP.md:184",
+        "PRD/ROADMAP.md:185",
+        "PRD/ROADMAP.md:186",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:85",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
       ]
     },
     {
@@ -568,12 +568,12 @@
       "owner": "QA Lead",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:38",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:18",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:24",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:25",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:93",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:107"
+        "PRD/PHASE-USABILITY-GUIDE.md:38",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:18",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:24",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:25",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:93",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:107"
       ]
     },
     {
@@ -583,10 +583,10 @@
       "owner": "PO",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:19",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33"
+        "PRD/ROADMAP.md:19",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:33",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:33",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:33"
       ]
     },
     {
@@ -596,12 +596,12 @@
       "owner": "PO",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:30",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:31",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:32",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:4"
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:30",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:31",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPICS.md:32",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:4",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:4",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:4"
       ]
     },
     {
@@ -611,13 +611,13 @@
       "owner": "Tech Lead",
       "due_days": 4,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:140",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:142",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:145",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:180",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
+        "PRD/ROADMAP.md:140",
+        "PRD/ROADMAP.md:142",
+        "PRD/ROADMAP.md:145",
+        "PRD/ROADMAP.md:180",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-01-INTEGRACOES-GOVERNADAS-E-ANTI-BYPASS.md:55",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-02-TRADING-HARDENING-E-PRONTIDAO-LIVE.md:81",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:94"
       ]
     }
   ]

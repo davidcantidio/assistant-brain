@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "domain": "runtime",
+  "rules": [
+    {
+      "rule_id": "RUNTIME-REQUIRED-FILES-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "runtime_contract",
+      "implementation": "required_files",
+      "enabled": true,
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md",
+        "ARC/ARC-CORE.md",
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "remediation_hint": "Restaure os arquivos obrigatorios de runtime antes de executar os gates."
+    },
+    {
+      "rule_id": "RUNTIME-SCHEMA-VALID-001",
+      "domain": "runtime",
+      "severity": "critical",
+      "category": "runtime_schema",
+      "implementation": "runtime_schema_valid_json",
+      "enabled": true,
+      "evidence_refs": [
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "remediation_hint": "Corrija o JSON da schema de runtime para manter parsing deterministico."
+    },
+    {
+      "rule_id": "RUNTIME-SCHEMA-REQUIRED-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "runtime_schema",
+      "implementation": "runtime_schema_required_fields",
+      "enabled": true,
+      "evidence_refs": [
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "remediation_hint": "Adicione todos os campos required obrigatorios no contrato de runtime."
+    },
+    {
+      "rule_id": "RUNTIME-IDEMPOTENCY-SCHEMA-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "idempotency",
+      "implementation": "idempotency_schema_contract",
+      "enabled": true,
+      "evidence_refs": [
+        "ARC/schemas/decision.schema.json"
+      ],
+      "remediation_hint": "Atualize decision.schema.json para manter o lifecycle de challenge completo."
+    },
+    {
+      "rule_id": "RUNTIME-IDEMPOTENCY-PROTOCOL-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "idempotency",
+      "implementation": "idempotency_protocol_markers",
+      "enabled": true,
+      "evidence_refs": [
+        "PM/DECISION-PROTOCOL.md"
+      ],
+      "remediation_hint": "Garanta no protocolo os marcadores de idempotencia de command_id e replay."
+    },
+    {
+      "rule_id": "RUNTIME-TIMEZONE-ANCHOR-001",
+      "domain": "runtime",
+      "severity": "medium",
+      "category": "runtime_contract",
+      "implementation": "timezone_anchor_markers",
+      "enabled": true,
+      "evidence_refs": [
+        "PRD/PRD-MASTER.md",
+        "ARC/ARC-HEARTBEAT.md",
+        "workspaces/main/HEARTBEAT.md",
+        "PRD/CHANGELOG.md"
+      ],
+      "remediation_hint": "Reaplique o timezone canonicamente definido como America/Sao_Paulo."
+    },
+    {
+      "rule_id": "RUNTIME-OPS-API-CONTRACT-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "runtime_contract",
+      "implementation": "ops_api_contract",
+      "enabled": true,
+      "evidence_refs": [
+        "contracts/runtime/ops_api.v1.yaml",
+        "apps/ops-api/README.md"
+      ],
+      "remediation_hint": "Mantenha o contrato de endpoints internos da Ops API atualizado com base_url e paths obrigatorios."
+    },
+    {
+      "rule_id": "RUNTIME-SCHEMA-EXTENSIONS-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "runtime_schema",
+      "implementation": "runtime_schema_extensions",
+      "enabled": true,
+      "evidence_refs": [
+        "ARC/schemas/openclaw_runtime_config.schema.json"
+      ],
+      "remediation_hint": "Adicione no schema de runtime as secoes de telemetry_store e privacy sem quebrar compatibilidade."
+    },
+    {
+      "rule_id": "RUNTIME-TEST-COVERAGE-001",
+      "domain": "runtime",
+      "severity": "high",
+      "category": "runtime_contract",
+      "implementation": "runtime_test_coverage",
+      "enabled": true,
+      "evidence_refs": [
+        "apps/control-plane/tests/test_service.py",
+        "apps/ops-api/tests/test_app.py",
+        "scripts/ci/eval_runtime_control_plane.sh"
+      ],
+      "remediation_hint": "Mantenha cobertura minima de testes para contratos e fluxos centrais do runtime control-plane."
+    }
+  ]
+}

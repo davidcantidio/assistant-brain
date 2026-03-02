@@ -1,6 +1,6 @@
 schema_version: "1.2"
 last_updated: "2026-02-25"
-mode: "single_primary"
+mode: "primary_with_backup"
 readiness:
   trading_live_requires_backup_operator: true
   slack_fallback_requires_non_empty_user_and_channel_ids: true
@@ -43,4 +43,4 @@ operators:
       - "baixo"
       - "medio"
       - "alto"
-    enabled: false
+    enabled: true

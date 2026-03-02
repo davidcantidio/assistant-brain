@@ -20,6 +20,10 @@ HOST_OS="$(uname -s)"
 NODE_VERSION="${NODE_VERSION:-22.22.0}"
 OPENCLAW_NPM_PKG="${OPENCLAW_NPM_PKG:-openclaw}"
 OPENCLAW_VERSION="${OPENCLAW_VERSION:-2026.2.14}"
+NVM_INSTALL_VERSION="${NVM_INSTALL_VERSION:-v0.39.7}"
+NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh"
+# Hash fixo do install.sh v0.39.7 (defesa basica contra supply-chain tampering).
+NVM_INSTALL_SHA256="8e45fa547f428e9196a5613efad3bfa4d4608b74ca870f930090598f5af5f643"
 
 INTERACTIVE="${INTERACTIVE:-0}"
 SET_TZ="${SET_TZ:-0}"
@@ -28,6 +32,37 @@ say(){ echo -e "\n==> $*"; }
 warn(){ echo -e "\n[WARN] $*" >&2; }
 need_cmd(){ command -v "$1" >/dev/null 2>&1; }
 die(){ echo -e "\n[ERRO] $*" >&2; exit 1; }
+
+sha256_file() {
+  local path="$1"
+  if need_cmd shasum; then
+    shasum -a 256 "$path" | awk '{print $1}'
+    return
+  fi
+  if need_cmd sha256sum; then
+    sha256sum "$path" | awk '{print $1}'
+    return
+  fi
+  if need_cmd openssl; then
+    openssl dgst -sha256 "$path" | awk '{print $NF}'
+    return
+  fi
+  die "Nao foi possivel calcular SHA-256 (shasum/sha256sum/openssl ausentes)."
+}
+
+download_checked() {
+  local url="$1"
+  local expected_sha256="$2"
+  local out_file="$3"
+
+  curl -fsSL "$url" -o "$out_file"
+  local actual_sha256
+  actual_sha256="$(sha256_file "$out_file")"
+  if [ "$actual_sha256" != "$expected_sha256" ]; then
+    rm -f "$out_file"
+    die "Checksum invalido para download de $url (esperado: $expected_sha256, obtido: $actual_sha256)."
+  fi
+}
 
 detect_platform() {
   case "$HOST_OS" in
@@ -131,8 +166,12 @@ ensure_nvm() {
     return
   fi
 
-  say "Instalando NVM em $NVM_DIR"
-  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  say "Instalando NVM em $NVM_DIR (download com verificacao SHA-256)"
+  local tmp_install_script
+  tmp_install_script="$(mktemp)"
+  download_checked "$NVM_INSTALL_URL" "$NVM_INSTALL_SHA256" "$tmp_install_script"
+  bash "$tmp_install_script"
+  rm -f "$tmp_install_script"
 
   # shellcheck disable=SC1090
   source "$NVM_DIR/nvm.sh"

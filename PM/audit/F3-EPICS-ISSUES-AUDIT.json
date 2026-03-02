@@ -26,9 +26,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:294-323",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:21-24"
+        "PRD/PRD-MASTER.md:294-323",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:21-24"
       ]
     },
     {
@@ -55,9 +55,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:324-327",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:10-18"
+        "PRD/PRD-MASTER.md:324-327",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:10-18"
       ]
     },
     {
@@ -85,10 +85,10 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:417-430",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+        "PRD/PRD-MASTER.md:417-430",
+        "PRD/PRD-MASTER.md:570-572",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
       ]
     },
     {
@@ -119,10 +119,10 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:432-459",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-64",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
+        "PRD/PRD-MASTER.md:432-459",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-64",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
+        "artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
       ]
     },
     {
@@ -150,9 +150,9 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-487",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/scripts/ci/eval_runtime_contracts.sh:213-319"
+        "PRD/PRD-MASTER.md:461-487",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
+        "scripts/ci/eval_runtime_contracts.sh:213-319"
       ]
     },
     {
@@ -178,9 +178,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:407-409",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:568-569",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:15-18"
+        "PRD/PRD-MASTER.md:407-409",
+        "PRD/PRD-MASTER.md:568-569",
+        "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:15-18"
       ]
     },
     {
@@ -209,10 +209,10 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:566-571",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:669-672",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-18",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:8-31"
+        "PRD/PRD-MASTER.md:566-571",
+        "PRD/PRD-MASTER.md:669-672",
+        "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-18",
+        "artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:8-31"
       ]
     },
     {
@@ -245,9 +245,9 @@
       ],
       "coverage_status": "uncovered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-657",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
+        "PRD/PRD-MASTER.md:656-657",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
       ]
     },
     {
@@ -281,9 +281,9 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:659",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:71-79",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:72-81"
+        "PRD/PRD-MASTER.md:659",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:71-79",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:72-81"
       ]
     },
     {
@@ -319,9 +319,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:661-663",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md:15-24",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/Makefile:18-20"
+        "PRD/PRD-MASTER.md:661-663",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPICS.md:15-24",
+        "Makefile:18-20"
       ]
     }
   ],
@@ -358,9 +358,9 @@
       "urgency_index": 35,
       "owner_recommended": "PO",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-660",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-01-required-files.md:8-24"
+        "PRD/PRD-MASTER.md:656-660",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-37",
+        "artifacts/phase-f3/epic-f3-01-issue-01-required-files.md:8-24"
       ]
     },
     {
@@ -398,10 +398,10 @@
       "urgency_index": 60,
       "owner_recommended": "Tech Lead",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:294-327",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:407-415",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-24"
+        "PRD/PRD-MASTER.md:294-327",
+        "PRD/PRD-MASTER.md:407-415",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:39-50",
+        "artifacts/phase-f3/epic-f3-01-issue-02-runtime-schema-a2a-hooks-gateway.md:9-24"
       ]
     },
     {
@@ -434,10 +434,10 @@
       "urgency_index": 55,
       "owner_recommended": "PO",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/META/DOCUMENT-HIERARCHY.md:71",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/ARC/ARC-CORE.md:193",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md:13-16"
+        "META/DOCUMENT-HIERARCHY.md:71",
+        "ARC/ARC-CORE.md:193",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63",
+        "artifacts/phase-f3/epic-f3-01-issue-03-workspace-state-canonical-source.md:13-16"
       ]
     },
     {
@@ -472,10 +472,10 @@
       "urgency_index": 35,
       "owner_recommended": "PO",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435-437",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456-457",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-01-memory-daily-files.md:8-27"
+        "PRD/PRD-MASTER.md:435-437",
+        "PRD/PRD-MASTER.md:456-457",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-37",
+        "artifacts/phase-f3/epic-f3-02-issue-01-memory-daily-files.md:8-27"
       ]
     },
     {
@@ -510,9 +510,9 @@
       "urgency_index": 50,
       "owner_recommended": "QA Lead",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:445-459",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-02-daily-header-sections.md:9-19"
+        "PRD/PRD-MASTER.md:445-459",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:39-50",
+        "artifacts/phase-f3/epic-f3-02-issue-02-daily-header-sections.md:9-19"
       ]
     },
     {
@@ -547,9 +547,9 @@
       "urgency_index": 50,
       "owner_recommended": "QA Lead",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:458-459",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md:9-19"
+        "PRD/PRD-MASTER.md:458-459",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:52-63",
+        "artifacts/phase-f3/epic-f3-02-issue-03-daily-bullet-minimum.md:9-19"
       ]
     },
     {
@@ -585,9 +585,9 @@
       "urgency_index": 65,
       "owner_recommended": "Tech Lead",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-467",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20"
+        "PRD/PRD-MASTER.md:461-467",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-37",
+        "artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20"
       ]
     },
     {
@@ -622,9 +622,9 @@
       "urgency_index": 50,
       "owner_recommended": "PO",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:437-440",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
+        "PRD/PRD-MASTER.md:437-440",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:39-50",
+        "artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:8-29"
       ]
     },
     {
@@ -661,10 +661,10 @@
       "urgency_index": 90,
       "owner_recommended": "Compliance",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428-430",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+        "PRD/PRD-MASTER.md:428-430",
+        "PRD/PRD-MASTER.md:570-572",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
       ]
     }
   ],
@@ -689,10 +689,10 @@
       "owner": "Compliance",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428-430",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:570-572",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
+        "PRD/PRD-MASTER.md:428-430",
+        "PRD/PRD-MASTER.md:570-572",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:52-63",
+        "artifacts/phase-f3/epic-f3-03-issue-03-channel-financial-rules.md:21-31"
       ]
     },
     {
@@ -701,9 +701,9 @@
       "owner": "Tech Lead",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:461-487",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/scripts/ci/eval_runtime_contracts.sh:213-319"
+        "PRD/PRD-MASTER.md:461-487",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-03-HEARTBEAT-TIMEZONE-OPERACAO.md:26-50",
+        "scripts/ci/eval_runtime_contracts.sh:213-319"
       ]
     },
     {
@@ -712,9 +712,9 @@
       "owner": "PO",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656-657",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
+        "PRD/PRD-MASTER.md:656-657",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:26-63",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-02-MEMORIA-DIARIA-CONTRATO.md:26-63"
       ]
     },
     {
@@ -723,9 +723,9 @@
       "owner": "PO",
       "due_days": 10,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/META/DOCUMENT-HIERARCHY.md:71",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/ARC/ARC-CORE.md:193",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63"
+        "META/DOCUMENT-HIERARCHY.md:71",
+        "ARC/ARC-CORE.md:193",
+        "PM/PHASES/feito/F3-RUNTIME-MINIMO-MEMORIA-HEARTBEAT/EPIC-F3-01-CONTRATO-RUNTIME-MINIMO.md:52-63"
       ]
     },
     {
@@ -734,9 +734,9 @@
       "owner": "QA Lead",
       "due_days": 10,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:659-664",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:11-20"
+        "PRD/PRD-MASTER.md:659-664",
+        "artifacts/phase-f3/epic-f3-03-issue-01-heartbeat-baseline.md:11-20",
+        "artifacts/phase-f3/epic-f3-03-issue-02-timezone-nightly.md:11-20"
       ]
     }
   ]

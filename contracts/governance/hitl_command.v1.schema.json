@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/contracts/governance/hitl_command.v1.schema.json",
+  "title": "hitl_command.v1",
+  "type": "object",
+  "required": [
+    "decision_id",
+    "command_id",
+    "operator_id",
+    "channel",
+    "challenge_id",
+    "signature_or_proof",
+    "evidence_ref"
+  ],
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "command_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operator_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "telegram",
+        "slack"
+      ]
+    },
+    "challenge_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signature_or_proof": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "side_effect_class": {
+      "type": "string",
+      "enum": [
+        "none",
+        "operational",
+        "financial"
+      ]
+    },
+    "explicit_human_approval": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}

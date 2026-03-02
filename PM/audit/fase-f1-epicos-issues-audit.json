@@ -26,8 +26,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+        "artifacts/phase-f1/validation-summary.md:82",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
       ]
     },
     {
@@ -55,8 +55,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27"
+        "artifacts/phase-f1/validation-summary.md:82",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27"
       ]
     },
     {
@@ -84,8 +84,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:109"
+        "artifacts/phase-f1/validation-summary.md:82",
+        "artifacts/phase-f1/validation-summary.md:109"
       ]
     },
     {
@@ -113,8 +113,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:27",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53"
       ]
     },
     {
@@ -142,8 +142,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:82"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:53",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-02-CONTRATO-CONFIG-LOCAL.md:82"
       ]
     },
     {
@@ -170,8 +170,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:85"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:85"
       ]
     },
     {
@@ -198,8 +198,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+        "artifacts/phase-f1/validation-summary.md:59",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
       ]
     },
     {
@@ -226,8 +226,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
+        "artifacts/phase-f1/validation-summary.md:82"
       ]
     },
     {
@@ -255,8 +255,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:83"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:55",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-03-WORKSPACE-STATE-MEMORY.md:83"
       ]
     },
     {
@@ -283,8 +283,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:27",
+        "artifacts/phase-f1/validation-summary.md:82"
       ]
     },
     {
@@ -312,8 +312,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:48",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+        "artifacts/phase-f1/validation-summary.md:48",
+        "artifacts/phase-f1/validation-summary.md:82"
       ]
     },
     {
@@ -341,8 +341,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
+        "artifacts/phase-f1/validation-summary.md:59",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:54"
       ]
     },
     {
@@ -380,8 +380,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md:27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:83"
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-01-INSTALACAO-VERIFY.md:27",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPIC-F1-04-HITL-BOOTSTRAP-EVIDENCIAS.md:83"
       ]
     },
     {
@@ -409,8 +409,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:109",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:143"
+        "artifacts/phase-f1/validation-summary.md:109",
+        "artifacts/phase-f1/validation-summary.md:143"
       ]
     },
     {
@@ -438,8 +438,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:48",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:82"
+        "artifacts/phase-f1/validation-summary.md:48",
+        "artifacts/phase-f1/validation-summary.md:82"
       ]
     },
     {
@@ -466,8 +466,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:59"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:59"
       ]
     },
     {
@@ -493,8 +493,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:59"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F5-INTEGRACOES-EXTERNAS-GOVERNADAS/EPIC-F5-03-AUTONOMIA-OPERACIONAL-E-BLAST-RADIUS.md:59"
       ]
     },
     {
@@ -521,8 +521,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:40"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:40"
       ]
     },
     {
@@ -550,9 +550,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
       ]
     },
     {
@@ -581,9 +581,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:40"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:40"
       ]
     },
     {
@@ -611,9 +611,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
       ]
     },
     {
@@ -640,8 +640,8 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
       ]
     }
   ],
@@ -973,24 +973,24 @@
         "risk": "Drift futuro entre macrofases de produto (M0..M2) e fases operacionais (F1..F8) se PRD e PM voltarem a divergir.",
         "level": "medium",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:657",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md:26"
+          "PRD/PRD-MASTER.md:657",
+          "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/EPICS.md:26"
         ]
       },
       {
         "risk": "Fallback Slack permanece pendente para F6 e continua nao elegivel para live-run ate validacao completa.",
         "level": "medium",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:59",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:143"
+          "artifacts/phase-f1/validation-summary.md:59",
+          "artifacts/phase-f1/validation-summary.md:143"
         ]
       },
       {
         "risk": "Requisitos remapeados para F2/F5/F7 precisam permanecer sincronizados para nao reabrir `uncovered` em auditorias futuras.",
         "level": "medium",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f1/validation-summary.md:11"
+          "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83",
+          "artifacts/phase-f1/validation-summary.md:11"
         ]
       }
     ]
@@ -1003,8 +1003,8 @@
       "owner": "PM",
       "due_days": 7,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:657",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83"
+        "PRD/PRD-MASTER.md:657",
+        "PM/TRACEABILITY/ROADMAP-BACKLOG-COVERAGE.md:83"
       ]
     }
   ]

@@ -160,6 +160,8 @@ def collect_evidence_refs(week_id: str, weekly_report_path: Path) -> list[str]:
     refs = [
         f"artifacts/phase-f8/contract-review/{week_id}.md",
         str(weekly_report_path.as_posix()),
+    ]
+    optional_refs = [
         "artifacts/phase-f8/epic-f8-03-issue-01-weekly-decision-criteria.md",
         "artifacts/phase-f8/epic-f8-03-issue-02-residual-risk-rollback.md",
         "artifacts/phase-f8/epic-f8-03-issue-03-executive-summary-audit.md",
@@ -169,7 +171,10 @@ def collect_evidence_refs(week_id: str, weekly_report_path: Path) -> list[str]:
         "artifacts/phase-f8/epic-f8-04-issue-03-shadow-r3-promote-hold.md",
         "artifacts/phase-f8/epic-f8-04-multiasset-enablement.md",
     ]
-    return [ref for ref in refs if Path(ref).exists()]
+    for ref in optional_refs:
+        if Path(ref).exists():
+            refs.append(ref)
+    return refs
 
 
 def parse_validation_summary(summary_path: Path) -> dict[str, object]:

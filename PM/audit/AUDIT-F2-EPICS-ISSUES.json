@@ -26,10 +26,10 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:512",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:662"
+        "PRD/PRD-MASTER.md:512",
+        "PRD/PRD-MASTER.md:529",
+        "PRD/PRD-MASTER.md:533",
+        "PRD/PRD-MASTER.md:662"
       ],
       "linked_issues": [
         "ISSUE-F2-01-01"
@@ -59,10 +59,10 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:30",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:518",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620"
+        "PRD/PRD-MASTER.md:30",
+        "PRD/PRD-MASTER.md:505",
+        "PRD/PRD-MASTER.md:518",
+        "PRD/PRD-MASTER.md:620"
       ],
       "linked_issues": [
         "ISSUE-F2-01-02"
@@ -94,10 +94,10 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:420",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:429",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430"
+        "PRD/PRD-MASTER.md:420",
+        "PRD/PRD-MASTER.md:428",
+        "PRD/PRD-MASTER.md:429",
+        "PRD/PRD-MASTER.md:430"
       ],
       "linked_issues": [
         "ISSUE-F2-01-03"
@@ -126,9 +126,9 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:31",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:282",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:513"
+        "PRD/PRD-MASTER.md:31",
+        "PRD/PRD-MASTER.md:282",
+        "PRD/PRD-MASTER.md:513"
       ],
       "linked_issues": [
         "ISSUE-F2-02-01"
@@ -159,8 +159,8 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663"
+        "PRD/PRD-MASTER.md:136",
+        "PRD/PRD-MASTER.md:663"
       ],
       "linked_issues": [
         "ISSUE-F2-02-02",
@@ -191,9 +191,9 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:34",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:485",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:610"
+        "PRD/PRD-MASTER.md:34",
+        "PRD/PRD-MASTER.md:485",
+        "PRD/PRD-MASTER.md:610"
       ],
       "linked_issues": [
         "ISSUE-F2-02-04"
@@ -222,8 +222,8 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:622"
+        "PRD/PRD-MASTER.md:53",
+        "PRD/PRD-MASTER.md:622"
       ],
       "linked_issues": [
         "ISSUE-F2-03-01"
@@ -252,8 +252,8 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664"
+        "PRD/PRD-MASTER.md:404",
+        "PRD/PRD-MASTER.md:664"
       ],
       "linked_issues": [
         "ISSUE-F2-03-02"
@@ -282,10 +282,10 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:316",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459"
+        "PRD/PRD-MASTER.md:316",
+        "PRD/PRD-MASTER.md:435",
+        "PRD/PRD-MASTER.md:456",
+        "PRD/PRD-MASTER.md:459"
       ],
       "linked_issues": [
         "ISSUE-F2-03-03"
@@ -314,9 +314,9 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:54",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:578",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618"
+        "PRD/PRD-MASTER.md:54",
+        "PRD/PRD-MASTER.md:578",
+        "PRD/PRD-MASTER.md:618"
       ],
       "linked_issues": [
         "ISSUE-F2-03-04"
@@ -346,10 +346,10 @@
       ],
       "target_date": null,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:301",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:313",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415"
+        "PRD/PRD-MASTER.md:301",
+        "PRD/PRD-MASTER.md:313",
+        "PRD/PRD-MASTER.md:413",
+        "PRD/PRD-MASTER.md:415"
       ],
       "linked_issues": [
         "ISSUE-F2-03-05"
@@ -388,11 +388,11 @@
         "needs-qa"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:512",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:42",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:44"
+        "PRD/PRD-MASTER.md:512",
+        "PRD/PRD-MASTER.md:529",
+        "PRD/PRD-MASTER.md:533",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:42",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:44"
       ]
     },
     {
@@ -425,10 +425,10 @@
         "compliance"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:57"
+        "PRD/PRD-MASTER.md:505",
+        "PRD/PRD-MASTER.md:620",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:57"
       ]
     },
     {
@@ -461,12 +461,12 @@
         "compliance"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:429",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:288",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
+        "PRD/PRD-MASTER.md:428",
+        "PRD/PRD-MASTER.md:429",
+        "PRD/PRD-MASTER.md:430",
+        "PRD/PRD-MASTER.md:288",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
       ]
     },
     {
@@ -494,10 +494,10 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:31",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:282",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:42"
+        "PRD/PRD-MASTER.md:31",
+        "PRD/PRD-MASTER.md:282",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:33",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:42"
       ]
     },
     {
@@ -525,10 +525,10 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:46",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:56"
+        "PRD/PRD-MASTER.md:136",
+        "PRD/PRD-MASTER.md:663",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:46",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:56"
       ]
     },
     {
@@ -561,10 +561,10 @@
         "needs-qa"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:136",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:65",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
+        "PRD/PRD-MASTER.md:136",
+        "PRD/PRD-MASTER.md:663",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:65",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
       ]
     },
     {
@@ -597,11 +597,11 @@
         "needs-runbook"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:34",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:485",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:610",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:82",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:83"
+        "PRD/PRD-MASTER.md:34",
+        "PRD/PRD-MASTER.md:485",
+        "PRD/PRD-MASTER.md:610",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:82",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:83"
       ]
     },
     {
@@ -630,10 +630,10 @@
         "model-catalog"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:622",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:43"
+        "PRD/PRD-MASTER.md:53",
+        "PRD/PRD-MASTER.md:622",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:33",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:43"
       ]
     },
     {
@@ -666,10 +666,10 @@
         "compliance"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:57"
+        "PRD/PRD-MASTER.md:404",
+        "PRD/PRD-MASTER.md:664",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:57"
       ]
     },
     {
@@ -702,11 +702,11 @@
         "needs-ops"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:435",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:456",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:70"
+        "PRD/PRD-MASTER.md:435",
+        "PRD/PRD-MASTER.md:456",
+        "PRD/PRD-MASTER.md:459",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:70"
       ]
     },
     {
@@ -739,11 +739,11 @@
         "finops"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:54",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:578",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:618",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:82",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:83"
+        "PRD/PRD-MASTER.md:54",
+        "PRD/PRD-MASTER.md:578",
+        "PRD/PRD-MASTER.md:618",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:82",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:83"
       ]
     },
     {
@@ -777,12 +777,12 @@
         "security"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:301",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:313",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:91",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
+        "PRD/PRD-MASTER.md:301",
+        "PRD/PRD-MASTER.md:313",
+        "PRD/PRD-MASTER.md:413",
+        "PRD/PRD-MASTER.md:415",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:91",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
       ]
     }
   ],
@@ -850,10 +850,10 @@
       "owner": "Compliance",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:428",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:430",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
+        "PRD/PRD-MASTER.md:428",
+        "PRD/PRD-MASTER.md:430",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:69",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:70"
       ]
     },
     {
@@ -863,9 +863,9 @@
       "owner": "Tech Lead",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:413",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:415",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
+        "PRD/PRD-MASTER.md:413",
+        "PRD/PRD-MASTER.md:415",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:95"
       ]
     },
     {
@@ -875,9 +875,9 @@
       "owner": "Tech Lead",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:663",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:69",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
+        "PRD/PRD-MASTER.md:663",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:69",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-02-CONTRATOS-IDEMPOTENCIA-E-RECONCILIACAO.md:70"
       ]
     },
     {
@@ -887,9 +887,9 @@
       "owner": "Compliance",
       "due_days": 4,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:505",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:620",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56"
+        "PRD/PRD-MASTER.md:505",
+        "PRD/PRD-MASTER.md:620",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:56"
       ]
     },
     {
@@ -899,9 +899,9 @@
       "owner": "QA",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:404",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:664",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56"
+        "PRD/PRD-MASTER.md:404",
+        "PRD/PRD-MASTER.md:664",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:56"
       ]
     },
     {
@@ -911,9 +911,9 @@
       "owner": "PO",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:437",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:459",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69"
+        "PRD/PRD-MASTER.md:437",
+        "PRD/PRD-MASTER.md:459",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-03-CATALOG-ROUTER-MEMORY-BUDGET.md:69"
       ]
     },
     {
@@ -923,9 +923,9 @@
       "owner": "Tech Lead",
       "due_days": 4,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:529",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:533",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:43"
+        "PRD/PRD-MASTER.md:529",
+        "PRD/PRD-MASTER.md:533",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:43"
       ]
     },
     {
@@ -935,9 +935,9 @@
       "owner": "PO",
       "due_days": 7,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:656",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md:38",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:33"
+        "PRD/PRD-MASTER.md:656",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPICS.md:38",
+        "PM/PHASES/feito/F1-INSTALACAO-BASE-OPENCLAW/F2-POS-INSTALACAO-BASELINE-SEGURANCA/EPIC-F2-01-BASELINE-SEGURANCA-E-GATES.md:33"
       ]
     }
   ]

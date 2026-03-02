@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0",
+  "contract_version": "v2",
+  "decision_id": "DEC-20260302-01",
+  "idempotency_key": "DEC-20260302-01",
+  "author": "primary-01",
+  "evidence_refs": [
+    "artifacts/phase-f8/weekly-governance/2026-W09.md"
+  ],
+  "command_id": "CMD-001",
+  "challenge": {
+    "challenge_id": "CH-001",
+    "status": "VALIDATED",
+    "expires_at": "2026-03-02T12:05:00Z"
+  },
+  "occurred_at": "2026-03-02T12:00:00Z",
+  "payload_digest": "45be19ee89f1df14f8e5d8f2ecb72a560fbf0812cd6be0fd17a8e4fcf3f6fdf3",
+  "status": "APPROVED",
+  "side_effect_class": "operational",
+  "explicit_human_approval": true
+}

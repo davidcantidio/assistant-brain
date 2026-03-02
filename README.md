@@ -59,7 +59,24 @@ make eval-trading
 make eval-gates
 make ci-quality
 make ci-security
+make policy-test
+make e2e-test
+make chaos-test
+make phase1-critical-suite
 ```
+
+## Policy Engine (migracao gradual)
+- base modular em `platform/policy-engine/` para substituir checks monoliticos em Bash.
+- contratos versionados por dominio:
+  - `platform/policy-engine/contracts/runtime.v1.yaml`
+  - `platform/policy-engine/contracts/security.v1.yaml`
+- wrappers legados continuam ativos e agora sao thin wrappers para a CLI canonica:
+  - `policy-engine run --domain runtime --format json --output artifacts/generated/ci/policy-engine-runtime.json`
+  - `policy-engine run --domain security --format json --output artifacts/generated/ci/policy-engine-security.json`
+  - `policy-engine validate --consistency --output artifacts/generated/ci/policy-engine-convergence.json`
+- contratos de saida:
+  - `ARC/schemas/policy_run_result.schema.json`
+  - `ARC/schemas/rule_violation.schema.json`
 
 ## Onboarding Local
 ```bash

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -u
+set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
@@ -26,6 +26,30 @@ SUMMARY_ARTIFACT="${SUMMARY_ARTIFACT:-artifacts/phase-f8/validation-summary-${WE
 STAMP="$(date '+%Y%m%dT%H%M%S')"
 
 mkdir -p "$LOG_DIR"
+
+json_field() {
+  local payload="$1"
+  local field="$2"
+  python3 - "$field" "$payload" <<'PY'
+import json
+import sys
+
+field = sys.argv[1]
+payload = sys.argv[2]
+data = json.loads(payload)
+if field not in data:
+    raise SystemExit(f"campo ausente no payload JSON: {field}")
+value = data[field]
+if isinstance(value, bool):
+    print("true" if value else "false")
+elif isinstance(value, (int, float)):
+    print(value)
+elif value is None:
+    print("")
+else:
+    print(str(value))
+PY
+}
 
 run_and_capture() {
   local label="$1"
@@ -66,8 +90,11 @@ elif [[ -n "${CONTRACT_REVIEW_STATUS+x}" ]]; then
   FAILED_DOMAINS="${FAILED_DOMAINS:-none}"
   CRITICAL_DRIFTS_OPEN="${CRITICAL_DRIFTS_OPEN:-0}"
 else
-  if REVIEW_ENV="$(WEEK_ID="$WEEK_ID" CONTRACT_REVIEW_DIR="$CONTRACT_REVIEW_DIR" bash scripts/ci/read_phase_f8_contract_review.sh 2>/dev/null)"; then
-    eval "$REVIEW_ENV"
+  if REVIEW_JSON="$(WEEK_ID="$WEEK_ID" CONTRACT_REVIEW_DIR="$CONTRACT_REVIEW_DIR" bash scripts/ci/read_phase_f8_contract_review.sh 2>/dev/null)"; then
+    REVIEW_VALIDITY_STATUS="$(json_field "$REVIEW_JSON" "review_validity_status")"
+    OPERATIONAL_CONFORMANCE_STATUS="$(json_field "$REVIEW_JSON" "operational_conformance_status")"
+    FAILED_DOMAINS="$(json_field "$REVIEW_JSON" "failed_domains")"
+    CRITICAL_DRIFTS_OPEN="$(json_field "$REVIEW_JSON" "critical_drifts_open")"
   else
     REVIEW_VALIDITY_STATUS="FAIL"
     OPERATIONAL_CONFORMANCE_STATUS="FAIL"
@@ -81,11 +108,14 @@ if [[ -n "${PRIOR_PHASE_DECISION+x}" && -n "${PHASE_TRANSITION_STATUS+x}" && -n 
   PHASE_TRANSITION_STATUS="${PHASE_TRANSITION_STATUS}"
   BLOCKING_REASON="${BLOCKING_REASON}"
 else
-  PHASE_ENV="$(
+  PHASE_JSON="$(
     python3 scripts/ci/phase_f8_release_governance.py read-prior-phase-status \
-      --summary-path "$F7_SUMMARY_PATH"
+      --summary-path "$F7_SUMMARY_PATH" \
+      --format json
   )"
-  eval "$PHASE_ENV"
+  PRIOR_PHASE_DECISION="$(json_field "$PHASE_JSON" "prior_phase_decision")"
+  PHASE_TRANSITION_STATUS="$(json_field "$PHASE_JSON" "phase_transition_status")"
+  BLOCKING_REASON="$(json_field "$PHASE_JSON" "blocking_reason")"
 fi
 
 EVAL_RESULT="$(run_and_capture "eval-gates" "$EVAL_GATES_CMD")"

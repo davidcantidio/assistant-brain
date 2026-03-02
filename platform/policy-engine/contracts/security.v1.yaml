@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "domain": "security",
+  "rules": [
+    {
+      "rule_id": "SEC-REQUIRED-FILES-001",
+      "domain": "security",
+      "severity": "high",
+      "category": "allowlists",
+      "implementation": "required_files",
+      "enabled": true,
+      "evidence_refs": [
+        "SEC/allowlists/DOMAINS.yaml",
+        "SEC/allowlists/TOOLS.yaml",
+        "SEC/allowlists/ACTIONS.yaml",
+        "SEC/allowlists/OPERATORS.yaml",
+        "SEC/allowlists/PROVIDERS.yaml",
+        "SEC/allowlists/AGENT-IDENTITY-SURFACES.yaml",
+        "SEC/allowlists/SECRET_SCAN_ALLOWLIST.yaml",
+        "SEC/allowlists/CURL_PIPE_BASH_ALLOWLIST.yaml"
+      ],
+      "remediation_hint": "Restaure as allowlists canonicas antes de promover alteracoes de seguranca."
+    },
+    {
+      "rule_id": "SEC-SECRET-SCAN-001",
+      "domain": "security",
+      "severity": "critical",
+      "category": "secret_scan",
+      "implementation": "secret_scan",
+      "enabled": true,
+      "evidence_refs": [
+        "SEC/SEC-POLICY.md",
+        "SEC/allowlists/SECRET_SCAN_ALLOWLIST.yaml"
+      ],
+      "remediation_hint": "Remova o segredo detectado e rode rotacao de credenciais antes do merge."
+    },
+    {
+      "rule_id": "SEC-POLICY-MARKERS-001",
+      "domain": "security",
+      "severity": "high",
+      "category": "policy_contract",
+      "implementation": "policy_markers",
+      "enabled": true,
+      "evidence_refs": [
+        "SEC/SEC-POLICY.md"
+      ],
+      "remediation_hint": "Reponha os marcadores normativos obrigatorios da politica de seguranca."
+    },
+    {
+      "rule_id": "SEC-OPERATORS-TOKENS-001",
+      "domain": "security",
+      "severity": "high",
+      "category": "operator_governance",
+      "implementation": "operators_tokens",
+      "enabled": true,
+      "evidence_refs": [
+        "SEC/allowlists/OPERATORS.yaml"
+      ],
+      "remediation_hint": "Atualize a allowlist de operadores para conter todos os campos obrigatorios."
+    },
+    {
+      "rule_id": "SEC-ONBOARD-CURL-PIPE-BASH-001",
+      "domain": "security",
+      "severity": "medium",
+      "category": "supply_chain",
+      "implementation": "forbid_curl_pipe_bash",
+      "enabled": true,
+      "evidence_refs": [
+        "scripts/onboard_linux.sh",
+        "SEC/allowlists/CURL_PIPE_BASH_ALLOWLIST.yaml"
+      ],
+      "remediation_hint": "Substitua instalacoes curl|bash por downloads verificados com hash/assinatura."
+    }
+  ]
+}

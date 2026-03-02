@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "domain": "governance",
+  "rules": [
+    {
+      "rule_id": "GOV-OWNERSHIP-SPOF-001",
+      "domain": "governance",
+      "severity": "critical",
+      "category": "ownership",
+      "implementation": "ownership_spof_controls",
+      "enabled": true,
+      "evidence_refs": [
+        ".github/CODEOWNERS",
+        "SEC/allowlists/OPERATORS.yaml"
+      ],
+      "remediation_hint": "Adicione no minimo 2 owners globais e habilite backup operator para operacao critica."
+    },
+    {
+      "rule_id": "GOV-RUNTIME-HARD-GATES-001",
+      "domain": "governance",
+      "severity": "critical",
+      "category": "governance_contract",
+      "implementation": "runtime_hard_gates",
+      "enabled": true,
+      "evidence_refs": [
+        "META/DOCUMENT-HIERARCHY.md",
+        "scripts/ci/check_quality.sh",
+        "PRD/PRD-MASTER.md"
+      ],
+      "remediation_hint": "Mantenha os hard gates de autoridade, governanca de PR e trilha de microtask ativos antes de promover runtime."
+    },
+    {
+      "rule_id": "GOV-WRAPPER-LIMITS-001",
+      "domain": "governance",
+      "severity": "high",
+      "category": "strangler",
+      "implementation": "shell_wrapper_line_limits",
+      "enabled": true,
+      "evidence_refs": [
+        "scripts/ci/check_phase_f8_weekly_governance.sh",
+        "scripts/ci/eval_trading.sh"
+      ],
+      "remediation_hint": "Mantenha wrappers criticos em no maximo 60 linhas; mova logica para modulos Python."
+    },
+    {
+      "rule_id": "GOV-KPI-BASELINE-001",
+      "domain": "governance",
+      "severity": "high",
+      "category": "kpis",
+      "implementation": "reconstruction_kpi_baseline",
+      "enabled": true,
+      "evidence_refs": [
+        "artifacts/governance/phase1-kpi-baseline.json"
+      ],
+      "remediation_hint": "Publique baseline KPI da Fase 1 com metrica minima obrigatoria."
+    },
+    {
+      "rule_id": "GOV-WEEKLY-F8-001",
+      "domain": "governance",
+      "severity": "high",
+      "category": "weekly_governance",
+      "implementation": "weekly_governance_contract",
+      "enabled": true,
+      "evidence_refs": [
+        "scripts/ci/legacy/check_phase_f8_weekly_governance_legacy.sh",
+        "artifacts/phase-f8/weekly-governance"
+      ],
+      "remediation_hint": "Corrija inconsistencias do report semanal F8 e preserve a formula canonica de promote/hold."
+    }
+  ]
+}

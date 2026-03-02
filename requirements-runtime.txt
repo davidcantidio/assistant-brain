@@ -1,0 +1,6 @@
+fastapi
+httpx
+jsonschema
+psycopg[binary]
+PyYAML
+uvicorn

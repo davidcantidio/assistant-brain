@@ -38,6 +38,7 @@ def parse_args() -> argparse.Namespace:
     read_parser = subparsers.add_parser("read")
     read_parser.add_argument("--week-id", required=True)
     read_parser.add_argument("--review-dir", default=str(DEFAULT_REVIEW_DIR))
+    read_parser.add_argument("--format", choices=("env", "json"), default="env")
 
     check_parser = subparsers.add_parser("check")
     check_parser.add_argument("--week-id", required=True)
@@ -954,16 +955,27 @@ def run_self_checks() -> None:
         raise ContractReviewError("mock sem classificacao do carry-over deveria falhar.")
 
 
-def command_read(week_id: str, review_dir: Path) -> int:
+def command_read(week_id: str, review_dir: Path, output_format: str) -> int:
     review = validate_review(review_dir, week_id)
     failed_domains = ",".join(review["failed_domains"]) if review["failed_domains"] else "none"
-    print(f"REVIEW_VALIDITY_STATUS={json.dumps(review['review_validity_status'], ensure_ascii=True)}")
+    payload = {
+        "review_validity_status": review["review_validity_status"],
+        "operational_conformance_status": review["operational_conformance_status"],
+        "failed_domains": failed_domains,
+        "critical_drifts_open": review["critical_open"],
+    }
+
+    if output_format == "json":
+        print(json.dumps(payload, ensure_ascii=True))
+        return 0
+
+    print(f"REVIEW_VALIDITY_STATUS={json.dumps(payload['review_validity_status'], ensure_ascii=True)}")
     print(
         "OPERATIONAL_CONFORMANCE_STATUS="
-        + json.dumps(review["operational_conformance_status"], ensure_ascii=True)
+        + json.dumps(payload["operational_conformance_status"], ensure_ascii=True)
     )
-    print(f"FAILED_DOMAINS={json.dumps(failed_domains, ensure_ascii=True)}")
-    print(f"CRITICAL_DRIFTS_OPEN={review['critical_open']}")
+    print(f"FAILED_DOMAINS={json.dumps(payload['failed_domains'], ensure_ascii=True)}")
+    print(f"CRITICAL_DRIFTS_OPEN={payload['critical_drifts_open']}")
     return 0
 
 
@@ -979,7 +991,7 @@ def main() -> int:
     review_dir = normalize_review_dir(args.review_dir)
     try:
         if args.command == "read":
-            return command_read(args.week_id, review_dir)
+            return command_read(args.week_id, review_dir, args.format)
         return command_check(args.week_id, review_dir)
     except ContractReviewError as exc:
         print(str(exc))

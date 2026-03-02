@@ -41,10 +41,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:12",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:22",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:56",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:15"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:12",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:22",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:56",
+        "artifacts/phase-f7/validation-summary.md:15"
       ]
     },
     {
@@ -80,9 +80,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:40",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:8"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:15",
+        "PRD/PHASE-USABILITY-GUIDE.md:40",
+        "artifacts/phase-f7/validation-summary.md:8"
       ]
     },
     {
@@ -118,10 +118,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:40",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:21",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26"
+        "PRD/PHASE-USABILITY-GUIDE.md:40",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "artifacts/phase-f7/validation-summary.md:21",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26"
       ]
     },
     {
@@ -155,9 +155,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:41",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:58",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26"
+        "VERTICALS/TRADING/TRADING-PRD.md:41",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:58",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26"
       ]
     },
     {
@@ -191,9 +191,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:127",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52"
+        "PRD/ROADMAP.md:127",
+        "PM/DECISION-PROTOCOL.md:216",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52"
       ]
     },
     {
@@ -227,9 +227,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:44",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77"
+        "VERTICALS/TRADING/TRADING-PRD.md:44",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77"
       ]
     },
     {
@@ -263,10 +263,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:164",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:138",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28"
+        "VERTICALS/TRADING/TRADING-PRD.md:164",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:138",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28"
       ]
     },
     {
@@ -300,10 +300,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:129",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
+        "PRD/ROADMAP.md:129",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53"
       ]
     },
     {
@@ -339,10 +339,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:152",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79"
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:152",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:9",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79"
       ]
     },
     {
@@ -376,9 +376,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
+        "PRD/ROADMAP.md:213",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27"
       ]
     },
     {
@@ -412,9 +412,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+        "VERTICALS/TRADING/TRADING-PRD.md:107",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
+        "artifacts/phase-f7/validation-summary.md:39"
       ]
     },
     {
@@ -448,9 +448,9 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
+        "artifacts/phase-f7/validation-summary.md:1"
       ]
     },
     {
@@ -485,10 +485,10 @@
         "phase_total_status": "covered"
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:34",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:70",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:34",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:70",
+        "PM/DECISION-PROTOCOL.md:216",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53"
       ]
     }
   ],
@@ -518,9 +518,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:42",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-01-issue-01-s0-paper-only-trading-blocked.md"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:26",
+        "VERTICALS/TRADING/TRADING-PRD.md:42",
+        "artifacts/phase-f7/epic-f7-01-issue-01-s0-paper-only-trading-blocked.md"
       ],
       "urgency_index": 20,
       "owner_recommended": "Tech Lead"
@@ -549,9 +549,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:127"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:52",
+        "PM/DECISION-PROTOCOL.md:216",
+        "PRD/ROADMAP.md:127"
       ],
       "urgency_index": 40,
       "owner_recommended": "Compliance/Security"
@@ -580,9 +580,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-01-s0-summary.md"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-01-S0-PAPER-SANDBOX-OPERACIONAL.md:77",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:60",
+        "artifacts/phase-f7/epic-f7-01-s0-summary.md"
       ],
       "urgency_index": 55,
       "owner_recommended": "PO/PM"
@@ -612,9 +612,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:164",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:28",
+        "VERTICALS/TRADING/TRADING-PRD.md:164",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:2"
       ],
       "urgency_index": 45,
       "owner_recommended": "Tech Lead"
@@ -645,9 +645,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:53",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:63",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:6"
       ],
       "urgency_index": 50,
       "owner_recommended": "Tech Lead"
@@ -680,9 +680,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:27"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:79",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+        "artifacts/phase-f7/validation-summary.md:27"
       ],
       "urgency_index": 98,
       "owner_recommended": "Compliance/Security"
@@ -713,9 +713,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:40"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:27",
+        "PRD/ROADMAP.md:213",
+        "artifacts/phase-f7/validation-summary.md:40"
       ],
       "urgency_index": 82,
       "owner_recommended": "PO/PM"
@@ -747,9 +747,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:53",
+        "VERTICALS/TRADING/TRADING-PRD.md:107",
+        "artifacts/phase-f7/validation-summary.md:39"
       ],
       "urgency_index": 88,
       "owner_recommended": "Tech Lead"
@@ -781,9 +781,9 @@
         "owner_assigned": true
       },
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/epic-f7-03-issue-03-phase-evidence-promote-hold.md"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:81",
+        "artifacts/phase-f7/validation-summary.md:1",
+        "artifacts/phase-f7/epic-f7-03-issue-03-phase-evidence-promote-hold.md"
       ],
       "urgency_index": 60,
       "owner_recommended": "PO/PM"
@@ -818,40 +818,40 @@
         "risk": "`credentials_live_no_withdraw` permanece `fail` e impede live seguro.",
         "level": "critical",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:27"
+          "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+          "artifacts/phase-f7/validation-summary.md:27"
         ]
       },
       {
         "risk": "`explicit_order_approval_active` permanece `fail` e deixa a trilha HITL incompleta para live.",
         "level": "critical",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216"
+          "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
+          "PM/DECISION-PROTOCOL.md:216"
         ]
       },
       {
         "risk": "`hitl_channel_ready` permanece `fail` e impede prontidao operacional de `S1`.",
         "level": "high",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:28"
+          "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
+          "artifacts/phase-f7/validation-summary.md:28"
         ]
       },
       {
         "risk": "`backup_operator_enabled` permanece `fail` e elimina redundancia operacional para live.",
         "level": "high",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:30"
+          "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41",
+          "artifacts/phase-f7/validation-summary.md:30"
         ]
       },
       {
         "risk": "Nao existe decision `R3` com limites explicitos para `S2`.",
         "level": "high",
         "evidence_refs": [
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
-          "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+          "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
+          "artifacts/phase-f7/validation-summary.md:39"
         ]
       }
     ]
@@ -864,9 +864,9 @@
       "due_days": 3,
       "urgency_index": 100,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:101"
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:160",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:26",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:101"
       ]
     },
     {
@@ -876,9 +876,9 @@
       "due_days": 5,
       "urgency_index": 95,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:220",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41"
+        "PM/DECISION-PROTOCOL.md:220",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:31",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:41"
       ]
     },
     {
@@ -888,9 +888,9 @@
       "due_days": 3,
       "urgency_index": 97,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/DECISION-PROTOCOL.md:216",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:103"
+        "PM/DECISION-PROTOCOL.md:216",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json:46",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-02-S1-MICRO-LIVE-PRE-LIVE-CHECKLIST.md:103"
       ]
     },
     {
@@ -900,9 +900,9 @@
       "due_days": 5,
       "urgency_index": 88,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-PRD.md:107",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:39"
+        "VERTICALS/TRADING/TRADING-PRD.md:107",
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPIC-F7-03-S2-ESCALA-E-PROMOCAO.md:75",
+        "artifacts/phase-f7/validation-summary.md:39"
       ]
     },
     {
@@ -912,9 +912,9 @@
       "due_days": 30,
       "urgency_index": 82,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:213",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:40"
+        "PRD/ROADMAP.md:213",
+        "VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md:167",
+        "artifacts/phase-f7/validation-summary.md:40"
       ]
     },
     {
@@ -924,9 +924,9 @@
       "due_days": 7,
       "urgency_index": 50,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f7/validation-summary.md:1",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/CHANGELOG.md:32"
+        "PM/PHASES/feito/F7-TRADING-POR-ESTAGIOS/EPICS.md:24",
+        "artifacts/phase-f7/validation-summary.md:1",
+        "PRD/CHANGELOG.md:32"
       ]
     }
   ]

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "domain": "trading",
+  "rules": [
+    {
+      "rule_id": "TRADING-EVAL-CONTRACT-001",
+      "domain": "trading",
+      "severity": "critical",
+      "category": "trading_contract",
+      "implementation": "trading_eval_contract",
+      "enabled": true,
+      "evidence_refs": [
+        "scripts/ci/legacy/eval_trading_legacy.sh",
+        "VERTICALS/TRADING/TRADING-PRD.md"
+      ],
+      "remediation_hint": "Corrija regressao de contrato no fluxo de trading antes de promover qualquer mudanca."
+    },
+    {
+      "rule_id": "TRADING-LIVE-READINESS-001",
+      "domain": "trading",
+      "severity": "high",
+      "category": "live_readiness",
+      "implementation": "live_readiness_guardrail",
+      "enabled": true,
+      "evidence_refs": [
+        "SEC/allowlists/OPERATORS.yaml",
+        "artifacts/trading/pre_live_checklist/CHECKLIST-F7-02-S1-20260301-01.json"
+      ],
+      "remediation_hint": "Nao promova live_ready=true sem backup operator e checklist pre-live auditado."
+    }
+  ]
+}

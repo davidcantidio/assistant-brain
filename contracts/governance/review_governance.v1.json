@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/contracts/governance/review_governance.v1.json",
+  "schema_version": "1.0",
+  "contract_version": "v1",
+  "min_global_owners": 2,
+  "required_scoped_rules": [
+    "ARC/",
+    "SEC/",
+    "scripts/",
+    "platform/policy-engine/"
+  ],
+  "required_policy_terms": [
+    "main protegida",
+    "PR obrigatorio",
+    "checks verdes",
+    "excecao por decision",
+    "CODEOWNERS"
+  ],
+  "require_backup_operator": true,
+  "require_live_ready_false_until_phase1_pass": true,
+  "disallow_personal_owner_hardcode": true
+}

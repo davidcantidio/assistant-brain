@@ -35,4 +35,5 @@ WEEK_ID_RESOLVED="$(resolve_week_id)"
 
 python3 scripts/ci/phase_f8_contract_review.py read \
   --week-id "$WEEK_ID_RESOLVED" \
-  --review-dir "$CONTRACT_REVIEW_DIR"
+  --review-dir "$CONTRACT_REVIEW_DIR" \
+  --format json

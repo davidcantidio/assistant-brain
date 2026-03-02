@@ -1,6 +1,6 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.50"
+version: "2.51"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-02"
@@ -28,6 +28,78 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-02 - Revisao tecnica profunda do PRD-F11 (v1.1 runtime-first B0 remanescente)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - reescreve integralmente `PRD/PRD-F11-RUNTIME-FIRST-B0-REMANESCENTE.md` para versao `1.1` com estrutura tecnica completa, schema-first e gate-first;
+  - atualiza o estado atual da fase para refletir o repositorio real em `2026-03-02` (F10 concluida, baseline implementada em `apps/control-plane` e `apps/ops-api`, policy-engine ativo);
+  - formaliza hard gate com precedencia normativa explicita `SEC > PRD > ARC` para compatibilidade com validacao de governanca em CI;
+  - fixa o contrato minimo da Ops API F11 com 8 endpoints obrigatorios e registra `/internal/hitl/*` como extensao fora do nucleo de aceite F11;
+  - adiciona matriz de rastreabilidade `B0 -> endpoint -> schema -> teste -> gate` cobrindo `B0-08`, `B0-09`, `B0-11`, `B0-13`, `B0-14`, `B0-17`, `B0-18`, `B0-16`;
+  - expande plano de execucao de 8 semanas com `Objetivo`, `Entrega`, `DoD` e `Evidencia esperada` por semana;
+  - consolida estrategia de testes (contrato, funcionais `TC-MC-01..TC-IDM-01`, regressao operacional `TC-TG-01`, `TC-F10-01`, `TC-RBK-01`);
+  - fixa gates obrigatorios finais de aceite no mesmo ciclo: `ci-quality`, `ci-security`, `eval-runtime`, `eval-gates`, `policy-test`, `phase-f10-runtime-convergence`;
+  - explicita pacote minimo de evidencia para canary, promocao e rollback, mantendo timezone canonico `America/Sao_Paulo`.
+- Migracao:
+  - esta revisao e documental; nao altera API wire format nem exige migracao de dados;
+  - qualquer rodada de promocao F11 a partir desta versao MUST anexar evidencias de canary/promocao/rollback e resultados de todos os gates obrigatorios no mesmo ciclo.
+
+### 2026-03-02 - F11 runtime-first B0 remanescente (ops-api + control-plane + hard gates)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - publica PRD tecnico da fase em:
+    - `PRD/PRD-F11-RUNTIME-FIRST-B0-REMANESCENTE.md`.
+  - implementa superficie interna de runtime em:
+    - `apps/control-plane/` (servicos de dominio + enforce de privacidade/idempotencia);
+    - `apps/ops-api/` (endpoints `/v1/*` com auth bearer + idempotency header).
+  - formaliza contrato versionado de API em:
+    - `contracts/runtime/ops_api.v1.yaml`.
+  - estende schema de runtime para novos blocos sem quebra:
+    - `memory.telemetry_store.*`;
+    - `privacy.data_sensitivity_default`;
+    - `privacy.provider_allowlist_by_sensitivity`;
+    - `privacy.prompt_storage_mode`.
+  - endurece gate de runtime para incluir testes de control-plane e ops-api:
+    - `scripts/ci/eval_runtime_control_plane.sh`;
+    - acoplamento em `scripts/ci/eval_runtime_contracts.sh`.
+  - adiciona validacoes no policy-engine para claims centrais da fase:
+    - contrato `ops_api.v1`;
+    - extensoes de `openclaw_runtime_config.schema.json`;
+    - cobertura minima de testes runtime;
+    - hard gates de governanca (autoridade, PR governance e trilha de microtask).
+- Migracao:
+  - para subir a API local:
+    - `PYTHONPATH=apps/control-plane/src:apps/ops-api/src python3 -m ops_api.run`;
+  - endpoints mutaveis passam a exigir:
+    - `Authorization: Bearer ${OPENCLAW_OPS_API_TOKEN}`;
+    - `X-Idempotency-Key`.
+  - `make eval-runtime` passa a executar a bateria de testes de runtime control-plane alem do policy-engine.
+
+### 2026-03-02 - Policy engine v2 com contratos YAML e wrappers finos de CI
+- RFCs afetadas: RFC-001, RFC-015, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - introduz contratos versionados de regras por dominio em:
+    - `platform/policy-engine/contracts/runtime.v1.yaml`;
+    - `platform/policy-engine/contracts/security.v1.yaml`.
+  - adiciona loader/validacao de contrato com enforcement de:
+    - unicidade de `rule_id`;
+    - dominio e severidade validos;
+    - `evidence_refs` obrigatorio.
+  - evolui o output `policy_run_result.v2` com:
+    - `rule_results[]` (`rule_id`, `status`, `severity`, `runtime_ms`, `category`, `evidence_ref`);
+    - `metrics` (`pass_rate`, `contradiction_count`, `rule_runtime_ms_total`).
+  - migra os scripts de maior risco para wrappers finos:
+    - `scripts/ci/eval_runtime_contracts.sh`;
+    - `scripts/ci/eval_idempotency_reconciliation.sh`;
+    - `scripts/ci/check_security.sh`;
+    - `scripts/ci/check_quality.sh`;
+    - `scripts/ci/check_policy_convergence.sh`.
+  - cria jobs separados no workflow `ci-governance.yml` para lint/typecheck/test-unit/test-integration/test-contract e publica artifacts de governanca.
+- Migracao:
+  - comandos existentes de `make` permanecem compativeis;
+  - novas regras MUST ser declaradas em contrato e implementadas em modulo Python testavel;
+  - regras de dominio novas em Bash deixam de ser o caminho preferencial.
 
 ### 2026-03-02 - Higiene estrutural do repositorio (anti-caos por partes)
 - RFCs afetadas: RFC-001, RFC-040, RFC-050.

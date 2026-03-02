@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://assistant-brain.local/schemas/rule_violation.schema.json",
+  "title": "RuleViolation",
+  "type": "object",
+  "required": [
+    "rule_id",
+    "domain",
+    "severity",
+    "error_code",
+    "message",
+    "category",
+    "evidence_ref",
+    "remediation_hint"
+  ],
+  "properties": {
+    "rule_id": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "error_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message": {
+      "type": "string"
+    },
+    "path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remediation_hint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

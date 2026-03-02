@@ -35,6 +35,8 @@ Exclui:
 - testes unitarios/minimos.
 - validacao de schema de artifacts.
 - execucao de eval gates centrais (`claim gates`).
+- execucao de `policy-convergence-check` para bloquear contradicoes entre gates/model routing/docs.
+- execucao de `governance-kpis-check` para gerar baseline e bloquear SPOF de ownership/operacao critica.
 - execucao de `make eval-idempotency` para mudancas em contratos `work_order/decision/task_event`, `PM/SPRINT-LIMITS.md`, `ARC/ARC-OBSERVABILITY.md` e `ARC/ARC-DEGRADED-MODE.md`.
 - execucao de `make eval-integrations` para mudancas em `INTEGRATIONS/`, `ARC/schemas/*` e contratos de trading.
 - em mudancas sob `VERTICALS/TRADING/*`: `make eval-trading` MUST executar e passar.
@@ -57,6 +59,7 @@ Exclui:
 ## Plataforma de CI
 - plataforma oficial: GitHub Actions.
 - workflows minimos obrigatorios:
+  - `ci-governance.yml` (lint shell/python, policy engine, policy convergence, scans de seguranca)
   - `ci-quality.yml` (lint/typecheck/tests)
   - `ci-security.yml` (secret scan, allowlists, policy)
   - `ci-routing.yml` (catalog/presets/router contracts)
@@ -74,6 +77,7 @@ Exclui:
 - merge em `main` MUST ocorrer via `PR obrigatorio`.
 - merge MUST exigir `checks verdes` nos workflows obrigatorios.
 - `CODEOWNERS` MUST existir como fonte versionada de ownership de revisao.
+- `CODEOWNERS` MUST manter pelo menos 2 owners na regra global para evitar SPOF de aprovacao.
 - merge direto fora de policy SHOULD ser bloqueado; quando houver necessidade excepcional, MUST existir `excecao por decision`.
 
 ## Links Relacionados

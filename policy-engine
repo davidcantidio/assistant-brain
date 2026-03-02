@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHONPATH="$ROOT/platform/policy-engine/src${PYTHONPATH:+:$PYTHONPATH}" \
+exec python3 "$ROOT/platform/policy-engine/src/policy_engine/adapters/ci/run_policy_engine.py" "$@"

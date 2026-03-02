@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "ops_api.v1",
+  "base_url": "http://127.0.0.1:18901/v1",
+  "auth": {
+    "mutable_endpoints": "Bearer ${OPENCLAW_OPS_API_TOKEN}",
+    "idempotency_header": "X-Idempotency-Key"
+  },
+  "response_envelope": {
+    "required": ["status", "data", "error"],
+    "status_enum": ["ok", "error"],
+    "error_shape": {
+      "code": "string|null",
+      "message": "string|null"
+    }
+  },
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/model-catalog/sync",
+      "schema_mode": "array_or_single",
+      "schemas": ["ARC/schemas/models_catalog.schema.json"]
+    },
+    {
+      "method": "GET",
+      "path": "/model-catalog/models",
+      "schema_mode": "read",
+      "schemas": ["ARC/schemas/models_catalog.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/router/decide",
+      "schema_mode": "single",
+      "schemas": ["ARC/schemas/router_decision.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/runs",
+      "schema_mode": "single",
+      "schemas": ["ARC/schemas/llm_run.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/budget/snapshots",
+      "schema_mode": "single",
+      "schemas": ["ARC/schemas/credits_snapshot.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/budget/check",
+      "schema_mode": "composed",
+      "schemas": [
+        "ARC/schemas/budget_governor_policy.schema.json",
+        "ARC/schemas/credits_snapshot.schema.json"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/a2a/delegate",
+      "schema_mode": "single",
+      "schemas": ["ARC/schemas/a2a_delegation_event.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/hooks/ingest",
+      "schema_mode": "single",
+      "schemas": ["ARC/schemas/webhook_ingest_event.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/internal/hitl/approve",
+      "schema_mode": "single",
+      "schemas": ["contracts/governance/hitl_command.v1.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/internal/hitl/reject",
+      "schema_mode": "single",
+      "schemas": ["contracts/governance/hitl_command.v1.schema.json"]
+    },
+    {
+      "method": "POST",
+      "path": "/internal/hitl/kill",
+      "schema_mode": "single",
+      "schemas": ["contracts/governance/hitl_command.v1.schema.json"]
+    }
+  ]
+}

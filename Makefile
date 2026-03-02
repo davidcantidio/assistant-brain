@@ -7,10 +7,11 @@ PDF ?= felixcraft.pdf
 MD ?= felixcraft.md
 
 .PHONY: eval-models eval-integrations eval-runtime eval-rag eval-trading eval-trading-equities_br eval-trading-fii_br \
-	eval-trading-fixed_income_br eval-trading-multiasset eval-idempotency eval-risk-gates eval-gates ci-quality ci-security \
+	eval-trading-fixed_income_br eval-trading-multiasset eval-idempotency eval-risk-gates eval-gates eval-runtime-control-plane ci-quality ci-security \
 	phase-f2-gate phase-f8-contract-review phase-f8-weekly-governance phase-f8-multiasset-contracts \
 	phase-f8-multiasset-enablement phase-f9-litellm-keygen phase-f10-runtime-convergence architecture-consistency-backlog-check pm-audit-paths-check repo-hygiene-check \
-	docling-install pdf-to-md check-pdf-md-sync
+	policy-convergence-check governance-kpis-check docling-install pdf-to-md check-pdf-md-sync policy-lint policy-typecheck policy-test policy-test-unit \
+	policy-test-integration policy-test-contract e2e-test chaos-test phase1-critical-suite
 
 eval-models:
 	@bash scripts/ci/eval_models.sh
@@ -20,6 +21,9 @@ eval-integrations:
 
 eval-runtime:
 	@bash scripts/ci/eval_runtime_contracts.sh
+
+eval-runtime-control-plane:
+	@bash scripts/ci/eval_runtime_control_plane.sh
 
 eval-rag:
 	@bash scripts/ci/eval_rag.sh
@@ -86,6 +90,12 @@ pm-audit-paths-check:
 repo-hygiene-check:
 	@bash scripts/ci/check_repo_hygiene.sh
 
+policy-convergence-check:
+	@bash scripts/ci/check_policy_convergence.sh
+
+governance-kpis-check:
+	@bash scripts/ci/check_governance_kpis.sh
+
 docling-install:
 	@if [[ ! -f requirements-docling.txt ]]; then \
 		echo "ERRO: requirements-docling.txt nao encontrado na raiz."; \
@@ -109,3 +119,35 @@ check-pdf-md-sync:
 		exit 2; \
 	fi
 	@bash scripts/ci/check_pdf_md_sync.sh
+
+policy-lint:
+	@ruff check platform/policy-engine/src platform/policy-engine/tests
+	@black --check platform/policy-engine/src platform/policy-engine/tests
+
+policy-typecheck:
+	@mypy --config-file platform/policy-engine/pyproject.toml platform/policy-engine/src
+
+policy-test:
+	@$(MAKE) policy-test-unit
+	@$(MAKE) policy-test-integration
+	@$(MAKE) policy-test-contract
+
+policy-test-unit:
+	@PYTHONPATH=platform/policy-engine/src:. python3 -m unittest discover -s platform/policy-engine/tests/unit -p 'test_*.py'
+
+policy-test-integration:
+	@PYTHONPATH=platform/policy-engine/src:. python3 -m unittest discover -s platform/policy-engine/tests -p 'test_*.py'
+
+policy-test-contract:
+	@PYTHONPATH=platform/policy-engine/src:. python3 -m unittest discover -s platform/policy-engine/tests/contract -p 'test_*.py'
+
+e2e-test:
+	@PYTHONPATH=apps/control-plane/src:apps/ops-api/src:platform/policy-engine/src:platform/event-ledger/src:. python3 -m unittest discover -s tests/e2e -p 'test_*.py'
+
+chaos-test:
+	@PYTHONPATH=apps/control-plane/src:apps/ops-api/src:platform/policy-engine/src:platform/event-ledger/src:. python3 -m unittest discover -s tests/chaos -p 'test_*.py'
+
+phase1-critical-suite:
+	@$(MAKE) policy-test
+	@$(MAKE) e2e-test
+	@$(MAKE) chaos-test

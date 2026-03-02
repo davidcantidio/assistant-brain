@@ -30,9 +30,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:12",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:13"
+        "PRD/PHASE-USABILITY-GUIDE.md:37",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:12",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:13"
       ]
     },
     {
@@ -67,9 +67,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:19",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10"
+        "PRD/PHASE-USABILITY-GUIDE.md:37",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:19",
+        "artifacts/phase-f4/validation-summary.md:10"
       ]
     },
     {
@@ -106,9 +106,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:37",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:23",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10"
+        "PRD/PHASE-USABILITY-GUIDE.md:37",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:23",
+        "artifacts/phase-f4/validation-summary.md:10"
       ]
     },
     {
@@ -135,9 +135,9 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
+        "PRD/PHASE-USABILITY-GUIDE.md:44",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
       ]
     },
     {
@@ -164,9 +164,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:54",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:27",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:30"
+        "PRD/PHASE-USABILITY-GUIDE.md:54",
+        "artifacts/phase-f4/validation-summary.md:27",
+        "artifacts/phase-f4/validation-summary.md:30"
       ]
     },
     {
@@ -196,9 +196,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11"
+        "PRD/ROADMAP.md:148",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11"
       ]
     },
     {
@@ -231,9 +231,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9"
+        "PRD/ROADMAP.md:149",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9"
       ]
     },
     {
@@ -263,9 +263,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:583",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:584"
+        "PRD/ROADMAP.md:150",
+        "PRD/PRD-MASTER.md:583",
+        "PRD/PRD-MASTER.md:584"
       ]
     },
     {
@@ -292,9 +292,9 @@
       ],
       "coverage_status": "partial",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:585",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-03-clawwork-governed-gateway-only.md:9"
+        "PRD/ROADMAP.md:151",
+        "PRD/PRD-MASTER.md:585",
+        "artifacts/phase-f4/epic-f4-01-issue-03-clawwork-governed-gateway-only.md:9"
       ]
     },
     {
@@ -325,9 +325,9 @@
       ],
       "coverage_status": "covered",
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:569",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9"
+        "PRD/ROADMAP.md:152",
+        "PRD/PRD-MASTER.md:569",
+        "artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9"
       ]
     }
   ],
@@ -375,10 +375,10 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:35",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:35",
+        "artifacts/phase-f4/epic-f4-01-issue-01-required-docs.md:11",
+        "PRD/ROADMAP.md:148"
       ]
     },
     {
@@ -424,10 +424,10 @@
         "risk:high"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:39",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-01-issue-02-ai-trader-signal-only.md:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:584"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:39",
+        "artifacts/phase-f4/epic-f4-01-issue-02-ai-trader-signal-only.md:9",
+        "PRD/ROADMAP.md:150",
+        "PRD/PRD-MASTER.md:584"
       ]
     },
     {
@@ -473,10 +473,10 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:151"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:52",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62",
+        "PRD/PHASE-USABILITY-GUIDE.md:44",
+        "PRD/ROADMAP.md:151"
       ]
     },
     {
@@ -521,9 +521,9 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-01-schema-presence-json-valid.md:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "artifacts/phase-f4/epic-f4-02-issue-01-schema-presence-json-valid.md:9",
+        "PRD/ROADMAP.md:149"
       ]
     },
     {
@@ -567,9 +567,9 @@
         "risk:high"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:39",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:149"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:39",
+        "artifacts/phase-f4/epic-f4-02-issue-02-min-required-fields.md:9",
+        "PRD/ROADMAP.md:149"
       ]
     },
     {
@@ -614,10 +614,10 @@
         "risk:high"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:52",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:569"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:52",
+        "artifacts/phase-f4/epic-f4-02-issue-03-runtime-dual-provider-path.md:9",
+        "PRD/ROADMAP.md:152",
+        "PRD/PRD-MASTER.md:569"
       ]
     },
     {
@@ -662,9 +662,9 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-01-openrouter-canonical-rule.md:9",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PRD-MASTER.md:558"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26",
+        "artifacts/phase-f4/epic-f4-03-issue-01-openrouter-canonical-rule.md:9",
+        "PRD/PRD-MASTER.md:558"
       ]
     },
     {
@@ -710,10 +710,10 @@
         "risk:high"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:39",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-02-upstream-matrix-anti-bypass.md:15",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:150",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:39",
+        "artifacts/phase-f4/epic-f4-03-issue-02-upstream-matrix-anti-bypass.md:15",
+        "PRD/ROADMAP.md:150",
+        "PRD/ROADMAP.md:152"
       ]
     },
     {
@@ -756,11 +756,11 @@
         "risk:medium"
       ],
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
+        "artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
       ]
     }
   ],
@@ -828,9 +828,9 @@
       }
     ],
     "evidence_refs": [
-      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:10",
-      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:17",
-      "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/validation-summary.md:27"
+      "artifacts/phase-f4/validation-summary.md:10",
+      "artifacts/phase-f4/validation-summary.md:17",
+      "artifacts/phase-f4/validation-summary.md:27"
     ]
   },
   "action_plan": [
@@ -841,9 +841,9 @@
       "owner": "PO (com Tech Lead e QA)",
       "due_days": 3,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:26",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:26",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:26"
       ]
     },
     {
@@ -853,10 +853,10 @@
       "owner": "PO",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPICS.md:28",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:4",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-02-CONTRATOS-SCHEMAS-INTEGRACAO.md:4",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:4"
       ]
     },
     {
@@ -866,8 +866,8 @@
       "owner": "QA",
       "due_days": 2,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:84"
+        "artifacts/phase-f4/epic-f4-03-issue-03-phase-evidence-promote-hold.md:33",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-03-COERENCIA-NORMATIVA-E-GATE.md:84"
       ]
     },
     {
@@ -877,8 +877,8 @@
       "owner": "Tech Lead",
       "due_days": 4,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/PHASE-USABILITY-GUIDE.md:44",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
+        "PRD/PHASE-USABILITY-GUIDE.md:44",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:62"
       ]
     },
     {
@@ -888,9 +888,9 @@
       "owner": "Compliance",
       "due_days": 5,
       "evidence_refs": [
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:148",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PRD/ROADMAP.md:152",
-        "/Users/genivalfreirenobrejunior/Documents/code/npbb/openclaw/assistant-brain/PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:24"
+        "PRD/ROADMAP.md:148",
+        "PRD/ROADMAP.md:152",
+        "PM/PHASES/feito/F4-ONBOARDING-REPOS-CONTEXTO-EXTERNO/EPIC-F4-01-PACOTE-INTEGRATIONS-BASELINE.md:24"
       ]
     }
   ]
