@@ -1,9 +1,9 @@
 ---
 doc_id: "CHANGELOG.md"
-version: "2.45"
+version: "2.50"
 status: "active"
 owner: "PM"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -28,6 +28,124 @@ Exclui:
 - [RFC-015] SHOULD avaliar reflexo em seguranca para toda alteracao estrutural.
 
 ## Entradas
+
+### 2026-03-02 - Higiene estrutural do repositorio (anti-caos por partes)
+- RFCs afetadas: RFC-001, RFC-040, RFC-050.
+- Impacto:
+  - formaliza politica anti-caos em `META/REPO-HYGIENE.md` com separacao entre artifact estavel (versionado) e artifact temporario/gerado (nao versionado);
+  - publica baseline de classificacao do caos em `artifacts/governance/2026-03-02-chaos-inventory.md`;
+  - atualiza `.gitignore` para bloquear ruido tecnico e snapshots runtime temporarios (`runtime-inventory`, `runtime-merge-plan`, `runtime-convergence-report`);
+  - remove arquivos de cache rastreados em `scripts/ci/__pycache__/`;
+  - adiciona check dedicado `scripts/ci/check_repo_hygiene.sh` e integra no `make ci-quality`;
+  - torna check semanal F8 deterministico por fallback automatico para o ultimo baseline disponivel quando a semana corrente nao tiver arquivo;
+  - harmoniza docs centrais para remover contradicao entre \"arquitetura de papel\" e baseline operacional local em:
+    - `README.md`;
+    - `PRD/PRD-MASTER.md`;
+    - `PRD/ROADMAP.md`;
+    - `META/DOCUMENT-HIERARCHY.md`.
+- Migracao:
+  - artifacts JSON temporarios de runtime devem ser gerados fora do fluxo de versionamento, preferencialmente em `artifacts/generated/`;
+  - novos PRs devem passar por `make ci-quality` com `repo-hygiene-check` obrigatorio;
+  - quando `WEEK_ID` nao for informado no review F8, o pipeline passa a usar o baseline mais recente disponivel.
+
+### 2026-03-02 - Migracao cloud-first OpenRouter com fallback local 7B
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - muda contrato de ambiente para cloud-first:
+    - `OPENCLAW_RUNTIME_MODE` default passa para `cloud`;
+    - `OPENROUTER_API_KEY` passa a ser obrigatoria em `cloud|hybrid`;
+    - `CODEX_OAUTH_ACCESS_TOKEN` e `ANTHROPIC_API_KEY` deixam de ser obrigatorias no fluxo cloud-first.
+  - atualiza defaults operacionais de supervisao e fallback:
+    - `OPENCLAW_SUPERVISOR_PRIMARY=openrouter-main`;
+    - `OPENCLAW_SUPERVISOR_SECONDARY=openrouter-review`;
+    - `OPENCLAW_WORKER_CODE_MODEL=ollama/qwen2.5:7b-instruct-q8_0`;
+    - `OPENCLAW_WORKER_REASON_MODEL=ollama/qwen2.5:7b-instruct-q8_0`;
+    - `LITELLM_MODELS=openrouter-main,openrouter-review,local-fallback-7b`.
+  - atualiza contratos/documentos ativos para remover linguagem de OpenRouter opcional/desabilitado:
+    - `README.md`;
+    - `DEV/DEV-OPENCLAW-SETUP.md`;
+    - `PRD/PRD-MASTER.md`;
+    - `PRD/ROADMAP.md`;
+    - `ARC/ARC-CORE.md`;
+    - `ARC/ARC-MODEL-ROUTING.md`;
+    - `SEC/SEC-POLICY.md`;
+    - `SEC/allowlists/PROVIDERS.yaml`.
+  - inclui secao de matriz de modelo por tarefa (selecao explicita + override por task).
+  - atualiza suites de validacao para baseline cloud-first:
+    - `scripts/ci/eval_models.sh`;
+    - `scripts/ci/eval_runtime_contracts.sh`;
+    - `scripts/ci/check_phase_f9_litellm_keygen.sh`.
+- Migracao:
+  - para operar em `cloud|hybrid`, preencher `OPENROUTER_API_KEY` e manter `LITELLM_*` validos;
+  - `local-only` permanece como contingencia sem obrigatoriedade de credenciais cloud;
+  - fallback local oficial do baseline passa a ser `qwen2.5:7b-instruct-q8_0`.
+
+### 2026-03-02 - Fase F10 de convergencia PRD -> Runtime sem regressao (Telegram preservado)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-035, RFC-040, RFC-050, RFC-060.
+- Impacto:
+  - cria fase PM dedicada em:
+    - `PM/PHASES/F10-CONVERGENCIA-PRD-RUNTIME-SEM-REGRESSAO/EPICS.md`;
+    - `PM/PHASES/F10-CONVERGENCIA-PRD-RUNTIME-SEM-REGRESSAO/EPIC-F10-01-AUDITORIA-E-BASELINE-RUNTIME.md`;
+    - `PM/PHASES/F10-CONVERGENCIA-PRD-RUNTIME-SEM-REGRESSAO/EPIC-F10-02-CONVERGENCIA-PRD-SEM-PERDA-DE-ESTADO.md`;
+    - `PM/PHASES/F10-CONVERGENCIA-PRD-RUNTIME-SEM-REGRESSAO/EPIC-F10-03-ROLLOUT-CANARIO-E-PROMOCAO.md`.
+  - adiciona toolkit de convergencia runtime:
+    - `scripts/runtime/export_runtime_state.sh`;
+    - `scripts/runtime/build_runtime_merge_plan.py`;
+    - `scripts/runtime/apply_runtime_merge_plan.sh`;
+    - `scripts/runtime/verify_runtime_convergence.sh`.
+  - formaliza o contrato de artifacts:
+    - `runtime_inventory.v1` com campos fixos (`snapshot_id`, `profile`, `openclaw_version`, `channels`, `auth_profiles`, `gateway`, `heartbeat`, `models`, `sessions`, `cron`, `plugins`, `hash`);
+    - `runtime_merge_plan.v1` com campos fixos (`plan_id`, `preserve_paths`, `enforce_paths`, `operations[]`, `rollback`).
+  - adiciona gate dedicado da fase:
+    - `scripts/ci/check_phase_f10_runtime_convergence.sh`;
+    - integracao em `scripts/ci/check_quality.sh`;
+    - alvo `make phase-f10-runtime-convergence`.
+  - publica artifacts tecnicos da fase:
+    - `artifacts/phase-f10/epic-f10-01-runtime-baseline-audit.md`;
+    - `artifacts/phase-f10/epic-f10-02-runtime-merge-policy.md`;
+    - `artifacts/phase-f10/epic-f10-03-canary-rollout-playbook.md`.
+- Migracao:
+  - fluxo oficial da F10 passa a ser `auditoria -> merge plan -> canario --dev -> promocao active -> rollback deterministico`;
+  - preservacao obrigatoria de estado runtime: `auth`, `channels`, `agents`, `messages`, `commands`, `plugins`, `wizard` e state-dir operacional (sessoes/credenciais/cron);
+  - convergencia inicial obrigatoria de parametros: `gateway.bind=loopback`, `gateway.port=18789`, `agents.defaults.heartbeat.every=15m`.
+
+### 2026-03-01 - Runtime mode `local-only` no onboarding/verify (LiteLLM/Codex condicionais)
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050.
+- Impacto:
+  - adiciona `OPENCLAW_RUNTIME_MODE=local-only|hybrid|cloud` no contrato de ambiente (`config/openclaw.env.example`, `.env_example`);
+  - atualiza `scripts/verify_linux.sh` para obrigatoriedade condicional:
+    - `local-only`: remove obrigatoriedade de `LITELLM_API_KEY`, `LITELLM_MASTER_KEY`, `CODEX_OAUTH_ACCESS_TOKEN` e `ANTHROPIC_API_KEY`;
+    - `hybrid|cloud`: mantem obrigatoriedade estrita dessas credenciais;
+  - atualiza `scripts/onboard_linux.sh` para branch por modo:
+    - `local-only`: desabilita `LITELLM_AUTO_GENERATE_KEY` por default e aplica supervisors locais (`local-main`, `local-review`);
+    - `hybrid|cloud`: preserva fluxo F9 de auto-key + fallback manual obrigatorio;
+  - sincroniza docs operacionais/normativas:
+    - `README.md`;
+    - `DEV/DEV-OPENCLAW-SETUP.md`;
+    - `PRD/PRD-MASTER.md`;
+    - `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md`.
+- Migracao:
+  - quem opera local-first deve setar `OPENCLAW_RUNTIME_MODE=local-only` e usar supervisors `local-main`/`local-review`;
+  - quem opera hibrido/cloud deve manter `OPENCLAW_RUNTIME_MODE=hybrid|cloud` com `LITELLM_*` e `CODEX_OAUTH_ACCESS_TOKEN` preenchidos.
+
+### 2026-03-01 - Fechamento do EPIC-F9-02 com bootstrap de canais e sincronizacao documental
+- RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-040, RFC-050.
+- Impacto:
+  - fecha `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md` com status de rodada `Done`;
+  - atualiza `PM/PHASES/F9-ONBOARDING-CREDENCIAIS-E-CANAIS-AUTOMATIZADOS/EPICS.md` para `EPIC-F9-02=done`;
+  - sincroniza instrucoes operacionais de bootstrap de canais em:
+    - `README.md`;
+    - `DEV/DEV-OPENCLAW-SETUP.md`;
+  - registra evidencias por issue:
+    - `artifacts/phase-f9/epic-f9-02-issue-01-telegram-json-preload.md`;
+    - `artifacts/phase-f9/epic-f9-02-issue-02-slack-socket-manifest.md`;
+    - `artifacts/phase-f9/epic-f9-02-issue-03-doc-sync-onboarding-canais.md`;
+  - registra artifact minimo do epico:
+    - `artifacts/phase-f9/epic-f9-02-telegram-slack-bootstrap.md`.
+- Migracao:
+  - onboarding de Telegram pode usar `TELEGRAM_UPDATE_JSON` (inline) ou `TELEGRAM_UPDATE_JSON_FILE` (arquivo) com fallback manual preservado quando payload for invalido;
+  - bootstrap de Slack deve partir de `config/slack-app-manifest.socket-mode.yaml`, preservando comandos HITL e placeholders obrigatorios de schema;
+  - gates finais de fechamento do epico: `make ci-quality`, `make ci-security`, `make eval-models`.
 
 ### 2026-03-01 - Fechamento do EPIC-F9-01 com hardening de fallback e checker dedicado de keygen
 - RFCs afetadas: RFC-001, RFC-010, RFC-015, RFC-030, RFC-040, RFC-050.

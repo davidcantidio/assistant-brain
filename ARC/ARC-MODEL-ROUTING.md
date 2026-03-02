@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-MODEL-ROUTING.md"
-version: "1.10"
+version: "1.11"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-030", "RFC-050", "RFC-060"]
 ---
 
@@ -40,9 +40,9 @@ Exclui:
 ## OpenClaw Gateway e Adapters Cloud
 - endpoint canonico do runtime: Gateway OpenClaw local.
 - adaptador de supervisao padrao:
-  - LiteLLM (`/v1`) com aliases gerenciados por preset (`codex-main`, `claude-review`).
+  - LiteLLM (`/v1`) com aliases gerenciados por preset (`openrouter-main`, `openrouter-review`).
 - adaptadores cloud adicionais:
-  - OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+  - OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido.
   - outro agregador cloud MAY ser habilitado somente por decision formal e com registro explicito em policy.
 - cliente:
   - OpenAI SDK compativel (troca de modelo via campo `model`) pode apontar para o gateway OpenClaw.
@@ -126,9 +126,17 @@ Exclui:
 - runtime MUST consumir `preset_id` aprovado.
 
 ## Perfis Oficiais de Execucao
-- `VPS-CLOUD` (producao): OpenClaw + LiteLLM para supervisores pagos; workers locais opcionais quando host permitir.
-- `MAC-LOCAL` (dev/operacao assistida): local-first para modelos locais, com escalonamento para supervisores pagos via LiteLLM quando gate local falhar.
-- Fase 0 MUST suportar `MAC-LOCAL` para tarefas pesadas nao urgentes, com supervisao por modelo robusto de assinatura em checkpoints de risco.
+- `VPS-CLOUD` (producao): OpenClaw + LiteLLM cloud-first para supervisores OpenRouter; fallback local 7B como contingencia.
+- `MAC-LOCAL` (dev/operacao assistida): cloud-first com fallback local 7B quando cloud indisponivel.
+- Fase 0 MUST suportar `MAC-LOCAL` com fallback local 7B para continuidade operacional.
+
+## Matriz de modelo por tarefa (selecao explicita)
+- `chat/triage/day-to-day`: `openrouter-main`
+- `review/risk/checkpoint`: `openrouter-review`
+- `contingencia cloud down`: `local-fallback-7b` (`ollama/qwen2.5:7b-instruct-q8_0`)
+- regra de override:
+  - cada task_type pode sobrescrever o modelo explicitamente no preset;
+  - toda troca de modelo MUST manter trilha `requested_model`, `effective_model`, `fallback_step` e `reason`.
 
 ## Regra Operacional de Capacidade Local
 - selecao local MUST usar a maior potencia disponivel que passe simultaneamente nos gates:
@@ -251,7 +259,7 @@ client = OpenAI(
 )
 
 resp = client.chat.completions.create(
-    model="codex-main",
+    model="openrouter-main",
     messages=[{"role": "user", "content": "revisar risco do patch"}],
 )
 ```
@@ -272,7 +280,7 @@ tools = [{
 }]
 
 resp = client.chat.completions.create(
-    model="codex-main",
+    model="openrouter-main",
     messages=[{"role": "user", "content": "buscar policy SEC-015"}],
     tools=tools,
 )
@@ -297,7 +305,7 @@ response_format = {
 }
 
 resp = client.chat.completions.create(
-    model="claude-review",
+    model="openrouter-review",
     messages=[{"role": "user", "content": "classifique risco da tarefa"}],
     response_format=response_format,
 )
@@ -316,17 +324,17 @@ resp = client.chat.completions.create(
 task_type: "dev_patch"
 fallback_chain:
   - step: 0
-    model: "local/code-worker"
+    model: "openrouter-main"
     provider_routing:
-      order: ["ollama"]
+      order: ["litellm"]
   - step: 1
-    model: "claude-review"
+    model: "openrouter-review"
     provider_routing:
       order: ["litellm"]
   - step: 2
-    model: "codex-main"
+    model: "local-fallback-7b"
     provider_routing:
-      order: ["litellm"]
+      order: ["ollama"]
 no_fallback: false
 ```
 
@@ -334,9 +342,9 @@ no_fallback: false
 ```yaml
 preset_id: "preset.dev_patch_v1"
 task_type: "dev_patch"
-requested_model: "local/code-worker"
+requested_model: "openrouter-main"
 provider_routing:
-  order: ["ollama", "litellm"]
+  order: ["litellm", "ollama"]
 pin_provider: false
 no_fallback: false
 exacto_mode: "prefer"

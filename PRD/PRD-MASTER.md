@@ -1,9 +1,9 @@
 ---
 doc_id: "PRD-MASTER.md"
-version: "1.16"
+version: "1.19"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-025", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -36,16 +36,17 @@ Exclui:
 - [RFC-050] MUST registrar observabilidade e auditoria por tarefa/empresa/decisao.
 - [RFC-060] MUST tratar Trading como vertical de alto risco estrutural.
 
-## Status de Maturidade (2026-02-24)
-- estado atual do repo: **planejamento/PRD**, sem control-plane implementado.
-- isso e esperado na fase atual e NAO caracteriza falha por si so.
-- risco real: iniciar automacoes sem contrato executavel de idempotencia, rollback, eval gate e politica de privacidade.
+## Status de Maturidade (2026-03-02)
+- estado atual do repo: **document-first com baseline operacional local ativo**.
+- convergencia F10 de runtime local concluida (gateway loopback + heartbeat 15m + preservacao de estado), sem implicar control-plane completo.
+- control-plane de produto continua parcialmente implementado e ainda depende do backlog B0 para cobertura integral.
+- risco real permanece: iniciar automacoes de alto impacto sem contratos executaveis de idempotencia, rollback, eval gate e politica de privacidade.
 
 ## Arquitetura Alvo Consolidada
 - gateway programatico principal: **OpenClaw Gateway** (loopback-first e contratos de policy no runtime).
-- stack de roteamento para supervisao: **LiteLLM** como adaptador padrao de modelos pagos (`codex-main` primario, `claude-review` secundario).
-- stack de execucao bracal: workers locais via Ollama/vLLM (`qwen2.5-coder:32b`, `deepseek-r1:32b`) com escalonamento por gates de capacidade.
-- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+- stack de roteamento para supervisao: **LiteLLM** como adaptador padrao de modelos pagos (`openrouter-main` primario, `openrouter-review` secundario).
+- stack de execucao bracal: workers locais via Ollama/vLLM (`qwen2.5:7b-instruct-q8_0`) com escalonamento por gates de capacidade.
+- OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido.
 - plano de execucao:
   - `Control Plane`: Convex + runtime + adapters de canal (Telegram primario para HITL critico; Slack para colaboracao operacional e fallback controlado de HITL; Discord/Signal/iMessage opcionais por policy).
   - `Router Plane`: Model Router + Presets + Policy Engine.
@@ -331,20 +332,20 @@ schema_version: "1.0"
 gateway:
   primary: "openclaw"
   supervisor_adapter: "litellm"
-  cloud_optional: "disabled"
+  cloud_optional: "enabled"
 ```
 
 Regras mandatarias:
 - `gateway.primary` MUST permanecer OpenClaw em todos os ambientes.
 - `gateway.supervisor_adapter` MUST ser LiteLLM para chamadas de supervisores pagos.
-- `gateway.cloud_optional` default MUST ser `disabled`; habilitacao de cloud adicional exige decision formal.
+- `gateway.cloud_optional` default MUST ser `enabled` para runtime `cloud|hybrid`.
 
 ### Contrato `supervisor_contract`
 ```yaml
 schema_version: "1.0"
 supervisors:
-  primary: "litellm/codex-main"
-  secondary: "litellm/claude-review"
+  primary: "litellm/openrouter-main"
+  secondary: "litellm/openrouter-review"
 roles:
   - approval
   - critique
@@ -362,8 +363,8 @@ Regras mandatarias:
 schema_version: "1.0"
 workers:
   local:
-    code: "ollama/qwen2.5-coder:32b"
-    reason: "ollama/deepseek-r1:32b"
+    code: "ollama/qwen2.5:7b-instruct-q8_0"
+    reason: "ollama/qwen2.5:7b-instruct-q8_0"
 policy:
   max_local_power_mode: true
 ```
@@ -390,9 +391,9 @@ Regras mandatarias:
 ```yaml
 schema_version: "1.0"
 order:
-  - "local_worker"
-  - "litellm/claude-review"
-  - "litellm/codex-main"
+  - "litellm/openrouter-main"
+  - "litellm/openrouter-review"
+  - "local-fallback-7b"
 audit_fields:
   - requested_model
   - effective_model
@@ -583,10 +584,13 @@ Definicao objetiva de side effect:
   - usar checklist detalhado em `VERTICALS/TRADING/TRADING-ENABLEMENT-CRITERIA.md`.
 
 ## Onboarding de Credenciais e Canais (F9)
+- onboarding MUST suportar `OPENCLAW_RUNTIME_MODE=local-only|hybrid|cloud` com default `cloud`.
+- em `local-only`, `LITELLM_API_KEY`, `LITELLM_MASTER_KEY` e `OPENROUTER_API_KEY` MAY ficar opcionais no gate de onboarding/verify, preservando operacao local-first.
+- em `hybrid|cloud`, `LITELLM_API_KEY`, `LITELLM_MASTER_KEY` e `OPENROUTER_API_KEY` MUST permanecer obrigatorios.
 - onboarding interativo MUST suportar auto-geracao de `LITELLM_API_KEY` via endpoint `LiteLLM /key/generate` quando `LITELLM_MASTER_KEY` estiver disponivel.
 - onboarding MUST derivar `LITELLM_PROXY_URL` a partir de `LITELLM_BASE_URL` removendo sufixo `/v1`, com possibilidade de override explicito.
 - onboarding MUST manter fallback manual para `LITELLM_API_KEY` quando a auto-geracao falhar.
-- onboarding MUST perguntar `OPENROUTER_API_KEY` explicitamente, mantendo OpenRouter como adaptador cloud opcional/desabilitado por default ate decision formal.
+- onboarding MUST perguntar `OPENROUTER_API_KEY` explicitamente e bloquear `cloud|hybrid` quando ausente/vazia.
 - onboarding MUST suportar preload de Telegram por payload:
   - `TELEGRAM_UPDATE_JSON` (inline) e
   - `TELEGRAM_UPDATE_JSON_FILE` (arquivo),
@@ -597,11 +601,19 @@ Definicao objetiva de side effect:
   - placeholders explicitos para URLs obrigatorias do schema.
 - qualquer mudanca neste contrato de onboarding MUST registrar impacto normativo em `PRD/CHANGELOG.md` e backlog em `PRD/ROADMAP.md`.
 
+## Matriz de modelo por tarefa (selecao explicita)
+- `chat/triage/day-to-day`: `openrouter-main`
+- `review/risk/checkpoint`: `openrouter-review`
+- `contingencia cloud down`: `local-fallback-7b` (`ollama/qwen2.5:7b-instruct-q8_0`)
+- regra de override:
+  - cada task pode sobrescrever o modelo explicitamente no preset/comando;
+  - toda execucao MUST registrar `requested_model`, `effective_model`, `fallback_step` e `reason`.
+
 ## Decisoes Fechadas
 - OpenClaw Gateway e o gateway padrao para chamadas LLM programaticas.
-- LiteLLM e o adaptador padrao para supervisores pagos (`codex-main` primario; `claude-review` secundario).
-- workers locais operam como camada bracal default em modo local-first (`ollama/qwen2.5-coder:32b`, `ollama/deepseek-r1:32b`).
-- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+- LiteLLM e o adaptador padrao para supervisores pagos (`openrouter-main` primario; `openrouter-review` secundario).
+- workers locais operam como camada de contingencia (`ollama/qwen2.5:7b-instruct-q8_0`) quando cloud falhar.
+- OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido.
 - inferencia local em `MAC-LOCAL` e permitida para modelos locais sem chamada direta a provider externo.
 - adaptador de supervisao ativo SHOULD manter logging de prompts/respostas desativado por default; qualquer opt-in MUST ser registrado por policy.
 - providers efetivos possuem politicas proprias de retencao e MUST obedecer `provider allowlist` por sensibilidade.

@@ -635,9 +635,9 @@ valid_llm_run = {
     "task_id": "TASK-001",
     "agent_id": "router-agent",
     "session_id": "SESSION-001",
-    "requested_model": "local/code-worker",
-    "effective_model": "local/code-worker",
-    "effective_provider": "ollama",
+    "requested_model": "openrouter-main",
+    "effective_model": "openrouter-main",
+    "effective_provider": "litellm",
     "preset_id": "preset.dev_patch_v1",
     "fallback_step": 0,
     "retry_count": 0,
@@ -672,22 +672,22 @@ valid_router_decision = {
     "policy_filters": {
         "risk": "R2",
         "sensitivity": "internal",
-        "allowlist": ["ollama", "litellm"]
+        "allowlist": ["litellm", "ollama"]
     },
     "ranking_strategy": "capabilities-first",
-    "requested_model": "local/code-worker",
-    "effective_model": "local/code-worker",
-    "effective_provider": "ollama",
+    "requested_model": "openrouter-main",
+    "effective_model": "openrouter-main",
+    "effective_provider": "litellm",
     "provider_routing_applied": {
-        "include": ["ollama"],
+        "include": ["litellm", "ollama"],
         "exclude": [],
-        "order": ["ollama", "litellm"],
+        "order": ["litellm", "ollama"],
         "require": []
     },
     "fallback_step": 0,
     "reason": "primary_available",
     "fallback_reason": "primary_available",
-    "decision_explain": "modelo local atende policy e custo.",
+    "decision_explain": "cloud-first atende policy; fallback local fica reservado para contingencia.",
     "pin_provider": False,
     "no_fallback": False,
     "burn_rate_policy": {

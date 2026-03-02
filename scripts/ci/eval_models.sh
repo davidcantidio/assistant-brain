@@ -173,9 +173,9 @@ if not isinstance(sync_minimum, int) or sync_minimum < 60:
 
 valid_payload = {
     "schema_version": "1.0",
-    "model_id": "codex-main",
+    "model_id": "openrouter-main",
     "provider": "litellm",
-    "provider_model_ref": "openai/gpt-5",
+    "provider_model_ref": "openrouter/openai/gpt-4o-mini",
     "model_family": "gpt",
     "model_tier": "supervisor",
     "risk_scope": "medio",
@@ -382,13 +382,13 @@ valid_payload = {
         "allowlist": ["litellm", "ollama"]
     },
     "ranking_strategy": "capabilities-first",
-    "requested_model": "local/code-worker",
-    "effective_model": "local/code-worker",
-    "effective_provider": "ollama",
+    "requested_model": "openrouter-main",
+    "effective_model": "openrouter-main",
+    "effective_provider": "litellm",
     "provider_routing_applied": {
-        "include": ["ollama", "litellm"],
+        "include": ["litellm", "ollama"],
         "exclude": [],
-        "order": ["ollama", "litellm"],
+        "order": ["litellm", "ollama"],
         "require": []
     },
     "fallback_step": 0,
@@ -396,12 +396,12 @@ valid_payload = {
     "fallback_reason": "primary_available",
     "candidates_considered": [
         {
-            "model": "local/code-worker",
-            "provider": "ollama",
+            "model": "openrouter-main",
+            "provider": "litellm",
             "score": 0.94
         }
     ],
-    "decision_explain": "capabilities-first com melhor ajuste para task.",
+    "decision_explain": "cloud-first com fallback local quando necessario.",
     "pin_provider": False,
     "no_fallback": False,
     "burn_rate_policy": {
@@ -471,17 +471,15 @@ search_re "chamadas programaticas de inferencia MUST passar pelo gateway OpenCla
 search_re "chamada direta a API de provider externo fora do gateway OpenClaw MUST ser bloqueada" SEC/SEC-POLICY.md
 search_re "LiteLLM MUST operar como adaptador padrao para supervisores pagos" SEC/SEC-POLICY.md
 search_re "gateway\\.supervisor_adapter.*LiteLLM" PRD/PRD-MASTER.md
-search_re "qwen2\\.5-coder:32b" PRD/PRD-MASTER.md
-search_re "deepseek-r1:32b" PRD/PRD-MASTER.md
+search_re "qwen2\\.5:7b-instruct-q8_0" PRD/PRD-MASTER.md
 search_re "preset_id" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md
 search_re "burn-rate|circuit breaker" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "fallback_step.*reason|reason.*fallback_step" ARC/ARC-MODEL-ROUTING.md PRD/PRD-MASTER.md EVALS/SYSTEM-HEALTH-THRESHOLDS.md
 search_re "sensitive.*no_fallback.*pin_provider.*ZDR|no_fallback.*pin_provider.*ZDR" ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md
-search_fixed "OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido." PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md PRD/ROADMAP.md README.md
-search_re 'cloud_adapter_default: "disabled"' SEC/allowlists/PROVIDERS.yaml
-search_re 'cloud_adapter_enablement: "decision_required"' SEC/allowlists/PROVIDERS.yaml
-search_re 'cloud_adapter_preferred_when_enabled: "openrouter"' SEC/allowlists/PROVIDERS.yaml
-search_absent_re "OpenRouter e o adaptador padrao recomendado" PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md PRD/ROADMAP.md README.md
-search_absent_re "OpenRouter MAY operar como adaptador cloud recomendado" SEC/SEC-POLICY.md
+search_fixed "OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido." PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md SEC/SEC-POLICY.md PRD/ROADMAP.md README.md
+search_re 'cloud_adapter_default: "enabled"' SEC/allowlists/PROVIDERS.yaml
+search_re 'cloud_adapter_enablement: "default_on"' SEC/allowlists/PROVIDERS.yaml
+search_re 'cloud_adapter_primary: "openrouter"' SEC/allowlists/PROVIDERS.yaml
+search_absent_re "OpenRouter e adaptador cloud opcional, permanece desabilitado por default" PRD/PRD-MASTER.md ARC/ARC-MODEL-ROUTING.md PRD/ROADMAP.md README.md SEC/SEC-POLICY.md
 
 echo "eval-models: PASS"

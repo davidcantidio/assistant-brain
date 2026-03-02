@@ -9,10 +9,16 @@
 .DS_Store
 **/.DS_Store
 
+# --- editor/temp ---
+*.swp
+*.swo
+*.tmp
+
 # --- runtime / lixo ---
 /tmp/
 /logs/
 **/*.log
+**/*.pyc
 .venv-docling/
 .venv*/
 **/cache/
@@ -41,3 +47,14 @@ agent/auth-profiles.json
 workspaces/main/.openclaw/audit/
 workspaces/main/.openclaw/runs/
 workspaces/main/.openclaw/tmp/
+
+# --- F10 runtime convergence backups (sensivel) ---
+artifacts/phase-f10/runtime-backups/
+
+# --- artifacts temporarios/gerados (nao versionar) ---
+artifacts/generated/*
+!artifacts/generated/.gitkeep
+!artifacts/generated/README.md
+artifacts/phase-f10/runtime-convergence-report-*.json
+artifacts/phase-f10/runtime-inventory-*.json
+artifacts/phase-f10/runtime-merge-plan-*.json

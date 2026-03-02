@@ -1,9 +1,9 @@
 ---
 doc_id: "DOCUMENT-HIERARCHY.md"
-version: "1.4"
+version: "1.5"
 status: "active"
 owner: "PM"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-015", "RFC-050"]
 ---
 
@@ -92,3 +92,4 @@ Exclui:
 - [RFC Index](./RFC-INDEX.md)
 - [PRD Master](../PRD/PRD-MASTER.md)
 - [Changelog](../PRD/CHANGELOG.md)
+- [Repo Hygiene](./REPO-HYGIENE.md)

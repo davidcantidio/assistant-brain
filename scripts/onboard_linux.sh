@@ -226,6 +226,100 @@ get_env_kv() {
   ' "$file"
 }
 
+normalize_env_value() {
+  printf "%s" "${1:-}" | tr -d '\r' | xargs
+}
+
+is_placeholder_value() {
+  local key="$1"
+  local val
+  val="$(normalize_env_value "${2:-}")"
+  case "${key}:${val}" in
+    "ANTHROPIC_API_KEY:sk-ant-..."|\
+    "TELEGRAM_BOT_TOKEN:123456789:ABCDEfghijklmnopqrstuvwxyz_1234567890"|\
+    "SLACK_BOT_TOKEN:xoxb-..."|\
+    "SLACK_SIGNING_SECRET:..."|\
+    "TELEGRAM_USER_ID:123456789"|\
+    "TELEGRAM_GROUP_ID:-1001234567890"|\
+    "LITELLM_API_KEY:...")
+      return 0
+      ;;
+  esac
+  return 1
+}
+
+is_effective_env_value() {
+  local key="$1"
+  local val
+  val="$(normalize_env_value "${2:-}")"
+  [ -n "$val" ] || return 1
+  if is_placeholder_value "$key" "$val"; then
+    return 1
+  fi
+  return 0
+}
+
+prompt_required_secret() {
+  local file="$1" key="$2" label="$3"
+  local existing raw value prompt
+  existing="$(normalize_env_value "$(get_env_kv "$file" "$key")")"
+
+  while true; do
+    if is_effective_env_value "$key" "$existing"; then
+      prompt="$label (Enter para manter valor atual)"
+    else
+      prompt="$label (obrigatorio)"
+    fi
+
+    raw="$(prompt_secret "$prompt")"
+    value="$(normalize_env_value "$raw")"
+
+    if [ -z "$value" ]; then
+      if is_effective_env_value "$key" "$existing"; then
+        set_env_kv "$file" "$key" "$existing"
+        return 0
+      fi
+      warn "$key obrigatoria e nao pode ficar vazia."
+      continue
+    fi
+
+    if is_effective_env_value "$key" "$value"; then
+      set_env_kv "$file" "$key" "$value"
+      return 0
+    fi
+
+    warn "$key com placeholder invalido; informe valor real."
+  done
+}
+
+prompt_required_text() {
+  local file="$1" key="$2" label="$3" default="${4:-}"
+  local existing effective_default value
+  existing="$(normalize_env_value "$(get_env_kv "$file" "$key")")"
+
+  while true; do
+    if is_effective_env_value "$key" "$existing"; then
+      effective_default="$existing"
+    else
+      effective_default="$default"
+    fi
+
+    if [ -n "$effective_default" ]; then
+      value="$(prompt_text "$label" "$effective_default")"
+    else
+      value="$(prompt_text "$label")"
+    fi
+    value="$(normalize_env_value "$value")"
+
+    if is_effective_env_value "$key" "$value"; then
+      set_env_kv "$file" "$key" "$value"
+      return 0
+    fi
+
+    warn "$key obrigatoria e nao pode ficar vazia/placeholder."
+  done
+}
+
 derive_litellm_proxy_url() {
   local base_url="$1"
   local trimmed="${base_url%/}"
@@ -234,6 +328,39 @@ derive_litellm_proxy_url() {
     return
   fi
   printf "%s\n" "$trimmed"
+}
+
+normalize_runtime_mode() {
+  local raw
+  raw="$(printf "%s" "${1:-}" | tr '[:upper:]' '[:lower:]' | xargs)"
+  case "$raw" in
+    local-only|hybrid|cloud) printf "%s\n" "$raw" ;;
+    *) printf "%s\n" "cloud" ;;
+  esac
+}
+
+ensure_openclaw_config() {
+  local config_path="$HOME/.openclaw/openclaw.json"
+  if [ -f "$config_path" ]; then
+    say "Config OpenClaw detectada: $config_path"
+    return
+  fi
+
+  say "Config OpenClaw ausente; executando bootstrap local (openclaw setup --mode local --non-interactive)"
+  if openclaw setup --mode local --non-interactive; then
+    say "Config OpenClaw criada em: $config_path"
+    return
+  fi
+
+  warn "openclaw setup falhou; tentando fallback via openclaw onboard --accept-risk."
+  if openclaw onboard --mode local --non-interactive --accept-risk --auth-choice skip --skip-channels --skip-skills --skip-daemon --skip-health --skip-ui; then
+    if [ -f "$config_path" ]; then
+      say "Config OpenClaw criada via fallback em: $config_path"
+      return
+    fi
+  fi
+
+  die "Falha ao gerar config local do OpenClaw. Rode manualmente: openclaw setup --mode local --non-interactive (ou fallback: openclaw onboard --mode local --non-interactive --accept-risk --auth-choice skip --skip-channels --skip-skills --skip-daemon --skip-health --skip-ui)"
 }
 
 telegram_defaults_from_payload() {
@@ -355,93 +482,106 @@ configure_env_interactive() {
   echo
 
   telegram_defaults_from_payload
+  local runtime_mode_raw runtime_mode
+  runtime_mode_raw="$(prompt_text "OPENCLAW_RUNTIME_MODE (local-only|hybrid|cloud)" "cloud")"
+  runtime_mode="$(normalize_runtime_mode "$runtime_mode_raw")"
+  set_env_kv "$env_file" "OPENCLAW_RUNTIME_MODE" "$runtime_mode"
+  say "Runtime mode selecionado: $runtime_mode"
 
-  local tz
-  tz="$(prompt_text "TZ" "America/Sao_Paulo")"
-  set_env_kv "$env_file" "TZ" "$tz"
-
-  local litellm_master
-  litellm_master="$(prompt_secret "LITELLM_MASTER_KEY (somente servico budget/admin)")"
-  [ -n "$litellm_master" ] && set_env_kv "$env_file" "LITELLM_MASTER_KEY" "$litellm_master"
-
-  local litellm_url
-  litellm_url="$(prompt_text "LITELLM_BASE_URL" "http://127.0.0.1:4000/v1")"
-  set_env_kv "$env_file" "LITELLM_BASE_URL" "$litellm_url"
-
-  local litellm_proxy_default
-  litellm_proxy_default="$(derive_litellm_proxy_url "$litellm_url")"
-  local litellm_proxy
-  litellm_proxy="$(prompt_text "LITELLM_PROXY_URL (sem /v1)" "$litellm_proxy_default")"
-  [ -n "$litellm_proxy" ] && set_env_kv "$env_file" "LITELLM_PROXY_URL" "$litellm_proxy"
-
-  local codex_oauth
-  codex_oauth="$(prompt_secret "CODEX_OAUTH_ACCESS_TOKEN (alias codex-main)")"
-  [ -n "$codex_oauth" ] && set_env_kv "$env_file" "CODEX_OAUTH_ACCESS_TOKEN" "$codex_oauth"
-
-  local anthropic_key
-  anthropic_key="$(prompt_secret "ANTHROPIC_API_KEY (alias claude-review)")"
-  [ -n "$anthropic_key" ] && set_env_kv "$env_file" "ANTHROPIC_API_KEY" "$anthropic_key"
+  prompt_required_text "$env_file" "TZ" "TZ" "America/Sao_Paulo"
+  local litellm_master="" litellm_url="" litellm_proxy=""
+  if [ "$runtime_mode" = "local-only" ]; then
+    set_env_kv "$env_file" "LITELLM_AUTO_GENERATE_KEY" "false"
+    set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_PRIMARY" "local-main"
+    set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_SECONDARY" "local-review"
+    say "Modo local-only: LiteLLM/OpenRouter nao obrigatorios; supervisors locais aplicados."
+  else
+    prompt_required_secret "$env_file" "LITELLM_MASTER_KEY" "LITELLM_MASTER_KEY (somente servico budget/admin)"
+    prompt_required_text "$env_file" "LITELLM_BASE_URL" "LITELLM_BASE_URL" "http://127.0.0.1:4000/v1"
+    litellm_master="$(normalize_env_value "$(get_env_kv "$env_file" "LITELLM_MASTER_KEY")")"
+    litellm_url="$(normalize_env_value "$(get_env_kv "$env_file" "LITELLM_BASE_URL")")"
+    local litellm_proxy_default
+    litellm_proxy_default="$(derive_litellm_proxy_url "$litellm_url")"
+    litellm_proxy="$(prompt_text "LITELLM_PROXY_URL (sem /v1)" "$litellm_proxy_default")"
+    [ -n "$litellm_proxy" ] && set_env_kv "$env_file" "LITELLM_PROXY_URL" "$litellm_proxy"
+  fi
 
   local openai_key
   openai_key="$(prompt_secret "OPENAI_API_KEY (opcional)")"
   [ -n "$openai_key" ] && set_env_kv "$env_file" "OPENAI_API_KEY" "$openai_key"
 
   local openrouter_key
-  openrouter_key="$(prompt_secret "OPENROUTER_API_KEY (opcional, cloud adapter)")"
-  [ -n "$openrouter_key" ] && set_env_kv "$env_file" "OPENROUTER_API_KEY" "$openrouter_key"
+  if [ "$runtime_mode" = "local-only" ]; then
+    openrouter_key="$(prompt_secret "OPENROUTER_API_KEY (opcional, cloud adapter)")"
+    [ -n "$openrouter_key" ] && set_env_kv "$env_file" "OPENROUTER_API_KEY" "$openrouter_key"
+  else
+    prompt_required_secret "$env_file" "OPENROUTER_API_KEY" "OPENROUTER_API_KEY (obrigatorio em cloud|hybrid)"
+    openrouter_key="$(normalize_env_value "$(get_env_kv "$env_file" "OPENROUTER_API_KEY")")"
+  fi
 
-  local litellm_auto_generate
-  litellm_auto_generate="$(prompt_text "LITELLM_AUTO_GENERATE_KEY via /key/generate? (Y/n)" "Y")"
-  local litellm_auto_generate_norm
-  litellm_auto_generate_norm="$(printf "%s" "$litellm_auto_generate" | tr '[:upper:]' '[:lower:]')"
   local should_auto_generate="true"
-  case "$litellm_auto_generate_norm" in
-    n|no|0|false) should_auto_generate="false" ;;
-  esac
-  set_env_kv "$env_file" "LITELLM_AUTO_GENERATE_KEY" "$should_auto_generate"
+  if [ "$runtime_mode" = "local-only" ]; then
+    should_auto_generate="false"
+    set_env_kv "$env_file" "LITELLM_AUTO_GENERATE_KEY" "false"
+  else
+    local litellm_auto_generate
+    litellm_auto_generate="$(prompt_text "LITELLM_AUTO_GENERATE_KEY via /key/generate? (Y/n)" "Y")"
+    local litellm_auto_generate_norm
+    litellm_auto_generate_norm="$(printf "%s" "$litellm_auto_generate" | tr '[:upper:]' '[:lower:]')"
+    case "$litellm_auto_generate_norm" in
+      n|no|0|false) should_auto_generate="false" ;;
+    esac
+    set_env_kv "$env_file" "LITELLM_AUTO_GENERATE_KEY" "$should_auto_generate"
+  fi
 
-  local litellm_models_default="codex-main,claude-review"
-  if [ -n "$openrouter_key" ]; then
-    litellm_models_default="${litellm_models_default},openrouter/openai/gpt-4o-mini"
+  local litellm_models_default="openrouter-main,openrouter-review,local-fallback-7b"
+  if [ "$runtime_mode" = "local-only" ]; then
+    litellm_models_default="local-main,local-review"
   fi
   local litellm_models
   litellm_models="$(prompt_text "LITELLM_MODELS (escopo da virtual key)" "$litellm_models_default")"
   [ -n "$litellm_models" ] && set_env_kv "$env_file" "LITELLM_MODELS" "$litellm_models"
 
   local litellm_key_generated=0
-  if [ "$should_auto_generate" = "true" ]; then
-    if generate_litellm_key_and_write_env "$env_file" "$litellm_url" "$litellm_master" "$litellm_models" "$litellm_proxy"; then
-      litellm_key_generated=1
+  if [ "$runtime_mode" != "local-only" ]; then
+    if [ "$should_auto_generate" = "true" ]; then
+      if generate_litellm_key_and_write_env "$env_file" "$litellm_url" "$litellm_master" "$litellm_models" "$litellm_proxy"; then
+        litellm_key_generated=1
+      fi
+    fi
+
+    if [ "$litellm_key_generated" -ne 1 ]; then
+      local existing_litellm_key
+      existing_litellm_key="$(normalize_env_value "$(get_env_kv "$env_file" "LITELLM_API_KEY")")"
+      local litellm_key
+      while true; do
+        if is_effective_env_value "LITELLM_API_KEY" "$existing_litellm_key"; then
+          litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual, obrigatoria; Enter para manter valor atual)")"
+        else
+          litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual, obrigatoria)")"
+        fi
+        litellm_key="$(normalize_env_value "$litellm_key")"
+        if is_effective_env_value "LITELLM_API_KEY" "$litellm_key"; then
+          set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
+          break
+        fi
+        if [ -z "$litellm_key" ] && is_effective_env_value "LITELLM_API_KEY" "$existing_litellm_key"; then
+          warn "Entrada vazia; mantendo LITELLM_API_KEY ja existente no .env."
+          set_env_kv "$env_file" "LITELLM_API_KEY" "$existing_litellm_key"
+          break
+        fi
+        warn "LITELLM_API_KEY e obrigatoria quando a auto-geracao falha."
+      done
+
+      local effective_litellm_key
+      effective_litellm_key="$(normalize_env_value "$(get_env_kv "$env_file" "LITELLM_API_KEY")")"
+      if ! is_effective_env_value "LITELLM_API_KEY" "$effective_litellm_key"; then
+        die "Nao foi possivel concluir onboarding: LITELLM_API_KEY obrigatoria apos falha da auto-geracao."
+      fi
     fi
   fi
 
-  if [ "$litellm_key_generated" -ne 1 ]; then
-    local existing_litellm_key
-    existing_litellm_key="$(get_env_kv "$env_file" "LITELLM_API_KEY" | tr -d '\r' | xargs)"
-    local litellm_key
-    while true; do
-      litellm_key="$(prompt_secret "LITELLM_API_KEY (fallback manual, obrigatoria)")"
-      if [ -n "$litellm_key" ]; then
-        set_env_kv "$env_file" "LITELLM_API_KEY" "$litellm_key"
-        break
-      fi
-      if [ -n "$existing_litellm_key" ]; then
-        warn "Entrada vazia; mantendo LITELLM_API_KEY ja existente no .env."
-        break
-      fi
-      warn "LITELLM_API_KEY e obrigatoria quando a auto-geracao falha."
-    done
-
-    local effective_litellm_key
-    effective_litellm_key="$(get_env_kv "$env_file" "LITELLM_API_KEY" | tr -d '\r' | xargs)"
-    if [ -z "$effective_litellm_key" ]; then
-      die "Nao foi possivel concluir onboarding: LITELLM_API_KEY obrigatoria apos falha da auto-geracao."
-    fi
-  fi
-
-  local tgbot
-  tgbot="$(prompt_secret "TELEGRAM_BOT_TOKEN")"
-  [ -n "$tgbot" ] && set_env_kv "$env_file" "TELEGRAM_BOT_TOKEN" "$tgbot"
+  prompt_required_secret "$env_file" "TELEGRAM_BOT_TOKEN" "TELEGRAM_BOT_TOKEN"
 
   local tg_chat_default="${TELEGRAM_DEFAULT_CHAT_ID:-}"
   local tg_user_default="${TELEGRAM_DEFAULT_USER_ID:-}"
@@ -462,13 +602,8 @@ configure_env_interactive() {
   tg_group="$(prompt_text "TELEGRAM_GROUP_ID (alias opcional)" "$tg_group_default")"
   [ -n "$tg_group" ] && set_env_kv "$env_file" "TELEGRAM_GROUP_ID" "$tg_group"
 
-  local slackbot
-  slackbot="$(prompt_secret "SLACK_BOT_TOKEN")"
-  [ -n "$slackbot" ] && set_env_kv "$env_file" "SLACK_BOT_TOKEN" "$slackbot"
-
-  local slacksign
-  slacksign="$(prompt_secret "SLACK_SIGNING_SECRET")"
-  [ -n "$slacksign" ] && set_env_kv "$env_file" "SLACK_SIGNING_SECRET" "$slacksign"
+  prompt_required_secret "$env_file" "SLACK_BOT_TOKEN" "SLACK_BOT_TOKEN"
+  prompt_required_secret "$env_file" "SLACK_SIGNING_SECRET" "SLACK_SIGNING_SECRET"
 
   local slackapp
   slackapp="$(prompt_secret "SLACK_APP_TOKEN (opcional)")"
@@ -478,13 +613,8 @@ configure_env_interactive() {
   slackchan="$(prompt_text "SLACK_ALERT_CHANNEL_ID (opcional, ex: C0123456789)" "")"
   [ -n "$slackchan" ] && set_env_kv "$env_file" "SLACK_ALERT_CHANNEL_ID" "$slackchan"
 
-  local cxurl
-  cxurl="$(prompt_text "CONVEX_DEPLOYMENT_URL (https://...convex.cloud)" "")"
-  [ -n "$cxurl" ] && set_env_kv "$env_file" "CONVEX_DEPLOYMENT_URL" "$cxurl"
-
-  local cxkey
-  cxkey="$(prompt_secret "CONVEX_DEPLOY_KEY")"
-  [ -n "$cxkey" ] && set_env_kv "$env_file" "CONVEX_DEPLOY_KEY" "$cxkey"
+  prompt_required_text "$env_file" "CONVEX_DEPLOYMENT_URL" "CONVEX_DEPLOYMENT_URL (https://...convex.cloud)"
+  prompt_required_secret "$env_file" "CONVEX_DEPLOY_KEY" "CONVEX_DEPLOY_KEY"
 
   local hb
   hb="$(prompt_text "HEARTBEAT_MINUTES" "15")"
@@ -498,24 +628,34 @@ configure_env_interactive() {
   gw="$(prompt_text "OPENCLAW_GATEWAY_URL" "http://127.0.0.1:18789/v1")"
   set_env_kv "$env_file" "OPENCLAW_GATEWAY_URL" "$gw"
 
-  local sup_primary
-  sup_primary="$(prompt_text "OPENCLAW_SUPERVISOR_PRIMARY" "codex-main")"
+  local sup_primary sup_secondary
+  if [ "$runtime_mode" = "local-only" ]; then
+    sup_primary="$(prompt_text "OPENCLAW_SUPERVISOR_PRIMARY" "local-main")"
+    sup_secondary="$(prompt_text "OPENCLAW_SUPERVISOR_SECONDARY" "local-review")"
+  else
+    sup_primary="$(prompt_text "OPENCLAW_SUPERVISOR_PRIMARY" "openrouter-main")"
+    sup_secondary="$(prompt_text "OPENCLAW_SUPERVISOR_SECONDARY" "openrouter-review")"
+  fi
   set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_PRIMARY" "$sup_primary"
-
-  local sup_secondary
-  sup_secondary="$(prompt_text "OPENCLAW_SUPERVISOR_SECONDARY" "claude-review")"
   set_env_kv "$env_file" "OPENCLAW_SUPERVISOR_SECONDARY" "$sup_secondary"
 
   local worker_code
-  worker_code="$(prompt_text "OPENCLAW_WORKER_CODE_MODEL" "ollama/qwen2.5-coder:32b")"
+  worker_code="$(prompt_text "OPENCLAW_WORKER_CODE_MODEL" "ollama/qwen2.5:7b-instruct-q8_0")"
   set_env_kv "$env_file" "OPENCLAW_WORKER_CODE_MODEL" "$worker_code"
 
   local worker_reason
-  worker_reason="$(prompt_text "OPENCLAW_WORKER_REASON_MODEL" "ollama/deepseek-r1:32b")"
+  worker_reason="$(prompt_text "OPENCLAW_WORKER_REASON_MODEL" "ollama/qwen2.5:7b-instruct-q8_0")"
   set_env_kv "$env_file" "OPENCLAW_WORKER_REASON_MODEL" "$worker_reason"
 
-  if [ -z "$chat" ] && [ -z "$tg_user" ] && [ -z "$tg_group" ]; then
-    warn "Nenhum ID Telegram informado. Defina TELEGRAM_CHAT_ID ou um alias USER/GROUP."
+  local effective_chat effective_user effective_group
+  effective_chat="$(normalize_env_value "$(get_env_kv "$env_file" "TELEGRAM_CHAT_ID")")"
+  effective_user="$(normalize_env_value "$(get_env_kv "$env_file" "TELEGRAM_USER_ID")")"
+  effective_group="$(normalize_env_value "$(get_env_kv "$env_file" "TELEGRAM_GROUP_ID")")"
+
+  if ! is_effective_env_value "TELEGRAM_CHAT_ID" "$effective_chat" \
+    && ! is_effective_env_value "TELEGRAM_USER_ID" "$effective_user" \
+    && ! is_effective_env_value "TELEGRAM_GROUP_ID" "$effective_group"; then
+    die "Nao foi possivel concluir onboarding: informe TELEGRAM_CHAT_ID (canonico) ou alias TELEGRAM_USER_ID/TELEGRAM_GROUP_ID com valor real."
   fi
 
   echo
@@ -539,8 +679,15 @@ setup_python_if_any() {
   fi
 }
 
+ensure_interactive_tty() {
+  if [ "$INTERACTIVE" = "1" ] && [ ! -t 0 ]; then
+    die "INTERACTIVE=1 requer terminal interativo (TTY). Execute em um terminal sem redirecionar stdin."
+  fi
+}
+
 main() {
   detect_platform
+  ensure_interactive_tty
   say "Repo: $REPO_ROOT"
   say "Plataforma detectada: $HOST_OS"
 
@@ -550,6 +697,7 @@ main() {
   ensure_nvm
   ensure_node
   ensure_openclaw
+  ensure_openclaw_config
   create_templates
 
   if [ "$INTERACTIVE" = "1" ]; then
@@ -564,7 +712,7 @@ main() {
   echo "Proximos passos:"
   echo "1) (se nao usou INTERACTIVE=1) edite .env"
   echo "2) Rode: bash scripts/verify_linux.sh"
-  echo "3) Documente no README o comando de inicializacao do OpenClaw."
+  echo "3) Inicie o gateway: openclaw gateway run --bind loopback --port 18789 --force"
 }
 
 main "$@"

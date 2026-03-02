@@ -1,9 +1,9 @@
 ---
 doc_id: "ARC-CORE.md"
-version: "2.2"
+version: "2.3"
 status: "active"
 owner: "Marvin"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-020", "RFC-030", "RFC-035", "RFC-050", "RFC-060"]
 ---
 
@@ -44,8 +44,8 @@ Exclui:
 - OpenClaw runtime: execucao de agentes e rotinas.
 - OpenClaw Gateway: endpoint unico do runtime para chamadas LLM e eventos operacionais.
 - Convex: estado compartilhado e feed operacional.
-- LiteLLM supervisor adapter (padrao): aliases de supervisores pagos (`codex-main`, `claude-review`) e contabilizacao de uso.
-- OpenRouter adapter (opcional/desabilitado por default): habilitacao somente por decision explicita; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+- LiteLLM supervisor adapter (padrao): aliases de supervisores pagos (`openrouter-main`, `openrouter-review`) e contabilizacao de uso.
+- OpenRouter adapter (cloud-first): OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido.
 - Worker LLM local: execucao de microtasks pesadas e nao urgentes em host compativel (preferencia: Mac >= 32 GB RAM).
 - Model Catalog Service: sync e versionamento de metadados de modelos.
 - Model Router: selecao de modelo/provider/fallback por task_type/risco/custo/confiabilidade.
@@ -59,17 +59,17 @@ Exclui:
 - `routing_stack_contract`:
   - `gateway.primary=openclaw`
   - `gateway.supervisor_adapter=litellm`
-  - `gateway.cloud_optional=disabled`
+  - `gateway.cloud_optional=enabled`
 - `supervisor_contract`:
-  - `primary=litellm/codex-main`
-  - `secondary=litellm/claude-review`
+  - `primary=litellm/openrouter-main`
+  - `secondary=litellm/openrouter-review`
   - aplicacao: aprovacao, critica, correcao, delegacao e revisao de risco.
 - `local_worker_contract`:
-  - `workers.local.code=ollama/qwen2.5-coder:32b`
-  - `workers.local.reason=ollama/deepseek-r1:32b`
+  - `workers.local.code=ollama/qwen2.5:7b-instruct-q8_0`
+  - `workers.local.reason=ollama/qwen2.5:7b-instruct-q8_0`
   - regra: local-first para tarefa bracal, com escalonamento por gates de capacidade.
 - `fallback_contract`:
-  - ordem default: `local_worker -> claude-review -> codex-main`
+  - ordem default: `openrouter-main -> openrouter-review -> local-fallback-7b`
   - logging obrigatorio: `requested_model`, `effective_model`, `fallback_step`, `reason`.
 
 ## Compatibilidade com Pipeline de Mudancas com Codigo

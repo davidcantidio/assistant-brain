@@ -1,9 +1,9 @@
 ---
 doc_id: "ROADMAP.md"
-version: "2.4"
+version: "2.6"
 status: "active"
 owner: "PM"
-last_updated: "2026-03-01"
+last_updated: "2026-03-02"
 rfc_refs: ["RFC-001", "RFC-010", "RFC-015", "RFC-020", "RFC-030", "RFC-035", "RFC-040", "RFC-050", "RFC-060"]
 ---
 
@@ -23,6 +23,11 @@ Exclui:
 - tuning fino de prompt por caso
 - implementacao de infraestrutura dentro deste documento
 - benchmark detalhado por hardware
+
+## Estado Atual de Execucao
+- baseline operacional local esta ativo (gateway loopback + onboarding + convergencia F10 de runtime sem regressao de Telegram).
+- este roadmap permanece valido para fechar o delta entre baseline operacional e control-plane completo.
+- progresso de fase MUST ser medido por gates executaveis, nao por existencia de artefato semanal isolado.
 
 ## Regras Normativas
 - [RFC-040] MUST bloquear inicio de fase nova sem DoD da fase anterior.
@@ -48,7 +53,7 @@ Exclui:
 - OpenClaw runtime configurado para workspace `workspaces/main`.
 - Worker LLM local habilitado na Fase 0 para tarefas pesadas nao urgentes (host compativel, preferencia Mac >= 32 GB RAM).
 - gateway LLM programatico padrao: OpenClaw Gateway (`bind=loopback`); providers cloud entram por adaptador plugavel.
-- OpenRouter e adaptador cloud opcional, permanece desabilitado por default e so pode ser habilitado por decision formal; quando cloud adicional estiver habilitado, OpenRouter e o preferido.
+- OpenRouter e o adaptador cloud padrao (cloud-first), habilitado por default no runtime cloud e hibrido.
 - Telegram bot com `/approve`, `/reject`, `/kill` e standup diario 11:30 (-03).
 - Model Catalog + Model Router + Memory Plane + Budget + Privacidade entram em baseline minimo na Fase 0.
 - refinos avancados desses blocos sao diferidos para Fase 1/2 sem perda de escopo.
@@ -64,7 +69,7 @@ Exclui:
 - `B0-07` implementar contrato do OpenClaw Gateway:
   - `bind=loopback`,
   - endpoint `chatCompletions` opcional sob policy,
-  - adaptador cloud plugavel (OpenRouter preferido somente quando cloud adicional estiver habilitado por decision formal).
+  - adaptador cloud plugavel (OpenRouter padrao em `cloud|hybrid`).
 - `B0-08` implementar Model Catalog baseline:
   - sync de Models API,
   - metadados minimos para roteamento (`model_id`, provider, capabilities, limits, pricing, status).

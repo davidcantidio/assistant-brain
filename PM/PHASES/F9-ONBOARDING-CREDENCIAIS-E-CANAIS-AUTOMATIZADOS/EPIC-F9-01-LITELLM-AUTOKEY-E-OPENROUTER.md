@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -15,6 +15,7 @@ Automatizar a obtencao de `LITELLM_API_KEY` no onboarding via `/key/generate`, m
 ## Resultado de Negocio Mensuravel
 - setup inicial reduzido para um fluxo interativo unico sem copiacao manual obrigatoria da virtual key;
 - onboarding permanece aderente a policy: OpenRouter suportado, porem nao obrigatorio.
+- onboarding suporta `OPENCLAW_RUNTIME_MODE` para operacao local-first sem exigir LiteLLM/Codex no modo `local-only`.
 
 ## Definition of Done (Scrum)
 - todas as issues do epico em estado `Done`.
@@ -119,6 +120,8 @@ Como operador, quero configurar OpenRouter no mesmo onboarding sem tornalo requi
   - `bash scripts/verify_linux.sh`: `PASS` com `.env` sem lacuna para `LITELLM_API_KEY`.
 - regra preservada:
   - `OPENROUTER_API_KEY` permanece opcional e nao bloqueante no `verify_linux.sh`.
+  - `OPENCLAW_RUNTIME_MODE=local-only` torna `LITELLM_API_KEY`, `LITELLM_MASTER_KEY` e `CODEX_OAUTH_ACCESS_TOKEN` opcionais no onboarding/verify;
+  - `OPENCLAW_RUNTIME_MODE=hybrid|cloud` mantem obrigatoriedade dessas credenciais.
 
 ## Dependencias
 - [Roadmap](../../../PRD/ROADMAP.md)

@@ -61,7 +61,7 @@ def run_main_with_payload(payload: dict) -> tuple[str, str | None]:
     module.urllib.request.urlopen = fake_urlopen
     os.environ["LITELLM_PROXY_URL"] = "http://127.0.0.1:4000"
     os.environ["LITELLM_MASTER_KEY"] = "sk-master-test"
-    os.environ["LITELLM_MODELS"] = "codex-main,claude-review"
+    os.environ["LITELLM_MODELS"] = "openrouter-main,openrouter-review,local-fallback-7b"
     os.environ["LITELLM_OUTPUT_MODE"] = "key-only"
 
     stdout_buffer = io.StringIO()

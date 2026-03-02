@@ -1,25 +1,28 @@
 model_list:
-  # 🧠 Generalista (chat)
-  - model_name: qwen3-general
+  # Cloud-first primary supervisor
+  - model_name: openrouter-main
     litellm_params:
-      model: ollama_chat/qwen3:30b-a3b-instruct-2507-q8_0
-      api_base: http://localhost:11434
-      num_ctx: 65536
+      model: openrouter/openai/gpt-4o-mini
 
-  # 💻 Código (chat)
-  - model_name: qwen3-coder
+  # Cloud-first review supervisor
+  - model_name: openrouter-review
     litellm_params:
-      model: ollama_chat/qwen3-coder:30b-a3b-q8_0
-      api_base: http://localhost:11434
-      num_ctx: 65536
+      model: openrouter/openai/gpt-4o-mini
 
-  # 📚 Embeddings (RAG)
+  # Local contingency fallback (7B)
+  - model_name: local-fallback-7b
+    litellm_params:
+      model: ollama_chat/qwen2.5:7b-instruct-q8_0
+      api_base: http://localhost:11434
+      num_ctx: 32768
+
+  # Embeddings (RAG)
   - model_name: qwen3-embed
     litellm_params:
       model: ollama/qwen3-embedding:8b
       api_base: http://localhost:11434
 
-  # 🎯 Reranker (RAG) - via vLLM (recomendado)
+  # Reranker (RAG) - via vLLM
   - model_name: bge-reranker
     litellm_params:
       model: hosted_vllm/BAAI/bge-reranker-v2-m3

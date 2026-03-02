@@ -1,6 +1,6 @@
 ---
 doc_id: "EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md"
-version: "1.0"
+version: "1.1"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -107,6 +107,21 @@ Como operador, quero instrucoes consistentes nos docs para repetir onboarding se
   - payload de exemplo de Telegram parseado;
   - checklist de importacao do manifesto Slack;
   - evidencias de testes/gates.
+
+## Resultado desta Rodada
+- status do epico: `Done`.
+- evidencia por issue:
+  - `artifacts/phase-f9/epic-f9-02-issue-01-telegram-json-preload.md`;
+  - `artifacts/phase-f9/epic-f9-02-issue-02-slack-socket-manifest.md`;
+  - `artifacts/phase-f9/epic-f9-02-issue-03-doc-sync-onboarding-canais.md`;
+  - `artifacts/phase-f9/epic-f9-02-telegram-slack-bootstrap.md`.
+- gates finais da rodada:
+  - `make ci-quality`: `PASS`;
+  - `make ci-security`: `PASS`;
+  - `make eval-models`: `PASS`.
+- regra preservada:
+  - bootstrap de Telegram usa preload opcional por payload com fallback manual;
+  - manifesto Slack permanece versionado e importavel com placeholders de schema explicitados.
 
 ## Dependencias
 - [Decision Protocol](../../../PM/DECISION-PROTOCOL.md)

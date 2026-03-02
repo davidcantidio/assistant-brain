@@ -1,6 +1,6 @@
 ---
 doc_id: "PHASE-F9-ONBOARDING-EPICS.md"
-version: "1.1"
+version: "1.2"
 status: "active"
 owner: "PM"
 last_updated: "2026-03-01"
@@ -33,8 +33,20 @@ Criterio objetivo:
 | Epic ID | Nome | Objetivo | Status | Documento |
 |---|---|---|---|---|
 | `EPIC-F9-01` | LiteLLM auto-key e OpenRouter opcional | automatizar `LITELLM_API_KEY` via `/key/generate` e manter OpenRouter opcional no baseline | done | [EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md](./EPIC-F9-01-LITELLM-AUTOKEY-E-OPENROUTER.md) |
-| `EPIC-F9-02` | Bootstrap Telegram e Slack Socket Mode | habilitar preload Telegram por payload e manifesto Slack versionado com comandos HITL | planned | [EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md](./EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md) |
+| `EPIC-F9-02` | Bootstrap Telegram e Slack Socket Mode | habilitar preload Telegram por payload e manifesto Slack versionado com comandos HITL | done | [EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md](./EPIC-F9-02-BOOTSTRAP-TELEGRAM-E-SLACK-SOCKET-MANIFEST.md) |
 
 ## Escopo desta entrega
 - criar backlog executavel de onboarding em fase dedicada sem alterar regra canonica de cloud opcional;
 - manter rastreabilidade `ROADMAP -> EPIC/ISSUE` para `B0-22`, `B0-23`, `B0-24`.
+
+## Resultado da Rodada (2026-03-01)
+- `EPIC-F9-02` fechado com evidencias por issue:
+  - `artifacts/phase-f9/epic-f9-02-issue-01-telegram-json-preload.md`;
+  - `artifacts/phase-f9/epic-f9-02-issue-02-slack-socket-manifest.md`;
+  - `artifacts/phase-f9/epic-f9-02-issue-03-doc-sync-onboarding-canais.md`.
+- artifact minimo do epico:
+  - `artifacts/phase-f9/epic-f9-02-telegram-slack-bootstrap.md`.
+- gates finais da rodada:
+  - `make ci-quality`: `PASS`;
+  - `make ci-security`: `PASS`;
+  - `make eval-models`: `PASS`.
